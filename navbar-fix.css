@@ -1,0 +1,71 @@
+/* ===================================
+   NAVBAR - WHITE BACKGROUND + BLACK TEXT
+   =================================== */
+
+/* Main Header Background */
+.site-header,
+.site-header.travel-overlay,
+body.page-template-page-home-travel .site-header,
+body.page-template-page-home-travel header.site-header {
+    background: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Logo Text - Black */
+.site-header .logo-text,
+.site-header.travel-overlay .logo-text,
+body.page-template-page-home-travel .site-header .logo-text,
+body.page-template-page-home-travel .site-header .logo-name {
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
+    background: none !important;
+}
+
+/* All Navigation Links - Black */
+.site-header .nav-menu a,
+.site-header.travel-overlay .nav-menu a,
+.nav-menu a,
+.nav-menu-white a,
+body.page-template-page-home-travel .nav-menu-desktop .nav-menu a,
+body.page-template-page-home-travel .site-header .nav-menu a,
+body.page-template-page-home-travel .site-header .nav-menu a,
+body.page-template-page-home-travel .site-header a {
+    color: #000000 !important;
+}
+
+/* Navigation Links Hover - Blue */
+.site-header .nav-menu a:hover,
+.site-header.travel-overlay .nav-menu a:hover,
+.nav-menu a:hover,
+.nav-menu-white a:hover,
+body.page-template-page-home-travel .nav-menu-desktop .nav-menu a:hover,
+body.page-template-page-home-travel .site-header .nav-menu a:hover {
+    color: #539294 !important;
+}
+
+/* Hamburger Menu Lines - Black */
+.site-header .hamburger-line,
+.site-header.travel-overlay .hamburger-line,
+body.page-template-page-home-travel .site-header .hamburger-line,
+body.page-template-page-home-travel .site-header span.hamburger-line,
+button.mobile-menu-toggle .hamburger-line {
+    background: #000000 !important;
+}
+
+/* Mobile Menu Button Border - Light Gray */
+button.mobile-menu-toggle {
+    border-color: #e2e8f0 !important;
+}
+
+/* Login/Member Button - Keep Blue Gradient */
+.site-header .site-header__auth-btn,
+.site-header a[href*="/login/"],
+.site-header a[href*="/dashboard/"] {
+    color: #ffffff !important;
+}
+
+/* Fix for any remaining white text */
+.main-navigation *,
+.main-navigation-wrapper * {
+    text-shadow: none !important;
+}

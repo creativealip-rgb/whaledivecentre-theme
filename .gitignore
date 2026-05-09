@@ -1,0 +1,11 @@
+# Backups
+*.bak
+*.bak-*
+*.bak.*
+*.broken
+*.testbak
+error_log
+
+# OS
+.DS_Store
+Thumbs.db

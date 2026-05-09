@@ -1,0 +1,89 @@
+/* ===================================
+   COMPLETE NAVBAR WHITE + BLACK TEXT
+   FORCE OVERRIDE EVERYTHING
+   =================================== */
+
+/* Force white background on ALL header elements */
+.site-header,
+.site-header.travel-overlay,
+body.page-template-page-home-travel .site-header,
+body.page-template-page-home-travel header.site-header,
+header.site-header,
+#masthead,
+.main-navigation-wrapper,
+.main-navigation {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+}
+
+/* Remove any gradient backgrounds */
+.site-header::before,
+.site-header::after,
+.site-header.travel-overlay::before,
+.site-header.travel-overlay::after,
+body.page-template-page-home-travel .site-header::before,
+body.page-template-page-home-travel .site-header::after {
+    background: none !important;
+    background-color: transparent !important;
+}
+
+/* Force black text on ALL elements */
+.site-header,
+.site-header *,
+.site-header a,
+.site-header .logo-text,
+.site-header .logo-name,
+.site-header .nav-menu a,
+.site-header .nav-menu li,
+.site-header .site-container,
+.main-navigation,
+.main-navigation *,
+.main-navigation a,
+.main-navigation-wrapper,
+.main-navigation-wrapper * {
+    color: #000000 !important;
+    fill: #000000 !important;
+}
+
+/* Remove any gradient text effects */
+.site-header .logo-text,
+.site-header .logo-name {
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    -webkit-text-fill-color: #000000 !important;
+    text-shadow: none !important;
+}
+
+/* Hamburger menu - black lines */
+.hamburger-line,
+.mobile-menu-toggle .hamburger-line,
+button.mobile-menu-toggle span.hamburger-line {
+    background: #000000 !important;
+}
+
+/* Mobile menu button border - light gray */
+.mobile-menu-toggle,
+button.mobile-menu-toggle {
+    border-color: #e2e8f0 !important;
+    background: transparent !important;
+}
+
+/* Login/Member button - keep blue but make text white */
+.site-header a[href*="/login/"],
+.site-header a[href*="/dashboard/"],
+.site-header__auth-btn {
+    color: #ffffff !important;
+}
+
+/* Fix any remaining transparency */
+.site-header .site-container {
+    background: #ffffff !important;
+}
+
+/* Ensure white background persists on scroll */
+.site-header.scrolled,
+.site-header.scrolled .site-container,
+.site-header.scrolled .main-navigation-wrapper {
+    background: #ffffff !important;
+}
