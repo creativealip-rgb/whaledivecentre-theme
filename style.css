@@ -1959,3 +1959,65 @@ body:has(.wm-checkout){background:#f4f8fb!important}
 body.wm-member-app .wd-page,
 body:has(.wm-dashboard) .wd-page,
 body:has(.wm-checkout) .wd-page{min-height:100vh;background:#f4f8fb!important}
+
+/* WDC public spacing/card refinement 2026-05-10 */
+:root {
+  --wd-section-y-public: clamp(64px, 7vw, 104px);
+  --wd-section-y-compact: clamp(48px, 5vw, 78px);
+  --wd-card-pad-public: clamp(22px, 2.2vw, 32px);
+  --wd-grid-gap-public: clamp(18px, 2vw, 28px);
+}
+.wd-section { padding-top: var(--wd-section-y-public); padding-bottom: var(--wd-section-y-public); }
+.wd-section + .wd-section, .wd-dark + .wd-section, .wd-section + .wd-dark { margin-top: 0; }
+.wd-page-grid, .wd-inner-grid, .wd-content-grid, .wd-course-grid, .wd-equipment-grid, .wd-blog-grid, .wd-safety-grid, .wd-steps, .wd-contact-grid { gap: var(--wd-grid-gap-public); }
+.wd-course-card, .wd-equip-card, .wd-blog-card, .wd-blog-featured, .wd-detail-card, .wd-sidebar-card, .wd-contact-card, .wd-crew-card, .wd-review-card, .wd-shop-card, .wd-inner-card { padding: var(--wd-card-pad-public); }
+.wd-hero { min-height: auto; padding-top: clamp(118px, 12vw, 176px); padding-bottom: clamp(72px, 8vw, 116px); }
+.wd-hero-grid { align-items: center; gap: clamp(28px, 4vw, 56px); }
+.wd-hero .wd-form, .wd-panel { padding: clamp(22px, 2.5vw, 30px); }
+.wd-trust-row { margin-top: clamp(18px, 2vw, 28px); gap: 12px; }
+.wd-course-grid { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+.whaledive-courses .wd-course-grid { grid-template-columns: repeat(auto-fit, minmax(285px, 1fr)); }
+.whaledive-courses .wd-course-card { display: flex; flex-direction: column; gap: 16px; }
+.whaledive-courses .wd-course-card .wd-inner-card, .whaledive-courses .wd-course-quickfacts, .whaledive-courses .wd-course-fit { padding: 14px 16px; }
+.whaledive-courses .wd-course-actions, .whaledive-equipment .wd-equip-actions { margin-top: auto; gap: 10px; }
+.whaledive-courses .wd-mini-link, .whaledive-equipment .wd-mini-link { border-color: rgba(255,255,255,.32); color: #fff; background: rgba(255,255,255,.08); }
+.wd-filter-bar { margin-top: clamp(18px, 2vw, 26px); margin-bottom: clamp(24px, 3vw, 38px); gap: 10px; }
+.whaledive-equipment .wd-equipment-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.whaledive-equipment .wd-equip-card { gap: 16px; }
+.whaledive-equipment .wd-equip-visual { min-height: 150px; padding: 22px; }
+.whaledive-equipment .wd-equip-card-body { gap: 12px; }
+.whaledive-equipment .wd-equip-price { margin: 2px 0 0; }
+.whaledive-blog .wd-editorial-note { margin-bottom: clamp(24px, 3vw, 40px); }
+.whaledive-blog .wd-blog-featured { margin-bottom: clamp(20px, 2.4vw, 32px); }
+.whaledive-blog .wd-blog-grid { align-items: stretch; }
+.whaledive-blog .wd-blog-card { display: flex; flex-direction: column; min-height: 100%; }
+.whaledive-blog .wd-blog-card .wd-blog-meta, .whaledive-blog .wd-blog-featured .wd-blog-meta { margin-top: auto; display: block; line-height: 1.6; }
+.whaledive-blog .wd-blog-card a:last-child, .whaledive-blog .wd-blog-featured a:last-child { align-self: flex-start; margin-top: 14px; }
+.wd-about-hero, .wd-courses-hero, .wd-equipment-hero, .wd-blog-hero, .wd-compact-hero { padding-top: clamp(104px, 11vw, 152px); padding-bottom: clamp(58px, 7vw, 92px); }
+.wd-contact-grid { align-items: start; }
+.wd-contact-cards { display: grid; gap: 14px; }
+.wd-contact-card { min-height: 112px; }
+.wd-contact-form { padding: clamp(24px, 3vw, 34px); }
+.single-wm_course .wd-content-grid, .single-wm_equipment .wd-content-grid { align-items: start; gap: clamp(28px, 4vw, 56px); }
+.single-wm_course .wd-content-main, .single-wm_equipment .wd-content-main { gap: clamp(20px, 2.4vw, 32px); }
+.single-wm_course .wd-sidebar-card, .single-wm_equipment .wd-sidebar-card { position: sticky; top: 96px; }
+.single-wm_course .wd-course-hero-card, .single-wm_equipment .wd-single-gear-visual { min-height: clamp(280px, 34vw, 420px); }
+.single-wm_equipment .wd-single-gear-visual { max-height: 440px; }
+.single-wm_course .wd-section:first-of-type, .single-wm_equipment .wd-section:first-of-type, .whaledive-blog .wd-section:first-of-type, .whaledive-equipment .wd-section:first-of-type, .whaledive-courses .wd-section:first-of-type { padding-top: var(--wd-section-y-compact); }
+.wd-section-cta, .wd-community { padding-top: clamp(50px, 6vw, 82px); padding-bottom: clamp(50px, 6vw, 82px); }
+.wd-footer { margin-top: 0; }
+@media (max-width: 900px) {
+  .wd-section { padding-top: clamp(46px, 10vw, 68px); padding-bottom: clamp(46px, 10vw, 68px); }
+  .wd-hero, .wd-about-hero, .wd-courses-hero, .wd-equipment-hero, .wd-blog-hero, .wd-compact-hero { padding-top: 96px; padding-bottom: 56px; }
+  .wd-course-grid, .whaledive-courses .wd-course-grid, .whaledive-equipment .wd-equipment-grid, .wd-blog-grid { grid-template-columns: 1fr; }
+  .wd-course-actions, .wd-equip-actions, .wd-actions { flex-wrap: wrap; }
+  .wd-btn, .wd-mini-btn, .wd-mini-link { min-height: 44px; }
+  .single-wm_course .wd-sidebar-card, .single-wm_equipment .wd-sidebar-card { position: static; }
+  .wd-contact-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  .wd-course-card, .wd-equip-card, .wd-blog-card, .wd-blog-featured, .wd-detail-card, .wd-sidebar-card, .wd-contact-card, .wd-contact-form, .wd-inner-card { padding: 20px; }
+  .wd-filter-bar { justify-content: flex-start; overflow-x: auto; padding-bottom: 4px; }
+  .wd-chip { white-space: nowrap; }
+  .whaledive-equipment .wd-equip-visual, .single-wm_equipment .wd-single-gear-visual, .single-wm_course .wd-course-hero-card { min-height: 220px; }
+}
