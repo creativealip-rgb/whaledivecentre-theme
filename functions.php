@@ -21,7 +21,7 @@ require_once get_template_directory() . '/inc/template-functions.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_stylesheet_uri(), [], '1.7.5');
+    wp_enqueue_style('contenly-style', get_stylesheet_uri(), [], '1.7.6');
     
     // Google Fonts
     wp_enqueue_style('contenly-fonts', 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap', [], null);
@@ -687,7 +687,7 @@ if (!is_admin()) {
  */
 function contenly_custom_document_title($title) {
     if (is_front_page() || is_home()) {
-        return contenly_tr('Whale Dive Centre - Dive Beyond the Surface', 'Whale Dive Centre - Bali Diving Community & Academy');
+        return contenly_tr('Whale Dive Centre - Dive Beyond the Surface', 'Whale Dive Centre - Jakarta Diving Community & Academy');
     }
 
     $title_checks = [
@@ -755,10 +755,10 @@ function contenly_get_seo_context() {
     $schema = [];
 
     if (is_front_page() || is_home()) {
-        $title = contenly_tr('Whale Dive Centre - Dive Beyond the Surface', 'Whale Dive Centre - Bali Diving Community & Academy');
+        $title = contenly_tr('Whale Dive Centre - Dive Beyond the Surface', 'Whale Dive Centre - Jakarta Diving Community & Academy');
         $description = contenly_tr(
             'Whale Dive Centre bantu rencanakan trip private, family trip, dan group trip dengan itinerary yang rapi, harga transparan, dan pendampingan jelas dari awal sampai berangkat.',
-            'Whale Dive Centre in Bali offers scuba diving courses, dive community programs, quality scuba equipment, and ocean-minded training for beginner to professional divers.'
+            'Whale Dive Centre in Jakarta offers scuba diving courses, dive community programs, quality scuba equipment, and ocean-minded training for beginner to professional divers.'
         );
         $schema[] = [
             '@context' => 'https://schema.org',
