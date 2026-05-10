@@ -47,7 +47,7 @@ endwhile; rewind_posts();
           <?php if($price): ?><span class="wd-agency-badge">Rp <?php echo number_format((float)$price,0,',','.'); ?></span><?php endif; ?>
         </div>
         <div class="wd-actions">
-          <a class="wd-btn" href="/contact/">Ask Availability</a>
+          <?php if (is_user_logged_in()): ?><button type="button" class="wd-btn wd-equipment-add-cart" data-item-id="<?php echo get_the_ID(); ?>">Add to Cart</button><?php else: ?><a class="wd-btn" href="/member-login/?next=checkout">Login to Buy</a><?php endif; ?>
           <a class="wd-btn alt" href="/equipment/">All Equipment</a>
         </div>
       </div>
@@ -74,13 +74,30 @@ endwhile; rewind_posts();
           </div>
           <?php endif; ?>
           <?php if($sizes): ?><h4>Available Sizes</h4><p><?php echo esc_html($sizes); ?></p><?php endif; ?>
-          <a class="wd-btn" href="/contact/" style="width:100%;text-align:center;margin-top:16px">Ask Availability</a>
+          <?php if (is_user_logged_in()): ?><button type="button" class="wd-btn wd-equipment-add-cart" data-item-id="<?php echo get_the_ID(); ?>" style="width:100%;text-align:center;margin-top:16px">Add to Cart</button><?php else: ?><a class="wd-btn" href="/member-login/?next=checkout" style="width:100%;text-align:center;margin-top:16px">Login to Buy</a><?php endif; ?>
         </div>
       </aside>
     </div>
   </section>
 
-  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/about/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>WhatsApp: +62 xxx xxxx xxxx</p><p>Bali, Indonesia</p><div class="wd-social"><a href="#" aria-label="Facebook">FB</a><a href="#" aria-label="Instagram">IG</a><a href="#" aria-label="YouTube">YT</a><a href="#" aria-label="TikTok">TT</a></div></div></div><div class="wd-footer-bottom"><span>&copy; <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
+  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/about/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>Instagram: @whaledivecentre.id</p><p>Bali dive crew — base details available on inquiry</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Facebook">FB</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram">IG</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="YouTube">YT</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="TikTok">TT</a></div></div></div><div class="wd-footer-bottom"><span>&copy; <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
 </main>
 <script>document.addEventListener("DOMContentLoaded",function(){var b=document.querySelector(".wd-hamburger"),m=document.querySelector(".wd-menu");if(!b||!m)return;b.addEventListener("click",function(){var o=document.body.classList.toggle("wd-menu-open");b.setAttribute("aria-expanded",o?"true":"false")});m.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){document.body.classList.remove("wd-menu-open");b.setAttribute("aria-expanded","false")})})});</script>
-<?php wp_footer(); ?></body></html>
+<?php wp_footer(); ?><script>
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('.wd-equipment-add-cart').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      if (!window.wmCart || !wmCart.addToCart) { window.location.href = '/checkout/'; return; }
+      var original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Adding...';
+      wmCart.addToCart('equipment', btn.getAttribute('data-item-id'), 1, {}).then(function(data){
+        if (data && data.success) { window.location.href = '/checkout/'; return; }
+        btn.disabled = false;
+        btn.textContent = original;
+      }).catch(function(){ btn.disabled = false; btn.textContent = original; });
+    });
+  });
+});
+</script>
+</body></html>

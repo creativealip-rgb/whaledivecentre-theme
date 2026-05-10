@@ -2,11 +2,14 @@
 /**
  * Template Name: About Page
  */
-get_header();
-$theme_uri = get_template_directory_uri();
-?>
+$theme_uri = get_stylesheet_directory_uri();
+?><!doctype html>
+<html <?php language_attributes(); ?>>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_head(); ?></head>
+<body <?php body_class('whaledive-inner whaledive-about'); ?>><?php wp_body_open(); ?>
+<main class="wd-page">
+  <header class="wd-header"><div class="wd-shell"><div class="wd-nav"><a class="wd-brand" href="/"><img src="https://whaledivecentre.com/wp-content/themes/theme-travel-master/assets/logo.jpg" alt="Whale Dive Centre"><span>Whale Dive Centre</span></a><button class="wd-hamburger" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="wd-menu" id="wd-mobile-menu"><a href="/">Home</a><a href="/courses/">Courses</a><a href="/equipment/">Equipment</a><a href="/about/">About</a><?php if(is_user_logged_in()){ $u=wp_get_current_user(); echo '<a href="/member-dashboard/" class="wd-nav-member">Dashboard - '.esc_html($u->display_name).'</a>'; } else { echo '<a href="/member-login/" class="wd-nav-member">Login</a>'; } ?></nav></div></div></header>
 
-<main class="wd-page whaledive-inner">
   <!-- HERO -->
   <section class="wd-inner-hero wd-about-hero">
     <div class="wd-shell">
@@ -28,24 +31,24 @@ $theme_uri = get_template_directory_uri();
       <p class="wd-sub">Small team, personal attention. Every crew member is here because they love the ocean.</p>
       <div class="wd-about-crew-grid">
         <div class="wd-crew-card">
-          <div class="wd-crew-photo"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=faces" alt="Kadek Arya"></div>
+          <img src="https://whaledivecentre.com/wp-content/themes/theme-travel-master/assets/crew-1.svg" alt="Kadek Arya">
           <h3>Kadek Arya</h3>
-          <span class="wd-crew-role">PADI Course Director</span>
+          <span>PADI Course Director</span>
         </div>
         <div class="wd-crew-card">
-          <div class="wd-crew-photo"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=faces" alt="Made Surya"></div>
+          <img src="https://whaledivecentre.com/wp-content/themes/theme-travel-master/assets/crew-2.svg" alt="Made Surya">
           <h3>Made Surya</h3>
-          <span class="wd-crew-role">Senior Instructor</span>
+          <span>Senior Instructor</span>
         </div>
         <div class="wd-crew-card">
-          <div class="wd-crew-photo"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&crop=faces" alt="Wayan Dika"></div>
+          <img src="https://whaledivecentre.com/wp-content/themes/theme-travel-master/assets/crew-3.svg" alt="Wayan Dika">
           <h3>Wayan Dika</h3>
-          <span class="wd-crew-role">Dive Guide & Safety Officer</span>
+          <span>Dive Guide & Safety Officer</span>
         </div>
         <div class="wd-crew-card">
-          <div class="wd-crew-photo"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&crop=faces" alt="Putu Rani"></div>
+          <img src="https://whaledivecentre.com/wp-content/themes/theme-travel-master/assets/crew-4.svg" alt="Putu Rani">
           <h3>Putu Rani</h3>
-          <span class="wd-crew-role">Equipment Specialist</span>
+          <span>Equipment Specialist</span>
         </div>
       </div>
     </div>
@@ -53,96 +56,54 @@ $theme_uri = get_template_directory_uri();
 
   <!-- HOW WE WORK -->
   <section class="wd-section wd-dark">
-    <div class="wd-shell wd-split">
-      <div>
-        <span class="wd-kicker">How we work</span>
-        <h2 class="wd-title">Calm briefings. Better habits. Safer dives.</h2>
-        <p class="wd-sub left">We keep the experience personal so divers can ask questions, repeat skills, and grow at the right pace.</p>
-      </div>
-      <div class="wd-steps">
-        <div>
-          <span style="font-size:48px;font-weight:900;color:rgba(255,255,255,.3);">01</span>
-          <h3 style="margin:12px 0 8px;color:#fff;">Before the dive</h3>
-          <p style="color:rgba(255,255,255,.7);margin:0;">Clear plan, gear check, site conditions, and skill expectations.</p>
-        </div>
-        <div>
-          <span style="font-size:48px;font-weight:900;color:rgba(255,255,255,.3);">02</span>
-          <h3 style="margin:12px 0 8px;color:#fff;">During the dive</h3>
-          <p style="color:rgba(255,255,255,.7);margin:0;">Small-group awareness, relaxed pacing, and safety-first decisions.</p>
-        </div>
-        <div>
-          <span style="font-size:48px;font-weight:900;color:rgba(255,255,255,.3);">03</span>
-          <h3 style="margin:12px 0 8px;color:#fff;">After the dive</h3>
-          <p style="color:rgba(255,255,255,.7);margin:0;">Debrief, next-step coaching, and recommendations for training or gear.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section class="wd-section wd-contact-section">
     <div class="wd-shell">
-      <div class="wd-contact-grid">
-        <div>
-          <span class="wd-kicker">Get in touch</span>
-          <h2 class="wd-title">Start the conversation</h2>
-          <p class="wd-sub left">Ask about courses, gear, scheduling, or anything else. The crew replies within 24 hours.</p>
-          <div class="wd-contact-cards">
-            <div>
-              <b>Email</b>
-              <span>info@whaledivecentre.com</span>
-            </div>
-            <div>
-              <b>WhatsApp</b>
-              <span>+62 xxx xxxx xxxx</span>
-            </div>
-            <div>
-              <b>Location</b>
-              <span>Bali, Indonesia</span>
-            </div>
-          </div>
-        </div>
-        <div>
-          <form class="wd-contact-form" method="post">
-            <label>
-              Your name
-              <input type="text" name="name" required>
-            </label>
-            <label>
-              WhatsApp / Email
-              <input type="text" name="contact" required>
-            </label>
-            <label>
-              What do you need?
-              <select name="inquiry_type">
-                <option>Course inquiry</option>
-                <option>Equipment availability</option>
-                <option>General question</option>
-              </select>
-            </label>
-            <label>
-              Message
-              <textarea name="message"></textarea>
-            </label>
-            <button type="submit" class="wd-btn">Send Inquiry</button>
-          </form>
-        </div>
+      <span class="wd-kicker">How we work</span>
+      <h2 class="wd-title">Calm briefings. Better habits. Safer dives.</h2>
+      <p class="wd-sub">We keep the experience personal so divers can ask questions, repeat skills, and grow at the right pace.</p>
+      <div class="wd-steps">
+        <div class="wd-step"><span>01</span><h3>Before the dive</h3><p>Clear plan, gear check, site conditions, and skill expectations.</p></div>
+        <div class="wd-step"><span>02</span><h3>During the dive</h3><p>Small-group awareness, relaxed pacing, and safety-first decisions.</p></div>
+        <div class="wd-step"><span>03</span><h3>After the dive</h3><p>Debrief, next-step coaching, and recommendations for training or gear.</p></div>
       </div>
     </div>
   </section>
-</main>
 
+  <!-- GET IN TOUCH -->
+  <section class="wd-section white" id="contact-form">
+    <div class="wd-shell">
+      <span class="wd-kicker">Get in touch</span>
+      <h2 class="wd-title">Start the conversation</h2>
+      <p class="wd-sub">Ask about courses, gear, scheduling, or anything else. The crew replies within 24 hours.</p>
+      <div class="wd-contact-grid">
+        <div class="wd-contact-cards">
+          <div class="wd-contact-card"><strong>Email</strong><a href="mailto:info@whaledivecentre.com">info@whaledivecentre.com</a></div>
+          <div class="wd-contact-card"><strong>Phone</strong><a href="tel:+622127939068">(021) 27939068</a></div>
+          <div class="wd-contact-card"><strong>Location</strong><span>Jl. Tanah Kusir II No.3, RT.10/RW.9, Kby. Lama Sel., Kec. Kebayoran Lama, Kota Jakarta Selatan, DKI Jakarta 12240</span></div>
+        </div>
+        <form class="wd-contact-form" method="post">
+          <label>Your Name<input type="text" name="your-name" placeholder="Your name" required></label>
+          <label>WhatsApp / Email<input type="text" name="whatsapp" placeholder="WhatsApp or email" required></label>
+          <label>What do you need?<select name="category"><option>Course inquiry</option><option>Equipment availability</option><option>General question</option></select></label>
+          <label>Message<textarea name="message" rows="4" placeholder="Tell us what you need..."></textarea></label>
+          <button type="submit" class="wd-btn">Send Inquiry</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/about/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>WhatsApp: <?php echo esc_html(get_option("wdc_whatsapp_number", "(021) 27939068")); ?></p><p>Jl. Tanah Kusir II No.3, RT.10/RW.9, Kby. Lama Sel., Kec. Kebayoran Lama, Kota Jakarta Selatan, DKI Jakarta 12240</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Facebook">FB</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram">IG</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="YouTube">YT</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="TikTok">TT</a></div></div></div><div class="wd-footer-bottom"><span>© <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
+</main>
 
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   var p = new URLSearchParams(window.location.search);
   var name = p.get('name');
   if(name){
-    var nameInput = document.querySelector('input[name="your-name"], input[placeholder*="name" i], input[name="name"]');
+    var nameInput = document.querySelector('input[name="your-name"]');
     if(nameInput) nameInput.value = name;
-    var waInput = document.querySelector('input[name="whatsapp"], input[name="your-whatsapp"]');
+    var waInput = document.querySelector('input[name="whatsapp"]');
     if(waInput && p.get('whatsapp')) waInput.value = p.get('whatsapp');
-    var msgInput = document.querySelector('textarea, input[name="message"]');
+    var msgInput = document.querySelector('textarea');
     if(msgInput){
       var msg = 'Course inquiry from homepage:\n';
       if(p.get('cert')) msg += 'Certification: ' + p.get('cert') + '\n';
@@ -154,5 +115,6 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 });
 </script>
-
-<?php get_footer(); ?>
+<?php wp_footer(); ?>
+</body>
+</html>

@@ -4,11 +4,11 @@
  */
 get_header();
 ?>
-<main class="wd-page-content">
+<div class="wd-page-content" style="padding:40px 0;min-height:60vh;">
 <?php
 while (have_posts()) : the_post();
     the_content();
 endwhile;
 ?>
-</main>
+</div>
 <?php get_footer(); ?>

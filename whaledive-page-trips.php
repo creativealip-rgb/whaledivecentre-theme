@@ -49,7 +49,7 @@ get_header();
         <div class="wd-container">
             <div class="wd-section-header">
                 <p class="wd-label">DIVE PACKAGES</p>
-                <h2>Choose your next underwater adventure</h2>
+                <h2>Ask the crew for current dive site recommendations</h2>
                 <p class="wd-section-subtitle">All trips include experienced dive guides, equipment rental options, and marine conservation briefings.</p>
             </div>
 

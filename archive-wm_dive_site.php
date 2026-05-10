@@ -27,8 +27,8 @@ $theme_uri = get_stylesheet_directory_uri();
       <div class="wd-map-placeholder">
         <div class="wd-map-inner">
           <span class="wd-kicker">Bali dive map</span>
-          <h3><?php echo count($all_sites); ?> dive sites across Bali</h3>
-          <p>Interactive map coming soon — for now, browse the sites below or ask the crew for recommendations.</p>
+          <h3>Bali dive site guide</h3>
+          <p>Our dive site guide is being curated by the Whale Dive Centre crew. For current recommendations, conditions, and trip planning, contact us directly.</p>
           <div class="wd-map-pins">
             <?php foreach($all_sites as $s): ?>
               <span class="wd-map-pin"><?php echo esc_html($s->post_title); ?></span>
@@ -42,7 +42,7 @@ $theme_uri = get_stylesheet_directory_uri();
   <section id="sites-list" class="wd-section white wd-center">
     <div class="wd-shell">
       <span class="wd-kicker">All dive sites</span>
-      <h2 class="wd-title">Choose your next underwater adventure</h2>
+      <h2 class="wd-title">Ask the crew for current dive site recommendations</h2>
 
       <div class="wd-filter-bar">
         <button class="wd-chip active" data-filter="all">All Sites</button>
@@ -84,7 +84,7 @@ $theme_uri = get_stylesheet_directory_uri();
 
   <section class="wd-section wd-community wd-center"><div class="wd-shell"><span class="wd-kicker">Ready to explore?</span><h2 class="wd-title">Plan your next dive trip with the crew.</h2><p class="wd-sub">Tell us your dates, level, and preferred sites — we handle logistics, safety, and fun.</p><a class="wd-btn alt" href="/contact/">Plan a Trip</a></div></section>
 
-  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/about/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water-diver/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course-idc/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>WhatsApp: +62 xxx xxxx xxxx</p><p>Bali, Indonesia</p><div class="wd-social"><a href="#" aria-label="Facebook">FB</a><a href="#" aria-label="Instagram">IG</a><a href="#" aria-label="YouTube">YT</a><a href="#" aria-label="TikTok">TT</a></div></div></div><div class="wd-footer-bottom"><span>&copy; <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
+  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/about/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water-diver/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course-idc/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>Instagram: @whaledivecentre.id</p><p>Bali dive crew — base details available on inquiry</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Facebook">FB</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram">IG</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="YouTube">YT</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="TikTok">TT</a></div></div></div><div class="wd-footer-bottom"><span>&copy; <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
 </main>
 <script>
 document.addEventListener('DOMContentLoaded', function() {

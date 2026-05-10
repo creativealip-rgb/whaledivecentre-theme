@@ -21,7 +21,7 @@ require_once get_template_directory() . '/inc/template-functions.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_stylesheet_uri(), [], '1.6.6');
+    wp_enqueue_style('contenly-style', get_stylesheet_uri(), [], '1.7.1');
     
     // Google Fonts
     wp_enqueue_style('contenly-fonts', 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap', [], null);
@@ -758,7 +758,7 @@ function contenly_get_seo_context() {
         $title = contenly_tr('Whale Dive Centre - Dive Beyond the Surface', 'Whale Dive Centre - Bali Diving Community & Academy');
         $description = contenly_tr(
             'Whale Dive Centre bantu rencanakan trip private, family trip, dan group trip dengan itinerary yang rapi, harga transparan, dan pendampingan jelas dari awal sampai berangkat.',
-            'Whale Dive Centre helps plan private trips, family vacations, and group journeys with clear itineraries, transparent pricing, and dependable support from planning to departure.'
+            'Whale Dive Centre in Bali offers scuba diving courses, dive community programs, quality scuba equipment, and ocean-minded training for beginner to professional divers.'
         );
         $schema[] = [
             '@context' => 'https://schema.org',

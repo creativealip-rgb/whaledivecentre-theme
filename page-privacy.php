@@ -34,7 +34,7 @@ get_header();
       <p>You can request to access, update, or delete your personal data at any time by contacting us at <strong>info@whaledivecentre.com</strong>.</p>
       
       <h2 style="font-size:28px;margin:32px 0 16px">Contact</h2>
-      <p>For privacy-related inquiries, contact us at <strong>info@whaledivecentre.com</strong> or WhatsApp <strong>+62 xxx xxxx xxxx</strong>.</p>
+      <p>For privacy-related inquiries, contact the Whale Dive Centre crew through our official email or Instagram channel.</p>
       
       <p style="margin-top:40px;color:#6b7c8a;font-size:14px">Last updated: May 2026</p>
     </div>
