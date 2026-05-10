@@ -17,39 +17,23 @@ $theme_uri = get_stylesheet_directory_uri();
         <div>
           <span class="wd-kicker">About Whale Dive Centre</span>
           <h1>Calm training. Better habits. Safer dives.</h1>
-          <p>A Bali-based dive centre focused on professional scuba training, quality gear, and an ocean-minded community.</p>
+          <p>A Jakarta-based dive centre focused on professional scuba training, quality gear support, and an ocean-minded community.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- OUR CREW -->
-  <section class="wd-section white">
+  <!-- TEAM STANDARDS -->
+  <section class="wd-section white wd-team-standards">
     <div class="wd-shell">
-      <span class="wd-kicker">Our crew</span>
-      <h2 class="wd-title">The people behind your dive experience</h2>
-      <p class="wd-sub">Small team, personal attention. Every crew member is here because they love the ocean.</p>
+      <span class="wd-kicker">Training standards</span>
+      <h2 class="wd-title">Crew-led standards for safer dive days</h2>
+      <p class="wd-sub">Our team keeps training personal, practical, and condition-aware from the first briefing to the final debrief.</p>
       <div class="wd-about-crew-grid">
-        <div class="wd-crew-card">
-          <img src="https://whaledivecentre.com/wp-content/themes/theme-travel-master/assets/crew-1.svg" alt="Kadek Arya">
-          <h3>Kadek Arya</h3>
-          <span>PADI Course Director</span>
-        </div>
-        <div class="wd-crew-card">
-          <img src="https://whaledivecentre.com/wp-content/themes/theme-travel-master/assets/crew-2.svg" alt="Made Surya">
-          <h3>Made Surya</h3>
-          <span>Senior Instructor</span>
-        </div>
-        <div class="wd-crew-card">
-          <img src="https://whaledivecentre.com/wp-content/themes/theme-travel-master/assets/crew-3.svg" alt="Wayan Dika">
-          <h3>Wayan Dika</h3>
-          <span>Dive Guide & Safety Officer</span>
-        </div>
-        <div class="wd-crew-card">
-          <img src="https://whaledivecentre.com/wp-content/themes/theme-travel-master/assets/crew-4.svg" alt="Putu Rani">
-          <h3>Putu Rani</h3>
-          <span>Equipment Specialist</span>
-        </div>
+        <div class="wd-crew-card"><div class="wd-crew-icon">01</div><h3>Instructor-led progression</h3><span>Courses move at the diver's real comfort level, not just the calendar.</span></div>
+        <div class="wd-crew-card"><div class="wd-crew-icon">02</div><h3>Equipment readiness</h3><span>Fit checks, setup walkthroughs, and gear questions happen before the dive.</span></div>
+        <div class="wd-crew-card"><div class="wd-crew-icon">03</div><h3>Small-group attention</h3><span>More room for questions, repeated skills, and calm debriefs.</span></div>
+        <div class="wd-crew-card"><div class="wd-crew-icon">04</div><h3>Condition-aware planning</h3><span>Weather, current, visibility, and diver readiness shape every recommendation.</span></div>
       </div>
     </div>
   </section>
@@ -60,7 +44,7 @@ $theme_uri = get_stylesheet_directory_uri();
       <span class="wd-kicker">How we work</span>
       <h2 class="wd-title">Calm briefings. Better habits. Safer dives.</h2>
       <p class="wd-sub">We keep the experience personal so divers can ask questions, repeat skills, and grow at the right pace.</p>
-      <div class="wd-steps">
+      <div class="wd-safety-grid"><article><b>Pre-dive briefing</b><span>Objectives, signals, limits, buddy plan, and exit plan are reviewed before each session.</span></article><article><b>Equipment checks</b><span>Fit, air delivery, weights, computer settings, and comfort are checked before entering the water.</span></article><article><b>Emergency readiness</b><span>Training decisions include conservative limits, first-aid awareness, and no-rush calls around conditions.</span></article></div><div class="wd-steps">
         <div class="wd-step"><span>01</span><h3>Before the dive</h3><p>Clear plan, gear check, site conditions, and skill expectations.</p></div>
         <div class="wd-step"><span>02</span><h3>During the dive</h3><p>Small-group awareness, relaxed pacing, and safety-first decisions.</p></div>
         <div class="wd-step"><span>03</span><h3>After the dive</h3><p>Debrief, next-step coaching, and recommendations for training or gear.</p></div>

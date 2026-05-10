@@ -38,7 +38,15 @@ endwhile; rewind_posts();
           <a class="wd-btn alt" href="/courses/">All Courses</a>
         </div>
       </div>
-      
+      <aside class="wd-course-hero-card">
+        <span>Course snapshot</span>
+        <b><?php echo esc_html($level_name ?: 'Dive training'); ?></b>
+        <ul>
+          <?php if($duration): ?><li>Duration: <?php echo esc_html($duration); ?></li><?php endif; ?>
+          <?php if($max_students): ?><li>Small group: max <?php echo esc_html($max_students); ?> divers</li><?php endif; ?>
+          <?php if($prereqs): ?><li>Prerequisite: <?php echo esc_html($prereqs); ?></li><?php endif; ?>
+        </ul>
+      </aside>
     </div>
   </section>
 
@@ -54,6 +62,11 @@ endwhile; rewind_posts();
           <p>This course is designed to build your skills and confidence underwater. Contact the crew for detailed scheduling and availability.</p>
         <?php endif; ?>
         <?php endwhile; ?>
+        <div class="wd-course-outcomes">
+          <article><b>What you build</b><span>Calmer buoyancy, clearer buddy communication, safer planning habits, and more confidence underwater.</span></article>
+          <article><b>How we teach</b><span>Briefing, demo, practice, feedback, and debrief cycles designed for real understanding.</span></article>
+          <article><b>Safety standard</b><span>Conservative limits, equipment checks, and condition-aware decisions stay central throughout the course.</span></article>
+        </div>
       </div>
       <aside class="wd-content-sidebar">
         <div class="wd-sidebar-card">
@@ -76,7 +89,7 @@ endwhile; rewind_posts();
 
   <section class="wd-section wd-community wd-center"><div class="wd-shell"><span class="wd-kicker">Ready when you are</span><h2 class="wd-title">Ask the crew for course availability.</h2><p class="wd-sub">Send your target certification, dates, and group size.</p><a class="wd-btn alt" href="/contact/">Request Course Plan</a></div></section>
 
-  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/about/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>Instagram: @whaledivecentre.id</p><p>Bali dive crew — base details available on inquiry</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Facebook">FB</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram">IG</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="YouTube">YT</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="TikTok">TT</a></div></div></div><div class="wd-footer-bottom"><span>&copy; <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
+  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/about/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>Phone: (021) 27939068</p><p>Jl. Tanah Kusir II No.3, Kebayoran Lama, Jakarta Selatan 12240</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Facebook">FB</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram">IG</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="YouTube">YT</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="TikTok">TT</a></div></div></div><div class="wd-footer-bottom"><span>&copy; <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
 </main>
 <script>document.addEventListener("DOMContentLoaded",function(){var b=document.querySelector(".wd-hamburger"),m=document.querySelector(".wd-menu");if(!b||!m)return;b.addEventListener("click",function(){var o=document.body.classList.toggle("wd-menu-open");b.setAttribute("aria-expanded",o?"true":"false")});m.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){document.body.classList.remove("wd-menu-open");b.setAttribute("aria-expanded","false")})})});</script>
 <?php wp_footer(); ?></body></html>

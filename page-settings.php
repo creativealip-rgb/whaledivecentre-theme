@@ -72,7 +72,7 @@ $current_tier = $tier_info[$membership_tier];
                     <?php echo esc_html(contenly_tr('Nomor Telepon', 'Phone Number')); ?>
                 </label>
                 <input type="tel" name="phone" value="<?php echo esc_attr($phone); ?>"
-                       placeholder="@whaledivecentre.id"
+                       placeholder="(021) 27939068"
                        style="width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 15px;">
             </div>
             

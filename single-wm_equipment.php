@@ -9,6 +9,7 @@ $sizes = get_post_meta(get_the_ID(), '_wm_sizes', true);
 $category = wp_get_post_terms(get_the_ID(), 'equipment_category');
 $brand = wp_get_post_terms(get_the_ID(), 'equipment_brand');
 $cat_name = !empty($category) ? $category[0]->name : '';
+$cat_slug = !empty($category) ? $category[0]->slug : '';
 $brand_name = !empty($brand) ? $brand[0]->name : '';
 $theme_uri = get_stylesheet_directory_uri();
 endwhile; rewind_posts();
@@ -26,20 +27,11 @@ endwhile; rewind_posts();
         <?php if($brand_name): ?><span class="wd-kicker"><?php echo esc_html($brand_name); ?></span><?php endif; ?>
         <h1><?php the_title(); ?></h1>
         <p><?php echo esc_html(get_the_excerpt()); ?></p>
-        <?php
-        // Equipment category images (Unsplash placeholders)
-        $equip_images = [
-            'masks' => 'https://images.unsplash.com/photo-1682687982501-1e58ab814714?w=800&h=500&fit=crop',
-            'wetsuits' => 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=500&fit=crop',
-            'bcd' => 'https://images.unsplash.com/photo-1559827291-bae8bb5af212?w=800&h=500&fit=crop',
-            'regulators' => 'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=800&h=500&fit=crop',
-            'fins' => 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=500&fit=crop',
-            'dive-computers' => 'https://images.unsplash.com/photo-1559827291-bae8bb5af212?w=800&h=500&fit=crop',
-        ];
-        $cat_slug = isset($cat_slug) ? $cat_slug : '';
-        $img_url = $equip_images[$cat_slug] ?? $equip_images['masks'];
-        ?>
-        <div style="width:100%;height:320px;border-radius:24px;overflow:hidden;margin-bottom:28px;background:url('<?php echo $img_url; ?>') center/cover no-repeat"></div>
+        <div class="wd-single-gear-visual" data-cat="<?php echo esc_attr($cat_slug ?: 'gear'); ?>">
+          <span><?php echo esc_html($cat_name ?: 'Dive Gear'); ?></span>
+          <b><?php echo esc_html($brand_name ?: 'Whale Dive Centre'); ?></b>
+          <small>Real product photography can replace this branded gear panel when the final media pack is available.</small>
+        </div>
 
         <div class="wd-detail-meta">
           <?php if($cat_name): ?><span><?php echo esc_html($cat_name); ?></span><?php endif; ?>
@@ -64,6 +56,7 @@ endwhile; rewind_posts();
           <h2 class="wd-title"><?php the_title(); ?></h2>
           <p>Quality dive gear selected by the Whale Dive Centre crew. Contact us for fit guidance, availability, and rental options.</p>
         <?php endif; endwhile; ?>
+      <div class="wd-gear-service-grid"><article><b>Fit guidance</b><span>Ask the crew about mask seal, BCD size, exposure protection, and comfort before buying.</span></article><article><b>Training-ready setup</b><span>Recommended for course sessions, fun dives, and safer habit-building.</span></article><article><b>Availability check</b><span>Stock and sizing can change; confirm before checkout or pickup.</span></article></div>
       </div>
       <aside class="wd-content-sidebar">
         <div class="wd-sidebar-card">
@@ -80,7 +73,7 @@ endwhile; rewind_posts();
     </div>
   </section>
 
-  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/about/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>Instagram: @whaledivecentre.id</p><p>Bali dive crew — base details available on inquiry</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Facebook">FB</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram">IG</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="YouTube">YT</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="TikTok">TT</a></div></div></div><div class="wd-footer-bottom"><span>&copy; <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
+  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/about/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>Phone: (021) 27939068</p><p>Jl. Tanah Kusir II No.3, Kebayoran Lama, Jakarta Selatan 12240</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Facebook">FB</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram">IG</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="YouTube">YT</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="TikTok">TT</a></div></div></div><div class="wd-footer-bottom"><span>&copy; <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
 </main>
 <script>document.addEventListener("DOMContentLoaded",function(){var b=document.querySelector(".wd-hamburger"),m=document.querySelector(".wd-menu");if(!b||!m)return;b.addEventListener("click",function(){var o=document.body.classList.toggle("wd-menu-open");b.setAttribute("aria-expanded",o?"true":"false")});m.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){document.body.classList.remove("wd-menu-open");b.setAttribute("aria-expanded","false")})})});</script>
 <?php wp_footer(); ?><script>

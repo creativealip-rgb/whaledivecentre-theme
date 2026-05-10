@@ -52,38 +52,46 @@ $theme_uri = get_stylesheet_directory_uri();
           $excerpt = $course->post_excerpt ?: wp_trim_words($course->post_content, 18, '…');
           $permalink = get_permalink($course->ID);
         ?>
-        <article class="wd-course-card wd-detail-card" data-level="level-<?php echo esc_attr($level_slug); ?>">
-          <div class="wd-course-no"><?php echo str_pad($i + 1, 2, '0', STR_PAD_LEFT); ?></div>
+        <article class="wd-course-card wd-detail-card wd-course-decision-card" data-level="level-<?php echo esc_attr($level_slug); ?>">
+          <div class="wd-course-card-head">
+            <div class="wd-course-no"><?php echo str_pad($i + 1, 2, '0', STR_PAD_LEFT); ?></div>
+            <?php if ($agency_name): ?><span class="wd-course-agency"><?php echo esc_html($agency_name); ?></span><?php endif; ?>
+          </div>
           <h3><?php echo esc_html($course->post_title); ?></h3>
-          <div class="wd-course-meta">
+          <div class="wd-course-meta wd-course-chips">
             <?php if ($level_name): ?><span><?php echo esc_html($level_name); ?></span><?php endif; ?>
             <?php if ($duration): ?><span><?php echo esc_html($duration); ?></span><?php endif; ?>
-            <?php if ($agency_name): ?><span class="wd-agency-badge"><?php echo esc_html($agency_name); ?></span><?php endif; ?>
+            <?php if ($max_students): ?><span>Max <?php echo esc_html($max_students); ?> divers</span><?php endif; ?>
           </div>
           <?php if ($excerpt): ?><p><?php echo esc_html($excerpt); ?></p><?php endif; ?>
+          <div class="wd-course-fit">
+            <b>Best for</b>
+            <span><?php echo esc_html($level_name ? $level_name . ' divers ready for the next step.' : 'Divers who want a structured, instructor-led pathway.'); ?></span>
+          </div>
           <?php if ($price): ?>
           <div class="wd-course-price">
-            <span class="wd-price-label">From</span>
+            <span class="wd-price-label">Course fee from</span>
             <span class="wd-price-amount">Rp <?php echo number_format((float)$price, 0, ',', '.'); ?></span>
-            <?php if ($max_students): ?><span class="wd-price-note">max <?php echo esc_html($max_students); ?> students</span><?php endif; ?>
           </div>
           <?php endif; ?>
-          <dl>
+          <dl class="wd-course-quickfacts">
             <?php if ($prereqs): ?><dt>Prerequisite</dt><dd><?php echo esc_html($prereqs); ?></dd><?php endif; ?>
             <?php if ($includes_text): ?><dt>Includes</dt><dd><?php echo esc_html($includes_text); ?></dd><?php endif; ?>
           </dl>
-          <a href="<?php echo esc_url($permalink); ?>">View course detail →</a>
+          <div class="wd-course-actions"><a class="wd-mini-btn" href="/contact/">Request Plan</a><a class="wd-mini-link" href="<?php echo esc_url($permalink); ?>">View Details</a></div>
         </article>
         <?php endforeach; ?>
       </div>
     </div>
   </section>
 
+  <section class="wd-section white wd-course-standards"><div class="wd-shell"><span class="wd-kicker">Training standards</span><h2 class="wd-title">Every course is planned around readiness, not pressure.</h2><div class="wd-course-trust-grid"><article><b>Prerequisites checked</b><span>The crew confirms certification, comfort level, and schedule before recommending a path.</span></article><article><b>Small-group pacing</b><span>More time for questions, repeated skills, and calm debriefs after each session.</span></article><article><b>Gear guidance included</b><span>Fit, comfort, and setup support are part of the course planning process.</span></article></div></div></section>
+
   <section class="wd-section white"><div class="wd-shell wd-split"><div><span class="wd-kicker">How it works</span><h2 class="wd-title">Simple steps to start diving.</h2><p class="wd-sub left">Pick a course, share your dates, and the crew handles the rest — from gear to certification.</p></div><div class="wd-steps"><div><b>01</b><h3>Tell us your level</h3><p>Share certification, schedule, group size, and comfort level.</p></div><div><b>02</b><h3>Get your course plan</h3><p>The crew recommends schedule, prerequisites, and gear notes.</p></div><div><b>03</b><h3>Confirm and train</h3><p>Once confirmed, the course appears in your member dashboard.</p></div></div></div></section>
 
   <section class="wd-section wd-community wd-center"><div class="wd-shell"><span class="wd-kicker">Ready when you are</span><h2 class="wd-title">Ask the crew for course availability.</h2><p class="wd-sub">Send your target certification, dates, and group size. Whale Dive Centre will help map the right path.</p><a class="wd-btn alt" href="/contact/">Request Course Plan</a></div></section>
 
-  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/about/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>WhatsApp: <?php echo esc_html(get_option("wdc_whatsapp_number", "@whaledivecentre.id")); ?></p><p>Bali dive crew — base details available on inquiry</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Facebook">FB</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram">IG</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="YouTube">YT</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="TikTok">TT</a></div></div></div><div class="wd-footer-bottom"><span>© <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
+  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/about/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>Phone: (021) 27939068</p><p>Jl. Tanah Kusir II No.3, Kebayoran Lama, Jakarta Selatan 12240</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Facebook">FB</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram">IG</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="YouTube">YT</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="TikTok">TT</a></div></div></div><div class="wd-footer-bottom"><span>© <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
 </main>
 <?php wp_footer(); ?>
 </body></html>

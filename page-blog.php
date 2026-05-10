@@ -36,12 +36,15 @@ $theme_uri = get_stylesheet_directory_uri();
   <!-- BLOG POSTS -->
   <section class="wd-section white">
     <div class="wd-shell">
+      <div class="wd-editorial-note"><span>Field notes</span><b>Practical dive knowledge, written for real decisions.</b><p>Use these guides to prepare for courses, gear choices, and safer habits before you meet the crew.</p></div>
       <?php if ($posts_q->have_posts()) : ?>
         <?php $first = true; ?>
         <?php while ($posts_q->have_posts()) : $posts_q->the_post(); ?>
           <?php
             $cats = get_the_category();
             $cat_name = $cats ? $cats[0]->name : 'Article';
+            $read_time = max(2, (int) ceil(str_word_count(wp_strip_all_tags(get_the_content())) / 220));
+            $byline = 'Whale Dive Centre Team';
           ?>
           <?php if ($first) : ?>
             <?php $first = false; ?>
@@ -49,7 +52,7 @@ $theme_uri = get_stylesheet_directory_uri();
               <span class="wd-blog-tag"><?php echo esc_html($cat_name); ?></span>
               <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
               <p><?php echo wp_trim_words(get_the_excerpt(), 30); ?></p>
-              <span class="wd-blog-meta"><?php echo get_the_date(); ?> · <?php the_author(); ?></span>
+              <span class="wd-blog-meta"><?php echo esc_html($byline); ?> · <?php echo get_the_date(); ?> · <?php echo esc_html($read_time); ?> min read</span>
               <a href="<?php the_permalink(); ?>" class="wd-btn">Read more &rarr;</a>
             </article>
             <div class="wd-blog-grid">
@@ -58,20 +61,20 @@ $theme_uri = get_stylesheet_directory_uri();
               <span class="wd-blog-tag"><?php echo esc_html($cat_name); ?></span>
               <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
               <p><?php echo wp_trim_words(get_the_excerpt(), 20); ?></p>
-              <span class="wd-blog-meta"><?php echo get_the_date(); ?> · <?php the_author(); ?></span>
+              <span class="wd-blog-meta"><?php echo esc_html($byline); ?> · <?php echo get_the_date(); ?> · <?php echo esc_html($read_time); ?> min read</span>
               <a href="<?php the_permalink(); ?>">Read more &rarr;</a>
             </article>
           <?php endif; ?>
         <?php endwhile; ?>
         </div>
       <?php else : ?>
-        <p class="wd-empty">Belum ada artikel.</p>
+        <p class="wd-empty">No articles published yet.</p>
       <?php endif; ?>
       <?php wp_reset_postdata(); ?>
     </div>
   </section>
 
-  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/about/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>WhatsApp: <?php echo esc_html(get_option("wdc_whatsapp_number", "@whaledivecentre.id")); ?></p><p>Bali dive crew — base details available on inquiry</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Facebook">FB</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram">IG</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="YouTube">YT</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="TikTok">TT</a></div></div></div><div class="wd-footer-bottom"><span>© <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
+  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/about/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>Phone: (021) 27939068</p><p>Jl. Tanah Kusir II No.3, Kebayoran Lama, Jakarta Selatan 12240</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Facebook">FB</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram">IG</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="YouTube">YT</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="TikTok">TT</a></div></div></div><div class="wd-footer-bottom"><span>© <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
 </main>
 <?php wp_footer(); ?>
 </body>

@@ -45,23 +45,35 @@ $theme_uri = get_stylesheet_directory_uri();
           $cat_name = !empty($cat_terms) ? $cat_terms[0]->name : '';
           $brand_name = !empty($brand_terms) ? $brand_terms[0] : '';
           $permalink = get_permalink($item->ID);
+          $use_case = $cat_name ? 'Crew-selected ' . strtolower($cat_name) . ' for training, comfort, and safer dive habits.' : 'Crew-selected dive gear for training, comfort, and safer dive habits.';
         ?>
-        <article class="wd-equip-card wd-detail-card" data-cat="cat-<?php echo esc_attr($cat_slug); ?>">
-          <div class="wd-equip-icon"><?php echo esc_html(mb_substr($cat_name, 0, 1)); ?></div>
-          <h3><?php echo esc_html($item->post_title); ?></h3>
-          <div class="wd-course-meta">
-            <?php if($cat_name): ?><span><?php echo esc_html($cat_name); ?></span><?php endif; ?>
-            <?php if($brand_name): ?><span><?php echo esc_html($brand_name); ?></span><?php endif; ?>
+        <article class="wd-equip-card wd-detail-card wd-shop-card" data-cat="cat-<?php echo esc_attr($cat_slug); ?>">
+          <div class="wd-equip-visual" data-cat="<?php echo esc_attr($cat_slug ?: 'gear'); ?>">
+            <span class="wd-equip-mark"><?php echo esc_html($cat_name ? mb_substr($cat_name, 0, 1) : 'G'); ?></span>
+            <?php if($cat_name): ?><span class="wd-equip-type"><?php echo esc_html($cat_name); ?></span><?php endif; ?>
           </div>
-          <?php if($price): ?>
-          <div class="wd-equip-price">
-            <span class="wd-price-label">Price</span>
-            <span class="wd-price-amount">Rp <?php echo number_format((float)$price,0,',','.'); ?></span>
+          <div class="wd-equip-card-body">
+            <div class="wd-course-meta wd-shop-meta">
+              <?php if($cat_name): ?><span><?php echo esc_html($cat_name); ?></span><?php endif; ?>
+              <?php if($brand_name): ?><span><?php echo esc_html($brand_name); ?></span><?php endif; ?>
+            </div>
+            <h3><?php echo esc_html($item->post_title); ?></h3>
+            <p class="wd-equip-use"><?php echo esc_html($use_case); ?></p>
+            <?php if($price): ?>
+            <div class="wd-equip-price">
+              <span class="wd-price-label">Buy price</span>
+              <span class="wd-price-amount">Rp <?php echo number_format((float)$price,0,',','.'); ?></span>
+            </div>
+            <?php endif; ?>
+            <div class="wd-equip-chips">
+              <?php if($sizes): ?><span>Sizes: <?php echo esc_html($sizes); ?></span><?php endif; ?>
+              <span><?php echo $stock ? esc_html($stock) . ' in stock' : 'Check availability'; ?></span>
+            </div>
+            <div class="wd-equip-actions">
+              <?php if(is_user_logged_in()): ?><button type="button" class="wd-mini-btn wd-equipment-add-cart" data-item-id="<?php echo esc_attr($item->ID); ?>">Add to Cart</button><?php else: ?><a class="wd-mini-btn" href="/member-login/?next=checkout">Login to Buy</a><?php endif; ?>
+              <a class="wd-mini-link" href="<?php echo esc_url($permalink); ?>">View Details</a>
+            </div>
           </div>
-          <?php endif; ?>
-          <?php if($sizes): ?><p class="wd-equip-sizes">Sizes: <?php echo esc_html($sizes); ?></p><?php endif; ?>
-          <?php if($stock): ?><p class="wd-equip-stock"><?php echo esc_html($stock); ?> in stock</p><?php endif; ?>
-          <a href="<?php echo esc_url($permalink); ?>">View details &rarr;</a>
         </article>
         <?php endforeach; ?>
       </div>
@@ -70,7 +82,7 @@ $theme_uri = get_stylesheet_directory_uri();
 
   <section class="wd-section wd-community wd-center"><div class="wd-shell"><span class="wd-kicker">Need gear advice?</span><h2 class="wd-title">The crew helps you find the right fit.</h2><p class="wd-sub">Tell us your certification level, dive plans, and budget — we recommend gear that works.</p><a class="wd-btn alt" href="/contact/">Ask the Crew</a></div></section>
 
-  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/about/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>WhatsApp: <?php echo esc_html(get_option("wdc_whatsapp_number", "@whaledivecentre.id")); ?></p><p>Bali dive crew — base details available on inquiry</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Facebook">FB</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram">IG</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="YouTube">YT</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="TikTok">TT</a></div></div></div><div class="wd-footer-bottom"><span>&copy; <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
+  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/about/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>Phone: (021) 27939068</p><p>Jl. Tanah Kusir II No.3, Kebayoran Lama, Jakarta Selatan 12240</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Facebook">FB</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram">IG</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="YouTube">YT</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="TikTok">TT</a></div></div></div><div class="wd-footer-bottom"><span>&copy; <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
 </main>
-<?php wp_footer(); ?>
+<script>/* catalog add cart */document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('.wd-equipment-add-cart').forEach(function(btn){btn.addEventListener('click',function(){if(!window.wmCart||!wmCart.addToCart){window.location.href='/checkout/';return;}var original=btn.textContent;btn.disabled=true;btn.textContent='Adding...';wmCart.addToCart('equipment',btn.getAttribute('data-item-id'),1,{}).then(function(data){if(data&&data.success){window.location.href='/checkout/';return;}btn.disabled=false;btn.textContent=original;}).catch(function(){btn.disabled=false;btn.textContent=original;});});});});</script><?php wp_footer(); ?>
 </body></html>
