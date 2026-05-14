@@ -5,10 +5,10 @@
 $theme_uri = get_stylesheet_directory_uri();
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_head(); ?></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_head(); ?><style id="wd-about-ux-pass">.wd-crew-proof{padding-top:72px!important}.wd-instructor-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.wd-instructor-grid article{padding:24px;border-radius:28px;background:linear-gradient(180deg,#fff,#eef8fb);border:1px solid rgba(0,91,122,.1);box-shadow:0 16px 38px rgba(2,32,46,.07)}.wd-instructor-grid div{width:74px;height:74px;border-radius:26px;display:grid;place-items:center;margin-bottom:18px;background:linear-gradient(135deg,#06384d,#08a7c7);color:#fff;font-size:28px;font-weight:900}.wd-instructor-grid h3{margin:0 0 8px;color:#06384d}.wd-instructor-grid b{display:block;margin-bottom:10px;color:#0b617c}.wd-instructor-grid span{color:#5b7180;line-height:1.65}.wd-contact-form small{display:block;margin-top:7px;color:#64748b;font-size:12px;line-height:1.45;text-transform:none;letter-spacing:0}.wd-form-privacy{margin:0;color:#64748b;font-size:13px;line-height:1.5}.wd-contact-card a{display:inline-flex;margin-top:10px;color:#0b617c;font-weight:800}@media(max-width:800px){.wd-instructor-grid{grid-template-columns:1fr}}</style></head>
 <body <?php body_class('whaledive-inner whaledive-about'); ?>><?php wp_body_open(); ?>
 <main class="wd-page">
-  <header class="wd-header"><div class="wd-shell"><div class="wd-nav"><a class="wd-brand" href="/"><img src="https://whaledivecentre.com/wp-content/themes/theme-travel-master/assets/logo.jpg" alt="Whale Dive Centre"><span>Whale Dive Centre</span></a><button class="wd-hamburger" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="wd-menu" id="wd-mobile-menu"><a href="/">Home</a><a href="/courses/">Courses</a><a href="/equipment/">Equipment</a><a href="/about/">About</a><?php if(is_user_logged_in()){ $u=wp_get_current_user(); echo '<a href="/member-dashboard/" class="wd-nav-member">Dashboard</a>'; } else { echo '<a href="/member-login/" class="wd-nav-member">Login</a>'; } ?></nav></div></div></header>
+  <header class="wd-header"><div class="wd-shell"><div class="wd-nav"><a class="wd-brand" href="/"><img class="wd-brand-logo" src="<?php echo esc_url(get_template_directory_uri() . '/assets/wdc-navbar-logo.jpg?v=20260514b'); ?>" alt="Whale Dive Centre"><span>Whale Dive Centre</span></a><button class="wd-hamburger" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="wd-menu" id="wd-mobile-menu"><a href="/" data-nav="home">Home</a><a href="/courses/" data-nav="courses">Courses</a><a href="/equipment/" data-nav="equipment">Equipment</a><a href="/blog/" data-nav="blog">Blog</a><?php if(is_user_logged_in()){ $u=wp_get_current_user(); echo '<a href="/member-dashboard/" class="wd-nav-member">Dashboard</a>'; } else { echo '<a href="/member-login/" class="wd-nav-member">Login</a>'; } ?></nav></div></div></header>
 
   <!-- HERO -->
   <section class="wd-inner-hero wd-about-hero">
@@ -17,7 +17,7 @@ $theme_uri = get_stylesheet_directory_uri();
         <div>
           <span class="wd-kicker">About Whale Dive Centre</span>
           <h1>Calm training. Better habits. Safer dives.</h1>
-          <p>A Jakarta-based dive centre focused on professional scuba training, quality gear support, and an ocean-minded community.</p>
+          <p>A Jakarta-based dive centre focused on professional scuba training, quality gear support, and an ocean-minded community.</p><div class="wd-actions"><a class="wd-btn" href="#contact-form">Start Inquiry</a><a class="wd-btn alt" href="/courses/">View Courses</a></div>
         </div>
       </div>
     </div>
@@ -37,6 +37,8 @@ $theme_uri = get_stylesheet_directory_uri();
       </div>
     </div>
   </section>
+
+  <section class="wd-section white wd-crew-proof"><div class="wd-shell"><span class="wd-kicker">Meet the crew</span><h2 class="wd-title">Certified, patient, and focused on calm progression.</h2><p class="wd-sub">Add real instructor portraits when available. Until then, these profiles clarify the teaching style and proof visitors expect.</p><div class="wd-instructor-grid"><article><div>W</div><h3>Lead Instructor</h3><b>PADI / SSI pathway</b><span>Small-group pacing, beginner confidence, and calm skill repetition.</span></article><article><div>D</div><h3>Training Crew</h3><b>Rescue & safety support</b><span>Briefings, buddy awareness, equipment checks, and debrief habits.</span></article><article><div>C</div><h3>Gear Specialist</h3><b>Fit and setup guidance</b><span>Mask fit, BCD sizing, regulator setup, and dive computer basics.</span></article></div></div></section>
 
   <!-- HOW WE WORK -->
   <section class="wd-section wd-dark">
@@ -62,20 +64,22 @@ $theme_uri = get_stylesheet_directory_uri();
         <div class="wd-contact-cards">
           <div class="wd-contact-card"><strong>Email</strong><a href="mailto:info@whaledivecentre.com">info@whaledivecentre.com</a></div>
           <div class="wd-contact-card"><strong>Phone</strong><a href="tel:+622127939068">(021) 27939068</a></div>
-          <div class="wd-contact-card"><strong>Location</strong><span>Jl. Tanah Kusir II No.3, RT.10/RW.9, Kby. Lama Sel., Kec. Kebayoran Lama, Kota Jakarta Selatan, DKI Jakarta 12240</span></div>
+          <div class="wd-contact-card"><strong>Business Hours</strong><span>Monday - Saturday, 09:00 - 18:00 WIB. Course and trip schedules are confirmed by appointment.</span></div>
+          <div class="wd-contact-card"><strong>Location</strong><span>Jl. Tanah Kusir II No.3, RT.10/RW.9, Kby. Lama Sel., Kec. Kebayoran Lama, Kota Jakarta Selatan, DKI Jakarta 12240</span><a href="https://www.google.com/maps/search/?api=1&query=Jl.%20Tanah%20Kusir%20II%20No.3%20Jakarta%20Selatan" target="_blank" rel="noopener">Open in Google Maps</a></div>
         </div>
         <form class="wd-contact-form" method="post">
           <label>Your Name<input type="text" name="your-name" placeholder="Your name" required></label>
-          <label>WhatsApp / Email<input type="text" name="whatsapp" placeholder="WhatsApp or email" required></label>
+          <label>Email<input type="email" name="email" placeholder="you@example.com"><small>Use email if you prefer a written reply.</small></label>
+          <label>WhatsApp Number<input type="tel" name="whatsapp" placeholder="+62..." required><small>Required so our crew can reply within 24 hours.</small></label>
           <label>What do you need?<select name="category"><option>Course inquiry</option><option>Equipment availability</option><option>General question</option></select></label>
           <label>Message<textarea name="message" rows="4" placeholder="Tell us what you need..."></textarea></label>
-          <button type="submit" class="wd-btn">Send Inquiry</button>
+          <p class="wd-form-privacy">We only use your contact details to reply to this inquiry.</p><button type="submit" class="wd-btn">Send Inquiry</button>
         </form>
       </div>
     </div>
   </section>
 
-  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/about/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>WhatsApp: <?php echo esc_html(get_option("wdc_whatsapp_number", "(021) 27939068")); ?></p><p>Jl. Tanah Kusir II No.3, RT.10/RW.9, Kby. Lama Sel., Kec. Kebayoran Lama, Kota Jakarta Selatan, DKI Jakarta 12240</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Facebook">FB</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram">IG</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="YouTube">YT</a><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="TikTok">TT</a></div></div></div><div class="wd-footer-bottom"><span>© <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
+  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/about/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>WhatsApp: <?php echo esc_html(get_option("wdc_whatsapp_number", "(021) 27939068")); ?></p><p>Jl. Tanah Kusir II No.3, RT.10/RW.9, Kby. Lama Sel., Kec. Kebayoran Lama, Kota Jakarta Selatan, DKI Jakarta 12240</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram">Instagram</a></div></div></div><div class="wd-footer-bottom"><span>© <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
 </main>
 
 <script>
@@ -87,6 +91,8 @@ document.addEventListener('DOMContentLoaded', function(){
     if(nameInput) nameInput.value = name;
     var waInput = document.querySelector('input[name="whatsapp"]');
     if(waInput && p.get('whatsapp')) waInput.value = p.get('whatsapp');
+    var emailInput = document.querySelector('input[name="email"]');
+    if(emailInput && p.get('email')) emailInput.value = p.get('email');
     var msgInput = document.querySelector('textarea');
     if(msgInput){
       var msg = 'Course inquiry from homepage:\n';
@@ -99,6 +105,6 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 });
 </script>
-<?php wp_footer(); ?>
+<script>document.addEventListener('DOMContentLoaded',function(){var path=location.pathname;document.querySelectorAll('.wd-menu a[data-nav]').forEach(function(a){var key=a.getAttribute('data-nav');var active=(key==='home'&&path==='/')||(key!=='home'&&path.indexOf('/'+key+'/')===0);if(active){a.classList.add('is-active');a.setAttribute('aria-current','page');}});});</script><?php wp_footer(); ?>
 </body>
 </html>

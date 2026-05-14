@@ -1,7 +1,7 @@
 <?php
 /**
  * Create WordPress pages for new features
- * Run this once via browser: https://whaledivecentre.com/wp-content/themes/theme-travel-master/create-pages.php
+ * Run this once via browser: https://whaledivecentre.com/wp-content/themes/whaledivecentre-theme/create-pages.php
  * Then delete this file
  */
 

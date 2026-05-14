@@ -21,7 +21,7 @@ require_once get_template_directory() . '/inc/template-functions.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_stylesheet_uri(), [], '1.7.7');
+    wp_enqueue_style('contenly-style', get_stylesheet_uri(), [], '1.9.8');
     
     // Google Fonts
     wp_enqueue_style('contenly-fonts', 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap', [], null);
@@ -1630,13 +1630,13 @@ add_action('template_redirect', function () {
  * Whale Dive favicon from existing logo asset.
  */
 add_action('wp_head', function () {
-    $icon = esc_url(get_stylesheet_directory_uri() . '/assets/logo.jpg');
+    $icon = esc_url(get_stylesheet_directory_uri() . '/assets/brand/favicon-192.png');
     echo '<link rel="icon" href="' . $icon . '" type="image/jpeg">' . "\n";
     echo '<link rel="shortcut icon" href="' . $icon . '" type="image/jpeg">' . "\n";
 }, 1);
 
 add_filter('get_site_icon_url', function ($url) {
-    return get_stylesheet_directory_uri() . '/assets/logo.jpg';
+    return get_stylesheet_directory_uri() . '/assets/brand/favicon-192.png';
 });
 
 
