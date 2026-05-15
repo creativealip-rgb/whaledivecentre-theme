@@ -14,12 +14,18 @@ $theme_uri = get_stylesheet_directory_uri();
 function wdc_course_image_url($title, $theme_uri) {
     $key = strtolower($title);
     $map = [
-        'open water' => 'wdc-course-open-water.jpg',
-        'advanced' => 'wdc-course-advanced.jpg',
-        'rescue' => 'wdc-course-rescue.jpg',
-        'divemaster' => 'wdc-course-divemaster.jpg',
-        'instructor' => 'wdc-course-instructor.jpg',
-        'discover' => 'wdc-course-discover.jpg',
+        'underwater photography' => 'wdc-course-underwater-photography-real-v2.jpg',
+        'photography' => 'wdc-course-underwater-photography-real-v2.jpg',
+        'deep diver' => 'wdc-course-deep-diver-real-v2.jpg',
+        'deep' => 'wdc-course-deep-diver-real-v2.jpg',
+        'nitrox' => 'wdc-course-nitrox-real-v2.jpg',
+        'enriched air' => 'wdc-course-nitrox-real-v2.jpg',
+        'discover' => 'wdc-course-discover-scuba-pexels.jpg',
+        'advanced' => 'wdc-course-advanced-open-water-real.png',
+        'rescue' => 'wdc-course-rescue-diver-real.png',
+        'divemaster' => 'wdc-course-divemaster-real.png',
+        'instructor' => 'wdc-course-instructor-course-real.png',
+        'open water' => 'wdc-course-open-water-real.png',
     ];
     foreach ($map as $needle => $file) {
         if (strpos($key, $needle) !== false) {
