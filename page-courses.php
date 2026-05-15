@@ -64,39 +64,31 @@ function wdc_course_image_url($title, $theme_uri) {
           $permalink = get_permalink($course->ID);
           $course_image_url = wdc_course_image_url($course->post_title, $theme_uri);
         ?>
-        <article class="wd-course-card wd-detail-card wd-course-decision-card" data-level="level-<?php echo esc_attr($level_slug); ?>">
-          <?php if($course_image_url): ?><img class="wd-course-photo" src="<?php echo esc_url($course_image_url); ?>" alt="<?php echo esc_attr($course->post_title); ?>" loading="lazy"><?php endif; ?>
-          <div class="wd-course-visual" aria-hidden="true">
-            <span class="wd-course-route">Training step</span>
-            <strong><?php echo str_pad($i + 1, 2, '0', STR_PAD_LEFT); ?></strong>
-            <i><?php echo esc_html($level_name ?: 'Dive Course'); ?></i>
+        <article class="wd-course-card wd-detail-card wd-course-decision-card wd-course-shop-card" data-level="level-<?php echo esc_attr($level_slug); ?>">
+          <div class="wd-course-visual wd-equip-visual <?php echo $course_image_url ? 'has-photo' : ''; ?>" data-level="<?php echo esc_attr($level_slug ?: 'course'); ?>">
+            <?php if($course_image_url): ?><img class="wd-course-photo wd-equip-photo" src="<?php echo esc_url($course_image_url); ?>" alt="<?php echo esc_attr($course->post_title); ?>" loading="lazy" onerror="this.closest('.wd-course-visual').classList.remove('has-photo');this.remove();"><?php else: ?><span class="wd-equip-mark"><?php echo esc_html(str_pad($i + 1, 2, '0', STR_PAD_LEFT)); ?></span><?php endif; ?>
+            <span class="wd-equip-type"><?php echo esc_html($level_name ?: 'Dive Course'); ?></span>
           </div>
-          <div class="wd-course-card-head">
-            <div class="wd-course-no"><?php echo str_pad($i + 1, 2, '0', STR_PAD_LEFT); ?></div>
-            <?php if ($agency_name): ?><span class="wd-course-agency"><?php echo esc_html($agency_name); ?></span><?php endif; ?><?php if ($i === 0): ?><span class="wd-course-badge">Start Here</span><?php elseif (stripos($course->post_title, "open water") !== false): ?><span class="wd-course-badge">Most Popular</span><?php endif; ?>
+          <div class="wd-equip-card-body wd-course-shop-body">
+            <div class="wd-course-meta wd-shop-meta wd-course-chips">
+              <?php if ($level_name): ?><span><?php echo esc_html($level_name); ?></span><?php endif; ?>
+              <?php if ($agency_name): ?><span><?php echo esc_html($agency_name); ?></span><?php endif; ?>
+              <?php if ($duration): ?><span><?php echo esc_html($duration); ?></span><?php endif; ?>
+            </div>
+            <h3><?php echo esc_html($course->post_title); ?></h3>
+            <?php if ($excerpt): ?><p class="wd-equip-use wd-course-use"><?php echo esc_html($excerpt); ?></p><?php endif; ?>
+            <?php if ($price): ?>
+            <div class="wd-equip-price wd-course-price">
+              <span class="wd-price-label">Course plan · schedule on request</span>
+              <span class="wd-price-amount">Rp <?php echo number_format((float)$price, 0, ',', '.'); ?></span>
+            </div>
+            <?php endif; ?>
+            <div class="wd-equip-chips wd-course-info-chips">
+              <?php if ($max_students): ?><span>Max <?php echo esc_html($max_students); ?> divers</span><?php endif; ?>
+              <?php if ($prereqs): ?><span>Prereq: <?php echo esc_html($prereqs); ?></span><?php else: ?><span>Ask crew for prerequisites</span><?php endif; ?>
+            </div>
+            <div class="wd-equip-actions wd-course-actions"><a class="wd-mini-btn" href="/contact/">Request Plan</a><a class="wd-mini-link" href="<?php echo esc_url($permalink); ?>">View Details</a></div>
           </div>
-          <h3><?php echo esc_html($course->post_title); ?></h3>
-          <div class="wd-course-meta wd-course-chips">
-            <?php if ($level_name): ?><span><?php echo esc_html($level_name); ?></span><?php endif; ?>
-            <?php if ($duration): ?><span><?php echo esc_html($duration); ?></span><?php endif; ?>
-            <?php if ($max_students): ?><span>Max <?php echo esc_html($max_students); ?> divers</span><?php endif; ?>
-          </div>
-          <?php if ($excerpt): ?><p><?php echo esc_html($excerpt); ?></p><?php endif; ?>
-          <div class="wd-course-fit">
-            <b>Best for</b>
-            <span><?php echo esc_html($level_name ? $level_name . ' divers ready for the next step.' : 'Divers who want a structured, instructor-led pathway.'); ?></span>
-          </div>
-          <?php if ($price): ?>
-          <div class="wd-course-price">
-            <span class="wd-price-label">Mulai dari</span>
-            <span class="wd-price-amount">Rp <?php echo number_format((float)$price, 0, ',', '.'); ?></span>
-          </div>
-          <?php endif; ?>
-          <dl class="wd-course-quickfacts">
-            <?php if ($prereqs): ?><dt>Prerequisite</dt><dd><?php echo esc_html($prereqs); ?></dd><?php endif; ?>
-            <?php if ($includes_text): ?><dt>Includes</dt><dd><?php echo esc_html($includes_text); ?></dd><?php endif; ?>
-          </dl>
-          <div class="wd-course-actions"><a class="wd-mini-btn" href="/contact/">Request Plan</a><a class="wd-mini-link" href="<?php echo esc_url($permalink); ?>">Lihat Detail</a></div>
         </article>
         <?php endforeach; ?>
       </div>
