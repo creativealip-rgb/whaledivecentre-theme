@@ -43,9 +43,6 @@ function wdc_equipment_image_url($title, $cat_slug, $theme_uri) {
       <span class="wd-kicker">Equipment catalog</span>
       <h2 class="wd-title">Dive gear from trusted brands</h2>
       <p class="wd-sub"><?php echo count($all_items); ?> products across <?php echo count($categories); ?> categories.</p>
-      <div class="wd-equipment-trust"><span>Warranty guidance</span><span>Pickup or shipping by request</span><span>Payment options confirmed by crew</span><span>Life-support gear inspection notes</span></div>
-      <div class="wd-gear-finder"><span>Filter by category now</span><a href="/contact/">Ask brand, size, stock, or rental availability</a><a href="/contact/">Reserve a fitting</a></div>
-
       <div id="equipFilters" class="wd-filter-bar">
         <button class="wd-chip active" data-filter="all">All Gear</button>
         <?php if(!empty($categories) && !is_wp_error($categories)): foreach($categories as $cat): ?>

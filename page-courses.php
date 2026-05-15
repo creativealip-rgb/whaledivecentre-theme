@@ -16,7 +16,16 @@ $all_courses = get_posts([
 $levels = get_terms(['taxonomy' => 'course_level', 'hide_empty' => true]);
 $theme_uri = get_stylesheet_directory_uri();
 function wdc_course_image_url($title, $theme_uri) {
-    return '';
+    $key = strtolower($title);
+    if (strpos($key, 'discover') !== false) return $theme_uri . '/assets/wdc-course-discover-scuba-pexels.jpg';
+    if (strpos($key, 'nitrox') !== false || strpos($key, 'enriched air') !== false) return $theme_uri . '/assets/wdc-course-nitrox-real-v2.jpg';
+    if (strpos($key, 'deep') !== false) return $theme_uri . '/assets/wdc-course-deep-diver-real-v2.jpg';
+    if (strpos($key, 'photography') !== false) return $theme_uri . '/assets/wdc-course-underwater-photography-real-v2.jpg';
+    if (strpos($key, 'advanced') !== false) return $theme_uri . '/assets/wdc-course-advanced-open-water-real.png';
+    if (strpos($key, 'rescue') !== false) return $theme_uri . '/assets/wdc-course-rescue-diver-real.png';
+    if (strpos($key, 'divemaster') !== false) return $theme_uri . '/assets/wdc-course-divemaster-real.png';
+    if (strpos($key, 'instructor') !== false || strpos($key, 'idc') !== false) return $theme_uri . '/assets/wdc-course-instructor-course.png';
+    return $theme_uri . '/assets/wdc-course-open-water-real.png';
 }
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
@@ -32,8 +41,6 @@ function wdc_course_image_url($title, $theme_uri) {
       <span class="wd-kicker">Course pathway</span>
       <h2 class="wd-title">Choose your next underwater milestone</h2>
       <p class="wd-sub"><?php echo count($all_courses); ?> courses available — from first-time experiences to professional leadership.</p>
-      <div class="wd-course-trust"><span>Instructor-led progression</span><span>Small-group coaching</span><span>Certification pathway guidance</span><span>Gear readiness support</span></div>
-
       <div class="wd-filter-bar" id="courseFilters">
         <button class="wd-chip active" data-filter="all">All Courses</button>
         <?php if (!empty($levels) && !is_wp_error($levels)): foreach ($levels as $level): ?>
@@ -81,7 +88,7 @@ function wdc_course_image_url($title, $theme_uri) {
           </div>
           <?php if ($price): ?>
           <div class="wd-course-price">
-            <span class="wd-price-label">Course fee from</span>
+            <span class="wd-price-label">Mulai dari</span>
             <span class="wd-price-amount">Rp <?php echo number_format((float)$price, 0, ',', '.'); ?></span>
           </div>
           <?php endif; ?>
@@ -89,7 +96,7 @@ function wdc_course_image_url($title, $theme_uri) {
             <?php if ($prereqs): ?><dt>Prerequisite</dt><dd><?php echo esc_html($prereqs); ?></dd><?php endif; ?>
             <?php if ($includes_text): ?><dt>Includes</dt><dd><?php echo esc_html($includes_text); ?></dd><?php endif; ?>
           </dl>
-          <div class="wd-course-actions"><a class="wd-mini-btn" href="/contact/">Request Plan</a><a class="wd-mini-link" href="<?php echo esc_url($permalink); ?>">View Details</a></div>
+          <div class="wd-course-actions"><a class="wd-mini-btn" href="/contact/">Request Plan</a><a class="wd-mini-link" href="<?php echo esc_url($permalink); ?>">Lihat Detail</a></div>
         </article>
         <?php endforeach; ?>
       </div>

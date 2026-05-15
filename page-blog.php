@@ -13,6 +13,17 @@ $posts_q = new WP_Query([
   'order' => 'DESC',
 ]);
 $theme_uri = get_stylesheet_directory_uri();
+
+$wd_blog_fallback_image = function($post_id, $cat_name = '') use ($theme_uri) {
+  $label = strtolower($cat_name . ' ' . get_the_title($post_id));
+  if (strpos($label, 'gear') !== false || strpos($label, 'mask') !== false) return $theme_uri . '/assets/wdc-equipment-mask-real.png';
+  if (strpos($label, 'fin') !== false) return $theme_uri . '/assets/wdc-equipment-fins-real.png';
+  if (strpos($label, 'bcd') !== false) return $theme_uri . '/assets/wdc-equipment-bcd-real.png';
+  if (strpos($label, 'safety') !== false || strpos($label, 'buddy') !== false || strpos($label, 'rescue') !== false) return $theme_uri . '/assets/Rescue Diver.png';
+  if (strpos($label, 'advanced') !== false) return $theme_uri . '/assets/Advanced Open Water.png';
+  if (strpos($label, 'conservation') !== false || strpos($label, 'reef') !== false) return $theme_uri . '/assets/wdc-home-hero-diving-clean3.webp';
+  return $theme_uri . '/assets/Open Water.png';
+};
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_head(); ?><style id="wd-blog-ux-pass">.wd-blog-search{display:flex;gap:10px;margin:0 0 14px}.wd-blog-search input{flex:1;min-height:50px;border:1px solid #d8e8e8;border-radius:999px;padding:0 18px}.wd-blog-search button{border:0;border-radius:999px;padding:0 22px;background:#06384d;color:#fff;font-weight:800}.wd-topic-pills{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:22px}.wd-topic-pills a{display:inline-flex;align-items:center;min-height:38px;padding:0 13px;border-radius:999px;background:#eef8fb;color:#0b617c;text-decoration:none;font-weight:800;font-size:13px}.wd-blog-cta{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0 0 28px;padding:18px;border-radius:22px;background:linear-gradient(135deg,#06384d,#08a7c7);color:#fff}.wd-blog-cta span{color:rgba(255,255,255,.78)}.wd-blog-cta a{margin-left:auto;color:#06384d;background:#fff;border-radius:999px;padding:10px 14px;text-decoration:none;font-weight:900}@media(max-width:640px){.wd-blog-search{display:grid}.wd-blog-cta a{width:100%;text-align:center}}</style></head>
@@ -20,52 +31,42 @@ $theme_uri = get_stylesheet_directory_uri();
 <main class="wd-page">
   <header class="wd-header"><div class="wd-shell"><div class="wd-nav"><a class="wd-brand" href="/"><img class="wd-brand-logo" src="<?php echo esc_url(get_template_directory_uri() . '/assets/wdc-navbar-logo.jpg?v=20260514b'); ?>" alt="Whale Dive Centre"><span>Whale Dive Centre</span></a><button class="wd-hamburger" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="wd-menu" id="wd-mobile-menu"><a href="/" data-nav="home">Home</a><a href="/courses/" data-nav="courses">Courses</a><a href="/equipment/" data-nav="equipment">Equipment</a><a href="/blog/" data-nav="blog">Blog</a><?php if(is_user_logged_in()){ $u=wp_get_current_user(); echo '<a href="/member-dashboard/" class="wd-nav-member">Dashboard</a>'; } else { echo '<a href="/member-login/" class="wd-nav-member">Login</a>'; } ?></nav></div></div></header>
 
-  <!-- HERO -->
-  <section class="wd-inner-hero wd-blog-hero">
-    <div class="wd-shell">
-      <div class="wd-inner-grid">
-        <div>
-          <span class="wd-kicker">Blog</span>
-          <h1>Stories, tips, and diving insights</h1>
-          <p>Selected articles from the Whale Dive Centre crew to help you dive safer, calmer, and better prepared.</p><div class="wd-actions"><a class="wd-btn" href="/courses/">Explore Courses</a><a class="wd-btn alt" href="/contact/">Talk to an Instructor</a></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- BLOG POSTS -->
-  <section class="wd-section white">
+  <section class="wd-section white wd-blog-section-clean">
     <div class="wd-shell">
-      <div class="wd-editorial-note"><span>Field notes</span><b>Practical dive knowledge, written for real decisions.</b><p>Use these guides to prepare for courses, gear choices, and safer habits before you meet the crew.</p></div><form class="wd-blog-search" method="get" action="/blog/"><input type="search" name="s" placeholder="Search dive tips, gear, courses, or safety topics"><button type="submit">Search</button></form><div class="wd-topic-pills"><a href="/blog/">All</a><a href="/category/beginner/">Beginner Tips</a><a href="/category/safety/">Safety</a><a href="/category/gear-guide/">Gear Guide</a><a href="/category/training/">Training</a><a href="/category/conservation/">Conservation</a></div><div class="wd-blog-cta"><b>Reading before your first dive?</b><span>Get a course plan based on comfort level, schedule, and gear needs.</span><a href="/contact/">Talk to an Instructor</a></div>
       <?php if ($posts_q->have_posts()) : ?>
-        <?php $first = true; ?>
-        <?php while ($posts_q->have_posts()) : $posts_q->the_post(); ?>
-          <?php
-            $cats = get_the_category();
-            $cat_name = $cats ? $cats[0]->name : 'Article';
-            $read_time = max(2, (int) ceil(str_word_count(wp_strip_all_tags(get_the_content())) / 220));
-            $byline = 'Whale Dive Centre Team';
-          ?>
-          <?php if ($first) : ?>
-            <?php $first = false; ?>
-            <article class="wd-blog-featured">
-              <span class="wd-blog-tag"><?php echo esc_html($cat_name); ?></span>
-              <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
-              <p><?php echo wp_trim_words(get_the_excerpt(), 30); ?></p>
-              <span class="wd-blog-meta"><?php echo esc_html($byline); ?> · <?php echo get_the_date(); ?> · <?php echo esc_html($read_time); ?> min read</span>
-              <a href="<?php the_permalink(); ?>" class="wd-btn">Read more &rarr;</a>
+        <?php $posts_q->the_post();
+          $cats = get_the_category(); $cat_name = $cats ? $cats[0]->name : 'Article';
+          $read_time = max(2, (int) ceil(str_word_count(wp_strip_all_tags(get_the_content())) / 220));
+        ?>
+        <div class="wd-blog-latest-layout">
+          <div class="wd-blog-latest-main">
+            <article class="wd-blog-featured-card">
+              <a class="wd-blog-featured-media" href="<?php the_permalink(); ?>">
+                <?php if (has_post_thumbnail()) { the_post_thumbnail('large'); } else { echo '<img src="' . esc_url($wd_blog_fallback_image(get_the_ID(), $cat_name)) . '" alt="' . esc_attr(get_the_title()) . '">'; } ?>
+                <b>Featured Article</b>
+              </a>
+              <div class="wd-blog-featured-body">
+                <div class="wd-blog-meta-row"><span><?php echo esc_html($cat_name); ?></span><em><?php echo get_the_date('d M Y'); ?> · <?php echo esc_html($read_time); ?> min read</em></div>
+                <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+                <p><?php echo esc_html(wp_trim_words(get_the_excerpt() ?: get_the_content(), 34)); ?></p>
+                <a class="wd-blog-read" href="<?php the_permalink(); ?>">Read more →</a>
+              </div>
             </article>
-            <div class="wd-blog-grid">
-          <?php else : ?>
-            <article class="wd-blog-card">
-              <span class="wd-blog-tag"><?php echo esc_html($cat_name); ?></span>
-              <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-              <p><?php echo wp_trim_words(get_the_excerpt(), 20); ?></p>
-              <span class="wd-blog-meta"><?php echo esc_html($byline); ?> · <?php echo get_the_date(); ?> · <?php echo esc_html($read_time); ?> min read</span>
-              <a href="<?php the_permalink(); ?>">Read more &rarr;</a>
+          </div>
+          <aside class="wd-blog-latest-side"><div class="wd-blog-side-card"><span>More Articles</span><h3>Artikel terbaru lainnya</h3><div class="wd-blog-mini-list">
+            <?php $mini_count=0; while ($posts_q->have_posts() && $mini_count < 4) : $posts_q->the_post(); $mini_count++; $cats=get_the_category(); $cat_name=$cats?$cats[0]->name:'Article'; ?>
+              <article class="wd-blog-mini"><a href="<?php the_permalink(); ?>"><span class="wd-blog-mini-thumb"><?php if(has_post_thumbnail()){the_post_thumbnail('thumbnail');} else { echo '<img src="' . esc_url($wd_blog_fallback_image(get_the_ID(), $cat_name)) . '" alt="' . esc_attr(get_the_title()) . '">'; } ?></span><span><small><?php echo esc_html($cat_name); ?> · <?php echo get_the_date('d M Y'); ?></small><strong><?php the_title(); ?></strong></span></a></article>
+            <?php endwhile; ?>
+          </div></div></aside>
+        </div>
+        <div class="wd-blog-grid wd-blog-grid-modern">
+          <?php while ($posts_q->have_posts()) : $posts_q->the_post(); $cats=get_the_category(); $cat_name=$cats?$cats[0]->name:'Article'; $read_time=max(2,(int)ceil(str_word_count(wp_strip_all_tags(get_the_content()))/220)); ?>
+            <article class="wd-blog-card-modern">
+              <a class="wd-blog-card-media" href="<?php the_permalink(); ?>"><?php if(has_post_thumbnail()){the_post_thumbnail('medium_large');} else { echo '<img src="' . esc_url($wd_blog_fallback_image(get_the_ID(), $cat_name)) . '" alt="' . esc_attr(get_the_title()) . '">'; } ?></a>
+              <div class="wd-blog-card-body"><span><?php echo esc_html($cat_name); ?> · <?php echo get_the_date('d M Y'); ?></span><h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3><p><?php echo esc_html(wp_trim_words(get_the_excerpt() ?: get_the_content(), 18)); ?></p><a href="<?php the_permalink(); ?>">Read more →</a></div>
             </article>
-          <?php endif; ?>
-        <?php endwhile; ?>
+          <?php endwhile; ?>
         </div>
       <?php else : ?>
         <p class="wd-empty">No articles published yet.</p>
