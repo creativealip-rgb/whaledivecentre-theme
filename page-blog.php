@@ -31,9 +31,28 @@ $wd_blog_fallback_image = function($post_id, $cat_name = '') use ($theme_uri) {
 <main class="wd-page">
   <header class="wd-header"><div class="wd-shell"><div class="wd-nav"><a class="wd-brand" href="/"><img class="wd-brand-logo" src="<?php echo esc_url(get_template_directory_uri() . '/assets/wdc-navbar-logo.jpg?v=20260514b'); ?>" alt="Whale Dive Centre"><span>Whale Dive Centre</span></a><button class="wd-hamburger" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="wd-menu" id="wd-mobile-menu"><a href="/" data-nav="home">Home</a><a href="/courses/" data-nav="courses">Courses</a><a href="/equipment/" data-nav="equipment">Equipment</a><a href="/blog/" data-nav="blog">Blog</a><?php if(is_user_logged_in()){ $u=wp_get_current_user(); echo '<a href="/member-dashboard/" class="wd-nav-member">Dashboard</a>'; } else { echo '<a href="/member-login/" class="wd-nav-member">Login</a>'; } ?></nav></div></div></header>
 
-  <!-- BLOG POSTS -->
-  <section class="wd-section white wd-blog-section-clean">
+  <section class="wd-blog-editorial-hero">
     <div class="wd-shell">
+      <div class="wd-blog-hero-copy">
+        <span class="wd-blog-kicker">Dive Journal</span>
+        <h1>Cerita, tips, dan insight diving yang gampang discan</h1>
+        <p>Baca panduan pilihan dari Whale Dive Centre: dari persiapan course, safety, equipment, sampai inspirasi trip bawah laut buat diver baru maupun yang sudah aktif.</p>
+        <div class="wd-blog-proof"><span>Artikel terbaru</span><span>Tips first timer</span><span>Gear & safety insight</span></div>
+      </div>
+      <div class="wd-blog-category-row">
+        <span>Kategori:</span>
+        <a href="/blog/">Semua</a>
+        <?php foreach (get_categories(['hide_empty' => true, 'number' => 6]) as $wd_cat) : ?>
+          <a href="<?php echo esc_url(get_category_link($wd_cat)); ?>"><?php echo esc_html($wd_cat->name); ?></a>
+        <?php endforeach; ?>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOG POSTS -->
+  <section class="wd-section white wd-blog-section-clean" id="articles">
+    <div class="wd-shell">
+      <div class="wd-blog-section-head"><span>Artikel Terbaru</span><h2>Pilih bacaan yang paling relevan dulu</h2><p>Format dibuat lebih editorial: satu artikel utama untuk fokus, lalu daftar ringkas dan grid lanjutan untuk quick scan.</p></div>
       <?php if ($posts_q->have_posts()) : ?>
         <?php $posts_q->the_post();
           $cats = get_the_category(); $cat_name = $cats ? $cats[0]->name : 'Article';
@@ -44,17 +63,17 @@ $wd_blog_fallback_image = function($post_id, $cat_name = '') use ($theme_uri) {
             <article class="wd-blog-featured-card">
               <a class="wd-blog-featured-media" href="<?php the_permalink(); ?>">
                 <?php if (has_post_thumbnail()) { the_post_thumbnail('large'); } else { echo '<img src="' . esc_url($wd_blog_fallback_image(get_the_ID(), $cat_name)) . '" alt="' . esc_attr(get_the_title()) . '">'; } ?>
-                <b>Featured Article</b>
+                <b>Artikel Pilihan</b>
               </a>
               <div class="wd-blog-featured-body">
                 <div class="wd-blog-meta-row"><span><?php echo esc_html($cat_name); ?></span><em><?php echo get_the_date('d M Y'); ?> · <?php echo esc_html($read_time); ?> min read</em></div>
                 <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
                 <p><?php echo esc_html(wp_trim_words(get_the_excerpt() ?: get_the_content(), 34)); ?></p>
-                <a class="wd-blog-read" href="<?php the_permalink(); ?>">Read more →</a>
+                <a class="wd-blog-read" href="<?php the_permalink(); ?>">Baca selengkapnya →</a>
               </div>
             </article>
           </div>
-          <aside class="wd-blog-latest-side"><div class="wd-blog-side-card"><span>More Articles</span><h3>Artikel terbaru lainnya</h3><div class="wd-blog-mini-list">
+          <aside class="wd-blog-latest-side"><div class="wd-blog-side-card"><span>Artikel Lainnya</span><h3>Artikel terbaru lainnya</h3><div class="wd-blog-mini-list">
             <?php $mini_count=0; while ($posts_q->have_posts() && $mini_count < 4) : $posts_q->the_post(); $mini_count++; $cats=get_the_category(); $cat_name=$cats?$cats[0]->name:'Article'; ?>
               <article class="wd-blog-mini"><a href="<?php the_permalink(); ?>"><span class="wd-blog-mini-thumb"><?php if(has_post_thumbnail()){the_post_thumbnail('thumbnail');} else { echo '<img src="' . esc_url($wd_blog_fallback_image(get_the_ID(), $cat_name)) . '" alt="' . esc_attr(get_the_title()) . '">'; } ?></span><span><small><?php echo esc_html($cat_name); ?> · <?php echo get_the_date('d M Y'); ?></small><strong><?php the_title(); ?></strong></span></a></article>
             <?php endwhile; ?>
@@ -64,7 +83,7 @@ $wd_blog_fallback_image = function($post_id, $cat_name = '') use ($theme_uri) {
           <?php while ($posts_q->have_posts()) : $posts_q->the_post(); $cats=get_the_category(); $cat_name=$cats?$cats[0]->name:'Article'; $read_time=max(2,(int)ceil(str_word_count(wp_strip_all_tags(get_the_content()))/220)); ?>
             <article class="wd-blog-card-modern">
               <a class="wd-blog-card-media" href="<?php the_permalink(); ?>"><?php if(has_post_thumbnail()){the_post_thumbnail('medium_large');} else { echo '<img src="' . esc_url($wd_blog_fallback_image(get_the_ID(), $cat_name)) . '" alt="' . esc_attr(get_the_title()) . '">'; } ?></a>
-              <div class="wd-blog-card-body"><span><?php echo esc_html($cat_name); ?> · <?php echo get_the_date('d M Y'); ?></span><h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3><p><?php echo esc_html(wp_trim_words(get_the_excerpt() ?: get_the_content(), 18)); ?></p><a href="<?php the_permalink(); ?>">Read more →</a></div>
+              <div class="wd-blog-card-body"><span><?php echo esc_html($cat_name); ?> · <?php echo get_the_date('d M Y'); ?></span><h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3><p><?php echo esc_html(wp_trim_words(get_the_excerpt() ?: get_the_content(), 18)); ?></p><a href="<?php the_permalink(); ?>">Baca selengkapnya →</a></div>
             </article>
           <?php endwhile; ?>
         </div>
