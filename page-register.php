@@ -12,7 +12,7 @@
   <section class="wd-inner-hero" style="min-height:520px;padding:150px 0 58px;color:#fff;background:linear-gradient(130deg,#021126 0%,#0a3d62 40%,#145374 100%)">
     <div class="wd-shell wd-auth-polish" style="max-width:520px;margin:0 auto;text-align:center">
       <div class="wd-auth-proof"><span>Start your diver profile</span><b>Training, equipment, and order updates in one place.</b></div>
-      <h1 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:48px;margin:0 0 12px">Join the Community</h1>
+      <h1 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:48px;margin:0 0 12px">Create Diver Profile</h1>
       <p style="font-size:17px;color:rgba(255,255,255,.82);margin:0 0 32px">Create an account to enroll in courses, track certifications, and manage gear.</p>
       
       <?php
@@ -63,11 +63,14 @@
           <label style="display:block;font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.78);margin-bottom:6px">Confirm Password</label>
           <input type="password" name="confirm_password" required style="width:100%;height:48px;border:0;border-radius:16px;padding:0 14px;background:rgba(255,255,255,.96);color:#0b1930;box-sizing:border-box">
         </div>
-        <button type="submit" name="register_submit" style="width:100%;height:52px;border:0;border-radius:999px;background:linear-gradient(135deg,#3B44AC,#004A98);color:#fff;font-weight:900;font-size:15px;cursor:pointer">Create Account</button>
+        <button type="submit" name="register_submit" style="width:100%;height:52px;border:0;border-radius:999px;background:linear-gradient(135deg,#3B44AC,#004A98);color:#fff;font-weight:900;font-size:15px;cursor:pointer">Create Diver Profile</button>
       </form>
       
       <p style="margin-top:24px;color:rgba(255,255,255,.7);font-size:14px">
         Already have an account? <a href="/member-login/" style="color:#4CC8ED;font-weight:700">Log in</a>
+      </p>
+      <p style="margin-top:14px">
+        <a href="/" style="display:inline-flex;align-items:center;gap:8px;color:#fff;font-size:14px;font-weight:800;text-decoration:none;border:1px solid rgba(255,255,255,.24);background:rgba(255,255,255,.1);border-radius:999px;padding:10px 16px">← Back to Home</a>
       </p>
     </div>
   </section>
