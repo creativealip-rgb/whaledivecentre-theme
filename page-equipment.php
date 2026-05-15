@@ -75,7 +75,6 @@ function wdc_equipment_image_url($title, $cat_slug, $theme_uri) {
               <?php if($brand_name): ?><span><?php echo esc_html($brand_name); ?></span><?php endif; ?>
             </div>
             <h3><?php echo esc_html($item->post_title); ?></h3>
-            <p class="wd-equip-use"><?php echo esc_html($use_case); ?></p>
             <?php if($price): ?>
             <div class="wd-equip-price">
               <span class="wd-price-label">Buy price · rental on request</span>
@@ -87,7 +86,6 @@ function wdc_equipment_image_url($title, $cat_slug, $theme_uri) {
               <span><?php echo $stock ? esc_html($stock) . ' in stock' : 'Check availability'; ?></span>
             </div>
             <div class="wd-equip-actions">
-              <?php if(is_user_logged_in()): ?><button type="button" class="wd-mini-btn wd-equipment-add-cart" data-item-id="<?php echo esc_attr($item->ID); ?>">Add to Cart</button><?php else: ?><a class="wd-mini-btn" href="/contact/">Check Availability</a><?php endif; ?>
               <a class="wd-mini-link" href="<?php echo esc_url($permalink); ?>">View Details</a>
             </div>
           </div>
