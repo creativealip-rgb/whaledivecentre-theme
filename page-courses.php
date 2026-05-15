@@ -81,7 +81,6 @@ function wdc_course_image_url($title, $theme_uri) {
               <?php if($agency_name): ?><span><?php echo esc_html($agency_name); ?></span><?php endif; ?>
             </div>
             <h3><?php echo esc_html($course->post_title); ?></h3>
-            <p class="wd-equip-use"><?php echo esc_html($use_case); ?></p>
             <?php if($price): ?>
             <div class="wd-equip-price">
               <span class="wd-price-label">Course price · schedule on request</span>
@@ -94,7 +93,6 @@ function wdc_course_image_url($title, $theme_uri) {
               <?php if($prereqs): ?><span>Prereq: <?php echo esc_html($prereqs); ?></span><?php endif; ?>
             </div>
             <div class="wd-equip-actions">
-              <a class="wd-mini-btn" href="/contact/">Request Plan</a>
               <a class="wd-mini-link" href="<?php echo esc_url($permalink); ?>">View Details</a>
             </div>
           </div>

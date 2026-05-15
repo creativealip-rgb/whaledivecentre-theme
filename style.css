@@ -2613,3 +2613,9 @@ article.wd-mini-article::before{content:none!important;display:none!important}
 .whaledive-courses #courseGrid .wd-shop-card.wd-course-card .wd-mini-btn{display:inline-flex!important;border:0!important;border-radius:999px!important;background:#06384d!important;color:#fff!important;padding:11px 14px!important;font-size:13px!important;font-weight:900!important;text-decoration:none!important;min-height:40px!important;width:auto!important;box-shadow:none!important}
 .whaledive-courses #courseGrid .wd-shop-card.wd-course-card .wd-mini-link{display:inline-flex!important;width:auto!important;min-height:40px!important;height:auto!important;align-items:center!important;justify-content:center!important;border-radius:999px!important;border:1px solid rgba(11,97,124,.24)!important;background:#fff!important;color:#0b617c!important;padding:10px 13px!important;font-size:13px!important;font-weight:900!important;text-decoration:none!important;box-shadow:none!important}
 @media(max-width:560px){.whaledive-courses #courseGrid.wd-equipment-grid{grid-template-columns:1fr!important}.whaledive-courses #courseGrid .wd-shop-card.wd-course-card{min-height:0!important}}
+
+/* WDC course card cleanup: remove visual ring overlay, description, and extra CTA */
+.whaledive-courses #courseGrid .wd-shop-card.wd-course-card .wd-equip-visual:after{display:none!important;content:none!important}
+.whaledive-courses #courseGrid .wd-shop-card.wd-course-card .wd-equip-visual.has-photo:before{background:linear-gradient(180deg,rgba(3,23,45,.02),rgba(3,23,45,.34))!important}
+.whaledive-courses #courseGrid .wd-shop-card.wd-course-card .wd-equip-actions .wd-mini-btn{display:none!important}
+.whaledive-courses #courseGrid .wd-shop-card.wd-course-card .wd-equip-actions .wd-mini-link{width:100%!important}
