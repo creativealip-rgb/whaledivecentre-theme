@@ -19,10 +19,10 @@ $wd_blog_fallback_image = function($post_id, $cat_name = '') use ($theme_uri) {
   if (strpos($label, 'gear') !== false || strpos($label, 'mask') !== false) return $theme_uri . '/assets/wdc-equipment-mask-real.png';
   if (strpos($label, 'fin') !== false) return $theme_uri . '/assets/wdc-equipment-fins-real.png';
   if (strpos($label, 'bcd') !== false) return $theme_uri . '/assets/wdc-equipment-bcd-real.png';
-  if (strpos($label, 'safety') !== false || strpos($label, 'buddy') !== false || strpos($label, 'rescue') !== false) return $theme_uri . '/assets/Rescue Diver.png';
-  if (strpos($label, 'advanced') !== false) return $theme_uri . '/assets/Advanced Open Water.png';
+  if (strpos($label, 'safety') !== false || strpos($label, 'buddy') !== false || strpos($label, 'rescue') !== false) return $theme_uri . '/assets/wdc-course-rescue-diver-real.png';
+  if (strpos($label, 'advanced') !== false) return $theme_uri . '/assets/wdc-course-advanced-open-water-real.png';
   if (strpos($label, 'conservation') !== false || strpos($label, 'reef') !== false) return $theme_uri . '/assets/wdc-home-hero-diving-clean3.webp';
-  return $theme_uri . '/assets/Open Water.png';
+  return $theme_uri . '/assets/wdc-course-open-water-real.png';
 };
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
