@@ -1906,6 +1906,7 @@ function wdc_member_template_route_map() {
         'dashboard' => 'page-dashboard.php',
         'my-courses' => 'page-my-courses.php',
         'my-gear' => 'page-my-gear.php',
+        'checkout' => 'page-checkout.php',
         'settings' => 'page-settings.php',
     ];
 }
