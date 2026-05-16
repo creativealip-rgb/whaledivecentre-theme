@@ -2005,6 +2005,27 @@ function wdc_ajax_save_direct_checkout() {
     $item = sanitize_text_field(wp_unslash($_POST['direct_item'] ?? ''));
     $price = (float) sanitize_text_field(wp_unslash($_POST['direct_price'] ?? '0'));
     $notes = sanitize_textarea_field(wp_unslash($_POST['payment_notes'] ?? ''));
+    $proof_url = '';
+    if (!empty($_FILES['payment_proof'])) {
+        $file = $_FILES['payment_proof'];
+        $allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!in_array($file['type'] ?? '', $allowed_types, true)) {
+            wp_send_json_error(['message' => 'Invalid file type. Upload JPG, PNG, GIF, or WEBP.'], 400);
+        }
+        if (($file['size'] ?? 0) > 5 * 1024 * 1024) {
+            wp_send_json_error(['message' => 'File too large. Max 5MB.'], 400);
+        }
+        $upload_dir = wp_upload_dir();
+        $proof_dir = trailingslashit($upload_dir['basedir']) . 'wdc-payment-proofs/';
+        if (!file_exists($proof_dir)) {
+            wp_mkdir_p($proof_dir);
+        }
+        $filename = $order_safe_name = time() . '-' . wp_generate_password(6, false, false) . '-' . sanitize_file_name($file['name']);
+        if (!move_uploaded_file($file['tmp_name'], $proof_dir . $filename)) {
+            wp_send_json_error(['message' => 'Failed to upload payment proof.'], 500);
+        }
+        $proof_url = trailingslashit($upload_dir['baseurl']) . 'wdc-payment-proofs/' . $filename;
+    }
     if (!$item) {
         wp_send_json_error(['message' => 'Missing item.'], 400);
     }
@@ -2020,6 +2041,7 @@ function wdc_ajax_save_direct_checkout() {
         'item' => $item,
         'price' => $price,
         'notes' => $notes,
+        'payment_proof_url' => $proof_url,
         'status' => 'Payment Uploaded',
         'created_at' => current_time('mysql'),
         'updated_at' => current_time('mysql'),
@@ -2109,20 +2131,62 @@ function wdc_render_member_admin_dashboard() {
     <?php
 }
 
+function wdc_status_badge_style($status) {
+    $colors = [
+        'Requested' => '#0b617c;background:#e8f8fc',
+        'Awaiting Payment' => '#92400e;background:#fef3c7',
+        'Payment Uploaded' => '#1d4ed8;background:#dbeafe',
+        'Verified' => '#047857;background:#d1fae5',
+        'Active' => '#166534;background:#dcfce7',
+        'Completed' => '#334155;background:#e2e8f0',
+        'Cancelled' => '#991b1b;background:#fee2e2',
+    ];
+    return $colors[$status] ?? '#334155;background:#e2e8f0';
+}
+
+function wdc_record_matches_admin_filters($record) {
+    $status_filter = sanitize_text_field(wp_unslash($_GET['status_filter'] ?? ''));
+    $search = strtolower(sanitize_text_field(wp_unslash($_GET['s'] ?? '')));
+    $item = $record['item'];
+    if ($status_filter && ($item['status'] ?? 'Requested') !== $status_filter) {
+        return false;
+    }
+    if ($search) {
+        $haystack = strtolower(implode(' ', [
+            $record['user']->display_name,
+            $record['user']->user_email,
+            $item['course'] ?? '',
+            $item['gear'] ?? '',
+            $item['item'] ?? '',
+            $item['id'] ?? '',
+        ]));
+        return strpos($haystack, $search) !== false;
+    }
+    return true;
+}
+
 function wdc_render_member_records_table($records, $title) {
+    $records = array_values(array_filter($records, 'wdc_record_matches_admin_filters'));
     ?>
     <div class="wrap"><h1><?php echo esc_html($title); ?></h1>
     <?php if (!empty($_GET['updated'])) : ?><div class="notice notice-success"><p>Status updated.</p></div><?php endif; ?>
-    <table class="widefat striped" style="margin-top:16px;"><thead><tr><th>Member</th><th>Item</th><th>Details</th><th>Status</th><th>Admin Note</th><th>Action</th></tr></thead><tbody>
-    <?php if (!$records) : ?><tr><td colspan="6">No records yet.</td></tr><?php endif; ?>
-    <?php foreach ($records as $record) : $item = $record['item']; ?>
+    <form method="get" style="display:flex;gap:10px;align-items:center;margin:16px 0;background:#fff;border:1px solid #dcdcde;border-radius:10px;padding:12px;">
+        <input type="hidden" name="page" value="<?php echo esc_attr(sanitize_key($_GET['page'] ?? 'wdc-member-admin')); ?>">
+        <input type="search" name="s" value="<?php echo esc_attr(sanitize_text_field(wp_unslash($_GET['s'] ?? ''))); ?>" placeholder="Search member or item" style="min-width:260px;">
+        <select name="status_filter"><option value="">All statuses</option><?php foreach (wdc_member_status_options() as $status) : ?><option value="<?php echo esc_attr($status); ?>" <?php selected(sanitize_text_field(wp_unslash($_GET['status_filter'] ?? '')), $status); ?>><?php echo esc_html($status); ?></option><?php endforeach; ?></select>
+        <button class="button">Filter</button><a class="button" href="<?php echo esc_url(admin_url('admin.php?page=' . sanitize_key($_GET['page'] ?? 'wdc-member-admin'))); ?>">Reset</a>
+    </form>
+    <table class="widefat striped" style="margin-top:16px;"><thead><tr><th>Member</th><th>Item</th><th>Details</th><th>Status</th><th>Proof</th><th>Admin Note</th><th>Action</th></tr></thead><tbody>
+    <?php if (!$records) : ?><tr><td colspan="7">No records yet.</td></tr><?php endif; ?>
+    <?php foreach ($records as $record) : $item = $record['item']; $current_status = $item['status'] ?? 'Requested'; ?>
         <tr><form method="post">
             <td><strong><?php echo esc_html($record['user']->display_name); ?></strong><br><small><?php echo esc_html($record['user']->user_email); ?></small></td>
-            <td><strong><?php echo esc_html($item['course'] ?? $item['gear'] ?? $item['item'] ?? 'Item'); ?></strong><br><small><?php echo esc_html($item['created_at'] ?? ''); ?></small></td>
+            <td><strong><?php echo esc_html($item['course'] ?? $item['gear'] ?? $item['item'] ?? 'Item'); ?></strong><br><small><?php echo esc_html($item['id'] ?? ($item['created_at'] ?? '')); ?></small></td>
             <td><?php echo esc_html($item['preferred_date'] ?? $item['request_type'] ?? (!empty($item['price']) ? 'Rp ' . number_format((float) $item['price'], 0, ',', '.') : 'Direct order')); ?><br><small><?php echo esc_html($item['message'] ?? $item['notes'] ?? $item['size_notes'] ?? ''); ?></small></td>
-            <td><select name="status"><?php foreach (wdc_member_status_options() as $status) : ?><option value="<?php echo esc_attr($status); ?>" <?php selected($item['status'] ?? 'Requested', $status); ?>><?php echo esc_html($status); ?></option><?php endforeach; ?></select></td>
+            <td><span style="display:inline-flex;padding:5px 9px;border-radius:999px;font-weight:700;<?php echo esc_attr(wdc_status_badge_style($current_status)); ?>"><?php echo esc_html($current_status); ?></span><br><select name="status" style="margin-top:8px;"><?php foreach (wdc_member_status_options() as $status) : ?><option value="<?php echo esc_attr($status); ?>" <?php selected($current_status, $status); ?>><?php echo esc_html($status); ?></option><?php endforeach; ?></select></td>
+            <td><?php if (!empty($item['payment_proof_url'])) : ?><a class="button" href="<?php echo esc_url($item['payment_proof_url']); ?>" target="_blank" rel="noopener">View Proof</a><?php else : ?><span style="color:#64748b;">No proof</span><?php endif; ?></td>
             <td><textarea name="admin_note" rows="2" style="width:100%;"><?php echo esc_textarea($item['admin_note'] ?? ''); ?></textarea></td>
-            <td><?php wp_nonce_field('wdc_member_admin_update', 'wdc_member_admin_nonce'); ?><input type="hidden" name="user_id" value="<?php echo esc_attr($record['user']->ID); ?>"><input type="hidden" name="record_type" value="<?php echo esc_attr($record['type']); ?>"><input type="hidden" name="bucket" value="<?php echo esc_attr($record['bucket']); ?>"><input type="hidden" name="record_index" value="<?php echo esc_attr($record['index']); ?>"><button class="button button-primary">Update</button></td>
+            <td><?php wp_nonce_field('wdc_member_admin_update', 'wdc_member_admin_nonce'); ?><input type="hidden" name="user_id" value="<?php echo esc_attr($record['user']->ID); ?>"><input type="hidden" name="record_type" value="<?php echo esc_attr($record['type']); ?>"><input type="hidden" name="bucket" value="<?php echo esc_attr($record['bucket']); ?>"><input type="hidden" name="record_index" value="<?php echo esc_attr($record['index']); ?>"><button class="button button-primary">Update</button><div style="margin-top:6px;display:grid;gap:4px;"><button class="button" name="status" value="Verified">Verify</button><button class="button" name="status" value="Active">Activate</button><button class="button" name="status" value="Cancelled">Cancel</button></div></td>
         </form></tr>
     <?php endforeach; ?>
     </tbody></table></div>

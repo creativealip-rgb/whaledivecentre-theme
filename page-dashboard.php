@@ -9,13 +9,20 @@ $course_requests = get_user_meta($user_id, '_wdc_course_requests', true);
 $gear_requests = get_user_meta($user_id, '_wdc_gear_requests', true);
 $course_requests = is_array($course_requests) ? $course_requests : [];
 $gear_requests = is_array($gear_requests) ? $gear_requests : [];
+$course_orders = get_user_meta($user_id, '_wdc_course_orders', true);
+$gear_orders = get_user_meta($user_id, '_wdc_gear_orders', true);
+$course_orders = is_array($course_orders) ? $course_orders : [];
+$gear_orders = is_array($gear_orders) ? $gear_orders : [];
+$active_items = array_filter(array_merge($course_orders, $gear_orders), function($item) {
+    return in_array($item['status'] ?? '', ['Verified', 'Active', 'Completed'], true);
+});
 ?>
 <div style="margin-bottom:24px;">
     <h1 style="font-size:28px;font-weight:800;color:#0f172a;margin-bottom:8px;">Member Dashboard</h1>
     <p style="font-size:15px;color:#64748b;">Your Whale Dive Centre hub for course planning, scuba gear requests, and crew support.</p>
 </div>
 
-<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:28px;">
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:28px;">
     <div style="background:linear-gradient(135deg,#eef9fc,#dff4fa);padding:20px;border-radius:16px;border:1px solid #ccecf5;">
         <div style="font-size:12px;color:#0b617c;text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:8px;">Course Requests</div>
         <div style="font-size:34px;font-weight:950;color:#06384d;"><?php echo count($course_requests); ?></div>
@@ -25,8 +32,12 @@ $gear_requests = is_array($gear_requests) ? $gear_requests : [];
         <div style="font-size:34px;font-weight:950;color:#7c2d12;"><?php echo count($gear_requests); ?></div>
     </div>
     <div style="background:linear-gradient(135deg,#f8fafc,#eef2ff);padding:20px;border-radius:16px;border:1px solid #e2e8f0;">
-        <div style="font-size:12px;color:#475569;text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:8px;">Crew Status</div>
-        <div style="font-size:22px;font-weight:950;color:#0f172a;">Ready to help</div>
+        <div style="font-size:12px;color:#475569;text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:8px;">Direct Orders</div>
+        <div style="font-size:34px;font-weight:950;color:#0f172a;"><?php echo count($course_orders) + count($gear_orders); ?></div>
+    </div>
+    <div style="background:linear-gradient(135deg,#ecfdf5,#dcfce7);padding:20px;border-radius:16px;border:1px solid #bbf7d0;">
+        <div style="font-size:12px;color:#166534;text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:8px;">Verified / Active</div>
+        <div style="font-size:34px;font-weight:950;color:#166534;"><?php echo count($active_items); ?></div>
     </div>
 </div>
 
@@ -44,6 +55,25 @@ $gear_requests = is_array($gear_requests) ? $gear_requests : [];
         <a href="/my-gear/" style="display:inline-flex;padding:11px 16px;border-radius:999px;background:#06384d;color:#fff;text-decoration:none;font-weight:900;">Open My Gear</a>
     </article>
 </div>
+
+
+<?php $recent_activity = array_slice(array_merge($course_orders, $gear_orders, $course_requests, $gear_requests), 0, 5); ?>
+<?php if (!empty($recent_activity)) : ?>
+<section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;margin-bottom:28px;box-shadow:0 12px 34px rgba(15,23,42,.05);">
+    <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;">Latest Activity</h2>
+    <div style="display:grid;gap:10px;">
+        <?php foreach ($recent_activity as $item) : $status = $item['status'] ?? 'Requested'; ?>
+        <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc;flex-wrap:wrap;">
+            <div>
+                <strong style="color:#0f172a;"><?php echo esc_html($item['item'] ?? $item['course'] ?? $item['gear'] ?? 'Member item'); ?></strong>
+                <div style="font-size:13px;color:#64748b;"><?php echo esc_html($item['admin_note'] ?? ($item['id'] ?? 'Crew will update this soon.')); ?></div>
+            </div>
+            <span style="font-size:12px;font-weight:900;color:#0b617c;background:#e8f8fc;border-radius:999px;padding:6px 10px;"><?php echo esc_html($status); ?></span>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</section>
+<?php endif; ?>
 
 <div style="background:linear-gradient(135deg,#f8fdff,#eef9fc);border:1px solid #ccecf5;border-radius:20px;padding:22px;">
     <div style="font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;color:#0b617c;margin-bottom:6px;">Recommended next step</div>
