@@ -157,6 +157,8 @@ $wdc_member_icon = function ($path) {
         .dashboard-menu a:hover, .dashboard-menu a.active { background: rgba(76,200,237,.14) !important; color: var(--wdc-blue) !important; }
         .dashboard-menu .menu-icon { background: rgba(76,200,237,.16) !important; color: var(--wdc-blue) !important; }
         .dashboard-menu .badge { background: rgba(195,28,74,.12) !important; color: var(--wdc-red) !important; }
+        .dashboard-menu a.dashboard-home-btn, .dashboard-menu a.dashboard-home-btn span:not(.menu-icon) { color: var(--wdc-white) !important; }
+        .dashboard-menu a.dashboard-home-btn .menu-icon { background: rgba(255,255,255,.18) !important; color: var(--wdc-white) !important; }
         .dashboard-main > div:has(> h1), .dashboard-main > section:has(> h1), .dashboard-main > h1.page-title, .dashboard-main > p.page-subtitle { background: linear-gradient(135deg,rgba(150,218,234,.28),#f8fcff) !important; border-color: rgba(0,74,152,.14) !important; }
         .dashboard-main a[style*="background:#06384d"], .dashboard-main a[style*="background: #06384d"], .dashboard-main a[style*="background:#539294"], .dashboard-main a[style*="background: #539294"] { background: linear-gradient(135deg,var(--wdc-blue),var(--wdc-blue-violet)) !important; color: var(--wdc-white) !important; }
         .dashboard-main a[style*="background:#fff"], .dashboard-main a[style*="background: #fff"] { color: var(--wdc-blue) !important; border-color: rgba(0,74,152,.18) !important; }
