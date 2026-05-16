@@ -10,9 +10,18 @@ $prereqs = get_post_meta(get_the_ID(), '_wm_prerequisites', true);
 $includes_text = get_post_meta(get_the_ID(), '_wm_includes', true);
 $level = wp_get_post_terms(get_the_ID(), 'course_level');
 $agency = wp_get_post_terms(get_the_ID(), 'course_agency');
-$level_name = !empty($level) ? $level[0]->name : '';
-$agency_name = !empty($agency) ? $agency[0]->name : '';
+$level_name = (!is_wp_error($level) && !empty($level)) ? $level[0]->name : '';
+$agency_name = (!is_wp_error($agency) && !empty($agency)) ? $agency[0]->name : '';
 $theme_uri = get_stylesheet_directory_uri();
+$course_image_map = array(
+  'open-water-diver' => 'wdc-course-open-water-real.png',
+  'advanced-open-water' => 'wdc-course-advanced-open-water-real.png',
+  'rescue-diver' => 'wdc-course-rescue-diver-real.png',
+  'divemaster' => 'wdc-course-divemaster-real.png',
+  'instructor-course' => 'wdc-course-instructor-course-real.png',
+);
+$course_image_file = $course_image_map[get_post_field('post_name', get_the_ID())] ?? 'wdc-home-hero-diving-clean3.webp';
+$course_image = $theme_uri . '/assets/' . $course_image_file;
 endwhile; rewind_posts();
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
@@ -21,7 +30,7 @@ endwhile; rewind_posts();
 <main class="wd-page">
   <header class="wd-header"><div class="wd-shell"><div class="wd-nav"><a class="wd-brand" href="/"><img class="wd-brand-logo" src="<?php echo esc_url(get_template_directory_uri() . '/assets/wdc-navbar-logo.jpg?v=20260514b'); ?>" alt="Whale Dive Centre"><span>Whale Dive Centre</span></a><button class="wd-hamburger" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="wd-menu" id="wd-mobile-menu"><a href="/" data-nav="home">Home</a><a href="/courses/" data-nav="courses">Courses</a><a href="/equipment/" data-nav="equipment">Equipment</a><a href="/blog/" data-nav="blog">Blog</a><?php if(is_user_logged_in()){ $u=wp_get_current_user(); echo '<a href="/member-dashboard/" class="wd-nav-member">Dashboard - '.esc_html($u->display_name).'</a>'; } else { echo '<a href="/member-login/" class="wd-nav-member">Login</a>'; } ?></nav></div></div></header>
 
-  <section class="wd-compact-hero wd-courses-hero">
+  <section class="wd-compact-hero wd-courses-hero wd-course-full-image-hero" style="--course-hero-image:url('<?php echo esc_url($course_image); ?>');background-image:linear-gradient(90deg,rgba(2,17,38,.9) 0%,rgba(2,17,38,.76) 36%,rgba(2,17,38,.42) 68%,rgba(2,17,38,.5) 100%),url('<?php echo esc_url($course_image); ?>')!important;background-size:cover!important;background-position:center 45%!important;">
     <div class="wd-shell wd-inner-grid">
       <div>
         <div class="wd-breadcrumb"><a href="/">Home</a> <span>/</span> <a href="/courses/">Courses</a> <span>/</span> <?php the_title(); ?></div>
@@ -34,7 +43,7 @@ endwhile; rewind_posts();
           <?php if($price): ?><span class="wd-agency-badge">Rp <?php echo number_format((float)$price,0,',','.'); ?></span><?php endif; ?>
         </div>
         <div class="wd-actions">
-          <a class="wd-btn" href="/contact/">Enroll Now</a>
+          <a class="wd-btn" href="/contact/">Request Enrollment</a>
           <a class="wd-btn alt" href="/courses/">All Courses</a>
         </div>
       </div>
@@ -87,7 +96,7 @@ endwhile; rewind_posts();
     </div>
   </section>
 
-  <section class="wd-section wd-community wd-center"><div class="wd-shell"><span class="wd-kicker">Ready when you are</span><h2 class="wd-title">Ask the crew for course availability.</h2><p class="wd-sub">Send your target certification, dates, and group size.</p><a class="wd-btn alt" href="/contact/">Request Course Plan</a></div></section>
+  <section class="wd-section wd-community wd-center"><div class="wd-shell"><span class="wd-kicker">Ready when you are</span><h2 class="wd-title">Ask the crew for course availability.</h2><p class="wd-sub">Send your target certification, dates, and group size.</p><a class="wd-btn alt" href="/contact/">Check Availability</a></div></section>
 
   <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/about/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>Phone: (021) 27939068</p><p>Jl. Tanah Kusir II No.3, Kebayoran Lama, Jakarta Selatan 12240</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram">Instagram</a></div></div></div><div class="wd-footer-bottom"><span>&copy; <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
 </main>

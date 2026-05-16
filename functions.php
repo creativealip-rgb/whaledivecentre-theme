@@ -77,6 +77,45 @@ function contenly_normalize_nav_menu_items($items) {
 add_filter('wp_nav_menu_objects', 'contenly_normalize_nav_menu_items', 5);
 
 /**
+ * Register course taxonomies used by the local course templates.
+ */
+function wdc_register_course_taxonomies() {
+    if (!post_type_exists('wm_course')) {
+        register_post_type('wm_course', [
+            'label' => 'Courses',
+            'public' => true,
+            'has_archive' => true,
+            'rewrite' => ['slug' => 'course'],
+            'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'page-attributes'],
+            'show_in_rest' => true,
+        ]);
+    }
+
+    if (!taxonomy_exists('course_level')) {
+        register_taxonomy('course_level', ['wm_course'], [
+            'label' => 'Course Levels',
+            'public' => true,
+            'hierarchical' => true,
+            'show_admin_column' => true,
+            'rewrite' => ['slug' => 'course-level'],
+            'show_in_rest' => true,
+        ]);
+    }
+
+    if (!taxonomy_exists('course_agency')) {
+        register_taxonomy('course_agency', ['wm_course'], [
+            'label' => 'Course Agencies',
+            'public' => true,
+            'hierarchical' => false,
+            'show_admin_column' => true,
+            'rewrite' => ['slug' => 'course-agency'],
+            'show_in_rest' => true,
+        ]);
+    }
+}
+add_action('init', 'wdc_register_course_taxonomies', 20);
+
+/**
  * Theme setup
  */
 function contenly_theme_setup() {
@@ -1652,6 +1691,25 @@ add_action('template_redirect', function () {
     }
 
     $slug = trim(substr($path, strlen('courses/')), '/');
+    $course_post = get_page_by_path($slug, OBJECT, 'wm_course');
+    if ($course_post) {
+        global $post, $wp_query;
+        $post = $course_post;
+        setup_postdata($post);
+        $wp_query->is_404 = false;
+        $wp_query->is_single = true;
+        $wp_query->is_home = false;
+        $wp_query->posts = array($course_post);
+        $wp_query->post = $course_post;
+        $wp_query->post_count = 1;
+        $wp_query->found_posts = 1;
+        $wp_query->current_post = -1;
+        $wp_query->queried_object = $course_post;
+        $wp_query->queried_object_id = $course_post->ID;
+        status_header(200);
+        include get_stylesheet_directory() . '/single-wm_course.php';
+        exit;
+    }
     if (!in_array($slug, $course_slugs, true)) {
         return;
     }
