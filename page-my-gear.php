@@ -9,6 +9,8 @@ $notice = '';
 $notice_type = 'success';
 $gear_requests = get_user_meta($user_id, '_wdc_gear_requests', true);
 $gear_requests = is_array($gear_requests) ? $gear_requests : [];
+$gear_orders = get_user_meta($user_id, '_wdc_gear_orders', true);
+$gear_orders = is_array($gear_orders) ? $gear_orders : [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wdc_gear_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_gear_nonce'])), 'wdc_gear_request')) {
     $selected_gear = sanitize_text_field(wp_unslash($_POST['selected_gear'] ?? ''));
@@ -116,6 +118,23 @@ $gear = [
         </form>
     </aside>
 </div>
+
+<?php if (!empty($gear_orders)) : ?>
+<section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;margin-bottom:28px;">
+    <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;">Gear Orders</h2>
+    <div style="display:grid;gap:10px;">
+        <?php foreach (array_slice($gear_orders, 0, 5) as $order) : ?>
+        <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc;flex-wrap:wrap;">
+            <div>
+                <strong style="color:#0f172a;"><?php echo esc_html($order['item'] ?? 'Gear'); ?></strong>
+                <div style="font-size:13px;color:#64748b;">Order: <?php echo esc_html($order['id'] ?? 'Direct checkout'); ?><?php if (!empty($order['admin_note'])) : ?> · <?php echo esc_html($order['admin_note']); ?><?php endif; ?></div>
+            </div>
+            <span style="font-size:12px;font-weight:900;color:#0b617c;background:#e8f8fc;border-radius:999px;padding:6px 10px;"><?php echo esc_html($order['status'] ?? 'Payment Uploaded'); ?></span>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</section>
+<?php endif; ?>
 
 <?php if (!empty($gear_requests)) : ?>
 <section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;margin-bottom:28px;">

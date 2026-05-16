@@ -184,8 +184,29 @@ jQuery(document).ready(function($) {
         
         var formData = new FormData(this);
         if (<?php echo $is_direct_checkout ? 'true' : 'false'; ?>) {
-            alert(<?php echo wp_json_encode(contenly_tr('Bukti pembayaran diterima. Crew akan verifikasi dan mengaktifkan pesanan kamu.', 'Payment proof received. The crew will verify and activate your order.')); ?>);
-            window.location.href = <?php echo wp_json_encode(contenly_localized_url($direct_type === 'equipment' ? '/my-gear/' : '/my-courses/')); ?>;
+            formData.append('action', 'wdc_save_direct_checkout');
+            formData.append('nonce', (window.wdcMemberAjax && wdcMemberAjax.nonce) ? wdcMemberAjax.nonce : '');
+            formData.append('direct_price', <?php echo wp_json_encode((string) $direct_price); ?>);
+            $.ajax({
+                url: <?php echo wp_json_encode(admin_url('admin-ajax.php')); ?>,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response && response.success) {
+                        alert(<?php echo wp_json_encode(contenly_tr('Bukti pembayaran diterima. Crew akan verifikasi dan mengaktifkan pesanan kamu.', 'Payment proof received. The crew will verify and activate your order.')); ?>);
+                        window.location.href = <?php echo wp_json_encode(contenly_localized_url($direct_type === 'equipment' ? '/my-gear/' : '/my-courses/')); ?>;
+                    } else {
+                        alert((response && response.data && response.data.message) ? response.data.message : <?php echo wp_json_encode(contenly_tr('Checkout gagal.', 'Checkout failed.')); ?>);
+                        $btn.prop('disabled', false).html(originalText);
+                    }
+                },
+                error: function() {
+                    alert(<?php echo wp_json_encode(contenly_tr('Checkout gagal. Coba lagi ya.', 'Checkout failed. Please try again.')); ?>);
+                    $btn.prop('disabled', false).html(originalText);
+                }
+            });
             return;
         }
         formData.append('action', 'tmpb_upload_payment');

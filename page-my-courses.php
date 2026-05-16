@@ -9,6 +9,8 @@ $notice = '';
 $notice_type = 'success';
 $course_requests = get_user_meta($user_id, '_wdc_course_requests', true);
 $course_requests = is_array($course_requests) ? $course_requests : [];
+$course_orders = get_user_meta($user_id, '_wdc_course_orders', true);
+$course_orders = is_array($course_orders) ? $course_orders : [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wdc_course_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_course_nonce'])), 'wdc_course_request')) {
     $selected_course = sanitize_text_field(wp_unslash($_POST['selected_course'] ?? ''));
@@ -114,6 +116,23 @@ $courses = [
         </form>
     </aside>
 </div>
+
+<?php if (!empty($course_orders)) : ?>
+<section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;margin-bottom:28px;">
+    <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;">Course Orders</h2>
+    <div style="display:grid;gap:10px;">
+        <?php foreach (array_slice($course_orders, 0, 5) as $order) : ?>
+        <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc;flex-wrap:wrap;">
+            <div>
+                <strong style="color:#0f172a;"><?php echo esc_html($order['item'] ?? 'Course'); ?></strong>
+                <div style="font-size:13px;color:#64748b;">Order: <?php echo esc_html($order['id'] ?? 'Direct checkout'); ?><?php if (!empty($order['admin_note'])) : ?> · <?php echo esc_html($order['admin_note']); ?><?php endif; ?></div>
+            </div>
+            <span style="font-size:12px;font-weight:900;color:#0b617c;background:#e8f8fc;border-radius:999px;padding:6px 10px;"><?php echo esc_html($order['status'] ?? 'Payment Uploaded'); ?></span>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</section>
+<?php endif; ?>
 
 <?php if (!empty($course_requests)) : ?>
 <section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;margin-bottom:28px;">

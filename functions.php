@@ -1973,3 +1973,164 @@ add_filter('pre_get_document_title', function($title) {
     return $title;
 });
 
+
+
+/**
+ * Member commerce helpers for direct checkout and admin fulfilment.
+ */
+function wdc_member_direct_order_meta_key($type) {
+    return $type === 'equipment' ? '_wdc_gear_orders' : '_wdc_course_orders';
+}
+
+function wdc_member_request_meta_key($type) {
+    return $type === 'equipment' ? '_wdc_gear_requests' : '_wdc_course_requests';
+}
+
+function wdc_member_status_options() {
+    return ['Requested', 'Awaiting Payment', 'Payment Uploaded', 'Verified', 'Active', 'Completed', 'Cancelled'];
+}
+
+function wdc_ajax_save_direct_checkout() {
+    check_ajax_referer('wdc_member_nonce', 'nonce');
+
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Please login first.'], 401);
+    }
+
+    $type = sanitize_key(wp_unslash($_POST['direct_type'] ?? ''));
+    if (!in_array($type, ['course', 'equipment'], true)) {
+        wp_send_json_error(['message' => 'Invalid order type.'], 400);
+    }
+
+    $item = sanitize_text_field(wp_unslash($_POST['direct_item'] ?? ''));
+    $price = (float) sanitize_text_field(wp_unslash($_POST['direct_price'] ?? '0'));
+    $notes = sanitize_textarea_field(wp_unslash($_POST['payment_notes'] ?? ''));
+    if (!$item) {
+        wp_send_json_error(['message' => 'Missing item.'], 400);
+    }
+
+    $user_id = get_current_user_id();
+    $meta_key = wdc_member_direct_order_meta_key($type);
+    $orders = get_user_meta($user_id, $meta_key, true);
+    $orders = is_array($orders) ? $orders : [];
+    $order_id = 'WDC-' . strtoupper($type[0]) . '-' . current_time('YmdHis') . '-' . $user_id;
+
+    array_unshift($orders, [
+        'id' => $order_id,
+        'item' => $item,
+        'price' => $price,
+        'notes' => $notes,
+        'status' => 'Payment Uploaded',
+        'created_at' => current_time('mysql'),
+        'updated_at' => current_time('mysql'),
+    ]);
+
+    update_user_meta($user_id, $meta_key, array_slice($orders, 0, 25));
+    wp_send_json_success(['order_id' => $order_id]);
+}
+add_action('wp_ajax_wdc_save_direct_checkout', 'wdc_ajax_save_direct_checkout');
+
+function wdc_register_member_admin_menu() {
+    add_menu_page('WDC Members', 'WDC Members', 'manage_options', 'wdc-member-admin', 'wdc_render_member_admin_dashboard', 'dashicons-groups', 30);
+    add_submenu_page('wdc-member-admin', 'Course Requests', 'Course Requests', 'manage_options', 'wdc-course-requests', 'wdc_render_course_admin_page');
+    add_submenu_page('wdc-member-admin', 'Gear Requests', 'Gear Requests', 'manage_options', 'wdc-gear-requests', 'wdc_render_gear_admin_page');
+    add_submenu_page('wdc-member-admin', 'Direct Orders', 'Direct Orders', 'manage_options', 'wdc-direct-orders', 'wdc_render_direct_orders_admin_page');
+}
+add_action('admin_menu', 'wdc_register_member_admin_menu');
+
+function wdc_member_admin_handle_update() {
+    if (!current_user_can('manage_options') || empty($_POST['wdc_member_admin_nonce'])) {
+        return;
+    }
+    if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_member_admin_nonce'])), 'wdc_member_admin_update')) {
+        return;
+    }
+
+    $user_id = absint($_POST['user_id'] ?? 0);
+    $type = sanitize_key(wp_unslash($_POST['record_type'] ?? ''));
+    $bucket = sanitize_key(wp_unslash($_POST['bucket'] ?? 'requests'));
+    $index = absint($_POST['record_index'] ?? 0);
+    $status = sanitize_text_field(wp_unslash($_POST['status'] ?? ''));
+    $admin_note = sanitize_textarea_field(wp_unslash($_POST['admin_note'] ?? ''));
+
+    if (!$user_id || !in_array($type, ['course', 'equipment'], true) || !in_array($status, wdc_member_status_options(), true)) {
+        return;
+    }
+
+    $meta_key = $bucket === 'orders' ? wdc_member_direct_order_meta_key($type) : wdc_member_request_meta_key($type);
+    $records = get_user_meta($user_id, $meta_key, true);
+    $records = is_array($records) ? $records : [];
+    if (!isset($records[$index])) {
+        return;
+    }
+
+    $records[$index]['status'] = $status;
+    $records[$index]['admin_note'] = $admin_note;
+    $records[$index]['updated_at'] = current_time('mysql');
+    update_user_meta($user_id, $meta_key, $records);
+
+    wp_safe_redirect(add_query_arg(['updated' => '1'], wp_get_referer() ?: admin_url('admin.php?page=wdc-member-admin')));
+    exit;
+}
+add_action('admin_init', 'wdc_member_admin_handle_update');
+
+function wdc_collect_member_records($type, $bucket) {
+    $meta_key = $bucket === 'orders' ? wdc_member_direct_order_meta_key($type) : wdc_member_request_meta_key($type);
+    $records = [];
+    foreach (get_users(['fields' => ['ID', 'display_name', 'user_email']]) as $user) {
+        $items = get_user_meta($user->ID, $meta_key, true);
+        if (!is_array($items)) {
+            continue;
+        }
+        foreach ($items as $index => $item) {
+            $records[] = ['user' => $user, 'index' => $index, 'item' => $item, 'type' => $type, 'bucket' => $bucket];
+        }
+    }
+    usort($records, function($a, $b) {
+        return strcmp($b['item']['created_at'] ?? '', $a['item']['created_at'] ?? '');
+    });
+    return $records;
+}
+
+function wdc_render_member_admin_dashboard() {
+    $course_requests = wdc_collect_member_records('course', 'requests');
+    $gear_requests = wdc_collect_member_records('equipment', 'requests');
+    $course_orders = wdc_collect_member_records('course', 'orders');
+    $gear_orders = wdc_collect_member_records('equipment', 'orders');
+    ?>
+    <div class="wrap"><h1>WDC Member Admin</h1>
+        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:20px 0;">
+            <?php foreach ([['Course Requests', count($course_requests)], ['Gear Requests', count($gear_requests)], ['Course Orders', count($course_orders)], ['Gear Orders', count($gear_orders)]] as $card) : ?>
+            <div style="background:#fff;border:1px solid #dcdcde;border-radius:12px;padding:18px;"><strong><?php echo esc_html($card[0]); ?></strong><div style="font-size:32px;font-weight:800;margin-top:8px;"><?php echo esc_html($card[1]); ?></div></div>
+            <?php endforeach; ?>
+        </div>
+        <p>Use the submenu to verify payments, approve course access, update gear fulfilment, and leave notes visible to members.</p>
+    </div>
+    <?php
+}
+
+function wdc_render_member_records_table($records, $title) {
+    ?>
+    <div class="wrap"><h1><?php echo esc_html($title); ?></h1>
+    <?php if (!empty($_GET['updated'])) : ?><div class="notice notice-success"><p>Status updated.</p></div><?php endif; ?>
+    <table class="widefat striped" style="margin-top:16px;"><thead><tr><th>Member</th><th>Item</th><th>Details</th><th>Status</th><th>Admin Note</th><th>Action</th></tr></thead><tbody>
+    <?php if (!$records) : ?><tr><td colspan="6">No records yet.</td></tr><?php endif; ?>
+    <?php foreach ($records as $record) : $item = $record['item']; ?>
+        <tr><form method="post">
+            <td><strong><?php echo esc_html($record['user']->display_name); ?></strong><br><small><?php echo esc_html($record['user']->user_email); ?></small></td>
+            <td><strong><?php echo esc_html($item['course'] ?? $item['gear'] ?? $item['item'] ?? 'Item'); ?></strong><br><small><?php echo esc_html($item['created_at'] ?? ''); ?></small></td>
+            <td><?php echo esc_html($item['preferred_date'] ?? $item['request_type'] ?? (!empty($item['price']) ? 'Rp ' . number_format((float) $item['price'], 0, ',', '.') : 'Direct order')); ?><br><small><?php echo esc_html($item['message'] ?? $item['notes'] ?? $item['size_notes'] ?? ''); ?></small></td>
+            <td><select name="status"><?php foreach (wdc_member_status_options() as $status) : ?><option value="<?php echo esc_attr($status); ?>" <?php selected($item['status'] ?? 'Requested', $status); ?>><?php echo esc_html($status); ?></option><?php endforeach; ?></select></td>
+            <td><textarea name="admin_note" rows="2" style="width:100%;"><?php echo esc_textarea($item['admin_note'] ?? ''); ?></textarea></td>
+            <td><?php wp_nonce_field('wdc_member_admin_update', 'wdc_member_admin_nonce'); ?><input type="hidden" name="user_id" value="<?php echo esc_attr($record['user']->ID); ?>"><input type="hidden" name="record_type" value="<?php echo esc_attr($record['type']); ?>"><input type="hidden" name="bucket" value="<?php echo esc_attr($record['bucket']); ?>"><input type="hidden" name="record_index" value="<?php echo esc_attr($record['index']); ?>"><button class="button button-primary">Update</button></td>
+        </form></tr>
+    <?php endforeach; ?>
+    </tbody></table></div>
+    <?php
+}
+
+function wdc_render_course_admin_page() { wdc_render_member_records_table(wdc_collect_member_records('course', 'requests'), 'Course Requests'); }
+function wdc_render_gear_admin_page() { wdc_render_member_records_table(wdc_collect_member_records('equipment', 'requests'), 'Gear Requests'); }
+function wdc_render_direct_orders_admin_page() {
+    wdc_render_member_records_table(array_merge(wdc_collect_member_records('course', 'orders'), wdc_collect_member_records('equipment', 'orders')), 'Direct Course / Gear Orders');
+}
