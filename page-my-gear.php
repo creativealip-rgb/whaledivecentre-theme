@@ -35,14 +35,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wdc_gear_nonce']) && 
     }
 }
 
-$gear = [
-    ['title' => 'Masks', 'price' => 'From Rp 1.250.000', 'checkout' => true, 'href' => '/equipment/masks/'],
-    ['title' => 'Fins', 'price' => 'From Rp 950.000', 'checkout' => true, 'href' => '/equipment/fins/'],
-    ['title' => 'BCD', 'price' => 'From Rp 5.500.000', 'checkout' => true, 'href' => '/equipment/bcd/'],
-    ['title' => 'Regulators', 'price' => 'From Rp 4.850.000', 'checkout' => true, 'href' => '/equipment/regulators/'],
-    ['title' => 'Wetsuits', 'price' => 'Fit advice required', 'checkout' => false, 'href' => '/equipment/wetsuits/'],
-    ['title' => 'Dive Computers', 'price' => 'Ask crew', 'checkout' => false, 'href' => '/equipment/dive-computers/'],
-];
+$gear = [];
+if (post_type_exists('wm_equipment')) {
+    $gear_posts = get_posts(['post_type' => 'wm_equipment', 'numberposts' => -1, 'post_status' => 'publish', 'orderby' => 'menu_order', 'order' => 'ASC']);
+    foreach ($gear_posts as $gear_post) {
+        $price = (float) get_post_meta($gear_post->ID, '_wm_price', true);
+        $stock = get_post_meta($gear_post->ID, '_wm_stock', true);
+        $gear[] = [
+            'title' => $gear_post->post_title,
+            'price' => $price > 0 ? 'Rp ' . number_format($price, 0, ',', '.') : 'Ask crew',
+            'checkout' => $price > 0 && ($stock === '' || (int) $stock > 0),
+            'href' => get_permalink($gear_post),
+        ];
+    }
+}
+if (!$gear) {
+    $gear = [
+        ['title' => 'Masks', 'price' => 'From Rp 1.250.000', 'checkout' => true, 'href' => '/equipment/masks/'],
+        ['title' => 'Fins', 'price' => 'From Rp 950.000', 'checkout' => true, 'href' => '/equipment/fins/'],
+        ['title' => 'BCD', 'price' => 'From Rp 5.500.000', 'checkout' => true, 'href' => '/equipment/bcd/'],
+        ['title' => 'Regulators', 'price' => 'From Rp 4.850.000', 'checkout' => true, 'href' => '/equipment/regulators/'],
+        ['title' => 'Wetsuits', 'price' => 'Fit advice required', 'checkout' => false, 'href' => '/equipment/wetsuits/'],
+        ['title' => 'Dive Computers', 'price' => 'Ask crew', 'checkout' => false, 'href' => '/equipment/dive-computers/'],
+    ];
+}
 ?>
 <div style="margin-bottom:24px;">
     <h1 style="font-size:28px;font-weight:800;color:#0f172a;margin-bottom:8px;">My Gear</h1>

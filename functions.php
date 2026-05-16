@@ -1990,6 +1990,44 @@ function wdc_member_status_options() {
     return ['Requested', 'Awaiting Payment', 'Payment Uploaded', 'Verified', 'Active', 'Completed', 'Cancelled'];
 }
 
+function wdc_send_member_commerce_email($user_id, $subject, $message) {
+    $user = get_userdata($user_id);
+    if (!$user || empty($user->user_email)) {
+        return false;
+    }
+    $headers = ['Content-Type: text/html; charset=UTF-8'];
+    return wp_mail($user->user_email, $subject, wpautop($message), $headers);
+}
+
+function wdc_send_admin_commerce_email($subject, $message) {
+    $headers = ['Content-Type: text/html; charset=UTF-8'];
+    return wp_mail(get_option('admin_email'), $subject, wpautop($message), $headers);
+}
+
+function wdc_find_equipment_post_by_title($title) {
+    if (!$title || !post_type_exists('wm_equipment')) {
+        return 0;
+    }
+    $post = get_page_by_title($title, OBJECT, 'wm_equipment');
+    return $post ? (int) $post->ID : 0;
+}
+
+function wdc_maybe_decrement_gear_stock($record, $old_status, $new_status) {
+    if ($old_status === $new_status || !in_array($new_status, ['Verified', 'Active'], true)) {
+        return;
+    }
+    $item_title = $record['gear'] ?? $record['item'] ?? '';
+    $post_id = wdc_find_equipment_post_by_title($item_title);
+    if (!$post_id) {
+        return;
+    }
+    $stock = get_post_meta($post_id, '_wm_stock', true);
+    if ($stock === '' || !is_numeric($stock)) {
+        return;
+    }
+    update_post_meta($post_id, '_wm_stock', max(0, (int) $stock - 1));
+}
+
 function wdc_ajax_save_direct_checkout() {
     check_ajax_referer('wdc_member_nonce', 'nonce');
 
@@ -2048,6 +2086,10 @@ function wdc_ajax_save_direct_checkout() {
     ]);
 
     update_user_meta($user_id, $meta_key, array_slice($orders, 0, 25));
+
+    wdc_send_member_commerce_email($user_id, 'Payment proof received - ' . $order_id, 'Thanks. We received your payment proof for <strong>' . esc_html($item) . '</strong>. The crew will verify it soon.');
+    wdc_send_admin_commerce_email('New WDC direct order - ' . $order_id, 'A member uploaded payment proof for <strong>' . esc_html($item) . '</strong>.<br>Open WDC Members > Direct Orders to verify it.');
+
     wp_send_json_success(['order_id' => $order_id]);
 }
 add_action('wp_ajax_wdc_save_direct_checkout', 'wdc_ajax_save_direct_checkout');
@@ -2086,10 +2128,18 @@ function wdc_member_admin_handle_update() {
         return;
     }
 
+    $old_status = $records[$index]['status'] ?? 'Requested';
+    wdc_maybe_decrement_gear_stock($records[$index], $old_status, $status);
+
     $records[$index]['status'] = $status;
     $records[$index]['admin_note'] = $admin_note;
     $records[$index]['updated_at'] = current_time('mysql');
     update_user_meta($user_id, $meta_key, $records);
+
+    if ($old_status !== $status) {
+        $item_label = $records[$index]['course'] ?? $records[$index]['gear'] ?? $records[$index]['item'] ?? 'your WDC item';
+        wdc_send_member_commerce_email($user_id, 'WDC status updated: ' . $status, 'Your status for <strong>' . esc_html($item_label) . '</strong> is now <strong>' . esc_html($status) . '</strong>.' . ($admin_note ? '<br><br>Note from crew: ' . esc_html($admin_note) : ''));
+    }
 
     wp_safe_redirect(add_query_arg(['updated' => '1'], wp_get_referer() ?: admin_url('admin.php?page=wdc-member-admin')));
     exit;

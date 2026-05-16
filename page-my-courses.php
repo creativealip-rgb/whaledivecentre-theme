@@ -35,12 +35,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wdc_course_nonce']) &
     }
 }
 
-$courses = [
-    ['title' => 'Open Water Diver', 'level' => 'Beginner', 'duration' => '3-4 days', 'price' => 4500000, 'href' => '/courses/open-water-diver/'],
-    ['title' => 'Advanced Open Water', 'level' => 'Next level', 'duration' => '2 days', 'price' => 3900000, 'href' => '/courses/advanced-open-water/'],
-    ['title' => 'Rescue Diver', 'level' => 'Safety', 'duration' => '2-3 days', 'price' => 4200000, 'href' => '/courses/rescue-diver/'],
-    ['title' => 'Divemaster', 'level' => 'Pro track', 'duration' => 'Flexible', 'price' => 0, 'href' => '/courses/divemaster/'],
-];
+$courses = [];
+if (post_type_exists('wm_course')) {
+    $course_posts = get_posts(['post_type' => 'wm_course', 'numberposts' => -1, 'post_status' => 'publish', 'orderby' => 'menu_order', 'order' => 'ASC']);
+    foreach ($course_posts as $course_post) {
+        $level_terms = wp_get_post_terms($course_post->ID, 'course_level', ['fields' => 'names']);
+        $courses[] = [
+            'title' => $course_post->post_title,
+            'level' => !is_wp_error($level_terms) && $level_terms ? $level_terms[0] : 'Course',
+            'duration' => get_post_meta($course_post->ID, '_wm_duration', true) ?: 'Flexible',
+            'price' => (float) get_post_meta($course_post->ID, '_wm_price', true),
+            'href' => get_permalink($course_post),
+        ];
+    }
+}
+if (!$courses) {
+    $courses = [
+        ['title' => 'Open Water Diver', 'level' => 'Beginner', 'duration' => '3-4 days', 'price' => 4500000, 'href' => '/courses/open-water-diver/'],
+        ['title' => 'Advanced Open Water', 'level' => 'Next level', 'duration' => '2 days', 'price' => 3900000, 'href' => '/courses/advanced-open-water/'],
+        ['title' => 'Rescue Diver', 'level' => 'Safety', 'duration' => '2-3 days', 'price' => 4200000, 'href' => '/courses/rescue-diver/'],
+        ['title' => 'Divemaster', 'level' => 'Pro track', 'duration' => 'Flexible', 'price' => 0, 'href' => '/courses/divemaster/'],
+    ];
+}
 ?>
 <div style="margin-bottom:24px;">
     <h1 style="font-size:28px;font-weight:800;color:#0f172a;margin-bottom:8px;">My Courses</h1>
