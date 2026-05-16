@@ -2254,8 +2254,9 @@ function wdc_render_font_mode_css() {
     }
     ?>
     <style id="wdc-brand-font-mode-css">
+        @font-face { font-family: 'iBrand'; src: url('<?php echo esc_url(get_template_directory_uri() . '/assets/fonts/ibrand.otf'); ?>') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
         body.wdc-brand-font-mode, body.wdc-brand-font-mode input, body.wdc-brand-font-mode select, body.wdc-brand-font-mode textarea, body.wdc-brand-font-mode button { font-family: 'Open Sans', Arial, sans-serif !important; }
-        body.wdc-brand-font-mode h1, body.wdc-brand-font-mode h2, body.wdc-brand-font-mode h3, body.wdc-brand-font-mode .wd-title, body.wdc-brand-font-mode .wd-brand span, body.wdc-brand-font-mode .page-title { font-family: 'iBrand', 'Open Sans', Arial, sans-serif !important; }
+        body.wdc-brand-font-mode h1, body.wdc-brand-font-mode h2, body.wdc-brand-font-mode h3, body.wdc-brand-font-mode .wd-title, body.wdc-brand-font-mode .wd-brand span, body.wdc-brand-font-mode .page-title { font-family: 'iBrand', 'Open Sans', Arial, sans-serif !important; font-weight: 400; }
     </style>
     <?php
 }

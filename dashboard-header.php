@@ -167,7 +167,7 @@ $wdc_member_icon = function ($path) {
         .mobile-topbar { background:#ffffff !important; border-bottom-color:rgba(0,74,152,.12) !important; }
         .mobile-menu-toggle span { background: var(--wdc-blue) !important; }
         body.wdc-brand-font-mode, body.wdc-brand-font-mode input, body.wdc-brand-font-mode select, body.wdc-brand-font-mode textarea, body.wdc-brand-font-mode button { font-family:'Open Sans',Arial,sans-serif !important; }
-        body.wdc-brand-font-mode h1, body.wdc-brand-font-mode h2, body.wdc-brand-font-mode h3, body.wdc-brand-font-mode .page-title { font-family:'iBrand','Open Sans',Arial,sans-serif !important; }
+        body.wdc-brand-font-mode h1, body.wdc-brand-font-mode h2, body.wdc-brand-font-mode h3, body.wdc-brand-font-mode .page-title { font-family:'iBrand','Open Sans',Arial,sans-serif !important; font-weight:400; }
 
         @media (max-width: 768px) {
             .dashboard-wrapper { grid-template-columns: 1fr; padding: 0; width:100%; max-width:100vw; overflow-x:hidden; }
