@@ -14,6 +14,23 @@ $categories = is_wp_error($categories) ? [] : $categories;
 $brands = get_terms(['taxonomy' => 'equipment_brand', 'hide_empty' => true]);
 $brands = is_wp_error($brands) ? [] : $brands;
 $theme_uri = get_stylesheet_directory_uri();
+function wdc_equipment_detail_slug($title, $cat_slug) {
+    $key = strtolower($title . ' ' . $cat_slug);
+    $map = [
+        'mask' => 'masks',
+        'wetsuit' => 'wetsuits',
+        'bcd' => 'bcd',
+        'regulator' => 'regulators',
+        'fin' => 'fins',
+        'computer' => 'dive-computers',
+    ];
+    foreach ($map as $needle => $slug) {
+        if (strpos($key, $needle) !== false) {
+            return $slug;
+        }
+    }
+    return sanitize_title($cat_slug ?: $title);
+}
 function wdc_equipment_image_url($title, $cat_slug, $theme_uri) {
     $key = strtolower($title . ' ' . $cat_slug);
     $map = [
@@ -51,7 +68,7 @@ function wdc_equipment_image_url($title, $cat_slug, $theme_uri) {
     <div class="wd-shell">
       <span class="wd-kicker">Equipment catalog</span>
       <h2 class="wd-title">Dive gear from trusted brands</h2>
-      <p class="wd-sub"><?php echo count($all_items); ?> products across <?php echo count($categories); ?> categories.</p>
+      <p class="wd-sub"><?php echo count($all_items); ?> products across <?php echo count($categories) ? count($categories) . ' categories' : 'featured gear categories'; ?>.</p>
       <div id="equipFilters" class="wd-filter-bar">
         <button class="wd-chip active" data-filter="all">All Gear</button>
         <?php if(!empty($categories) && !is_wp_error($categories)): foreach($categories as $cat): ?>
@@ -71,11 +88,11 @@ function wdc_equipment_image_url($title, $cat_slug, $theme_uri) {
           $cat_slug = !empty($cat_terms) ? $cat_terms[0]->slug : '';
           $cat_name = !empty($cat_terms) ? $cat_terms[0]->name : '';
           $brand_name = !empty($brand_terms) ? $brand_terms[0] : '';
-          $permalink = get_permalink($item->ID);
+          $permalink = home_url('/equipment/' . wdc_equipment_detail_slug($item->post_title, $cat_slug) . '/');
           $use_case = $cat_name ? 'Crew-selected ' . strtolower($cat_name) . ' for training, comfort, and safer dive habits.' : 'Crew-selected dive gear for training, comfort, and safer dive habits.';
           $image_url = wdc_equipment_image_url($item->post_title, $cat_slug, $theme_uri);
         ?>
-        <article class="wd-equip-card wd-detail-card wd-shop-card" data-cat="cat-<?php echo esc_attr($cat_slug); ?>" style="border-radius:18px!important;overflow:hidden!important;padding:0!important;background:#fff!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important;border:1px solid rgba(6,56,77,.08)!important;min-height:0!important;height:auto!important;display:flex!important;flex-direction:column!important;">
+        <article class="wd-equip-card wd-detail-card wd-shop-card" data-href="<?php echo esc_url($permalink); ?>" onclick="if(!event.target.closest('a,button')){window.location.href=this.dataset.href;}" data-cat="cat-<?php echo esc_attr($cat_slug); ?>" style="border-radius:18px!important;overflow:hidden!important;padding:0!important;background:#fff!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important;border:1px solid rgba(6,56,77,.08)!important;min-height:0!important;height:auto!important;display:flex!important;flex-direction:column!important;">
           <div class="wd-equip-visual <?php echo $image_url ? 'has-photo' : ''; ?>" data-cat="<?php echo esc_attr($cat_slug ?: 'gear'); ?>" style="height:190px!important;min-height:0!important;border-radius:0!important;margin:0!important;overflow:hidden!important;background:radial-gradient(circle at 50% 42%,rgba(76,200,237,.24),rgba(255,255,255,.68) 50%,#eef8fb 100%)!important;border-bottom:1px solid rgba(6,56,77,.08)!important;">
             <?php if($image_url): ?><img class="wd-equip-photo" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($item->post_title); ?>" loading="lazy" style="width:100%!important;height:100%!important;object-fit:contain!important;padding:14px 14px 8px!important;display:block!important;position:relative!important;z-index:2!important;transform:scale(1.28)!important;transform-origin:center!important;" onerror="this.closest('.wd-equip-visual').classList.remove('has-photo');this.remove();"><?php else: ?><span class="wd-equip-mark"><?php echo esc_html($cat_name ? mb_substr($cat_name, 0, 1) : 'G'); ?></span><?php endif; ?>
             <?php if($cat_name): ?><span class="wd-equip-type"><?php echo esc_html($cat_name); ?></span><?php endif; ?>
@@ -88,8 +105,8 @@ function wdc_equipment_image_url($title, $cat_slug, $theme_uri) {
             <h3 style="font-size:20px!important;line-height:1.08!important;letter-spacing:-.03em!important;margin:0 0 2px!important;color:#061a36!important;min-height:0!important;"><?php echo esc_html($item->post_title); ?></h3>
             <?php if($price): ?>
             <div class="wd-equip-price" style="margin:0 0 6px!important;padding:0!important;background:transparent!important;border:0!important;">
-              <span class="wd-price-label" style="display:block!important;margin:0 0 2px!important;color:#5f7180!important;font-size:10px!important;font-weight:800!important;letter-spacing:.02em!important;">Buy price · rental on request</span>
-              <span class="wd-price-amount" style="display:block!important;color:#06384d!important;font-size:17px!important;line-height:1.1!important;font-weight:950!important;letter-spacing:-.02em!important;">Rp <?php echo number_format((float)$price,0,',','.'); ?></span>
+              <span class="wd-price-label" style="display:block!important;width:100%!important;flex-basis:100%!important;margin:0 0 4px!important;color:#5f7180!important;font-size:10px!important;font-weight:800!important;letter-spacing:.02em!important;">Buy price · rental on request</span>
+              <span class="wd-price-amount" style="display:block!important;width:100%!important;flex-basis:100%!important;color:#06384d!important;font-size:17px!important;line-height:1.1!important;font-weight:950!important;letter-spacing:-.02em!important;">Rp <?php echo number_format((float)$price,0,',','.'); ?></span>
             </div>
             <?php endif; ?>
             <div class="wd-equip-chips" style="gap:6px!important;margin:0 0 4px!important;display:flex!important;flex-wrap:wrap!important;">
@@ -106,9 +123,9 @@ function wdc_equipment_image_url($title, $cat_slug, $theme_uri) {
     </div>
   </section>
 
-  <section class="wd-section wd-community wd-center"><div class="wd-shell"><span class="wd-kicker">Need gear advice?</span><h2 class="wd-title">The crew helps you find the right fit.</h2><p class="wd-sub">Tell us your certification level, dive plans, and budget — we recommend gear that works.</p><a class="wd-btn alt" href="/contact/">Ask About Gear Fit</a></div></section>
+  <section class="wdc-card-cta"><div class="wd-shell"><span class="wd-kicker">Need gear advice?</span><h2>The crew helps you find the right fit.</h2><p>Tell us your certification level, dive plans, and budget — we recommend gear that works.</p><a class="wd-btn alt" href="/contact/">Ask About Gear Fit</a></div></section>
 
   <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/contact/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>Phone: (021) 27939068</p><p>Jl. Tanah Kusir II No.3, Kebayoran Lama, Jakarta Selatan 12240</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram">Instagram</a></div></div></div><div class="wd-footer-bottom"><span>&copy; <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
 </main>
-<script>/* catalog add cart */document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('.wd-equipment-add-cart').forEach(function(btn){btn.addEventListener('click',function(){if(!window.wmCart||!wmCart.addToCart){window.location.href='/checkout/';return;}var original=btn.textContent;btn.disabled=true;btn.textContent='Adding...';wmCart.addToCart('equipment',btn.getAttribute('data-item-id'),1,{}).then(function(data){if(data&&data.success){window.location.href='/checkout/';return;}btn.disabled=false;btn.textContent=original;}).catch(function(){btn.disabled=false;btn.textContent=original;});});});});</script><script>document.addEventListener('DOMContentLoaded',function(){var path=location.pathname;document.querySelectorAll('.wd-menu a[data-nav]').forEach(function(a){var key=a.getAttribute('data-nav');var active=(key==='home'&&path==='/')||(key!=='home'&&path.indexOf('/'+key+'/')===0);if(active){a.classList.add('is-active');a.setAttribute('aria-current','page');}});});</script><?php wp_footer(); ?>
+<script>/* catalog add cart */document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('.wd-equipment-add-cart').forEach(function(btn){btn.addEventListener('click',function(){if(!window.wmCart||!wmCart.addToCart){window.location.href='/checkout/';return;}var original=btn.textContent;btn.disabled=true;btn.textContent='Adding...';wmCart.addToCart('equipment',btn.getAttribute('data-item-id'),1,{}).then(function(data){if(data&&data.success){window.location.href='/checkout/';return;}btn.disabled=false;btn.textContent=original;}).catch(function(){btn.disabled=false;btn.textContent=original;});});});});</script><script>document.addEventListener('DOMContentLoaded',function(){var path=location.pathname;document.querySelectorAll('.wd-menu a[data-nav]').forEach(function(a){var key=a.getAttribute('data-nav');var active=(key==='home'&&path==='/')||(key!=='home'&&path.indexOf('/'+key+'/')===0);if(active){a.classList.add('is-active');a.setAttribute('aria-current','page');}});document.querySelectorAll('[data-href]').forEach(function(card){card.style.cursor='pointer';card.addEventListener('click',function(e){if(e.target.closest('a,button'))return;window.location.href=card.getAttribute('data-href');});});});</script><?php wp_footer(); ?>
 </body></html>
