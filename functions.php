@@ -2016,8 +2016,11 @@ function wdc_maybe_decrement_gear_stock($record, $old_status, $new_status) {
     if ($old_status === $new_status || !in_array($new_status, ['Verified', 'Active'], true)) {
         return;
     }
-    $item_title = $record['gear'] ?? $record['item'] ?? '';
-    $post_id = wdc_find_equipment_post_by_title($item_title);
+    $post_id = absint($record['item_id'] ?? 0);
+    if (!$post_id || get_post_type($post_id) !== 'wm_equipment') {
+        $item_title = $record['gear'] ?? $record['item'] ?? '';
+        $post_id = wdc_find_equipment_post_by_title($item_title);
+    }
     if (!$post_id) {
         return;
     }
@@ -2041,6 +2044,11 @@ function wdc_ajax_save_direct_checkout() {
     }
 
     $item = sanitize_text_field(wp_unslash($_POST['direct_item'] ?? ''));
+    $item_id = absint($_POST['direct_item_id'] ?? 0);
+    $expected_type = $type === 'course' ? 'wm_course' : 'wm_equipment';
+    if ($item_id && get_post_type($item_id) !== $expected_type) {
+        wp_send_json_error(['message' => 'Invalid catalog item.'], 400);
+    }
     $price = (float) sanitize_text_field(wp_unslash($_POST['direct_price'] ?? '0'));
     $notes = sanitize_textarea_field(wp_unslash($_POST['payment_notes'] ?? ''));
     $proof_url = '';
@@ -2076,6 +2084,7 @@ function wdc_ajax_save_direct_checkout() {
 
     array_unshift($orders, [
         'id' => $order_id,
+        'item_id' => $item_id,
         'item' => $item,
         'price' => $price,
         'notes' => $notes,
@@ -2228,10 +2237,10 @@ function wdc_render_member_records_table($records, $title) {
     </form>
     <table class="widefat striped" style="margin-top:16px;"><thead><tr><th>Member</th><th>Item</th><th>Details</th><th>Status</th><th>Proof</th><th>Admin Note</th><th>Action</th></tr></thead><tbody>
     <?php if (!$records) : ?><tr><td colspan="7">No records yet.</td></tr><?php endif; ?>
-    <?php foreach ($records as $record) : $item = $record['item']; $current_status = $item['status'] ?? 'Requested'; ?>
+    <?php foreach ($records as $record) : $item = $record['item']; $current_status = $item['status'] ?? 'Requested'; $item_label = $item['course'] ?? $item['gear'] ?? $item['item'] ?? 'Item'; $item_post_id = absint($item['item_id'] ?? 0); $item_link = $item_post_id ? get_edit_post_link($item_post_id) : ''; ?>
         <tr><form method="post">
             <td><strong><?php echo esc_html($record['user']->display_name); ?></strong><br><small><?php echo esc_html($record['user']->user_email); ?></small></td>
-            <td><strong><?php echo esc_html($item['course'] ?? $item['gear'] ?? $item['item'] ?? 'Item'); ?></strong><br><small><?php echo esc_html($item['id'] ?? ($item['created_at'] ?? '')); ?></small></td>
+            <td><strong><?php if ($item_link) : ?><a href="<?php echo esc_url($item_link); ?>"><?php echo esc_html($item_label); ?></a><?php else : ?><?php echo esc_html($item_label); ?><?php endif; ?></strong><br><small><?php echo esc_html($item['id'] ?? ($item['created_at'] ?? '')); ?></small></td>
             <td><?php echo esc_html($item['preferred_date'] ?? $item['request_type'] ?? (!empty($item['price']) ? 'Rp ' . number_format((float) $item['price'], 0, ',', '.') : 'Direct order')); ?><br><small><?php echo esc_html($item['message'] ?? $item['notes'] ?? $item['size_notes'] ?? ''); ?></small></td>
             <td><span style="display:inline-flex;padding:5px 9px;border-radius:999px;font-weight:700;<?php echo esc_attr(wdc_status_badge_style($current_status)); ?>"><?php echo esc_html($current_status); ?></span><br><select name="status" style="margin-top:8px;"><?php foreach (wdc_member_status_options() as $status) : ?><option value="<?php echo esc_attr($status); ?>" <?php selected($current_status, $status); ?>><?php echo esc_html($status); ?></option><?php endforeach; ?></select></td>
             <td><?php if (!empty($item['payment_proof_url'])) : ?><a class="button" href="<?php echo esc_url($item['payment_proof_url']); ?>" target="_blank" rel="noopener">View Proof</a><?php else : ?><span style="color:#64748b;">No proof</span><?php endif; ?></td>

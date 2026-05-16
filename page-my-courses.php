@@ -41,6 +41,7 @@ if (post_type_exists('wm_course')) {
     foreach ($course_posts as $course_post) {
         $level_terms = wp_get_post_terms($course_post->ID, 'course_level', ['fields' => 'names']);
         $courses[] = [
+            'id' => $course_post->ID,
             'title' => $course_post->post_title,
             'level' => !is_wp_error($level_terms) && $level_terms ? $level_terms[0] : 'Course',
             'duration' => get_post_meta($course_post->ID, '_wm_duration', true) ?: 'Flexible',
@@ -51,10 +52,10 @@ if (post_type_exists('wm_course')) {
 }
 if (!$courses) {
     $courses = [
-        ['title' => 'Open Water Diver', 'level' => 'Beginner', 'duration' => '3-4 days', 'price' => 4500000, 'href' => '/courses/open-water-diver/'],
-        ['title' => 'Advanced Open Water', 'level' => 'Next level', 'duration' => '2 days', 'price' => 3900000, 'href' => '/courses/advanced-open-water/'],
-        ['title' => 'Rescue Diver', 'level' => 'Safety', 'duration' => '2-3 days', 'price' => 4200000, 'href' => '/courses/rescue-diver/'],
-        ['title' => 'Divemaster', 'level' => 'Pro track', 'duration' => 'Flexible', 'price' => 0, 'href' => '/courses/divemaster/'],
+        ['id' => 0, 'title' => 'Open Water Diver', 'level' => 'Beginner', 'duration' => '3-4 days', 'price' => 4500000, 'href' => '/courses/open-water-diver/'],
+        ['id' => 0, 'title' => 'Advanced Open Water', 'level' => 'Next level', 'duration' => '2 days', 'price' => 3900000, 'href' => '/courses/advanced-open-water/'],
+        ['id' => 0, 'title' => 'Rescue Diver', 'level' => 'Safety', 'duration' => '2-3 days', 'price' => 4200000, 'href' => '/courses/rescue-diver/'],
+        ['id' => 0, 'title' => 'Divemaster', 'level' => 'Pro track', 'duration' => 'Flexible', 'price' => 0, 'href' => '/courses/divemaster/'],
     ];
 }
 ?>
@@ -94,7 +95,7 @@ if (!$courses) {
                 <h3 style="font-size:19px;font-weight:900;color:#0f172a;margin:0 0 8px;"><?php echo esc_html($course['title']); ?></h3>
                 <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0 0 18px;">Review prerequisites, schedule options, and training outcomes before enrolling.</p>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-                    <a href="<?php echo esc_url(add_query_arg(['type' => 'course', 'item' => $course['title'], 'price' => $course['price']], '/checkout/')); ?>" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#4cc8ed;color:#06384d;text-decoration:none;font-weight:950;font-size:13px;">Enroll / Checkout</a>
+                    <a href="<?php echo esc_url(add_query_arg(['type' => 'course', 'item_id' => $course['id'] ?? 0, 'item' => $course['title'], 'price' => $course['price']], '/checkout/')); ?>" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#4cc8ed;color:#06384d;text-decoration:none;font-weight:950;font-size:13px;">Enroll / Checkout</a>
                     <a href="<?php echo esc_url($course['href']); ?>" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#f3fbff;color:#06384d;text-decoration:none;font-weight:900;font-size:13px;border:1px solid rgba(6,56,77,.12);">Details</a>
                 </div>
             </article>
@@ -137,10 +138,10 @@ if (!$courses) {
 <section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;margin-bottom:28px;">
     <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;">Course Orders</h2>
     <div style="display:grid;gap:10px;">
-        <?php foreach (array_slice($course_orders, 0, 5) as $order) : ?>
+        <?php foreach (array_slice($course_orders, 0, 5) as $order) : $order_link = !empty($order['item_id']) ? get_permalink((int) $order['item_id']) : ''; ?>
         <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc;flex-wrap:wrap;">
             <div>
-                <strong style="color:#0f172a;"><?php echo esc_html($order['item'] ?? 'Course'); ?></strong>
+                <strong style="color:#0f172a;"><?php if ($order_link) : ?><a href="<?php echo esc_url($order_link); ?>" style="color:inherit;text-decoration:none;"><?php echo esc_html($order['item'] ?? 'Course'); ?></a><?php else : ?><?php echo esc_html($order['item'] ?? 'Course'); ?><?php endif; ?></strong>
                 <div style="font-size:13px;color:#64748b;">Order: <?php echo esc_html($order['id'] ?? 'Direct checkout'); ?><?php if (!empty($order['admin_note'])) : ?> · <?php echo esc_html($order['admin_note']); ?><?php endif; ?></div>
             </div>
             <span style="font-size:12px;font-weight:900;color:#0b617c;background:#e8f8fc;border-radius:999px;padding:6px 10px;"><?php echo esc_html($order['status'] ?? 'Payment Uploaded'); ?></span>

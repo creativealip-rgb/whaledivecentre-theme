@@ -42,6 +42,7 @@ if (post_type_exists('wm_equipment')) {
         $price = (float) get_post_meta($gear_post->ID, '_wm_price', true);
         $stock = get_post_meta($gear_post->ID, '_wm_stock', true);
         $gear[] = [
+            'id' => $gear_post->ID,
             'title' => $gear_post->post_title,
             'price' => $price > 0 ? 'Rp ' . number_format($price, 0, ',', '.') : 'Ask crew',
             'checkout' => $price > 0 && ($stock === '' || (int) $stock > 0),
@@ -51,12 +52,12 @@ if (post_type_exists('wm_equipment')) {
 }
 if (!$gear) {
     $gear = [
-        ['title' => 'Masks', 'price' => 'From Rp 1.250.000', 'checkout' => true, 'href' => '/equipment/masks/'],
-        ['title' => 'Fins', 'price' => 'From Rp 950.000', 'checkout' => true, 'href' => '/equipment/fins/'],
-        ['title' => 'BCD', 'price' => 'From Rp 5.500.000', 'checkout' => true, 'href' => '/equipment/bcd/'],
-        ['title' => 'Regulators', 'price' => 'From Rp 4.850.000', 'checkout' => true, 'href' => '/equipment/regulators/'],
-        ['title' => 'Wetsuits', 'price' => 'Fit advice required', 'checkout' => false, 'href' => '/equipment/wetsuits/'],
-        ['title' => 'Dive Computers', 'price' => 'Ask crew', 'checkout' => false, 'href' => '/equipment/dive-computers/'],
+        ['id' => 0, 'title' => 'Masks', 'price' => 'From Rp 1.250.000', 'checkout' => true, 'href' => '/equipment/masks/'],
+        ['id' => 0, 'title' => 'Fins', 'price' => 'From Rp 950.000', 'checkout' => true, 'href' => '/equipment/fins/'],
+        ['id' => 0, 'title' => 'BCD', 'price' => 'From Rp 5.500.000', 'checkout' => true, 'href' => '/equipment/bcd/'],
+        ['id' => 0, 'title' => 'Regulators', 'price' => 'From Rp 4.850.000', 'checkout' => true, 'href' => '/equipment/regulators/'],
+        ['id' => 0, 'title' => 'Wetsuits', 'price' => 'Fit advice required', 'checkout' => false, 'href' => '/equipment/wetsuits/'],
+        ['id' => 0, 'title' => 'Dive Computers', 'price' => 'Ask crew', 'checkout' => false, 'href' => '/equipment/dive-computers/'],
     ];
 }
 ?>
@@ -93,7 +94,7 @@ if (!$gear) {
                 <p style="font-size:15px;color:#06384d;font-weight:900;margin:0 0 16px;"><?php echo esc_html($item['price']); ?></p>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
                     <?php if (!empty($item['checkout'])) : ?>
-                    <a href="<?php echo esc_url(add_query_arg(['type' => 'equipment', 'item' => $item['title'], 'price' => preg_replace('/[^0-9]/', '', $item['price'])], '/checkout/')); ?>" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#4cc8ed;color:#06384d;text-decoration:none;font-weight:950;font-size:13px;">Buy Now</a>
+                    <a href="<?php echo esc_url(add_query_arg(['type' => 'equipment', 'item_id' => $item['id'] ?? 0, 'item' => $item['title'], 'price' => preg_replace('/[^0-9]/', '', $item['price'])], '/checkout/')); ?>" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#4cc8ed;color:#06384d;text-decoration:none;font-weight:950;font-size:13px;">Buy Now</a>
                     <?php else : ?>
                     <a href="#" onclick="event.preventDefault();document.querySelector('select[name=selected_gear]').value='<?php echo esc_js($item['title']); ?>';document.querySelector('select[name=request_type]').value='Availability check';document.querySelector('aside form').scrollIntoView({behavior:'smooth'});" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#4cc8ed;color:#06384d;text-decoration:none;font-weight:950;font-size:13px;">Check Availability</a>
                     <?php endif; ?>
@@ -139,10 +140,10 @@ if (!$gear) {
 <section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;margin-bottom:28px;">
     <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;">Gear Orders</h2>
     <div style="display:grid;gap:10px;">
-        <?php foreach (array_slice($gear_orders, 0, 5) as $order) : ?>
+        <?php foreach (array_slice($gear_orders, 0, 5) as $order) : $order_link = !empty($order['item_id']) ? get_permalink((int) $order['item_id']) : ''; ?>
         <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc;flex-wrap:wrap;">
             <div>
-                <strong style="color:#0f172a;"><?php echo esc_html($order['item'] ?? 'Gear'); ?></strong>
+                <strong style="color:#0f172a;"><?php if ($order_link) : ?><a href="<?php echo esc_url($order_link); ?>" style="color:inherit;text-decoration:none;"><?php echo esc_html($order['item'] ?? 'Gear'); ?></a><?php else : ?><?php echo esc_html($order['item'] ?? 'Gear'); ?><?php endif; ?></strong>
                 <div style="font-size:13px;color:#64748b;">Order: <?php echo esc_html($order['id'] ?? 'Direct checkout'); ?><?php if (!empty($order['admin_note'])) : ?> · <?php echo esc_html($order['admin_note']); ?><?php endif; ?></div>
             </div>
             <span style="font-size:12px;font-weight:900;color:#0b617c;background:#e8f8fc;border-radius:999px;padding:6px 10px;"><?php echo esc_html($order['status'] ?? 'Payment Uploaded'); ?></span>

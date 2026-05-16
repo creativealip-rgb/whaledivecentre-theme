@@ -13,6 +13,7 @@ $booking_id = isset($_GET['booking_id']) ? absint($_GET['booking_id']) : 0;
 $booking_code = isset($_GET['code']) ? sanitize_text_field($_GET['code']) : '';
 $direct_type = isset($_GET['type']) ? sanitize_key(wp_unslash($_GET['type'])) : '';
 $direct_item = isset($_GET['item']) ? sanitize_text_field(wp_unslash($_GET['item'])) : '';
+$direct_item_id = isset($_GET['item_id']) ? absint($_GET['item_id']) : 0;
 $direct_price = isset($_GET['price']) ? (float) sanitize_text_field(wp_unslash($_GET['price'])) : 0;
 $is_direct_checkout = (!$booking_id && $direct_item && in_array($direct_type, ['course', 'equipment'], true));
 
@@ -128,6 +129,7 @@ get_header();
                 <?php if ($is_direct_checkout) : ?>
                 <input type="hidden" name="direct_type" value="<?php echo esc_attr($direct_type); ?>">
                 <input type="hidden" name="direct_item" value="<?php echo esc_attr($direct_item); ?>">
+                <input type="hidden" name="direct_item_id" value="<?php echo esc_attr($direct_item_id); ?>">
                 <?php endif; ?>
                 
                 <div>
