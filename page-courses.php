@@ -8,6 +8,18 @@ $all_courses = get_posts([
     'post_status' => 'publish',
     'orderby'     => 'menu_order',
     'order'       => 'ASC',
+    'meta_query'  => [
+        'relation' => 'OR',
+        [
+            'key'     => '_wdc_catalog_visible',
+            'compare' => 'NOT EXISTS',
+        ],
+        [
+            'key'     => '_wdc_catalog_visible',
+            'value'   => '0',
+            'compare' => '!=',
+        ],
+    ],
 ]);
 $levels = get_terms(['taxonomy' => 'course_level', 'hide_empty' => true]);
 $levels = is_wp_error($levels) ? [] : $levels;
@@ -78,7 +90,7 @@ function wdc_course_image_url($title, $theme_uri) {
           $agency_name = !empty($agency_terms) ? $agency_terms[0] : '';
           $permalink = home_url('/courses/' . $course->post_name . '/');
           $use_case = $level_name ? 'Crew-guided ' . strtolower($level_name) . ' training for safer skills, confidence, and certification progress.' : 'Crew-guided dive training for safer skills, confidence, and certification progress.';
-          $image_url = wdc_course_image_url($course->post_title, $theme_uri);
+          $image_url = get_the_post_thumbnail_url($course->ID, 'large') ?: wdc_course_image_url($course->post_title, $theme_uri);
         ?>
         <article class="wd-equip-card wd-detail-card wd-shop-card wd-course-card" data-href="<?php echo esc_url($permalink); ?>" onclick="if(!event.target.closest('a,button')){window.location.href=this.dataset.href;}" data-cat="cat-<?php echo esc_attr($level_slug); ?>" style="border-radius:18px!important;overflow:hidden!important;padding:0!important;background:#fff!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important;border:1px solid rgba(6,56,77,.08)!important;min-height:0!important;height:auto!important;display:flex!important;flex-direction:column!important;">
           <div class="wd-equip-visual <?php echo $image_url ? 'has-photo' : ''; ?>" data-cat="<?php echo esc_attr($level_slug ?: 'course'); ?>" style="height:138px!important;min-height:0!important;border-radius:0!important;margin:0!important;">

@@ -20,8 +20,11 @@ $course_image_map = array(
   'divemaster' => 'wdc-course-divemaster-real.png',
   'instructor-course' => 'wdc-course-instructor-course-real.png',
 );
-$course_image_file = $course_image_map[get_post_field('post_name', get_the_ID())] ?? 'wdc-home-hero-diving-clean3.webp';
-$course_image = $theme_uri . '/assets/' . $course_image_file;
+$course_image = get_the_post_thumbnail_url(get_the_ID(), 'full');
+if (!$course_image) {
+  $course_image_file = $course_image_map[get_post_field('post_name', get_the_ID())] ?? 'wdc-home-hero-diving-clean3.webp';
+  $course_image = $theme_uri . '/assets/' . $course_image_file;
+}
 endwhile; rewind_posts();
 ?><!doctype html>
 <html <?php language_attributes(); ?>>

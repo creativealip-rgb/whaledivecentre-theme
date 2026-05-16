@@ -29,7 +29,10 @@ function wdc_single_equipment_image_url($title, $cat_slug, $theme_uri) {
     }
     return '';
 }
-$equipment_image_url = wdc_single_equipment_image_url(get_the_title(), $cat_slug, $theme_uri);
+$equipment_image_url = get_the_post_thumbnail_url(get_the_ID(), 'full');
+if (!$equipment_image_url) {
+    $equipment_image_url = wdc_single_equipment_image_url(get_the_title(), $cat_slug, $theme_uri);
+}
 endwhile; rewind_posts();
 ?><!doctype html>
 <html <?php language_attributes(); ?>>

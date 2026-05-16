@@ -16,20 +16,25 @@ if (is_user_logged_in()) {
 
 <!-- Hero Section -->
 <?php
-$hero_image = get_the_post_thumbnail_url(get_the_ID(), 'full');
-$preferred_hero_image = wp_get_attachment_url(175);
-if ($preferred_hero_image) {
-    $hero_image = $preferred_hero_image;
+$wdc_content = function_exists('wdc_get_content_settings') ? wdc_get_content_settings() : [];
+$hero_image_id = absint($wdc_content['hero_image_id'] ?? 0);
+$hero_image = $hero_image_id ? wp_get_attachment_image_url($hero_image_id, 'full') : get_the_post_thumbnail_url(get_the_ID(), 'full');
+if (!$hero_image) {
+    $legacy_hero_image = wp_get_attachment_url(175);
+    $hero_image = $legacy_hero_image ?: '';
 }
+$hero_eyebrow = contenly_tr($wdc_content['hero_eyebrow_id'] ?? 'Curated trip planner untuk domestik & internasional', $wdc_content['hero_eyebrow_en'] ?? 'Curated trip planner for domestic and international journeys');
+$hero_title = contenly_tr($wdc_content['hero_title_id'] ?? 'Liburan Rapi, Berangkat Pasti', $wdc_content['hero_title_en'] ?? 'Plan Clearly, Travel Confidently');
+$hero_text = contenly_tr($wdc_content['hero_text_id'] ?? 'Dari trip private sampai open trip, kami bantu pilih itinerary yang pas budget, nyaman, dan minim drama.', $wdc_content['hero_text_en'] ?? 'From private trips to open departures, we help you choose itineraries that fit your budget, stay comfortable, and keep the journey hassle-free.');
 $hero_bg = $hero_image ? 'url(' . esc_url($hero_image) . ')' : 'linear-gradient(135deg, #355F72 0%, #539294 72%, #E5A736 100%)';
 ?>
 <div class="gt-hero" style="background: <?php echo $hero_bg; ?> center center / cover no-repeat;">
     <div class="gt-hero-overlay"></div>
     <div class="gt-hero-inner">
         <div class="gt-hero-copy">
-            <span class="gt-hero-eyebrow"><?php echo esc_html(contenly_tr('Curated trip planner untuk domestik & internasional', 'Curated trip planner for domestic and international journeys')); ?></span>
-            <h1><?php echo esc_html(contenly_tr('Liburan Rapi, Berangkat Pasti', 'Plan Clearly, Travel Confidently')); ?></h1>
-            <p><?php echo esc_html(contenly_tr('Dari trip private sampai open trip, kami bantu pilih itinerary yang pas budget, nyaman, dan minim drama.', 'From private trips to open departures, we help you choose itineraries that fit your budget, stay comfortable, and keep the journey hassle-free.')); ?></p>
+            <span class="gt-hero-eyebrow"><?php echo esc_html($hero_eyebrow); ?></span>
+            <h1><?php echo esc_html($hero_title); ?></h1>
+            <p><?php echo esc_html($hero_text); ?></p>
         </div>
 
         <div class="gt-search-card" id="gt-search-card">

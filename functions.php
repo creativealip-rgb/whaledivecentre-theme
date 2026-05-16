@@ -80,9 +80,34 @@ function wdc_register_course_taxonomies() {
     if (!post_type_exists('wm_course')) {
         register_post_type('wm_course', [
             'label' => 'Courses',
+            'labels' => [
+                'name' => 'Courses',
+                'singular_name' => 'Course',
+                'add_new_item' => 'Add New Course',
+                'edit_item' => 'Edit Course',
+            ],
             'public' => true,
             'has_archive' => true,
             'rewrite' => ['slug' => 'course'],
+            'menu_icon' => 'dashicons-welcome-learn-more',
+            'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'page-attributes'],
+            'show_in_rest' => true,
+        ]);
+    }
+
+    if (!post_type_exists('wm_equipment')) {
+        register_post_type('wm_equipment', [
+            'label' => 'Equipment',
+            'labels' => [
+                'name' => 'Equipment',
+                'singular_name' => 'Equipment Item',
+                'add_new_item' => 'Add New Equipment',
+                'edit_item' => 'Edit Equipment',
+            ],
+            'public' => true,
+            'has_archive' => true,
+            'rewrite' => ['slug' => 'equipment-item'],
+            'menu_icon' => 'dashicons-products',
             'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'page-attributes'],
             'show_in_rest' => true,
         ]);
@@ -132,6 +157,28 @@ function wdc_register_course_taxonomies() {
             'show_in_rest' => true,
         ]);
     }
+
+    if (!taxonomy_exists('equipment_category')) {
+        register_taxonomy('equipment_category', ['wm_equipment'], [
+            'label' => 'Equipment Categories',
+            'public' => true,
+            'hierarchical' => true,
+            'show_admin_column' => true,
+            'rewrite' => ['slug' => 'equipment-category'],
+            'show_in_rest' => true,
+        ]);
+    }
+
+    if (!taxonomy_exists('equipment_brand')) {
+        register_taxonomy('equipment_brand', ['wm_equipment'], [
+            'label' => 'Equipment Brands',
+            'public' => true,
+            'hierarchical' => false,
+            'show_admin_column' => true,
+            'rewrite' => ['slug' => 'equipment-brand'],
+            'show_in_rest' => true,
+        ]);
+    }
 }
 add_action('init', 'wdc_register_course_taxonomies', 20);
 
@@ -140,6 +187,7 @@ add_action('init', 'wdc_register_course_taxonomies', 20);
  */
 function contenly_theme_setup() {
     add_theme_support('title-tag');
+    add_theme_support('post-thumbnails');
     load_theme_textdomain('contenly', get_template_directory() . '/languages');
     register_nav_menus([
         'primary' => __('Primary Menu', 'contenly'),
@@ -2382,3 +2430,232 @@ function wdc_render_gear_admin_page() { wdc_render_member_records_table(wdc_coll
 function wdc_render_direct_orders_admin_page() {
     wdc_render_member_records_table(array_merge(wdc_collect_member_records('course', 'orders'), wdc_collect_member_records('equipment', 'orders')), 'Direct Course / Gear Orders');
 }
+
+/**
+ * WDC editable content and catalog admin helpers.
+ */
+function wdc_content_defaults() {
+    return [
+        'hero_image_id' => 0,
+        'hero_eyebrow_id' => 'Curated trip planner untuk domestik & internasional',
+        'hero_eyebrow_en' => 'Curated trip planner for domestic and international journeys',
+        'hero_title_id' => 'Liburan Rapi, Berangkat Pasti',
+        'hero_title_en' => 'Plan Clearly, Travel Confidently',
+        'hero_text_id' => 'Dari trip private sampai open trip, kami bantu pilih itinerary yang pas budget, nyaman, dan minim drama.',
+        'hero_text_en' => 'From private trips to open departures, we help you choose itineraries that fit your budget, stay comfortable, and keep the journey hassle-free.',
+    ];
+}
+
+function wdc_get_content_settings() {
+    $saved = get_option('wdc_content_settings', []);
+    return wp_parse_args(is_array($saved) ? $saved : [], wdc_content_defaults());
+}
+
+function wdc_admin_content_menu() {
+    add_menu_page('WDC Content', 'WDC Content', 'manage_options', 'wdc-content-settings', 'wdc_render_content_settings_page', 'dashicons-edit-page', 26);
+}
+add_action('admin_menu', 'wdc_admin_content_menu');
+
+function wdc_use_classic_editor_for_catalog($use_block_editor, $post_type) {
+    if (in_array($post_type, ['wm_course', 'wm_equipment'], true)) {
+        return false;
+    }
+    return $use_block_editor;
+}
+add_filter('use_block_editor_for_post_type', 'wdc_use_classic_editor_for_catalog', 10, 2);
+
+function wdc_admin_assets($hook) {
+    if ($hook === 'toplevel_page_wdc-content-settings') {
+        wp_enqueue_media();
+    }
+}
+add_action('admin_enqueue_scripts', 'wdc_admin_assets');
+
+function wdc_render_content_settings_page() {
+    if (!current_user_can('manage_options')) {
+        wp_die('Not allowed.');
+    }
+
+    if (isset($_POST['wdc_content_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_content_nonce'])), 'wdc_save_content_settings')) {
+        $settings = [
+            'hero_image_id' => absint($_POST['hero_image_id'] ?? 0),
+            'hero_eyebrow_id' => sanitize_text_field(wp_unslash($_POST['hero_eyebrow_id'] ?? '')),
+            'hero_eyebrow_en' => sanitize_text_field(wp_unslash($_POST['hero_eyebrow_en'] ?? '')),
+            'hero_title_id' => sanitize_text_field(wp_unslash($_POST['hero_title_id'] ?? '')),
+            'hero_title_en' => sanitize_text_field(wp_unslash($_POST['hero_title_en'] ?? '')),
+            'hero_text_id' => sanitize_textarea_field(wp_unslash($_POST['hero_text_id'] ?? '')),
+            'hero_text_en' => sanitize_textarea_field(wp_unslash($_POST['hero_text_en'] ?? '')),
+        ];
+        update_option('wdc_content_settings', wp_parse_args($settings, wdc_content_defaults()));
+        echo '<div class="notice notice-success is-dismissible"><p>Homepage hero updated.</p></div>';
+    }
+
+    $settings = wdc_get_content_settings();
+    $image_url = $settings['hero_image_id'] ? wp_get_attachment_image_url((int) $settings['hero_image_id'], 'medium_large') : '';
+    ?>
+    <div class="wrap wdc-content-admin">
+        <h1>WDC Content</h1>
+        <p>Edit public homepage content without touching theme code.</p>
+        <form method="post">
+            <?php wp_nonce_field('wdc_save_content_settings', 'wdc_content_nonce'); ?>
+            <table class="form-table" role="presentation">
+                <tr>
+                    <th scope="row"><label for="hero_image_id">Hero Image</label></th>
+                    <td>
+                        <input type="hidden" id="hero_image_id" name="hero_image_id" value="<?php echo esc_attr($settings['hero_image_id']); ?>">
+                        <div id="wdc-hero-preview" style="max-width:420px;margin-bottom:12px;<?php echo $image_url ? '' : 'display:none;'; ?>">
+                            <img src="<?php echo esc_url($image_url); ?>" style="width:100%;height:auto;border-radius:12px;border:1px solid #dcdcde;" alt="Hero preview">
+                        </div>
+                        <button type="button" class="button button-secondary" id="wdc-select-hero">Choose Image</button>
+                        <button type="button" class="button" id="wdc-remove-hero">Remove</button>
+                        <p class="description">Recommended: wide image, 1800px+ width.</p>
+                    </td>
+                </tr>
+                <tr><th scope="row">Eyebrow / Kicker</th><td><input class="regular-text" name="hero_eyebrow_id" value="<?php echo esc_attr($settings['hero_eyebrow_id']); ?>" placeholder="Indonesian"><br><br><input class="regular-text" name="hero_eyebrow_en" value="<?php echo esc_attr($settings['hero_eyebrow_en']); ?>" placeholder="English"></td></tr>
+                <tr><th scope="row">Hero Title</th><td><input class="large-text" name="hero_title_id" value="<?php echo esc_attr($settings['hero_title_id']); ?>" placeholder="Indonesian"><br><br><input class="large-text" name="hero_title_en" value="<?php echo esc_attr($settings['hero_title_en']); ?>" placeholder="English"></td></tr>
+                <tr><th scope="row">Hero Subtitle</th><td><textarea class="large-text" rows="3" name="hero_text_id" placeholder="Indonesian"><?php echo esc_textarea($settings['hero_text_id']); ?></textarea><br><br><textarea class="large-text" rows="3" name="hero_text_en" placeholder="English"><?php echo esc_textarea($settings['hero_text_en']); ?></textarea></td></tr>
+            </table>
+            <?php submit_button('Save Hero Content'); ?>
+        </form>
+    </div>
+    <script>
+    jQuery(function($){
+        var frame;
+        $('#wdc-select-hero').on('click', function(e){
+            e.preventDefault();
+            frame = wp.media({title:'Choose hero image', button:{text:'Use this image'}, multiple:false});
+            frame.on('select', function(){
+                var img = frame.state().get('selection').first().toJSON();
+                $('#hero_image_id').val(img.id);
+                $('#wdc-hero-preview').show().html('<img src="'+img.url+'" style="width:100%;height:auto;border-radius:12px;border:1px solid #dcdcde;" alt="Hero preview">');
+            });
+            frame.open();
+        });
+        $('#wdc-remove-hero').on('click', function(){
+            $('#hero_image_id').val('0');
+            $('#wdc-hero-preview').hide().empty();
+        });
+    });
+    </script>
+    <?php
+}
+
+function wdc_add_catalog_meta_boxes() {
+    add_meta_box('wdc_course_details', 'Course Details', 'wdc_render_course_details_box', 'wm_course', 'normal', 'high');
+    add_meta_box('wdc_equipment_details', 'Equipment Details', 'wdc_render_equipment_details_box', 'wm_equipment', 'normal', 'high');
+}
+add_action('add_meta_boxes', 'wdc_add_catalog_meta_boxes');
+
+function wdc_meta_field($post_id, $key) {
+    return get_post_meta($post_id, $key, true);
+}
+
+function wdc_render_course_details_box($post) {
+    wp_nonce_field('wdc_save_course_details', 'wdc_course_details_nonce');
+    $fields = [
+        '_wm_price' => ['Price (IDR)', 'number', '4500000'],
+        '_wm_duration' => ['Duration', 'text', '3 days / 2 pool sessions'],
+        '_wm_max_students' => ['Max Students', 'number', '4'],
+        '_wm_prerequisites' => ['Prerequisites', 'text', 'Able to swim'],
+    ];
+    echo '<div class="wdc-admin-grid" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;max-width:920px">';
+    foreach ($fields as $key => $field) {
+        printf('<p><label><strong>%s</strong><br><input type="%s" name="%s" value="%s" placeholder="%s" style="width:100%%"></label></p>', esc_html($field[0]), esc_attr($field[1]), esc_attr($key), esc_attr(wdc_meta_field($post->ID, $key)), esc_attr($field[2]));
+    }
+    echo '</div>';
+    printf('<p><label><strong>What is Included</strong><br><textarea name="_wm_includes" rows="4" style="width:100%%" placeholder="Certification, instructor, pool session, rental gear...">%s</textarea></label></p>', esc_textarea(wdc_meta_field($post->ID, '_wm_includes')));
+    $visible = wdc_meta_field($post->ID, '_wdc_catalog_visible') !== '0';
+    echo '<p><label><input type="checkbox" name="_wdc_catalog_visible" value="1" ' . checked($visible, true, false) . '> Show in member course catalog</label></p>';
+    echo '<p class="description">Use Featured Image for the course hero/card image. Use Course Levels and Course Agencies panels for level/agency.</p>';
+}
+
+function wdc_render_equipment_details_box($post) {
+    wp_nonce_field('wdc_save_equipment_details', 'wdc_equipment_details_nonce');
+    $fields = [
+        '_wm_price' => ['Price (IDR)', 'number', '1250000'],
+        '_wm_stock' => ['Stock', 'number', '8'],
+        '_wm_sizes' => ['Sizes / Variants', 'text', 'S, M, L / Clear, Black'],
+        '_wdc_equipment_fit' => ['Fit / Usage Note', 'text', 'Best for training and warm-water dives'],
+    ];
+    echo '<div class="wdc-admin-grid" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;max-width:920px">';
+    foreach ($fields as $key => $field) {
+        printf('<p><label><strong>%s</strong><br><input type="%s" name="%s" value="%s" placeholder="%s" style="width:100%%"></label></p>', esc_html($field[0]), esc_attr($field[1]), esc_attr($key), esc_attr(wdc_meta_field($post->ID, $key)), esc_attr($field[2]));
+    }
+    echo '</div>';
+    $visible = wdc_meta_field($post->ID, '_wdc_catalog_visible') !== '0';
+    echo '<p><label><input type="checkbox" name="_wdc_catalog_visible" value="1" ' . checked($visible, true, false) . '> Show in member equipment catalog</label></p>';
+    echo '<p class="description">Use Featured Image for the product image. Use Equipment Categories and Equipment Brands panels for filtering/detail labels.</p>';
+}
+
+function wdc_save_catalog_details($post_id, $post) {
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    if ($post->post_type === 'wm_course') {
+        if (!isset($_POST['wdc_course_details_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_course_details_nonce'])), 'wdc_save_course_details')) {
+            return;
+        }
+        $keys = ['_wm_price' => 'float', '_wm_duration' => 'text', '_wm_max_students' => 'int', '_wm_prerequisites' => 'text', '_wm_includes' => 'textarea'];
+    } elseif ($post->post_type === 'wm_equipment') {
+        if (!isset($_POST['wdc_equipment_details_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_equipment_details_nonce'])), 'wdc_save_equipment_details')) {
+            return;
+        }
+        $keys = ['_wm_price' => 'float', '_wm_stock' => 'int', '_wm_sizes' => 'text', '_wdc_equipment_fit' => 'text'];
+    } else {
+        return;
+    }
+
+    foreach ($keys as $key => $type) {
+        $raw = wp_unslash($_POST[$key] ?? '');
+        if ($type === 'float') {
+            $value = $raw === '' ? '' : (float) $raw;
+        } elseif ($type === 'int') {
+            $value = $raw === '' ? '' : max(0, (int) $raw);
+        } elseif ($type === 'textarea') {
+            $value = sanitize_textarea_field($raw);
+        } else {
+            $value = sanitize_text_field($raw);
+        }
+        update_post_meta($post_id, $key, $value);
+    }
+
+    update_post_meta($post_id, '_wdc_catalog_visible', isset($_POST['_wdc_catalog_visible']) ? '1' : '0');
+}
+add_action('save_post', 'wdc_save_catalog_details', 10, 2);
+
+function wdc_catalog_admin_columns($columns) {
+    $new = [];
+    foreach ($columns as $key => $label) {
+        $new[$key] = $label;
+        if ($key === 'title') {
+            $new['wdc_price'] = 'Price';
+            $new['wdc_stock_duration'] = 'Stock / Duration';
+            $new['wdc_visible'] = 'Catalog';
+        }
+    }
+    return $new;
+}
+add_filter('manage_wm_course_posts_columns', 'wdc_catalog_admin_columns');
+add_filter('manage_wm_equipment_posts_columns', 'wdc_catalog_admin_columns');
+
+function wdc_render_catalog_admin_column($column, $post_id) {
+    if ($column === 'wdc_price') {
+        $price = get_post_meta($post_id, '_wm_price', true);
+        echo $price !== '' ? 'Rp ' . esc_html(number_format((float) $price, 0, ',', '.')) : '-';
+    } elseif ($column === 'wdc_stock_duration') {
+        if (get_post_type($post_id) === 'wm_equipment') {
+            $stock = get_post_meta($post_id, '_wm_stock', true);
+            echo $stock !== '' ? esc_html($stock) . ' in stock' : '-';
+        } else {
+            echo esc_html(get_post_meta($post_id, '_wm_duration', true) ?: '-');
+        }
+    } elseif ($column === 'wdc_visible') {
+        echo get_post_meta($post_id, '_wdc_catalog_visible', true) === '0' ? 'Hidden' : 'Visible';
+    }
+}
+add_action('manage_wm_course_posts_custom_column', 'wdc_render_catalog_admin_column', 10, 2);
+add_action('manage_wm_equipment_posts_custom_column', 'wdc_render_catalog_admin_column', 10, 2);

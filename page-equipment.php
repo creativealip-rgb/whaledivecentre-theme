@@ -8,6 +8,18 @@ $all_items = get_posts([
     'post_status' => 'publish',
     'orderby'     => 'menu_order',
     'order'       => 'ASC',
+    'meta_query'  => [
+        'relation' => 'OR',
+        [
+            'key'     => '_wdc_catalog_visible',
+            'compare' => 'NOT EXISTS',
+        ],
+        [
+            'key'     => '_wdc_catalog_visible',
+            'value'   => '0',
+            'compare' => '!=',
+        ],
+    ],
 ]);
 $categories = get_terms(['taxonomy' => 'equipment_category', 'hide_empty' => true]);
 $categories = is_wp_error($categories) ? [] : $categories;
@@ -90,7 +102,7 @@ function wdc_equipment_image_url($title, $cat_slug, $theme_uri) {
           $brand_name = !empty($brand_terms) ? $brand_terms[0] : '';
           $permalink = home_url('/equipment/' . wdc_equipment_detail_slug($item->post_title, $cat_slug) . '/');
           $use_case = $cat_name ? 'Crew-selected ' . strtolower($cat_name) . ' for training, comfort, and safer dive habits.' : 'Crew-selected dive gear for training, comfort, and safer dive habits.';
-          $image_url = wdc_equipment_image_url($item->post_title, $cat_slug, $theme_uri);
+          $image_url = get_the_post_thumbnail_url($item->ID, 'large') ?: wdc_equipment_image_url($item->post_title, $cat_slug, $theme_uri);
         ?>
         <article class="wd-equip-card wd-detail-card wd-shop-card" data-href="<?php echo esc_url($permalink); ?>" onclick="if(!event.target.closest('a,button')){window.location.href=this.dataset.href;}" data-cat="cat-<?php echo esc_attr($cat_slug); ?>" style="border-radius:18px!important;overflow:hidden!important;padding:0!important;background:#fff!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important;border:1px solid rgba(6,56,77,.08)!important;min-height:0!important;height:auto!important;display:flex!important;flex-direction:column!important;">
           <div class="wd-equip-visual <?php echo $image_url ? 'has-photo' : ''; ?>" data-cat="<?php echo esc_attr($cat_slug ?: 'gear'); ?>" style="height:190px!important;min-height:0!important;border-radius:0!important;margin:0!important;overflow:hidden!important;background:radial-gradient(circle at 50% 42%,rgba(76,200,237,.24),rgba(255,255,255,.68) 50%,#eef8fb 100%)!important;border-bottom:1px solid rgba(6,56,77,.08)!important;">

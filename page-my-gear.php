@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wdc_gear_nonce']) && 
 
 $gear = [];
 if (post_type_exists('wm_equipment')) {
-    $gear_posts = get_posts(['post_type' => 'wm_equipment', 'numberposts' => -1, 'post_status' => 'publish', 'orderby' => 'menu_order', 'order' => 'ASC']);
+    $gear_posts = get_posts(['post_type' => 'wm_equipment', 'numberposts' => -1, 'post_status' => 'publish', 'orderby' => 'menu_order', 'order' => 'ASC', 'meta_query' => ['relation' => 'OR', ['key' => '_wdc_catalog_visible', 'compare' => 'NOT EXISTS'], ['key' => '_wdc_catalog_visible', 'value' => '0', 'compare' => '!=']]]);
     foreach ($gear_posts as $gear_post) {
         $price = (float) get_post_meta($gear_post->ID, '_wm_price', true);
         $stock = get_post_meta($gear_post->ID, '_wm_stock', true);
