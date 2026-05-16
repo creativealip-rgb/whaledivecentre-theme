@@ -2564,3 +2564,13 @@ article.wd-mini-article::before{content:none!important;display:none!important}
 .whaledive-courses .wd-course-decision-card .wd-course-actions .wd-mini-link{height:44px!important;min-height:44px!important}
 @media(max-width:980px){.whaledive-courses #courseGrid.wd-page-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media(max-width:560px){.whaledive-courses #courseGrid.wd-page-grid{grid-template-columns:1fr!important}.whaledive-courses .wd-course-decision-card .wd-course-photo{height:172px!important;min-height:172px!important;max-height:172px!important}}
+
+
+/* WDC equipment cards aligned to Ganesha compact spacing 2026-05-16 */
+.whaledive-equipment .wd-equip-card-body{padding:14px!important;gap:6px!important}
+.whaledive-equipment .wd-shop-meta{gap:6px!important;margin:0 0 4px!important}
+.whaledive-equipment .wd-shop-card h3{margin:0 0 2px!important}
+.whaledive-equipment .wd-equip-price{margin:0 0 6px!important;padding:0!important;background:transparent!important;border:0!important}
+.whaledive-equipment .wd-equip-chips{gap:6px!important;margin:0 0 4px!important}
+.whaledive-equipment .wd-equip-actions{display:block!important;margin-top:8px!important;padding-top:0!important;border-top:0!important}
+.whaledive-equipment .wd-equip-actions .wd-mini-link{display:inline-flex!important;align-items:center!important;justify-content:center!important;width:max-content!important;min-width:128px!important;min-height:38px!important;margin:0!important;padding:0 16px!important;border-radius:999px!important;background:#f3fbff!important;border:1px solid rgba(6,56,77,.14)!important;color:#06384d!important;font-size:12px!important;font-weight:900!important;box-shadow:none!important;text-decoration:none!important}
