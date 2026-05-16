@@ -10,6 +10,7 @@
 
 /* Final article preview polish. */
 .whaledive-home #articles .wd-mini-article{display:flex!important;flex-direction:column!important;gap:10px!important;min-height:238px!important;padding:22px!important;border-radius:18px!important;background:#fff!important;border:1px solid rgba(6,56,77,.08)!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important}.whaledive-home #articles .wd-mini-article b{width:max-content!important;padding:6px 10px!important;border-radius:999px!important;background:#eef8fb!important;color:#0b617c!important;font-size:10px!important;letter-spacing:.08em!important;text-transform:uppercase!important}.whaledive-home #articles .wd-mini-article h3{margin:0!important;min-height:54px!important;font-size:20px!important;line-height:1.08!important;letter-spacing:-.03em!important}.whaledive-home #articles .wd-mini-article h3 a{color:#061a36!important;text-decoration:none!important}.whaledive-home #articles .wd-mini-article p{margin:0!important;min-height:58px!important;color:#5f7180!important;font-size:13px!important;line-height:1.45!important}.whaledive-home #articles .wd-mini-article .wd-article-link{margin-top:auto!important;width:max-content!important;min-height:34px!important;padding:0 12px!important;border-radius:999px!important;display:inline-flex!important;align-items:center!important;background:#f3fbff!important;border:1px solid rgba(6,56,77,.12)!important;color:#06384d!important;font-size:12px!important;font-weight:900!important;text-decoration:none!important}.whaledive-home #articles .wd-mini-article .wd-article-link:after{content:' →'}
+.whaledive-home #articles .wd-featured-card{font-family:inherit!important;background-image:linear-gradient(180deg,rgba(3,22,43,.24),rgba(3,22,43,.88)),var(--wd-article-img)!important;background-size:cover!important;background-position:center!important;overflow:hidden!important}.whaledive-home #articles .wd-featured-card h3{font-family:inherit!important;letter-spacing:-.04em!important}.whaledive-home #articles .wd-mini-article-image{padding:0!important;overflow:hidden!important}.whaledive-home #articles .wd-mini-article-thumb{display:block!important;height:132px!important;overflow:hidden!important;background:#eaf8fc!important}.whaledive-home #articles .wd-mini-article-thumb img{width:100%!important;height:100%!important;object-fit:cover!important;display:block!important}.whaledive-home #articles .wd-mini-article-image b,.whaledive-home #articles .wd-mini-article-image h3,.whaledive-home #articles .wd-mini-article-image p,.whaledive-home #articles .wd-mini-article-image .wd-article-link{margin-left:22px!important;margin-right:22px!important}.whaledive-home #articles .wd-mini-article-image .wd-article-link{margin-bottom:22px!important}
 
 /* WDC home cards aligned to Ganesha compact spacing 2026-05-16 */
 .whaledive-home #courses .wd-course-body,
@@ -64,7 +65,44 @@
   </div></div></section>
 
   <!-- ARTICLES -->
-  <section id="articles" class="wd-section wd-articles"><div class="wd-shell"><div class="wd-article-head"><div><span class="wd-kicker">Featured Article</span><h2 class="wd-title">Dive Stories & Ocean Notes</h2><p class="wd-sub">Curated reads for new divers, gear buyers, and ocean-minded community members.</p></div><a class="wd-btn" href="/blog/">Read Blog</a></div><div class="wd-article-grid"><article class="wd-featured-card"><span>Featured</span><h3>How to Prepare for Your First Open Water Course</h3><p>What to expect before pool sessions, ocean dives, equipment fitting, and the habits that make new divers feel calm underwater.</p><a href="/blog/">Read article</a></article><article class="wd-mini-article"><b>Gear Guide</b><h3><a href="/mask-fit-tips-before-buying-your-first-scuba-mask/">Mask fit tips before buying your first scuba mask</a></h3><p>Quick fit checks that prevent leaks, fogging, and pressure marks before your first ocean session.</p><a class="wd-article-link" href="/mask-fit-tips-before-buying-your-first-scuba-mask/">Read article</a></article><article class="wd-mini-article"><b>Safety</b><h3><a href="/why-slow-ascents-and-buoyancy-control-matter/">Why slow ascents and buoyancy control matter</a></h3><p>Simple buoyancy habits that make every ascent calmer, safer, and easier for new divers.</p><a class="wd-article-link" href="/why-slow-ascents-and-buoyancy-control-matter/">Read article</a></article><article class="wd-mini-article"><b>Community</b><h3><a href="/building-better-dive-habits-with-small-groups/">Building better dive habits with small groups</a></h3><p>How smaller training groups help divers build confidence, awareness, and stronger buddy skills.</p><a class="wd-article-link" href="/building-better-dive-habits-with-small-groups/">Read article</a></article></div></div></section>
+  <?php
+  $wd_latest_posts = new WP_Query([
+    'post_type' => 'post',
+    'post_status' => 'publish',
+    'posts_per_page' => 4,
+    'ignore_sticky_posts' => true,
+  ]);
+  $wd_fallback_articles = [
+    ['Featured', 'How to Prepare for Your First Open Water Course', 'What to expect before pool sessions, ocean dives, equipment fitting, and the habits that make new divers feel calm underwater.', '/blog/', 'wdc-course-open-water-real.png'],
+    ['Gear Guide', 'Mask fit tips before buying your first scuba mask', 'Quick fit checks that prevent leaks, fogging, and pressure marks before your first ocean session.', '/mask-fit-tips-before-buying-your-first-scuba-mask/', 'wdc-equipment-mask-real.png'],
+    ['Safety', 'Why slow ascents and buoyancy control matter', 'Simple buoyancy habits that make every ascent calmer, safer, and easier for new divers.', '/why-slow-ascents-and-buoyancy-control-matter/', 'wdc-course-rescue-diver-real.png'],
+    ['Community', 'Building better dive habits with small groups', 'How smaller training groups help divers build confidence, awareness, and stronger buddy skills.', '/building-better-dive-habits-with-small-groups/', 'wdc-course-divemaster-real.png'],
+  ];
+  $wd_article_fallback_images = ['wdc-course-open-water-real.png', 'wdc-equipment-mask-real.png', 'wdc-course-rescue-diver-real.png', 'wdc-course-divemaster-real.png'];
+  ?>
+  <section id="articles" class="wd-section wd-articles"><div class="wd-shell"><div class="wd-article-head"><div><span class="wd-kicker">Featured Article</span><h2 class="wd-title">Dive Stories & Ocean Notes</h2><p class="wd-sub">Curated reads for new divers, gear buyers, and ocean-minded community members.</p></div><a class="wd-btn" href="/blog/">Read Blog</a></div><div class="wd-article-grid wd-article-grid-dynamic">
+  <?php if ($wd_latest_posts->have_posts()) : $wd_article_index = 0; while ($wd_latest_posts->have_posts()) : $wd_latest_posts->the_post();
+    $wd_article_index++;
+    $wd_article_url = get_permalink();
+    $wd_article_title = get_the_title();
+    $wd_article_label = $wd_article_index === 1 ? 'Featured' : (get_the_category()[0]->name ?? 'Article');
+    $wd_article_excerpt = wp_trim_words(get_the_excerpt() ?: wp_strip_all_tags(get_the_content()), $wd_article_index === 1 ? 24 : 18, '...');
+    $wd_article_image = get_the_post_thumbnail_url(get_the_ID(), $wd_article_index === 1 ? 'large' : 'medium_large');
+    if (!$wd_article_image) {
+      $wd_article_image = get_template_directory_uri() . '/assets/' . $wd_article_fallback_images[min($wd_article_index - 1, count($wd_article_fallback_images) - 1)];
+    }
+    if ($wd_article_index === 1) : ?>
+      <article class="wd-featured-card wd-featured-card-image" style="--wd-article-img:url('<?php echo esc_url($wd_article_image); ?>')"><span><?php echo esc_html($wd_article_label); ?></span><h3><?php echo esc_html($wd_article_title); ?></h3><p><?php echo esc_html($wd_article_excerpt); ?></p><a href="<?php echo esc_url($wd_article_url); ?>">Read article</a></article>
+    <?php else : ?>
+      <article class="wd-mini-article wd-mini-article-image"><a class="wd-mini-article-thumb" href="<?php echo esc_url($wd_article_url); ?>"><img src="<?php echo esc_url($wd_article_image); ?>" alt="<?php echo esc_attr($wd_article_title); ?>" loading="lazy"></a><b><?php echo esc_html($wd_article_label); ?></b><h3><a href="<?php echo esc_url($wd_article_url); ?>"><?php echo esc_html($wd_article_title); ?></a></h3><p><?php echo esc_html($wd_article_excerpt); ?></p><a class="wd-article-link" href="<?php echo esc_url($wd_article_url); ?>">Read article</a></article>
+    <?php endif; endwhile; wp_reset_postdata(); else : foreach ($wd_fallback_articles as $wd_article_index => $wd_article) :
+      $wd_article_image = get_template_directory_uri() . '/assets/' . $wd_article[4];
+      if ($wd_article_index === 0) : ?>
+        <article class="wd-featured-card wd-featured-card-image" style="--wd-article-img:url('<?php echo esc_url($wd_article_image); ?>')"><span><?php echo esc_html($wd_article[0]); ?></span><h3><?php echo esc_html($wd_article[1]); ?></h3><p><?php echo esc_html($wd_article[2]); ?></p><a href="<?php echo esc_url($wd_article[3]); ?>">Read article</a></article>
+      <?php else : ?>
+        <article class="wd-mini-article wd-mini-article-image"><a class="wd-mini-article-thumb" href="<?php echo esc_url($wd_article[3]); ?>"><img src="<?php echo esc_url($wd_article_image); ?>" alt="<?php echo esc_attr($wd_article[1]); ?>" loading="lazy"></a><b><?php echo esc_html($wd_article[0]); ?></b><h3><a href="<?php echo esc_url($wd_article[3]); ?>"><?php echo esc_html($wd_article[1]); ?></a></h3><p><?php echo esc_html($wd_article[2]); ?></p><a class="wd-article-link" href="<?php echo esc_url($wd_article[3]); ?>">Read article</a></article>
+      <?php endif; endforeach; endif; ?>
+  </div></div></section>
 
   <!-- MEMBERSHIP CTA -->
   <section id="membership" class="wd-section wd-community wd-center"><div class="wd-shell"><span class="wd-kicker">Member Portal</span><h2 class="wd-title">Join the Whale Dive Community</h2><p class="wd-sub">Track your courses, manage certifications, purchase equipment, and connect with the crew — all from your member dashboard.</p><div class="wd-trust-row"><div><b>Course tracking</b><span>Enrollment to certification</span></div><div><b>Equipment shop</b><span>Buy or rent gear online</span></div><div><b>Cert portfolio</b><span>All your dive cards in one place</span></div></div><a class="wd-btn alt" href="/member-register/">Create Free Account</a></div></section>
