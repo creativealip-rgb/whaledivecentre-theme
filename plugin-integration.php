@@ -494,24 +494,11 @@ function contenly_render_destination_columns($column, $post_id) {
 add_action('manage_destination_posts_custom_column', 'contenly_render_destination_columns', 10, 2);
 
 /**
- * Check if plugin is active and notify admin if not
+ * Legacy plugin notice disabled: WDC member flows now run inside the theme.
  */
 function contenly_check_plugin_activation() {
-    if (is_admin() && !class_exists('Travel_Membership_Pro')) {
-        add_action('admin_notices', function() {
-            ?>
-            <div class="notice notice-warning is-dismissible">
-                <p>
-                    <strong>⚠️ Travel Membership Pro Plugin Not Active</strong><br>
-                    The Contenly theme requires the Travel Membership Pro plugin for tour booking functionality.<br>
-                    Please activate the plugin or install it from <code>/wp-content/plugins/travel-membership-plugin/</code>
-                </p>
-            </div>
-            <?php
-        });
-    }
+    return;
 }
-add_action('admin_init', 'contenly_check_plugin_activation');
 
 
 /**
