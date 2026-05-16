@@ -88,6 +88,29 @@ function wdc_register_course_taxonomies() {
         ]);
     }
 
+    if (!post_type_exists('wm_equipment')) {
+        register_post_type('wm_equipment', [
+            'label' => 'Equipment',
+            'public' => true,
+            'has_archive' => true,
+            'rewrite' => ['slug' => 'equipment'],
+            'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'page-attributes'],
+            'show_in_rest' => true,
+            'menu_icon' => 'dashicons-products',
+        ]);
+    }
+
+    if (!taxonomy_exists('equipment_category')) {
+        register_taxonomy('equipment_category', ['wm_equipment'], [
+            'label' => 'Equipment Categories',
+            'public' => true,
+            'hierarchical' => true,
+            'show_admin_column' => true,
+            'rewrite' => ['slug' => 'equipment-category'],
+            'show_in_rest' => true,
+        ]);
+    }
+
     if (!taxonomy_exists('course_level')) {
         register_taxonomy('course_level', ['wm_course'], [
             'label' => 'Course Levels',
@@ -2331,7 +2354,7 @@ function wdc_render_member_records_table($records, $title) {
     <form id="wdc-bulk-admin" method="post" style="display:flex;gap:8px;align-items:center;margin:12px 0;">
         <?php wp_nonce_field('wdc_member_admin_update', 'wdc_member_admin_nonce'); ?>
         <input type="hidden" name="bulk_apply" value="1">
-        <select name="status"><?php foreach (wdc_member_status_options() as $status) : ?><option value="<?php echo esc_attr($status); ?>"><?php echo esc_html($status); ?></option><?php endforeach; ?></select>
+        <select name="status" required><option value="">Change status to...</option><?php foreach (wdc_member_status_options() as $status) : ?><option value="<?php echo esc_attr($status); ?>"><?php echo esc_html($status); ?></option><?php endforeach; ?></select>
         <input type="text" name="admin_note" placeholder="Optional bulk note" style="min-width:260px;">
         <button class="button button-primary">Apply to selected</button>
     </form>
@@ -2347,7 +2370,7 @@ function wdc_render_member_records_table($records, $title) {
             <td><span style="display:inline-flex;padding:5px 9px;border-radius:999px;font-weight:700;<?php echo esc_attr(wdc_status_badge_style($current_status)); ?>"><?php echo esc_html($current_status); ?></span><br><select name="status" style="margin-top:8px;"><?php foreach (wdc_member_status_options() as $status) : ?><option value="<?php echo esc_attr($status); ?>" <?php selected($current_status, $status); ?>><?php echo esc_html($status); ?></option><?php endforeach; ?></select></td>
             <td><?php if (!empty($item['payment_proof_url'])) : ?><a class="button" href="<?php echo esc_url($item['payment_proof_url']); ?>" target="_blank" rel="noopener">View Proof</a><?php else : ?><span style="color:#64748b;">No proof</span><?php endif; ?></td>
             <td><textarea name="admin_note" rows="2" style="width:100%;"><?php echo esc_textarea($item['admin_note'] ?? ''); ?></textarea></td>
-            <td><?php wp_nonce_field('wdc_member_admin_update', 'wdc_member_admin_nonce'); ?><input type="hidden" name="user_id" value="<?php echo esc_attr($record['user']->ID); ?>"><input type="hidden" name="record_type" value="<?php echo esc_attr($record['type']); ?>"><input type="hidden" name="bucket" value="<?php echo esc_attr($record['bucket']); ?>"><input type="hidden" name="record_index" value="<?php echo esc_attr($record['index']); ?>"><button class="button button-primary">Update</button><div style="margin-top:6px;display:grid;gap:4px;"><button class="button" name="status" value="Verified">Verify</button><button class="button" name="status" value="Active">Activate</button><button class="button" name="status" value="Cancelled">Cancel</button></div></td>
+            <td><?php wp_nonce_field('wdc_member_admin_update', 'wdc_member_admin_nonce'); ?><input type="hidden" name="user_id" value="<?php echo esc_attr($record['user']->ID); ?>"><input type="hidden" name="record_type" value="<?php echo esc_attr($record['type']); ?>"><input type="hidden" name="bucket" value="<?php echo esc_attr($record['bucket']); ?>"><input type="hidden" name="record_index" value="<?php echo esc_attr($record['index']); ?>"><button class="button button-primary">Save</button><div style="margin-top:8px;display:flex;gap:4px;flex-wrap:wrap;"><button class="button button-small" name="status" value="Verified">Verify</button><button class="button button-small" name="status" value="Active">Activate</button><button class="button button-small" name="status" value="Cancelled">Cancel</button></div></td>
         </form></tr>
     <?php endforeach; ?>
     </tbody></table></div>
