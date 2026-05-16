@@ -3050,3 +3050,38 @@ body.whaledive-single-course .wd-sidebar-note,
 @media(max-width:700px){
   .wdc-auth-card>.wdc-auth-switch{display:block!important;margin-top:18px!important}
 }
+
+
+/* WDC mobile overflow guard 2026-05-16 */
+@media(max-width:760px){
+  html,body{max-width:100%;overflow-x:hidden!important}
+  .wd-page{max-width:100vw;overflow-x:hidden!important}
+  .wd-header{width:100%!important;max-width:100vw!important;overflow:visible!important}
+  .wd-header .wd-shell{width:100%!important;max-width:100vw!important;margin:0!important;padding-left:0!important;padding-right:0!important}
+  .wd-nav{width:100%!important;max-width:100vw!important;margin:0!important;padding:10px 14px!important;box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important}
+  .wd-brand{min-width:0!important;flex:1 1 auto!important;overflow:hidden!important}
+  .wd-brand span{display:block!important;min-width:0!important;max-width:calc(100vw - 118px)!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  .wd-hamburger{flex:0 0 40px!important;margin-left:auto!important;right:auto!important;transform:none!important}
+  .wd-menu{left:14px!important;right:14px!important;max-width:calc(100vw - 28px)!important;box-sizing:border-box!important}
+  .wd-shell{width:100%!important;max-width:100vw!important;box-sizing:border-box!important;padding-left:18px!important;padding-right:18px!important}
+  img,video,canvas,svg{max-width:100%;height:auto}
+  .home #courses .wd-course-slider{width:100%!important;max-width:100vw!important;margin-left:0!important;margin-right:0!important;padding-left:0!important;padding-right:0!important;box-sizing:border-box!important}
+  .home #courses .wd-course-grid{min-width:0!important;width:max-content!important;max-width:none!important}
+  .home #courses .wd-course-card{flex-basis:calc(100vw - 72px)!important;max-width:318px!important}
+  .home #courses .wd-course-card a{max-width:100%!important;white-space:normal!important}
+  .whaledive-equipment #equipGrid .wd-equip-photo{left:auto!important;right:auto!important;max-width:100%!important;transform:none!important;object-fit:contain!important;padding:10px!important;box-sizing:border-box!important}
+  .whaledive-equipment #equipGrid .wd-equip-visual{overflow:hidden!important}
+}
+@media(max-width:420px){
+  .wd-brand span{font-size:14px!important;max-width:calc(100vw - 108px)!important}
+  .wd-shell{padding-left:16px!important;padding-right:16px!important}
+}
+
+/* WDC homepage mobile equipment crop guard 2026-05-16 */
+@media(max-width:760px){
+  .home .wd-home-equip-photo img,
+  .home .wd-equipment-grid .wd-course-photo img,
+  .home .wd-equipment-grid img{width:100%!important;max-width:100%!important;height:100%!important;left:auto!important;right:auto!important;transform:none!important;object-fit:cover!important;box-sizing:border-box!important}
+  .home .wd-home-equip-photo,
+  .home .wd-equipment-grid .wd-course-photo{overflow:hidden!important;max-width:100%!important}
+}

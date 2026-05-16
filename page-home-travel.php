@@ -348,6 +348,14 @@ html,body{max-width:100%;overflow-x:hidden}
 .gt-grid .choices__list--dropdown .choices__item{font-size:14px;padding:11px 13px;color:#0f172a}
 .gt-grid .choices__list--dropdown .choices__item--selectable.is-highlighted{background:#DCE9E6!important;color:#355F72}
 .gt-grid .choices__list--dropdown .choices__item--selectable.is-selected{font-weight:700;color:#355F72}
+@media(max-width:760px){
+  .home .wd-course-slider{max-width:100vw;overflow-x:auto;overflow-y:hidden}
+  .home .wd-course-slider .wd-course-grid{min-width:0!important;width:max-content!important}
+  .home .wd-course-slider .wd-course-card{flex-basis:calc(100vw - 72px)!important;max-width:318px!important}
+  .home .wd-course-slider .wd-course-card a{max-width:100%;white-space:normal;box-sizing:border-box}
+  .home .wd-equipment-grid,.home .wd-home-equip-card,.home .wd-home-equip-photo{max-width:100%!important;overflow:hidden!important}
+  .home .wd-home-equip-photo img{width:100%!important;max-width:100%!important;height:100%!important;object-fit:cover!important;transform:none!important;left:auto!important;right:auto!important;display:block!important}
+}
 </style>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">

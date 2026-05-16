@@ -1984,7 +1984,14 @@ function wdc_member_template_route_map() {
 
 function wdc_current_clean_path() {
     $path = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
-    return preg_replace('#^index\.php/#', '', $path);
+    $path = preg_replace('#^index\.php/#', '', $path);
+
+    // Normalize language-prefixed routes from multilingual plugins/localized URLs.
+    if (preg_match('#^[a-z]{2}(?:-[a-z]{2})?/(.+)$#i', $path, $matches)) {
+        $path = $matches[1];
+    }
+
+    return $path;
 }
 
 add_action('template_redirect', function () {
