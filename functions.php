@@ -2221,6 +2221,59 @@ function wdc_ajax_save_direct_checkout() {
 }
 add_action('wp_ajax_wdc_save_direct_checkout', 'wdc_ajax_save_direct_checkout');
 
+function wdc_font_mode() {
+    $mode = get_option('wdc_font_mode', 'current');
+    return in_array($mode, ['current', 'brand'], true) ? $mode : 'current';
+}
+
+function wdc_is_brand_font_mode() {
+    return wdc_font_mode() === 'brand';
+}
+
+function wdc_body_font_mode_class($classes) {
+    $classes[] = wdc_is_brand_font_mode() ? 'wdc-brand-font-mode' : 'wdc-current-font-mode';
+    return $classes;
+}
+add_filter('body_class', 'wdc_body_font_mode_class');
+add_filter('admin_body_class', function($classes) {
+    return trim($classes . ' ' . (wdc_is_brand_font_mode() ? 'wdc-brand-font-mode' : 'wdc-current-font-mode'));
+});
+
+function wdc_enqueue_brand_font_assets() {
+    if (!wdc_is_brand_font_mode()) {
+        return;
+    }
+    wp_enqueue_style('wdc-brand-open-sans', 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap', [], null);
+}
+add_action('wp_enqueue_scripts', 'wdc_enqueue_brand_font_assets');
+add_action('admin_enqueue_scripts', 'wdc_enqueue_brand_font_assets');
+
+function wdc_render_font_mode_css() {
+    if (!wdc_is_brand_font_mode()) {
+        return;
+    }
+    ?>
+    <style id="wdc-brand-font-mode-css">
+        body.wdc-brand-font-mode, body.wdc-brand-font-mode input, body.wdc-brand-font-mode select, body.wdc-brand-font-mode textarea, body.wdc-brand-font-mode button { font-family: 'Open Sans', Arial, sans-serif !important; }
+        body.wdc-brand-font-mode h1, body.wdc-brand-font-mode h2, body.wdc-brand-font-mode h3, body.wdc-brand-font-mode .wd-title, body.wdc-brand-font-mode .wd-brand span, body.wdc-brand-font-mode .page-title { font-family: 'iBrand', 'Open Sans', Arial, sans-serif !important; }
+    </style>
+    <?php
+}
+add_action('wp_head', 'wdc_render_font_mode_css', 99);
+add_action('admin_head', 'wdc_render_font_mode_css', 99);
+
+function wdc_handle_font_mode_update() {
+    if (!current_user_can('manage_options')) {
+        wp_die('Not allowed');
+    }
+    check_admin_referer('wdc_font_mode_update');
+    $mode = sanitize_key(wp_unslash($_POST['wdc_font_mode'] ?? 'current'));
+    update_option('wdc_font_mode', $mode === 'brand' ? 'brand' : 'current');
+    wp_safe_redirect(add_query_arg(['page' => 'wdc-member-admin', 'font-updated' => '1'], admin_url('admin.php')));
+    exit;
+}
+add_action('admin_post_wdc_update_font_mode', 'wdc_handle_font_mode_update');
+
 function wdc_register_member_admin_menu() {
     add_menu_page('WDC Members', 'WDC Members', 'manage_options', 'wdc-member-admin', 'wdc_render_member_admin_dashboard', 'dashicons-groups', 30);
     add_submenu_page('wdc-member-admin', 'Course Requests', 'Course Requests' . wdc_admin_menu_badge(wdc_member_admin_pending_count('course', 'requests')), 'manage_options', 'wdc-course-requests', 'wdc_render_course_admin_page');
@@ -2350,6 +2403,20 @@ function wdc_render_member_admin_dashboard() {
     $gear_orders = wdc_collect_member_records('equipment', 'orders');
     ?>
     <div class="wrap"><h1>WDC Member Admin</h1>
+        <?php if (!empty($_GET['font-updated'])) : ?>
+            <div class="notice notice-success is-dismissible"><p>WDC font mode updated.</p></div>
+        <?php endif; ?>
+        <div style="background:#fff;border:1px solid #dcdcde;border-left:4px solid #004A98;border-radius:12px;padding:18px;margin:18px 0 20px;max-width:900px;">
+            <h2 style="margin:0 0 8px;font-size:18px;">Brand Font Switch</h2>
+            <p style="margin:0 0 14px;color:#64748b;">Switch website and member dashboard typography. Current keeps the existing font; Brand Guideline uses Open Sans body and attempts iBrand for headings when available.</p>
+            <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+                <?php wp_nonce_field('wdc_font_mode_update'); ?>
+                <input type="hidden" name="action" value="wdc_update_font_mode">
+                <label style="display:inline-flex;gap:6px;align-items:center;"><input type="radio" name="wdc_font_mode" value="current" <?php checked(wdc_font_mode(), 'current'); ?>> Keep current font</label>
+                <label style="display:inline-flex;gap:6px;align-items:center;"><input type="radio" name="wdc_font_mode" value="brand" <?php checked(wdc_font_mode(), 'brand'); ?>> Brand Guideline font</label>
+                <?php submit_button('Save Font Mode', 'primary', 'submit', false); ?>
+            </form>
+        </div>
         <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:20px 0;">
             <?php foreach ([['Course Requests', count($course_requests)], ['Gear Requests', count($gear_requests)], ['Course Orders', count($course_orders)], ['Gear Orders', count($gear_orders)]] as $card) : ?>
             <div style="background:#fff;border:1px solid #dcdcde;border-radius:12px;padding:18px;"><strong><?php echo esc_html($card[0]); ?></strong><div style="font-size:32px;font-weight:800;margin-top:8px;"><?php echo esc_html($card[1]); ?></div></div>
