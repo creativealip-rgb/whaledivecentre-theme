@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Wishlist
+ * Template Name: Gear Wishlist
  */
 require_once get_template_directory() . '/dashboard-header.php';
 
@@ -37,7 +37,7 @@ $recommended = new WP_Query([
 </style>
 
 <div style="margin-bottom: 24px;">
-    <h1 class="page-title">❤️ <?php echo esc_html(contenly_tr('Wishlist', 'Wishlist')); ?></h1>
+    <h1 class="page-title">❤️ <?php echo esc_html(contenly_tr('Gear Wishlist', 'Gear Wishlist')); ?></h1>
     <p class="page-subtitle"><?php echo esc_html(contenly_tr('Simpan paket favoritmu dan booking saat sudah siap.', 'Save your favourite packages and book them when you are ready.')); ?></p>
 </div>
 
@@ -68,7 +68,7 @@ $recommended = new WP_Query([
 <div class="member-card" style="margin-bottom:22px;">
     <h3 style="font-size:18px;font-weight:700;color:#0f172a;margin-bottom:6px;"><?php echo esc_html(contenly_tr('Belum ada wishlist', 'No wishlist yet')); ?></h3>
     <p style="color:#64748b;margin-bottom:14px;"><?php echo esc_html(contenly_tr('Kamu bisa mulai simpan paket dari halaman tour. Nanti semua yang kamu simpan muncul di sini.', 'You can start saving packages from the tour page. Everything you save will appear here.')); ?></p>
-    <a href="<?php echo esc_url(contenly_localized_url('/tour-packages/')); ?>" class="member-btn-primary">🔎 <?php echo esc_html(contenly_tr('Jelajahi Tour', 'Browse Tours')); ?></a>
+    <a href="<?php echo esc_url(contenly_localized_url('/tour-packages/')); ?>" class="member-btn-primary">🔎 <?php echo esc_html(contenly_tr('Explore Courses', 'Explore Courses')); ?></a>
 </div>
 <?php endif; ?>
 
@@ -149,12 +149,12 @@ jQuery(function($){
 
   $('.wishlist-remove-btn').on('click', async function(){
     const btn = this;
-    if (!window.contenlyBooking) return;
+    if (!window.contenlyDive Plan) return;
     const tourId = btn.getAttribute('data-tour-id');
     const fd = new FormData();
     fd.append('action', 'contenly_toggle_wishlist');
     fd.append('tour_id', tourId);
-    fd.append('nonce', window.contenlyBooking.nonce || '');
+    fd.append('nonce', window.contenlyDive Plan.nonce || '');
     btn.disabled = true;
     try {
       const res = await fetch(<?php echo wp_json_encode(admin_url('admin-ajax.php')); ?>, { method: 'POST', body: fd });

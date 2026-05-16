@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: My Travels
+ * Template Name: My Dives
  * Unified booking management with review system
  */
 
@@ -84,7 +84,7 @@ $booking_notice = isset($_GET['booking']) ? sanitize_text_field($_GET['booking']
 <div style="margin-bottom: 16px; padding: 14px 16px; border-radius: 12px; background: linear-gradient(135deg,#eef5f4,#f8fafc); border:1px solid #D8E8E8; color:#355F72; display:flex; align-items:center; justify-content:space-between; gap:12px;">
     <div style="display:flex; align-items:center; gap:10px; font-weight:600;">
         <span style="font-size:18px;">🧾</span>
-        <span><?php echo esc_html(contenly_tr('Permintaan booking berhasil dikirim. Tim admin akan review detail trip kamu dulu sebelum konfirmasi tahap selanjutnya.', 'Your booking request has been sent successfully. Our admin team will review your trip details before confirming the next step.')); ?></span>
+        <span><?php echo esc_html(contenly_tr('Permintaan dive plan berhasil dikirim. Tim crew akan review detail dive kamu dulu sebelum konfirmasi tahap selanjutnya.', 'Your dive plan request has been sent successfully. Our crew will review the dive details before confirming the next step.')); ?></span>
     </div>
     <a href="<?php echo esc_url(add_query_arg('tab', $active_tab, contenly_localized_url('/my-travels/'))); ?>" style="text-decoration:none; color:#355F72; font-weight:700;"><?php echo esc_html(contenly_tr('Tutup', 'Close')); ?></a>
 </div>
@@ -102,8 +102,8 @@ $booking_notice = isset($_GET['booking']) ? sanitize_text_field($_GET['booking']
 
 <!-- Page Header -->
 <div style="margin-bottom: 32px;">
-    <h1 style="font-size: 28px; font-weight: 700; color: #0f172a; margin-bottom: 8px;">📍 <?php echo esc_html(contenly_tr('Perjalanan Saya', 'My Travels')); ?></h1>
-    <p style="font-size: 15px; color: #64748b;"><?php echo esc_html(contenly_tr('Kelola perjalananmu, status booking, dan review', 'Manage your trips, booking statuses, and reviews.')); ?></p>
+    <h1 style="font-size: 28px; font-weight: 700; color: #0f172a; margin-bottom: 8px;">📍 <?php echo esc_html(contenly_tr('Dive Saya', 'My Dives')); ?></h1>
+    <p style="font-size: 15px; color: #64748b;"><?php echo esc_html(contenly_tr('Kelola rencana dive, status pembayaran, dan review', 'Manage dive plans, payment status, and reviews.')); ?></p>
 </div>
 
 <!-- Tabs -->
@@ -130,23 +130,23 @@ if (empty($current_bookings)) :
     $empty_messages = [
         'upcoming' => [
             'icon' => '📅',
-            'title' => 'No upcoming bookings',
-            'text' => 'Start exploring our amazing tours!',
-            'button' => contenly_tr('Jelajahi Tour', 'Browse Tours'),
+            'title' => 'No upcoming dive plans',
+            'text' => 'Start with a course or ask the crew about your next dive.',
+            'button' => contenly_tr('Explore Courses', 'Explore Courses'),
             'link' => contenly_localized_url('/tour-packages'),
         ],
         'completed' => [
             'icon' => '✔',
-            'title' => contenly_tr('Belum ada booking selesai', 'No completed bookings yet'),
-            'text' => contenly_tr('Selesaikan trip pertamamu lalu bagikan pengalamanmu!', 'Complete your first tour and share your experience!'),
-            'button' => contenly_tr('Jelajahi Tour', 'Browse Tours'),
+            'title' => contenly_tr('No dive plans yet selesai', 'No completed dive plans yet'),
+            'text' => contenly_tr('Selesaikan dive pertamamu lalu bagikan pengalamanmu!', 'Complete your first dive and share your experience!'),
+            'button' => contenly_tr('Explore Courses', 'Explore Courses'),
             'link' => contenly_localized_url('/tour-packages'),
         ],
         'cancelled' => [
             'icon' => '❌',
-            'title' => contenly_tr('Belum ada booking dibatalkan', 'No cancelled bookings'),
-            'text' => contenly_tr('Mantap! Semua booking kamu masih aman di jalur.', 'Great! All your bookings are on track.'),
-            'button' => contenly_tr('Jelajahi Tour', 'Browse Tours'),
+            'title' => contenly_tr('No dive plans yet dibatalkan', 'No cancelled dive plans'),
+            'text' => contenly_tr('Mantap! Semua rencana dive kamu masih aman di jalur.', 'Great! All your dive plans are on track.'),
+            'button' => contenly_tr('Explore Courses', 'Explore Courses'),
             'link' => contenly_localized_url('/tour-packages'),
         ],
     ];
@@ -178,7 +178,7 @@ if (empty($current_bookings)) :
         $review_rating = $has_reviewed ? get_post_meta($review->ID, '_rating', true) : 0;
         
         $status_labels = [
-            'pending_review' => ['label' => '🧾 ' . contenly_tr('Menunggu Review', 'Pending Review'), 'color' => '#355F72', 'bg' => '#DCE9E6'],
+            'pending_review' => ['label' => '🧾 ' . contenly_tr('Menunggu Dive Review', 'Pending Dive Review'), 'color' => '#355F72', 'bg' => '#DCE9E6'],
             'pending_payment' => ['label' => '⏳ ' . contenly_tr('Menunggu Pembayaran', 'Pending Payment'), 'color' => '#fbbf24', 'bg' => '#fef3c7'],
             'payment_uploaded' => ['label' => '📤 ' . contenly_tr('Bukti Pembayaran Diupload', 'Payment Uploaded'), 'color' => '#539294', 'bg' => '#DCE9E6'],
             'paid' => ['label' => '✅ ' . contenly_tr('Lunas', 'Paid'), 'color' => '#10b981', 'bg' => '#d1fae5'],
@@ -195,9 +195,9 @@ if (empty($current_bookings)) :
         <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
             <div style="flex: 1;">
                 <h3 style="font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">
-                    <?php echo esc_html($tour ? $tour->post_title : contenly_tr('Booking Tour', 'Tour Booking')); ?>
+                    <?php echo esc_html($tour ? $tour->post_title : contenly_tr('Dive Plan', 'Dive Plan')); ?>
                 </h3>
-                <div style="font-size: 14px; color: #94a3b8;"><?php echo esc_html(contenly_tr('Booking', 'Booking')); ?> #<?php echo esc_html($booking->ID); ?></div>
+                <div style="font-size: 14px; color: #94a3b8;"><?php echo esc_html(contenly_tr('Dive Plan', 'Dive Plan')); ?> #<?php echo esc_html($booking->ID); ?></div>
             </div>
             <span style="padding: 6px 16px; background: <?php echo $status_info['bg']; ?>; color: <?php echo $status_info['color']; ?>; border-radius: 9999px; font-size: 13px; font-weight: 600;">
                 <?php echo esc_html($status_info['label']); ?>
@@ -206,7 +206,7 @@ if (empty($current_bookings)) :
         
         <div class="booking-meta-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; padding: 16px; background: #f8fafc; border-radius: 12px; margin-bottom: 16px;">
             <div>
-                <div style="font-size: 13px; color: #64748b; margin-bottom: 4px;"><?php echo esc_html(contenly_tr('Tanggal Perjalanan', 'Travel Date')); ?></div>
+                <div style="font-size: 13px; color: #64748b; margin-bottom: 4px;"><?php echo esc_html(contenly_tr('Dive Date', 'Dive Date')); ?></div>
                 <div style="font-weight: 600; color: #0f172a;"><?php echo esc_html($travel_date ? date_i18n(get_option('date_format'), strtotime($travel_date)) : contenly_tr('Belum diatur', 'Not set')); ?></div>
             </div>
             <div>
@@ -223,7 +223,7 @@ if (empty($current_bookings)) :
             </div>
         </div>
         
-        <!-- Review Section (Only for Completed) -->
+        <!-- Dive Review Section (Only for Completed) -->
         <?php if ($active_tab === 'completed') : ?>
         <div style="padding: 16px; background: <?php echo $has_reviewed ? '#f0fdf4' : '#fffbeb'; ?>; border: 2px solid <?php echo $has_reviewed ? '#86efac' : '#fcd34d'; ?>; border-radius: 12px; margin-bottom: 16px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -231,7 +231,7 @@ if (empty($current_bookings)) :
                     <?php if ($has_reviewed) : ?>
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <span style="font-size: 20px;"><?php echo str_repeat('⭐', $review_rating); ?></span>
-                        <span style="color: #166534; font-weight: 600;"><?php echo esc_html(contenly_tr('Review berhasil dikirim!', 'Review submitted!')); ?></span>
+                        <span style="color: #166534; font-weight: 600;"><?php echo esc_html(contenly_tr('Dive Review berhasil dikirim!', 'Dive Review submitted!')); ?></span>
                     </div>
                     <div style="font-size: 13px; color: #166534; margin-top: 4px;">
                         "<?php echo esc_html($review->post_title); ?>"
@@ -241,32 +241,32 @@ if (empty($current_bookings)) :
                         📝 <?php echo esc_html(contenly_tr('Bagikan pengalamanmu!', 'Share your experience!')); ?>
                     </div>
                     <div style="font-size: 13px; color: #92400e; margin-top: 4px;">
-                        <?php echo esc_html(contenly_tr('Bantu traveler lain dengan menulis review untuk tour ini', 'Help other travellers by writing a review for this tour.')); ?>
+                        <?php echo esc_html(contenly_tr('Bantu diver lain dengan menulis review untuk dive ini', 'Help other divers by writing a review for this dive.')); ?>
                     </div>
                     <?php endif; ?>
                 </div>
-                <button onclick='openReviewModal(<?php echo (int) $booking->ID; ?>, <?php echo (int) $tour_id; ?>, <?php echo $has_reviewed ? (int) $review->ID : 0; ?>, <?php echo wp_json_encode($has_reviewed ? $review->post_title : ''); ?>, <?php echo wp_json_encode($has_reviewed ? $review->post_content : ''); ?>, <?php echo (int) ($has_reviewed ? $review_rating : 0); ?>)' 
+                <button onclick='openDiveReviewModal(<?php echo (int) $booking->ID; ?>, <?php echo (int) $tour_id; ?>, <?php echo $has_reviewed ? (int) $review->ID : 0; ?>, <?php echo wp_json_encode($has_reviewed ? $review->post_title : ''); ?>, <?php echo wp_json_encode($has_reviewed ? $review->post_content : ''); ?>, <?php echo (int) ($has_reviewed ? $review_rating : 0); ?>)' 
                         style="padding: 10px 20px; background: <?php echo $has_reviewed ? '#10b981' : '#f59e0b'; ?>; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
-                    <?php echo esc_html($has_reviewed ? contenly_tr('✏️ Edit Review', '✏️ Edit Review') : contenly_tr('⭐ Tulis Review', '⭐ Write Review')); ?>
+                    <?php echo esc_html($has_reviewed ? contenly_tr('✏️ Edit Dive Review', '✏️ Edit Dive Review') : contenly_tr('⭐ Tulis Dive Review', '⭐ Write Dive Review')); ?>
                 </button>
             </div>
         </div>
         <?php endif; ?>
         
         <div class="booking-actions" style="display: flex; gap: 12px; flex-wrap: wrap;">
-            <a href="<?php echo esc_url(get_permalink($tour_id)); ?>" style="padding: 10px 20px; background: #f0f9ff; color: #539294; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px;"><?php echo esc_html(contenly_tr('Lihat Tour', 'View Tour')); ?></a>
+            <a href="<?php echo esc_url(get_permalink($tour_id)); ?>" style="padding: 10px 20px; background: #f0f9ff; color: #539294; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px;"><?php echo esc_html(contenly_tr('View Course', 'View Course')); ?></a>
             <?php if ($status === 'payment_uploaded') : ?>
             <span style="padding: 10px 20px; background: #DCE9E6; color: #355F72; border-radius: 8px; font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; gap: 6px;">📎 <?php echo esc_html(contenly_tr('Bukti Pembayaran Diupload', 'Payment Proof Uploaded')); ?></span>
             <?php endif; ?>
             <?php if ($status === 'pending_payment') : ?>
             <a href="<?php echo esc_url(add_query_arg('booking_id', $booking->ID, contenly_localized_url('/checkout/'))); ?>" style="padding: 10px 20px; background: linear-gradient(135deg, #10b981, #059669); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; gap: 6px;">💳 <?php echo esc_html(contenly_tr('Bayar Sekarang', 'Pay Now')); ?></a>
-            <button onclick="cancelBooking(<?php echo (int) $booking->ID; ?>)" style="padding: 10px 20px; background: #fee2e2; color: #dc2626; border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer;"><?php echo esc_html(contenly_tr('Batalkan Booking', 'Cancel Booking')); ?></button>
+            <button onclick="cancelDivePlan(<?php echo (int) $booking->ID; ?>)" style="padding: 10px 20px; background: #fee2e2; color: #dc2626; border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer;"><?php echo esc_html(contenly_tr('Cancel Dive Plan', 'Cancel Dive Plan')); ?></button>
             <?php endif; ?>
             <?php if ($status === 'payment_uploaded') : ?>
             <span style="padding:10px 14px;background:#EEF5F4;color:#355F72;border:1px solid #D8E8E8;border-radius:8px;font-size:13px;"><?php echo esc_html(contenly_tr('⌛ Menunggu verifikasi admin. Tombol pembayaran dinonaktifkan.', '⌛ Waiting for admin verification. The payment button is disabled.')); ?></span>
             <?php endif; ?>
             <?php if (!in_array($status, ['pending_payment','payment_uploaded']) && $active_tab === 'upcoming') : ?>
-            <span style="padding:10px 14px;background:#fff7ed;color:#9a3412;border:1px solid #fdba74;border-radius:8px;font-size:13px;"><?php echo esc_html(contenly_tr('ℹ️ Perubahan booking tidak tersedia setelah pembayaran diproses.', 'ℹ️ Booking changes are no longer available after payment is processed.')); ?></span>
+            <span style="padding:10px 14px;background:#fff7ed;color:#9a3412;border:1px solid #fdba74;border-radius:8px;font-size:13px;"><?php echo esc_html(contenly_tr('ℹ️ Perubahan booking tidak tersedia setelah pembayaran diproses.', 'ℹ️ Dive Plan changes are no longer available after payment is processed.')); ?></span>
             <?php endif; ?>
 
         </div>
@@ -275,12 +275,12 @@ if (empty($current_bookings)) :
 </div>
 <?php endif; ?>
 
-<!-- Review Modal -->
+<!-- Dive Review Modal -->
 <div id="review-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
     <div style="background: white; border-radius: 16px; padding: 32px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-            <h2 style="font-size: 24px; font-weight: 700; color: #0f172a;">⭐ Write a Review</h2>
-            <button onclick="closeReviewModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #64748b;">&times;</button>
+            <h2 style="font-size: 24px; font-weight: 700; color: #0f172a;">⭐ Write a Dive Review</h2>
+            <button onclick="closeDive ReviewModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #64748b;">&times;</button>
         </div>
         
         <form id="review-form" style="display: grid; gap: 20px;">
@@ -301,13 +301,13 @@ if (empty($current_bookings)) :
             </div>
             
             <div>
-                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #0f172a;">Review Title *</label>
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #0f172a;">Dive Review Title *</label>
                 <input type="text" id="review-title" name="title" required placeholder="e.g., Amazing experience!" 
                        style="width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 15px;">
             </div>
             
             <div>
-                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #0f172a;">Your Review *</label>
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #0f172a;">Your Dive Review *</label>
                 <textarea id="review-content" name="content" required rows="5" placeholder="Share your experience with this tour..." 
                           style="width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 15px; resize: vertical;"></textarea>
             </div>
@@ -315,9 +315,9 @@ if (empty($current_bookings)) :
             <div style="display: flex; gap: 12px;">
                 <button type="submit" id="submit-review-btn" 
                         style="flex: 1; padding: 14px; background: linear-gradient(135deg, #539294, #539294); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer;">
-                    📝 Submit Review
+                    📝 Submit Dive Review
                 </button>
-                <button type="button" onclick="closeReviewModal()" 
+                <button type="button" onclick="closeDive ReviewModal()" 
                         style="padding: 14px 32px; background: #f1f5f9; color: #64748b; border: none; border-radius: 12px; font-weight: 600; font-size: 16px; cursor: pointer;">
                     Cancel
                 </button>
@@ -340,7 +340,7 @@ if (empty($current_bookings)) :
 <script>
 let currentRating = 0;
 
-function openReviewModal(bookingId, tourId, existingId = 0, existingTitle = '', existingContent = '', existingRating = 0) {
+function openDiveReviewModal(bookingId, tourId, existingId = 0, existingTitle = '', existingContent = '', existingRating = 0) {
     document.getElementById('review-booking-id').value = bookingId;
     document.getElementById('review-tour-id').value = tourId;
     document.getElementById('review-existing-id').value = existingId || '';
@@ -360,14 +360,14 @@ function openReviewModal(bookingId, tourId, existingId = 0, existingTitle = '', 
         updateStars();
     }
 
-    submitBtn.innerHTML = isEdit ? '💾 Update Review' : '📝 Submit Review';
+    submitBtn.innerHTML = isEdit ? '💾 Update Dive Review' : '📝 Submit Dive Review';
 }
 
-function closeReviewModal() {
+function closeDive ReviewModal() {
     document.getElementById('review-modal').style.display = 'none';
     document.getElementById('review-form').reset();
     document.getElementById('review-existing-id').value = '';
-    document.getElementById('submit-review-btn').innerHTML = '📝 Submit Review';
+    document.getElementById('submit-review-btn').innerHTML = '📝 Submit Dive Review';
     currentRating = 0;
     updateStars();
 }
@@ -417,8 +417,8 @@ document.getElementById('review-form').addEventListener('submit', function(e) {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            showToast('✅ Review submitted successfully! Thank you for sharing your experience.', 'success');
-            closeReviewModal();
+            showToast('✅ Dive Review submitted successfully! Thank you for sharing your experience.', 'success');
+            closeDive ReviewModal();
             location.reload();
         } else {
             showToast('❌ ' + (data.data.message || 'Failed to submit review'), 'error');
@@ -434,8 +434,8 @@ document.getElementById('review-form').addEventListener('submit', function(e) {
 });
 
 // Cancel booking
-function cancelBooking(bookingId) {
-    if (!confirm('Are you sure you want to cancel this booking?')) return;
+function cancelDivePlan(bookingId) {
+    if (!confirm('Are you sure you want to cancel this dive plan?')) return;
     
     const formData = new FormData();
     formData.append('action', 'tmpb_cancel_booking');
@@ -449,12 +449,12 @@ function cancelBooking(bookingId) {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            showToast('✅ Booking cancelled successfully', 'success');
+            showToast('✅ Dive Plan cancelled successfully', 'success');
             location.reload();
         } else {
-            const msg = (data.data && data.data.message) ? data.data.message : 'Failed to cancel booking';
+            const msg = (data.data && data.data.message) ? data.data.message : 'Failed to cancel dive plan';
             if (msg.toLowerCase().includes('already processed')) {
-                showToast('ℹ️ Booking sudah diproses dan tidak bisa dibatalkan dari member area.', 'warn');
+                showToast('ℹ️ Dive Plan sudah diproses dan tidak bisa dibatalkan dari member area.', 'warn');
             } else {
                 showToast('❌ ' + msg, 'error');
             }
@@ -469,7 +469,7 @@ function cancelBooking(bookingId) {
     $prefill_rating = (int) get_post_meta($prefill_review->ID, '_rating', true);
 ?>
 document.addEventListener('DOMContentLoaded', function () {
-    openReviewModal(
+    openDiveReviewModal(
         <?php echo $prefill_booking_id; ?>,
         <?php echo $prefill_tour_id; ?>,
         <?php echo (int) $prefill_review->ID; ?>,
@@ -482,7 +482,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Close modal on outside click
 document.getElementById('review-modal').addEventListener('click', function(e) {
-    if (e.target === this) closeReviewModal();
+    if (e.target === this) closeDive ReviewModal();
 });
 </script>
 

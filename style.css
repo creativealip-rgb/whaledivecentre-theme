@@ -2983,3 +2983,70 @@ body.whaledive-single-course .wd-sidebar-note,
 .whaledive-equipment #equipGrid .wd-equip-price{display:block!important}
 .whaledive-equipment #equipGrid .wd-price-label,
 .whaledive-equipment #equipGrid .wd-price-amount{display:block!important;width:100%!important;flex-basis:100%!important}
+/* WDC auth pages 2026-05-16 */
+.wdc-auth-page{background:#f6fbfd;color:#06384d}
+.wdc-auth-hero{position:relative;overflow:hidden;padding:132px 0 76px;background:radial-gradient(circle at 12% 18%,rgba(76,200,237,.28),transparent 34%),linear-gradient(135deg,#021126 0%,#083c5d 46%,#0b617c 100%);color:#fff}
+.wdc-auth-hero:before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(180deg,#000,transparent 78%)}
+.wdc-auth-grid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 470px;gap:48px;align-items:center}
+.wdc-auth-copy h1{margin:14px 0 14px;font-size:clamp(44px,7vw,84px);line-height:.9;letter-spacing:-.07em;color:#fff}
+.wdc-auth-copy p{max-width:560px;margin:0;color:rgba(255,255,255,.78);font-size:18px;line-height:1.65}
+.wdc-auth-back{display:inline-flex;align-items:center;gap:8px;margin-bottom:18px;color:#9ee8ff;font-weight:900;text-decoration:none}
+.wdc-auth-proof{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:34px;max-width:650px}
+.wdc-auth-proof div{padding:16px;border-radius:18px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(12px)}
+.wdc-auth-proof b{display:block;color:#fff;font-size:22px}.wdc-auth-proof span{color:rgba(255,255,255,.72);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+.wdc-auth-card{padding:30px;border-radius:30px;background:linear-gradient(180deg,#fff,#eefaff);box-shadow:0 30px 80px rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.65);color:#06384d}
+.wdc-auth-card h2{margin:0 0 8px;font-size:32px;letter-spacing:-.04em}.wdc-auth-card p{margin:0 0 24px;color:#5f7180;line-height:1.55}
+.wdc-auth-form{display:grid;gap:14px}.wdc-auth-field label{display:block;margin:0 0 7px;color:#5b7180;font-size:11px;font-weight:950;letter-spacing:.1em;text-transform:uppercase}
+.wdc-auth-field input{width:100%;height:52px;border:1px solid rgba(6,56,77,.12);border-radius:16px;padding:0 14px;background:#fff;color:#061a36;box-sizing:border-box;box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
+.wdc-auth-field input:focus{outline:3px solid rgba(76,200,237,.26);border-color:#4cc8ed}
+.wd-password-wrap{position:relative}.wd-password-wrap input{padding-right:92px!important}.wd-password-toggle{position:absolute;right:8px;top:10px;height:32px;border:0;border-radius:999px;background:#06384d;color:#fff;font-weight:900;padding:0 12px;cursor:pointer}
+.wdc-auth-row{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#5f7180;font-size:14px}.wdc-auth-row a,.wdc-auth-switch a{color:#0b617c;font-weight:900}.wdc-auth-row label{display:flex;align-items:center;gap:8px}
+.wdc-auth-submit{width:100%;height:54px;border:0;border-radius:999px;background:linear-gradient(135deg,#4cc8ed,#0b617c);color:#fff;font-size:15px;font-weight:950;cursor:pointer;box-shadow:0 16px 34px rgba(11,97,124,.24)}
+.wdc-auth-switch{margin:22px 0 0!important;text-align:center!important;color:#5f7180!important;font-size:14px}.wdc-auth-alert{padding:12px 14px;border-radius:16px;background:#fff8e6;color:#946000;border:1px solid rgba(243,156,18,.26);font-weight:800}
+@media(max-width:900px){.wdc-auth-grid{grid-template-columns:1fr}.wdc-auth-proof{grid-template-columns:1fr}.wdc-auth-card{padding:24px}.wdc-auth-hero{padding:112px 0 58px}}
+/* WDC auth mobile simplification 2026-05-16 */
+@media(max-width:700px){
+  .wdc-auth-hero{padding:96px 0 36px;min-height:auto}
+  .wdc-auth-grid{display:block}
+  .wdc-auth-copy{text-align:center;margin:0 0 18px}
+  .wdc-auth-copy .wd-auth-back,
+  .wdc-auth-copy .wdc-auth-back,
+  .wdc-auth-copy .wd-kicker,
+  .wdc-auth-copy p,
+  .wdc-auth-proof{display:none!important}
+  .wdc-auth-copy h1{font-size:42px;line-height:.95;margin:0 0 18px;letter-spacing:-.06em}
+  .wdc-auth-card{padding:22px;border-radius:24px;box-shadow:0 18px 48px rgba(0,0,0,.22)}
+  .wdc-auth-card h2,.wdc-auth-card>p{display:none}
+  .wdc-auth-form{gap:12px}
+  .wdc-auth-field input{height:50px;border-radius:15px}
+  .wdc-auth-submit{height:52px}
+  .wdc-auth-row{align-items:flex-start;flex-direction:column}
+}
+/* WDC auth full responsive desktop 2026-05-16 */
+.wdc-auth-hero{min-height:calc(100vh - 0px);display:flex;align-items:center;padding:118px 0 70px!important;box-sizing:border-box}
+.wdc-auth-grid{width:100%}
+.wdc-auth-card{width:100%;max-width:500px;justify-self:end}
+.wdc-auth-copy{max-width:720px}
+@media(min-width:1200px){
+  .wdc-auth-grid{grid-template-columns:minmax(0,1.15fr) 500px;gap:70px}
+  .wdc-auth-copy h1{font-size:clamp(72px,7vw,104px)}
+  .wdc-auth-card{padding:36px}
+}
+@media(min-width:901px) and (max-width:1100px){
+  .wdc-auth-grid{grid-template-columns:minmax(0,1fr) 430px;gap:34px}
+  .wdc-auth-proof{grid-template-columns:1fr;max-width:360px}
+}
+@media(max-width:700px){
+  .wdc-auth-hero{min-height:100svh;align-items:center;padding:78px 0 34px!important}
+  .wdc-auth-copy{margin:0 0 32px}
+  .wdc-auth-copy h1{margin-bottom:0}
+  .wdc-auth-card{max-width:none;padding:24px 22px 22px}
+  .wdc-auth-form{gap:15px}
+  .wdc-auth-field label{margin-bottom:8px}
+  .wdc-auth-row{margin:2px 0 4px}
+  .wdc-auth-submit{margin-top:2px}
+}
+/* WDC auth mobile switch link visible 2026-05-16 */
+@media(max-width:700px){
+  .wdc-auth-card>.wdc-auth-switch{display:block!important;margin-top:18px!important}
+}

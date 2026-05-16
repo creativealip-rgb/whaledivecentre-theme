@@ -18,7 +18,7 @@ $plans = [
         'threshold_label' => contenly_tr('Mulai otomatis saat daftar', 'Starts automatically when you register'),
         'benefits' => [
             contenly_tr('Browse semua tour', 'Browse all tours'),
-            contenly_tr('Booking standar', 'Standard booking'),
+            contenly_tr('Dive Plan standar', 'Standard booking'),
             contenly_tr('Update via email', 'Updates via email'),
             contenly_tr('Simpan wishlist tanpa batas', 'Unlimited wishlist saving'),
         ],
@@ -32,7 +32,7 @@ $plans = [
         'benefits' => [
             contenly_tr('Semua benefit Silver', 'All Silver benefits'),
             contenly_tr('5% discount tour', '5% tour discount'),
-            contenly_tr('Review admin lebih cepat', 'Faster admin review'),
+            contenly_tr('Dive Review admin lebih cepat', 'Faster admin review'),
             contenly_tr('Price alerts & early deals', 'Price alerts & early deals'),
             contenly_tr('No booking fee', 'No booking fee'),
         ],
@@ -60,7 +60,7 @@ $remaining_spend = $next_target_spend ? max(0, $next_target_spend - $total_spend
 
 <!-- Page Header -->
 <div style="margin-bottom: 32px;">
-    <h1 style="font-size: 28px; font-weight: 700; color: #0f172a; margin-bottom: 8px;"><?php echo esc_html(contenly_tr('👑 Tier Member', '👑 Member Tier')); ?></h1>
+    <h1 style="font-size: 28px; font-weight: 700; color: #0f172a; margin-bottom: 8px;"><?php echo esc_html(contenly_tr('👑 Diver Level', '👑 Diver Level')); ?></h1>
     <p style="font-size: 15px; color: #64748b;"><?php echo esc_html(contenly_tr('Tier membership sekarang naik otomatis dari total spending, bukan paket langganan.', 'Membership tiers now upgrade automatically based on total spending, not subscription packages.')); ?></p>
 </div>
 

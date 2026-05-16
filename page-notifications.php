@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Notifications
+ * Template Name: Crew Updates
  */
 require_once get_template_directory() . '/dashboard-header.php';
 
@@ -29,8 +29,8 @@ $promo_notif = ($promo_notif === '') ? '0' : $promo_notif;
 
 
 <div style="margin-bottom:24px;">
-  <h1 class="page-title">🔔 <?php echo esc_html(contenly_tr('Notifikasi', 'Notifications')); ?></h1>
-  <p class="page-subtitle"><?php echo esc_html(contenly_tr('Atur notifikasi penting supaya kamu tidak ketinggalan update perjalanan.', 'Manage important notifications so you never miss a trip update.')); ?></p>
+  <h1 class="page-title">🔔 <?php echo esc_html(contenly_tr('Crew Updates', 'Crew Updates')); ?></h1>
+  <p class="page-subtitle"><?php echo esc_html(contenly_tr('Atur notifikasi penting supaya kamu tidak ketinggalan update dive dan crew.', 'Manage important notifications so you never miss dive and crew updates.')); ?></p>
 </div>
 
 <div style="background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:20px;margin-bottom:16px;">
@@ -38,7 +38,7 @@ $promo_notif = ($promo_notif === '') ? '0' : $promo_notif;
   <form id="notif-form" style="display:grid;gap:10px;max-width:640px;">
     <label style="display:flex;align-items:center;gap:10px;color:#334155;">
       <input type="checkbox" name="notif_email" value="1" <?php checked($email_notif, '1'); ?>>
-      <?php echo esc_html(contenly_tr('Email: status booking, invoice, itinerary', 'Email: booking status, invoice, itinerary')); ?>
+      <?php echo esc_html(contenly_tr('Email: dive plan status, invoice, schedule', 'Email: dive plan status, invoice, schedule')); ?>
     </label>
     <label style="display:flex;align-items:center;gap:10px;color:#334155;">
       <input type="checkbox" name="notif_whatsapp" value="1" <?php checked($wa_notif, '1'); ?>>
@@ -59,12 +59,12 @@ $promo_notif = ($promo_notif === '') ? '0' : $promo_notif;
   <h3 style="font-size:17px;font-weight:700;color:#0f172a;margin-bottom:10px;"><?php echo esc_html(contenly_tr('Aktivitas terbaru', 'Recent activity')); ?></h3>
   <div style="display:grid;gap:10px;">
     <div style="padding:12px;border:1px solid #f1f5f9;border-radius:10px;background:#f8fafc;">
-      <div style="font-weight:600;color:#0f172a;">Booking update</div>
+      <div style="font-weight:600;color:#0f172a;">Dive Plan update</div>
       <div style="font-size:13px;color:#64748b;">Status perjalanan kamu akan muncul di sini.</div>
     </div>
     <div style="padding:12px;border:1px solid #f1f5f9;border-radius:10px;background:#f8fafc;">
       <div style="font-weight:600;color:#0f172a;">Pembayaran</div>
-      <div style="font-size:13px;color:#64748b;">Notifikasi invoice / verifikasi payment akan tampil di sini.</div>
+      <div style="font-size:13px;color:#64748b;">Crew Updates invoice / verifikasi payment akan tampil di sini.</div>
     </div>
     <div style="padding:12px;border:1px solid #f1f5f9;border-radius:10px;background:#f8fafc;">
       <div style="font-weight:600;color:#0f172a;">Promo & rewards</div>
@@ -83,7 +83,7 @@ jQuery(function($){
 
     const fd = new FormData();
     fd.append('action', 'contenly_update_notifications');
-    fd.append('nonce', window.contenlyBooking ? window.contenlyBooking.nonce : '');
+    fd.append('nonce', window.contenlyDive Plan ? window.contenlyDive Plan.nonce : '');
     fd.append('notif_email', $('input[name=notif_email]').is(':checked') ? '1' : '0');
     fd.append('notif_whatsapp', $('input[name=notif_whatsapp]').is(':checked') ? '1' : '0');
     fd.append('notif_promo', $('input[name=notif_promo]').is(':checked') ? '1' : '0');

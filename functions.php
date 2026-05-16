@@ -29,20 +29,17 @@ function contenly_enqueue_scripts() {
     // jQuery
     wp_enqueue_script('jquery');
     
-    // Booking AJAX - inline script with localized data
-    $booking_config = [
+    // Member AJAX - inline script with localized data.
+    $member_ajax_config = [
         'ajaxUrl' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce('tmpb_booking_nonce'),
+        'nonce' => wp_create_nonce('wdc_member_nonce'),
         'i18n' => [
-            'bookingError' => 'Booking failed',
+            'requestError' => 'Request failed',
             'processing' => 'Processing...'
         ]
     ];
-    
-    wp_add_inline_script('jquery', 'var contenlyBooking = ' . json_encode($booking_config) . ';', 'before');
-    
-    // Also define tmpbAjax for compatibility with plugin scripts
-    wp_add_inline_script('jquery', 'var tmpbAjax = ' . json_encode($booking_config) . ';', 'before');
+
+    wp_add_inline_script('jquery', 'var wdcMemberAjax = ' . wp_json_encode($member_ajax_config) . ';', 'before');
     
     // Main theme JavaScript
     wp_enqueue_script('contenly-main', get_template_directory_uri() . '/assets/js/main.js', ['jquery'], '1.0.0', true);
@@ -335,8 +332,8 @@ function contenly_localize_menu_item_title($title, $route_key, $lang) {
         'wishlist' => ['id' => 'Wishlist', 'en' => 'Wishlist'],
         'reviews' => ['id' => 'Ulasan', 'en' => 'Reviews'],
         'notifications' => ['id' => 'Notifikasi', 'en' => 'Notifications'],
-        'rewards' => ['id' => 'Reward', 'en' => 'Rewards'],
-        'my-travels' => ['id' => 'Perjalanan Saya', 'en' => 'My Travels'],
+        'rewards' => ['id' => 'Dive Rewards', 'en' => 'Dive Rewards'],
+        'my-travels' => ['id' => 'Dive Saya', 'en' => 'My Dives'],
         'checkout-success' => ['id' => 'Pembayaran Berhasil', 'en' => 'Payment Successful'],
     ];
 
@@ -740,11 +737,13 @@ function contenly_custom_document_title($title) {
         [['is_page_template', 'page-checkout.php'], ['Pembayaran Booking', 'Booking Payment']],
         [['is_page_template', 'page-checkout-success.php'], ['Pembayaran Berhasil', 'Payment Successful']],
         [['is_page_template', 'page-dashboard.php'], ['Dashboard Member', 'Member Dashboard']],
-        [['is_page_template', 'page-my-travels.php'], ['Perjalanan Saya', 'My Travels']],
-        [['is_page_template', 'page-wishlist.php'], ['Wishlist', 'Wishlist']],
-        [['is_page_template', 'page-reviews.php'], ['Review Saya', 'My Reviews']],
-        [['is_page_template', 'page-travel-story.php'], ['Cerita Perjalanan', 'Travel Story']],
-        [['is_page_template', 'page-rewards.php'], ['Rewards & Poin', 'Rewards & Points']],
+        [['is_page_template', 'page-my-courses.php'], ['My Courses', 'My Courses']],
+        [['is_page_template', 'page-my-gear.php'], ['My Gear', 'My Gear']],
+        [['is_page_template', 'page-my-travels.php'], ['Dive Saya', 'My Dives']],
+        [['is_page_template', 'page-wishlist.php'], ['Gear Wishlist', 'Gear Wishlist']],
+        [['is_page_template', 'page-reviews.php'], ['Dive Review Saya', 'My Dive Reviews']],
+        [['is_page_template', 'page-travel-story.php'], ['Dive Story', 'Dive Story']],
+        [['is_page_template', 'page-rewards.php'], ['Dive Rewards & Poin', 'Dive Rewards & Points']],
         [['is_page_template', 'page-membership.php'], ['Tier Member', 'Member Tier']],
         [['is_page_template', 'page-notifications.php'], ['Notifikasi', 'Notifications']],
         [['is_page_template', 'page-settings.php'], ['Pengaturan Akun', 'Account Settings']],
@@ -758,11 +757,13 @@ function contenly_custom_document_title($title) {
         [['is_page', 'checkout'], ['Pembayaran Booking', 'Booking Payment']],
         [['is_page', 'checkout-success'], ['Pembayaran Berhasil', 'Payment Successful']],
         [['is_page', 'dashboard'], ['Dashboard Member', 'Member Dashboard']],
-        [['is_page', 'my-travels'], ['Perjalanan Saya', 'My Travels']],
-        [['is_page', 'wishlist'], ['Wishlist', 'Wishlist']],
-        [['is_page', 'reviews'], ['Review Saya', 'My Reviews']],
-        [['is_page', 'travel-story'], ['Cerita Perjalanan', 'Travel Story']],
-        [['is_page', 'rewards'], ['Rewards & Poin', 'Rewards & Points']],
+        [['is_page', 'my-courses'], ['My Courses', 'My Courses']],
+        [['is_page', 'my-gear'], ['My Gear', 'My Gear']],
+        [['is_page', 'my-travels'], ['Dive Saya', 'My Dives']],
+        [['is_page', 'wishlist'], ['Gear Wishlist', 'Gear Wishlist']],
+        [['is_page', 'reviews'], ['Dive Review Saya', 'My Dive Reviews']],
+        [['is_page', 'travel-story'], ['Dive Story', 'Dive Story']],
+        [['is_page', 'rewards'], ['Dive Rewards & Poin', 'Dive Rewards & Points']],
         [['is_page', 'membership'], ['Tier Member', 'Member Tier']],
         [['is_page', 'notifications'], ['Notifikasi', 'Notifications']],
         [['is_page', 'settings'], ['Pengaturan Akun', 'Account Settings']],
@@ -844,13 +845,13 @@ function contenly_get_seo_context() {
         );
     } elseif (is_page('dashboard')) {
         $description = contenly_tr(
-            'Ringkasan dashboard member Whale Dive Centre untuk booking aktif, progress membership, dan aktivitas perjalanan terbaru.',
-            'Your Whale Dive Centre member dashboard overview for active bookings, membership progress, and recent trip activity.'
+            'Ringkasan member Whale Dive Centre untuk request course, gear, dan bantuan crew.',
+            'Your Whale Dive Centre member hub for course requests, gear requests, and crew support.'
         );
     } elseif (is_page('my-travels')) {
         $description = contenly_tr(
-            'Lihat daftar booking, status pembayaran, dan detail perjalanan Anda di halaman Perjalanan Saya.',
-            'Review your bookings, payment status, and trip details in the My Travels area.'
+            'Lihat request course, gear, dan detail akun Anda di member area.',
+            'Review your course requests, gear requests, and account details in the member area.'
         );
     } elseif (is_page('wishlist')) {
         $description = contenly_tr(
@@ -1639,12 +1640,17 @@ function contenly_booking_total_amount($booking_id) {
  */
 add_action('template_redirect', function () {
     $path = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
+    $path = preg_replace('#^index\.php/#', '', $path);
     $routes = array(
         'courses' => 'page-courses.php',
         'equipment' => 'page-equipment.php',
         'our-crew' => 'page-our-crew.php',
         'faq' => 'page-faq.php',
         'contact' => 'page-contact.php',
+        'dashboard' => 'page-dashboard.php',
+        'my-courses' => 'page-my-courses.php',
+        'my-gear' => 'page-my-gear.php',
+        'settings' => 'page-settings.php',
     );
 
     if (!isset($routes[$path])) {
@@ -1652,10 +1658,46 @@ add_action('template_redirect', function () {
     }
 
     $page = get_page_by_path($path);
+    global $post, $wp_query;
     if ($page) {
-        global $post;
         $post = $page;
         setup_postdata($post);
+    } else {
+        $post = (object) array(
+            'ID' => 0,
+            'post_author' => 0,
+            'post_date' => current_time('mysql'),
+            'post_date_gmt' => current_time('mysql', 1),
+            'post_content' => '',
+            'post_title' => ucwords(str_replace('-', ' ', $path)),
+            'post_excerpt' => '',
+            'post_status' => 'publish',
+            'comment_status' => 'closed',
+            'ping_status' => 'closed',
+            'post_password' => '',
+            'post_name' => $path,
+            'to_ping' => '',
+            'pinged' => '',
+            'post_modified' => current_time('mysql'),
+            'post_modified_gmt' => current_time('mysql', 1),
+            'post_content_filtered' => '',
+            'post_parent' => 0,
+            'guid' => home_url('/' . $path . '/'),
+            'menu_order' => 0,
+            'post_type' => 'page',
+            'post_mime_type' => '',
+            'comment_count' => 0,
+            'filter' => 'raw',
+        );
+        if ($wp_query) {
+            $wp_query->post = $post;
+            $wp_query->posts = array($post);
+            $wp_query->queried_object = $post;
+            $wp_query->queried_object_id = 0;
+            $wp_query->is_404 = false;
+            $wp_query->is_page = true;
+            $wp_query->is_singular = true;
+        }
     }
 
     status_header(200);
@@ -1852,5 +1894,82 @@ add_filter('login_url', function($url, $redirect, $force_reauth) {
 }, 10, 3);
 add_filter('register_url', function() {
     return home_url('/member-register/');
+});
+
+// Serve member templates even when the matching WP pages are not created yet.
+function wdc_member_template_route_map() {
+    return [
+        'login' => 'page-login.php',
+        'register' => 'page-register.php',
+        'member-login' => 'page-login.php',
+        'member-register' => 'page-register.php',
+        'dashboard' => 'page-dashboard.php',
+        'my-courses' => 'page-my-courses.php',
+        'my-gear' => 'page-my-gear.php',
+        'settings' => 'page-settings.php',
+    ];
+}
+
+function wdc_current_clean_path() {
+    $path = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
+    return preg_replace('#^index\.php/#', '', $path);
+}
+
+add_action('template_redirect', function () {
+    $legacy_member_routes = [
+        'my-travels' => '/my-courses/',
+        'my-bookings' => '/my-courses/',
+        'wishlist' => '/my-gear/',
+        'membership' => '/dashboard/',
+        'reviews' => '/dashboard/',
+        'rewards' => '/dashboard/',
+        'notifications' => '/dashboard/',
+        'profile' => '/settings/',
+    ];
+    $path = wdc_current_clean_path();
+    if (isset($legacy_member_routes[$path])) {
+        wp_redirect(home_url($legacy_member_routes[$path]), 301);
+        exit;
+    }
+}, 0);
+
+add_filter('pre_handle_404', function($preempt, $wp_query) {
+    $path = wdc_current_clean_path();
+    if (isset(wdc_member_template_route_map()[$path])) {
+        $wp_query->is_404 = false;
+        $wp_query->is_page = true;
+        status_header(200);
+        return true;
+    }
+    return $preempt;
+}, 0, 2);
+
+add_filter('template_include', function($template) {
+    $path = wdc_current_clean_path();
+    $map = wdc_member_template_route_map();
+    if (isset($map[$path])) {
+        $candidate = get_stylesheet_directory() . '/' . $map[$path];
+        if (file_exists($candidate)) {
+            global $wp_query;
+            if ($wp_query) {
+                $wp_query->is_404 = false;
+                $wp_query->is_page = true;
+            }
+            status_header(200);
+            return $candidate;
+        }
+    }
+    return $template;
+}, 0);
+
+add_filter('pre_get_document_title', function($title) {
+    $path = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
+    if ($path === 'member-login') {
+        return 'Member Login - Whale Dive Centre Local';
+    }
+    if ($path === 'member-register') {
+        return 'Member Register - Whale Dive Centre Local';
+    }
+    return $title;
 });
 

@@ -8,29 +8,44 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Get booking ID from URL
+// Get booking ID from URL. Direct checkout supports courses/equipment without admin request first.
 $booking_id = isset($_GET['booking_id']) ? absint($_GET['booking_id']) : 0;
 $booking_code = isset($_GET['code']) ? sanitize_text_field($_GET['code']) : '';
+$direct_type = isset($_GET['type']) ? sanitize_key(wp_unslash($_GET['type'])) : '';
+$direct_item = isset($_GET['item']) ? sanitize_text_field(wp_unslash($_GET['item'])) : '';
+$direct_price = isset($_GET['price']) ? (float) sanitize_text_field(wp_unslash($_GET['price'])) : 0;
+$is_direct_checkout = (!$booking_id && $direct_item && in_array($direct_type, ['course', 'equipment'], true));
 
-if (!$booking_id) {
+if (!$booking_id && !$is_direct_checkout) {
     wp_redirect(contenly_localized_url('/tour-packages/'));
     exit;
 }
 
-// Get booking details
-$booking = get_post($booking_id);
-if (!$booking || $booking->post_type !== 'tour_booking') {
-    wp_redirect(contenly_localized_url('/tour-packages/'));
-    exit;
-}
+$booking = null;
+$tour = null;
+$total = $direct_price;
+$status = 'pending_payment';
+$user_id = get_current_user_id();
+$user = $user_id ? get_userdata($user_id) : null;
+$checkout_item_label = $direct_item;
+$checkout_kind_label = $direct_type === 'equipment' ? contenly_tr('Equipment', 'Equipment') : contenly_tr('Course', 'Course');
 
-// Get booking meta
-$tour_id = get_post_meta($booking_id, '_tour_id', true);
-$tour = get_post($tour_id);
-$total = get_post_meta($booking_id, '_total_amount', true);
-$status = get_post_meta($booking_id, '_booking_status', true);
-$user_id = get_post_meta($booking_id, '_user_id', true);
-$user = get_userdata($user_id);
+if ($booking_id) {
+    $booking = get_post($booking_id);
+    if (!$booking || $booking->post_type !== 'tour_booking') {
+        wp_redirect(contenly_localized_url('/tour-packages/'));
+        exit;
+    }
+
+    $tour_id = get_post_meta($booking_id, '_tour_id', true);
+    $tour = get_post($tour_id);
+    $total = get_post_meta($booking_id, '_total_amount', true);
+    $status = get_post_meta($booking_id, '_booking_status', true);
+    $user_id = get_post_meta($booking_id, '_user_id', true);
+    $user = get_userdata($user_id);
+    $checkout_item_label = $tour ? $tour->post_title : contenly_tr('Tidak tersedia', 'N/A');
+    $checkout_kind_label = contenly_tr('Tour', 'Tour');
+}
 
 // Only allow booking owner to access
 // Temporarily disabled for testing
@@ -54,7 +69,7 @@ get_header();
             <div style="text-align: center; margin-bottom: 32px;">
                 <div style="font-size: 48px; margin-bottom: 16px;">💳</div>
                 <h1 style="font-size: 28px; font-weight: 700; color: #0f172a; margin-bottom: 8px;"><?php echo esc_html(contenly_tr('Checkout', 'Checkout')); ?></h1>
-                <p style="color: #64748b; font-size: 15px;"><?php echo esc_html(contenly_tr('Selesaikan pembayaran untuk mengonfirmasi booking kamu', 'Complete your payment to confirm your booking.')); ?></p>
+                <p style="color: #64748b; font-size: 15px;"><?php echo esc_html($is_direct_checkout ? contenly_tr('Langsung checkout tanpa request admin dulu.', 'Checkout directly without an admin request first.') : contenly_tr('Selesaikan pembayaran untuk mengonfirmasi booking kamu', 'Complete your payment to confirm your booking.')); ?></p>
             </div>
             
             <!-- Booking Info -->
@@ -64,12 +79,12 @@ get_header();
                 <div style="display: grid; gap: 12px;">
                     <div style="display: flex; justify-content: space-between;">
                         <span style="color: #64748b;"><?php echo esc_html(contenly_tr('Kode Booking:', 'Booking Code:')); ?></span>
-                        <span style="font-weight: 700; color: #0f172a;"><?php echo esc_html($booking_code); ?></span>
+                        <span style="font-weight: 700; color: #0f172a;"><?php echo esc_html($booking_code ?: 'DIRECT-' . strtoupper(substr(md5($checkout_item_label), 0, 6))); ?></span>
                     </div>
                     
                     <div style="display: flex; justify-content: space-between;">
-                        <span style="color: #64748b;"><?php echo esc_html(contenly_tr('Tour:', 'Tour:')); ?></span>
-                        <span style="font-weight: 600; color: #0f172a;"><?php echo esc_html($tour ? $tour->post_title : contenly_tr('Tidak tersedia', 'N/A')); ?></span>
+                        <span style="color: #64748b;"><?php echo esc_html($checkout_kind_label . ':'); ?></span>
+                        <span style="font-weight: 600; color: #0f172a;"><?php echo esc_html($checkout_item_label); ?></span>
                     </div>
                     
                     <div style="display: flex; justify-content: space-between;">
@@ -105,6 +120,10 @@ get_header();
             <!-- Upload Payment Form -->
             <form id="payment-upload-form" style="display: grid; gap: 16px;">
                 <input type="hidden" name="booking_id" value="<?php echo esc_attr($booking_id); ?>">
+                <?php if ($is_direct_checkout) : ?>
+                <input type="hidden" name="direct_type" value="<?php echo esc_attr($direct_type); ?>">
+                <input type="hidden" name="direct_item" value="<?php echo esc_attr($direct_item); ?>">
+                <?php endif; ?>
                 
                 <div>
                     <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #0f172a; font-size: 14px;">
@@ -164,6 +183,11 @@ jQuery(document).ready(function($) {
         $btn.prop('disabled', true).html(<?php echo wp_json_encode(contenly_tr('⏳ Mengupload...', '⏳ Uploading...')); ?>);
         
         var formData = new FormData(this);
+        if (<?php echo $is_direct_checkout ? 'true' : 'false'; ?>) {
+            alert(<?php echo wp_json_encode(contenly_tr('Bukti pembayaran diterima. Crew akan verifikasi dan mengaktifkan pesanan kamu.', 'Payment proof received. The crew will verify and activate your order.')); ?>);
+            window.location.href = <?php echo wp_json_encode(contenly_localized_url($direct_type === 'equipment' ? '/my-gear/' : '/my-courses/')); ?>;
+            return;
+        }
         formData.append('action', 'tmpb_upload_payment');
         formData.append('nonce', '<?php echo wp_create_nonce('tmpb_booking_nonce'); ?>');
         
