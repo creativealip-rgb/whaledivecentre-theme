@@ -2012,15 +2012,26 @@ function wdc_find_equipment_post_by_title($title) {
     return $post ? (int) $post->ID : 0;
 }
 
-function wdc_maybe_decrement_gear_stock($record, $old_status, $new_status) {
-    if ($old_status === $new_status || !in_array($new_status, ['Verified', 'Active'], true)) {
+function wdc_get_equipment_post_id_from_record($record) {
+    $post_id = absint($record['item_id'] ?? 0);
+    if ($post_id && get_post_type($post_id) === 'wm_equipment') {
+        return $post_id;
+    }
+    $item_title = $record['gear'] ?? $record['item'] ?? '';
+    return wdc_find_equipment_post_by_title($item_title);
+}
+
+function wdc_order_consumes_gear_stock($status) {
+    return in_array($status, ['Verified', 'Active'], true);
+}
+
+function wdc_maybe_adjust_gear_stock($record, $old_status, $new_status) {
+    $old_consumes = wdc_order_consumes_gear_stock($old_status);
+    $new_consumes = wdc_order_consumes_gear_stock($new_status);
+    if ($old_consumes === $new_consumes) {
         return;
     }
-    $post_id = absint($record['item_id'] ?? 0);
-    if (!$post_id || get_post_type($post_id) !== 'wm_equipment') {
-        $item_title = $record['gear'] ?? $record['item'] ?? '';
-        $post_id = wdc_find_equipment_post_by_title($item_title);
-    }
+    $post_id = wdc_get_equipment_post_id_from_record($record);
     if (!$post_id) {
         return;
     }
@@ -2028,7 +2039,32 @@ function wdc_maybe_decrement_gear_stock($record, $old_status, $new_status) {
     if ($stock === '' || !is_numeric($stock)) {
         return;
     }
-    update_post_meta($post_id, '_wm_stock', max(0, (int) $stock - 1));
+    $delta = $new_consumes ? -1 : 1;
+    update_post_meta($post_id, '_wm_stock', max(0, (int) $stock + $delta));
+}
+
+function wdc_equipment_stock_available($item_id) {
+    $item_id = absint($item_id);
+    if (!$item_id || get_post_type($item_id) !== 'wm_equipment') {
+        return true;
+    }
+    $stock = get_post_meta($item_id, '_wm_stock', true);
+    return $stock === '' || !is_numeric($stock) || (int) $stock > 0;
+}
+
+function wdc_member_admin_pending_count($type, $bucket) {
+    $count = 0;
+    foreach (wdc_collect_member_records($type, $bucket) as $record) {
+        $status = $record['item']['status'] ?? 'Requested';
+        if (in_array($status, ['Requested', 'Awaiting Payment', 'Payment Uploaded'], true)) {
+            $count++;
+        }
+    }
+    return $count;
+}
+
+function wdc_admin_menu_badge($count) {
+    return $count > 0 ? ' <span class="awaiting-mod">' . esc_html($count) . '</span>' : '';
 }
 
 function wdc_ajax_save_direct_checkout() {
@@ -2048,6 +2084,9 @@ function wdc_ajax_save_direct_checkout() {
     $expected_type = $type === 'course' ? 'wm_course' : 'wm_equipment';
     if ($item_id && get_post_type($item_id) !== $expected_type) {
         wp_send_json_error(['message' => 'Invalid catalog item.'], 400);
+    }
+    if ($type === 'equipment' && !wdc_equipment_stock_available($item_id)) {
+        wp_send_json_error(['message' => 'This gear is out of stock. Please request availability help.'], 409);
     }
     $price = (float) sanitize_text_field(wp_unslash($_POST['direct_price'] ?? '0'));
     $notes = sanitize_textarea_field(wp_unslash($_POST['payment_notes'] ?? ''));
@@ -2105,9 +2144,10 @@ add_action('wp_ajax_wdc_save_direct_checkout', 'wdc_ajax_save_direct_checkout');
 
 function wdc_register_member_admin_menu() {
     add_menu_page('WDC Members', 'WDC Members', 'manage_options', 'wdc-member-admin', 'wdc_render_member_admin_dashboard', 'dashicons-groups', 30);
-    add_submenu_page('wdc-member-admin', 'Course Requests', 'Course Requests', 'manage_options', 'wdc-course-requests', 'wdc_render_course_admin_page');
-    add_submenu_page('wdc-member-admin', 'Gear Requests', 'Gear Requests', 'manage_options', 'wdc-gear-requests', 'wdc_render_gear_admin_page');
-    add_submenu_page('wdc-member-admin', 'Direct Orders', 'Direct Orders', 'manage_options', 'wdc-direct-orders', 'wdc_render_direct_orders_admin_page');
+    add_submenu_page('wdc-member-admin', 'Course Requests', 'Course Requests' . wdc_admin_menu_badge(wdc_member_admin_pending_count('course', 'requests')), 'manage_options', 'wdc-course-requests', 'wdc_render_course_admin_page');
+    add_submenu_page('wdc-member-admin', 'Gear Requests', 'Gear Requests' . wdc_admin_menu_badge(wdc_member_admin_pending_count('equipment', 'requests')), 'manage_options', 'wdc-gear-requests', 'wdc_render_gear_admin_page');
+    $direct_pending = wdc_member_admin_pending_count('course', 'orders') + wdc_member_admin_pending_count('equipment', 'orders');
+    add_submenu_page('wdc-member-admin', 'Direct Orders', 'Direct Orders' . wdc_admin_menu_badge($direct_pending), 'manage_options', 'wdc-direct-orders', 'wdc_render_direct_orders_admin_page');
 }
 add_action('admin_menu', 'wdc_register_member_admin_menu');
 
@@ -2126,7 +2166,41 @@ function wdc_member_admin_handle_update() {
     $status = sanitize_text_field(wp_unslash($_POST['status'] ?? ''));
     $admin_note = sanitize_textarea_field(wp_unslash($_POST['admin_note'] ?? ''));
 
-    if (!$user_id || !in_array($type, ['course', 'equipment'], true) || !in_array($status, wdc_member_status_options(), true)) {
+    if (!in_array($status, wdc_member_status_options(), true)) {
+        return;
+    }
+
+    if (!empty($_POST['bulk_apply']) && !empty($_POST['bulk_records']) && is_array($_POST['bulk_records'])) {
+        foreach ($_POST['bulk_records'] as $packed) {
+            $parts = explode('|', sanitize_text_field(wp_unslash($packed)));
+            if (count($parts) !== 4) {
+                continue;
+            }
+            [$bulk_user_id, $bulk_type, $bulk_bucket, $bulk_index] = $parts;
+            $bulk_user_id = absint($bulk_user_id);
+            $bulk_type = sanitize_key($bulk_type);
+            $bulk_bucket = sanitize_key($bulk_bucket);
+            $bulk_index = absint($bulk_index);
+            if (!in_array($bulk_type, ['course', 'equipment'], true)) {
+                continue;
+            }
+            $bulk_meta_key = $bulk_bucket === 'orders' ? wdc_member_direct_order_meta_key($bulk_type) : wdc_member_request_meta_key($bulk_type);
+            $bulk_records = get_user_meta($bulk_user_id, $bulk_meta_key, true);
+            if (!is_array($bulk_records) || !isset($bulk_records[$bulk_index])) {
+                continue;
+            }
+            $old_status = $bulk_records[$bulk_index]['status'] ?? 'Requested';
+            wdc_maybe_adjust_gear_stock($bulk_records[$bulk_index], $old_status, $status);
+            $bulk_records[$bulk_index]['status'] = $status;
+            $bulk_records[$bulk_index]['admin_note'] = $admin_note;
+            $bulk_records[$bulk_index]['updated_at'] = current_time('mysql');
+            update_user_meta($bulk_user_id, $bulk_meta_key, $bulk_records);
+        }
+        wp_safe_redirect(add_query_arg(['updated' => '1'], wp_get_referer() ?: admin_url('admin.php?page=wdc-member-admin')));
+        exit;
+    }
+
+    if (!$user_id || !in_array($type, ['course', 'equipment'], true)) {
         return;
     }
 
@@ -2138,7 +2212,7 @@ function wdc_member_admin_handle_update() {
     }
 
     $old_status = $records[$index]['status'] ?? 'Requested';
-    wdc_maybe_decrement_gear_stock($records[$index], $old_status, $status);
+    wdc_maybe_adjust_gear_stock($records[$index], $old_status, $status);
 
     $records[$index]['status'] = $status;
     $records[$index]['admin_note'] = $admin_note;
@@ -2173,6 +2247,23 @@ function wdc_collect_member_records($type, $bucket) {
     return $records;
 }
 
+function wdc_render_low_stock_notice() {
+    if (!post_type_exists('wm_equipment')) {
+        return;
+    }
+    $low_stock = get_posts(['post_type' => 'wm_equipment', 'numberposts' => 8, 'post_status' => 'publish', 'meta_query' => [['key' => '_wm_stock', 'value' => 3, 'type' => 'NUMERIC', 'compare' => '<=']]]);
+    if (!$low_stock) {
+        return;
+    }
+    echo '<div class="notice notice-warning" style="margin:18px 0 0;"><p><strong>Low stock alert:</strong> ';
+    $items = [];
+    foreach ($low_stock as $post) {
+        $items[] = '<a href="' . esc_url(get_edit_post_link($post->ID)) . '">' . esc_html($post->post_title) . '</a> (' . esc_html(get_post_meta($post->ID, '_wm_stock', true)) . ')';
+    }
+    echo wp_kses_post(implode(', ', $items));
+    echo '</p></div>';
+}
+
 function wdc_render_member_admin_dashboard() {
     $course_requests = wdc_collect_member_records('course', 'requests');
     $gear_requests = wdc_collect_member_records('equipment', 'requests');
@@ -2185,6 +2276,7 @@ function wdc_render_member_admin_dashboard() {
             <div style="background:#fff;border:1px solid #dcdcde;border-radius:12px;padding:18px;"><strong><?php echo esc_html($card[0]); ?></strong><div style="font-size:32px;font-weight:800;margin-top:8px;"><?php echo esc_html($card[1]); ?></div></div>
             <?php endforeach; ?>
         </div>
+        <?php wdc_render_low_stock_notice(); ?>
         <p>Use the submenu to verify payments, approve course access, update gear fulfilment, and leave notes visible to members.</p>
     </div>
     <?php
@@ -2235,10 +2327,19 @@ function wdc_render_member_records_table($records, $title) {
         <select name="status_filter"><option value="">All statuses</option><?php foreach (wdc_member_status_options() as $status) : ?><option value="<?php echo esc_attr($status); ?>" <?php selected(sanitize_text_field(wp_unslash($_GET['status_filter'] ?? '')), $status); ?>><?php echo esc_html($status); ?></option><?php endforeach; ?></select>
         <button class="button">Filter</button><a class="button" href="<?php echo esc_url(admin_url('admin.php?page=' . sanitize_key($_GET['page'] ?? 'wdc-member-admin'))); ?>">Reset</a>
     </form>
-    <table class="widefat striped" style="margin-top:16px;"><thead><tr><th>Member</th><th>Item</th><th>Details</th><th>Status</th><th>Proof</th><th>Admin Note</th><th>Action</th></tr></thead><tbody>
-    <?php if (!$records) : ?><tr><td colspan="7">No records yet.</td></tr><?php endif; ?>
+    <form id="wdc-bulk-admin" method="post" style="display:flex;gap:8px;align-items:center;margin:12px 0;">
+        <?php wp_nonce_field('wdc_member_admin_update', 'wdc_member_admin_nonce'); ?>
+        <input type="hidden" name="bulk_apply" value="1">
+        <select name="status"><?php foreach (wdc_member_status_options() as $status) : ?><option value="<?php echo esc_attr($status); ?>"><?php echo esc_html($status); ?></option><?php endforeach; ?></select>
+        <input type="text" name="admin_note" placeholder="Optional bulk note" style="min-width:260px;">
+        <button class="button button-primary">Apply to selected</button>
+    </form>
+    <table class="widefat striped" style="margin-top:16px;"><thead><tr><th><input type="checkbox" onclick="document.querySelectorAll('.wdc-bulk-record').forEach(function(cb){cb.checked=event.target.checked;});"></th><th>Date</th><th>Member</th><th>Item</th><th>Details</th><th>Status</th><th>Proof</th><th>Admin Note</th><th>Action</th></tr></thead><tbody>
+    <?php if (!$records) : ?><tr><td colspan="9">No records yet.</td></tr><?php endif; ?>
     <?php foreach ($records as $record) : $item = $record['item']; $current_status = $item['status'] ?? 'Requested'; $item_label = $item['course'] ?? $item['gear'] ?? $item['item'] ?? 'Item'; $item_post_id = absint($item['item_id'] ?? 0); $item_link = $item_post_id ? get_edit_post_link($item_post_id) : ''; ?>
         <tr><form method="post">
+            <td><input class="wdc-bulk-record" form="wdc-bulk-admin" type="checkbox" name="bulk_records[]" value="<?php echo esc_attr($record['user']->ID . '|' . $record['type'] . '|' . $record['bucket'] . '|' . $record['index']); ?>"></td>
+            <td><?php echo esc_html($item['created_at'] ?? '-'); ?></td>
             <td><strong><?php echo esc_html($record['user']->display_name); ?></strong><br><small><?php echo esc_html($record['user']->user_email); ?></small></td>
             <td><strong><?php if ($item_link) : ?><a href="<?php echo esc_url($item_link); ?>"><?php echo esc_html($item_label); ?></a><?php else : ?><?php echo esc_html($item_label); ?><?php endif; ?></strong><br><small><?php echo esc_html($item['id'] ?? ($item['created_at'] ?? '')); ?></small></td>
             <td><?php echo esc_html($item['preferred_date'] ?? $item['request_type'] ?? (!empty($item['price']) ? 'Rp ' . number_format((float) $item['price'], 0, ',', '.') : 'Direct order')); ?><br><small><?php echo esc_html($item['message'] ?? $item['notes'] ?? $item['size_notes'] ?? ''); ?></small></td>

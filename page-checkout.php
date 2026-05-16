@@ -16,6 +16,11 @@ $direct_item = isset($_GET['item']) ? sanitize_text_field(wp_unslash($_GET['item
 $direct_item_id = isset($_GET['item_id']) ? absint($_GET['item_id']) : 0;
 $direct_price = isset($_GET['price']) ? (float) sanitize_text_field(wp_unslash($_GET['price'])) : 0;
 $is_direct_checkout = (!$booking_id && $direct_item && in_array($direct_type, ['course', 'equipment'], true));
+$direct_out_of_stock = false;
+
+if ($is_direct_checkout && $direct_type === 'equipment' && $direct_item_id && function_exists('wdc_equipment_stock_available')) {
+    $direct_out_of_stock = !wdc_equipment_stock_available($direct_item_id);
+}
 
 if (!$booking_id && !$is_direct_checkout) {
     wp_redirect(contenly_localized_url('/tour-packages/'));
@@ -123,6 +128,12 @@ get_header();
                 </div>
             </div>
             
+            <?php if ($direct_out_of_stock) : ?>
+            <div style="background:#fee2e2;border:1px solid #fecaca;color:#991b1b;border-radius:12px;padding:16px;margin-bottom:18px;font-weight:800;line-height:1.5;">
+                This gear is currently out of stock. Please go back to My Gear and request availability help so the crew can confirm the next restock or alternative setup.
+            </div>
+            <?php endif; ?>
+
             <!-- Upload Payment Form -->
             <form id="payment-upload-form" style="display: grid; gap: 16px;">
                 <input type="hidden" name="booking_id" value="<?php echo esc_attr($booking_id); ?>">
@@ -150,9 +161,9 @@ get_header();
                               placeholder="<?php echo esc_attr(contenly_tr('Tanggal transfer, jam, atau informasi tambahan lainnya...', 'Transfer date, time, or any additional information...')); ?>"></textarea>
                 </div>
                 
-                <button type="submit" id="upload-btn" 
-                        style="width: 100%; padding: 16px; background: linear-gradient(135deg, #539294, #539294); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; transition: all 0.3s;">
-                    <?php echo esc_html(contenly_tr('Upload Bukti Pembayaran', 'Upload Payment Proof')); ?>
+                <button type="submit" id="upload-btn" <?php disabled($direct_out_of_stock); ?>
+                        style="width: 100%; padding: 16px; background: linear-gradient(135deg, #539294, #539294); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; transition: all 0.3s;<?php echo $direct_out_of_stock ? 'opacity:.55;cursor:not-allowed;' : ''; ?>">
+                    <?php echo esc_html($direct_out_of_stock ? 'Out of Stock' : contenly_tr('Upload Bukti Pembayaran', 'Upload Payment Proof')); ?>
                 </button>
             </form>
             

@@ -41,10 +41,12 @@ if (post_type_exists('wm_equipment')) {
     foreach ($gear_posts as $gear_post) {
         $price = (float) get_post_meta($gear_post->ID, '_wm_price', true);
         $stock = get_post_meta($gear_post->ID, '_wm_stock', true);
+        $stock_label = $stock === '' || !is_numeric($stock) ? 'In stock' : ((int) $stock > 0 ? (int) $stock . ' left' : 'Out of stock');
         $gear[] = [
             'id' => $gear_post->ID,
             'title' => $gear_post->post_title,
             'price' => $price > 0 ? 'Rp ' . number_format($price, 0, ',', '.') : 'Ask crew',
+            'stock' => $stock_label,
             'checkout' => $price > 0 && ($stock === '' || (int) $stock > 0),
             'href' => get_permalink($gear_post),
         ];
@@ -91,7 +93,8 @@ if (!$gear) {
             <article style="background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:20px;box-shadow:0 12px 30px rgba(15,23,42,.05);">
                 <span style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#0b617c;background:#e8f8fc;border-radius:999px;padding:6px 10px;">Buy / fit advice</span>
                 <h3 style="font-size:20px;font-weight:900;color:#0f172a;margin:16px 0 8px;"><?php echo esc_html($item['title']); ?></h3>
-                <p style="font-size:15px;color:#06384d;font-weight:900;margin:0 0 16px;"><?php echo esc_html($item['price']); ?></p>
+                <p style="font-size:15px;color:#06384d;font-weight:900;margin:0 0 6px;"><?php echo esc_html($item['price']); ?></p>
+                <p style="font-size:12px;color:<?php echo (!empty($item['stock']) && $item['stock'] === 'Out of stock') ? '#991b1b' : '#64748b'; ?>;font-weight:800;margin:0 0 16px;"><?php echo esc_html($item['stock'] ?? 'Availability on request'); ?></p>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
                     <?php if (!empty($item['checkout'])) : ?>
                     <a href="<?php echo esc_url(add_query_arg(['type' => 'equipment', 'item_id' => $item['id'] ?? 0, 'item' => $item['title'], 'price' => preg_replace('/[^0-9]/', '', $item['price'])], '/checkout/')); ?>" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#4cc8ed;color:#06384d;text-decoration:none;font-weight:950;font-size:13px;">Buy Now</a>

@@ -57,7 +57,10 @@ $active_items = array_filter(array_merge($course_orders, $gear_orders), function
 </div>
 
 
-<?php $recent_activity = array_slice(array_merge($course_orders, $gear_orders, $course_requests, $gear_requests), 0, 5); ?>
+<?php
+$recent_activity = array_slice(array_merge($course_orders, $gear_orders, $course_requests, $gear_requests), 0, 5);
+$status_steps = ['Payment Uploaded' => 'Proof received', 'Verified' => 'Payment verified', 'Active' => 'Ready / active', 'Completed' => 'Completed', 'Cancelled' => 'Cancelled', 'Requested' => 'Crew review', 'Awaiting Payment' => 'Waiting for payment'];
+?>
 <?php if (!empty($recent_activity)) : ?>
 <section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;margin-bottom:28px;box-shadow:0 12px 34px rgba(15,23,42,.05);">
     <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;">Latest Activity</h2>
@@ -66,7 +69,12 @@ $active_items = array_filter(array_merge($course_orders, $gear_orders), function
         <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc;flex-wrap:wrap;">
             <div>
                 <strong style="color:#0f172a;"><?php echo esc_html($item['item'] ?? $item['course'] ?? $item['gear'] ?? 'Member item'); ?></strong>
-                <div style="font-size:13px;color:#64748b;"><?php echo esc_html($item['admin_note'] ?? ($item['id'] ?? 'Crew will update this soon.')); ?></div>
+                <div style="font-size:13px;color:#64748b;"><?php echo esc_html($status_steps[$status] ?? 'Crew update'); ?> · <?php echo esc_html($item['admin_note'] ?? ($item['id'] ?? 'Crew will update this soon.')); ?></div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;">
+                    <?php foreach (['Payment Uploaded', 'Verified', 'Active'] as $step) : $done = array_search($status, ['Payment Uploaded', 'Verified', 'Active', 'Completed'], true) !== false && array_search($step, ['Payment Uploaded', 'Verified', 'Active'], true) <= array_search($status, ['Payment Uploaded', 'Verified', 'Active', 'Completed'], true); ?>
+                    <span style="padding:5px 8px;border-radius:999px;background:<?php echo $done ? '#dcfce7' : '#f1f5f9'; ?>;color:<?php echo $done ? '#166534' : '#64748b'; ?>;"><?php echo esc_html($step); ?></span>
+                    <?php endforeach; ?>
+                </div>
             </div>
             <span style="font-size:12px;font-weight:900;color:#0b617c;background:#e8f8fc;border-radius:999px;padding:6px 10px;"><?php echo esc_html($status); ?></span>
         </div>
@@ -78,6 +86,7 @@ $active_items = array_filter(array_merge($course_orders, $gear_orders), function
 <div style="background:linear-gradient(135deg,#f8fdff,#eef9fc);border:1px solid #ccecf5;border-radius:20px;padding:22px;">
     <div style="font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;color:#0b617c;margin-bottom:6px;">Recommended next step</div>
     <h2 style="font-size:22px;color:#06384d;margin:0 0 6px;">Pick a course or request gear advice.</h2>
-    <p style="color:#64748b;margin:0;line-height:1.6;">The member area now focuses on what Whale Dive Centre members need most: joining courses and buying the right dive gear.</p>
+    <p style="color:#64748b;margin:0 0 16px;line-height:1.6;">The member area now focuses on what Whale Dive Centre members need most: joining courses and buying the right dive gear.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;"><a href="/my-courses/" style="display:inline-flex;padding:10px 14px;border-radius:999px;background:#06384d;color:#fff;text-decoration:none;font-weight:900;">Browse Courses</a><a href="/my-gear/" style="display:inline-flex;padding:10px 14px;border-radius:999px;background:#fff;color:#06384d;text-decoration:none;font-weight:900;border:1px solid #ccecf5;">Browse Gear</a></div>
 </div>
 <?php require_once get_template_directory() . '/dashboard-footer.php'; ?>
