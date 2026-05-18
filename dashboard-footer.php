@@ -127,7 +127,7 @@ function initDashboardNav() {
         if (href === '/' || href.includes('wp_logout_url') || href.includes('logout')) return;
 
         const url = new URL(href, window.location.origin);
-        const dashboardPaths = ['/dashboard', '/my-travels', '/wishlist', '/reviews', '/rewards', '/membership', '/notifications', '/settings', '/profile', '/travel-story', '/my-bookings'];
+        const dashboardPaths = ['/dashboard', '/my-courses', '/my-gear', '/settings'];
         const normalized = url.pathname.replace(/\/$/, '');
         const isDashboardPage = dashboardPaths.some(p => p === normalized || p === (normalized + '/'));
         if (!isDashboardPage) return;

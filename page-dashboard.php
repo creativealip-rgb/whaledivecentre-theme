@@ -2,158 +2,91 @@
 /**
  * Template Name: Dashboard
  */
-
 require_once get_template_directory() . '/dashboard-header.php';
 
 $user_id = get_current_user_id();
-// Keep dashboard counters in sync with sidebar/live data (avoid stale user_meta snapshots)
-$booking_count = 0;
-$points = isset($dynamic_points) ? (int) $dynamic_points : 0;
-
-// Get booking stats
-$bookings = get_posts([
-    'post_type' => 'tour_booking',
-    'posts_per_page' => -1,
-    'post_status' => 'any',
-    'meta_query' => [
-        [
-            'key' => '_user_id',
-            'value' => $user_id,
-            'compare' => '=',
-        ],
-    ],
-    'orderby' => 'date',
-    'order' => 'DESC',
-]);
-$booking_count = count($bookings);
-$pending_count = 0;
-$confirmed_count = 0;
-foreach ($bookings as $booking) {
-    $status = get_post_meta($booking->ID, '_booking_status', true);
-    if (in_array($status, ['pending_payment', 'payment_uploaded'])) $pending_count++;
-    if (in_array($status, ['confirmed', 'paid'])) $confirmed_count++;
-}
-
-$current_tier = $current_tier ?? 'free';
-$total_spend = isset($total_spend) ? (int) $total_spend : 0;
+$course_requests = get_user_meta($user_id, '_wdc_course_requests', true);
+$gear_requests = get_user_meta($user_id, '_wdc_gear_requests', true);
+$course_requests = is_array($course_requests) ? $course_requests : [];
+$gear_requests = is_array($gear_requests) ? $gear_requests : [];
+$course_orders = get_user_meta($user_id, '_wdc_course_orders', true);
+$gear_orders = get_user_meta($user_id, '_wdc_gear_orders', true);
+$course_orders = is_array($course_orders) ? $course_orders : [];
+$gear_orders = is_array($gear_orders) ? $gear_orders : [];
+$active_items = array_filter(array_merge($course_orders, $gear_orders), function($item) {
+    return in_array($item['status'] ?? '', ['Verified', 'Active', 'Completed'], true);
+});
 ?>
-
-<!-- Page Header -->
-<div style="margin-bottom: 32px;">
-    <h1 style="font-size: 28px; font-weight: 700; color: #0f172a; margin-bottom: 8px;"><?php echo esc_html(contenly_tr('Dashboard', 'Dashboard')); ?></h1>
-    <p style="font-size: 15px; color: #64748b;"><?php echo esc_html(contenly_tr('Kelola booking, pantau perjalanan, dan temukan petualangan baru.', 'Manage your bookings, track your travels, and explore new adventures.')); ?></p>
+<div style="margin-bottom:24px;">
+    <h1 style="font-size:28px;font-weight:800;color:#0f172a;margin-bottom:8px;">Member Dashboard</h1>
+    <p style="font-size:15px;color:#64748b;">Your Whale Dive Centre hub for course planning, scuba gear requests, and crew support.</p>
 </div>
 
-<!-- Stats Grid - 2 Columns -->
-<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 32px;">
-    <div style="background: linear-gradient(135deg, #fef3c7, #fde68a); padding: 20px; border-radius: 12px; text-align: center;">
-        <div style="font-size: 28px; font-weight: 700; color: #d97706; margin-bottom: 4px;"><?php echo $pending_count; ?></div>
-        <div style="font-size: 12px; color: #92400e; text-transform: uppercase; letter-spacing: 0.5px;"><?php echo esc_html(contenly_tr('Pending', 'Pending')); ?></div>
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:28px;">
+    <div style="background:linear-gradient(135deg,#eef9fc,#dff4fa);padding:20px;border-radius:16px;border:1px solid #ccecf5;">
+        <div style="font-size:12px;color:#0b617c;text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:8px;">Course Requests</div>
+        <div style="font-size:34px;font-weight:950;color:#06384d;"><?php echo count($course_requests); ?></div>
     </div>
-    <div style="background: linear-gradient(135deg, #d1fae5, #a7f3d0); padding: 20px; border-radius: 12px; text-align: center;">
-        <div style="font-size: 28px; font-weight: 700; color: #059669; margin-bottom: 4px;"><?php echo $confirmed_count; ?></div>
-        <div style="font-size: 12px; color: #065f46; text-transform: uppercase; letter-spacing: 0.5px;"><?php echo esc_html(contenly_tr('Terkonfirmasi', 'Confirmed')); ?></div>
+    <div style="background:linear-gradient(135deg,#fff7ed,#ffedd5);padding:20px;border-radius:16px;border:1px solid #fed7aa;">
+        <div style="font-size:12px;color:#9a3412;text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:8px;">Gear Requests</div>
+        <div style="font-size:34px;font-weight:950;color:#7c2d12;"><?php echo count($gear_requests); ?></div>
     </div>
-    <div style="background: linear-gradient(135deg, #ede9fe, #ddd6fe); padding: 20px; border-radius: 12px; text-align: center;">
-        <div style="font-size: 28px; font-weight: 700; color: #7c3aed; margin-bottom: 4px;"><?php echo $points; ?></div>
-        <div style="font-size: 12px; color: #5b21b6; text-transform: uppercase; letter-spacing: 0.5px;"><?php echo esc_html(contenly_tr('Poin Reward', 'Reward Points')); ?></div>
+    <div style="background:linear-gradient(135deg,#f8fafc,#eef2ff);padding:20px;border-radius:16px;border:1px solid #e2e8f0;">
+        <div style="font-size:12px;color:#475569;text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:8px;">Direct Orders</div>
+        <div style="font-size:34px;font-weight:950;color:#0f172a;"><?php echo count($course_orders) + count($gear_orders); ?></div>
     </div>
-    <div style="background: linear-gradient(135deg, #f8fafc, #f1f5f9); padding: 20px; border-radius: 12px; text-align: center;">
-        <div style="font-size: 28px; font-weight: 700; color: #539294; margin-bottom: 4px;"><?php echo $booking_count; ?></div>
-        <div style="font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;"><?php echo esc_html(contenly_tr('Total Booking', 'Total Bookings')); ?></div>
+    <div style="background:linear-gradient(135deg,#ecfdf5,#dcfce7);padding:20px;border-radius:16px;border:1px solid #bbf7d0;">
+        <div style="font-size:12px;color:#166534;text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:8px;">Verified / Active</div>
+        <div style="font-size:34px;font-weight:950;color:#166534;"><?php echo count($active_items); ?></div>
     </div>
 </div>
 
-<!-- Progress to Next Tier -->
-<?php if ($current_tier !== 'platinum') : 
-    $next_tier = $current_tier === 'silver' ? 'gold' : 'platinum';
-    $target_spend = $current_tier === 'silver' ? 5000000 : 15000000;
-    $previous_spend = $current_tier === 'silver' ? 0 : 5000000;
-    $current_window_spend = max(0, $total_spend - $previous_spend);
-    $needed_window_spend = max(1, $target_spend - $previous_spend);
-    $progress = min(100, ($current_window_spend / $needed_window_spend) * 100);
-    $remaining_spend = max(0, $target_spend - $total_spend);
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-bottom:28px;">
+    <article style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:24px;box-shadow:0 12px 34px rgba(15,23,42,.06);">
+        <span style="font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;color:#0b617c;">Learn</span>
+        <h2 style="font-size:24px;color:#0f172a;margin:10px 0 10px;">Join a dive course</h2>
+        <p style="color:#64748b;line-height:1.65;margin:0 0 18px;">Start Open Water, continue to Advanced, or build safer rescue and leadership skills with the crew.</p>
+        <a href="/my-courses/" style="display:inline-flex;padding:11px 16px;border-radius:999px;background:#06384d;color:#fff;text-decoration:none;font-weight:900;">Open My Courses</a>
+    </article>
+    <article style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:24px;box-shadow:0 12px 34px rgba(15,23,42,.06);">
+        <span style="font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;color:#0b617c;">Gear</span>
+        <h2 style="font-size:24px;color:#0f172a;margin:10px 0 10px;">Buy scuba equipment</h2>
+        <p style="color:#64748b;line-height:1.65;margin:0 0 18px;">Browse masks, fins, BCDs, regulators, wetsuits, and dive computers with fit support before checkout.</p>
+        <a href="/my-gear/" style="display:inline-flex;padding:11px 16px;border-radius:999px;background:#06384d;color:#fff;text-decoration:none;font-weight:900;">Open My Gear</a>
+    </article>
+</div>
+
+
+<?php
+$recent_activity = array_slice(array_merge($course_orders, $gear_orders, $course_requests, $gear_requests), 0, 5);
+$status_steps = ['Payment Uploaded' => 'Proof received', 'Verified' => 'Payment verified', 'Active' => 'Ready / active', 'Completed' => 'Completed', 'Cancelled' => 'Cancelled', 'Requested' => 'Crew review', 'Awaiting Payment' => 'Waiting for payment'];
 ?>
-<div style="background: linear-gradient(135deg, #f0f9ff, #e0f2fe); padding: 24px; border-radius: 16px; margin-bottom: 32px;">
-    <h2 style="font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 16px;">
-        <?php echo esc_html(sprintf(contenly_tr('🎯 Progress ke %s', '🎯 Progress to %s'), ucfirst($next_tier))); ?>
-    </h2>
-    <div style="background: #e2e8f0; border-radius: 9999px; height: 12px; overflow: hidden; margin-bottom: 12px;">
-        <div style="width: <?php echo $progress; ?>%; background: linear-gradient(90deg, #539294, #539294); height: 100%; border-radius: 9999px;"></div>
+<?php if (!empty($recent_activity)) : ?>
+<section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;margin-bottom:28px;box-shadow:0 12px 34px rgba(15,23,42,.05);">
+    <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;">Latest Activity</h2>
+    <div style="display:grid;gap:10px;">
+        <?php foreach ($recent_activity as $item) : $status = $item['status'] ?? 'Requested'; ?>
+        <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc;flex-wrap:wrap;">
+            <div>
+                <strong style="color:#0f172a;"><?php echo esc_html($item['item'] ?? $item['course'] ?? $item['gear'] ?? 'Member item'); ?></strong>
+                <div style="font-size:13px;color:#64748b;"><?php echo esc_html($status_steps[$status] ?? 'Crew update'); ?> · <?php echo esc_html($item['admin_note'] ?? ($item['id'] ?? 'Crew will update this soon.')); ?></div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;">
+                    <?php foreach (['Payment Uploaded', 'Verified', 'Active'] as $step) : $done = array_search($status, ['Payment Uploaded', 'Verified', 'Active', 'Completed'], true) !== false && array_search($step, ['Payment Uploaded', 'Verified', 'Active'], true) <= array_search($status, ['Payment Uploaded', 'Verified', 'Active', 'Completed'], true); ?>
+                    <span style="padding:5px 8px;border-radius:999px;background:<?php echo $done ? '#dcfce7' : '#f1f5f9'; ?>;color:<?php echo $done ? '#166534' : '#64748b'; ?>;"><?php echo esc_html($step); ?></span>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <span style="font-size:12px;font-weight:900;color:#0b617c;background:#e8f8fc;border-radius:999px;padding:6px 10px;"><?php echo esc_html($status); ?></span>
+        </div>
+        <?php endforeach; ?>
     </div>
-    <div style="display: flex; justify-content: space-between; font-size: 14px; color: #64748b;">
-        <span><?php echo esc_html(sprintf(contenly_tr('Spend Rp %1$s / Rp %2$s', 'Spend Rp %1$s / Rp %2$s'), number_format($total_spend, 0, ',', '.'), number_format($target_spend, 0, ',', '.'))); ?></span>
-        <span><?php echo esc_html(sprintf(contenly_tr('Butuh Rp %s lagi', 'Need Rp %s more'), number_format($remaining_spend, 0, ',', '.'))); ?></span>
-    </div>
-</div>
+</section>
 <?php endif; ?>
 
-<!-- Recent Bookings -->
-<h2 style="font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 24px;"><?php echo esc_html(contenly_tr('Booking Terbaru', 'Recent Bookings')); ?></h2>
-<?php if (empty($bookings)) : ?>
-    <div style="text-align: center; padding: 60px 20px; background: #f8fafc; border-radius: 16px;">
-        <div style="font-size: 64px; margin-bottom: 16px;">🗺️</div>
-        <h3 style="font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 8px;"><?php echo esc_html(contenly_tr('Belum ada booking', 'No bookings yet')); ?></h3>
-        <p style="color: #64748b; margin-bottom: 24px;"><?php echo esc_html(contenly_tr('Mulai jelajahi tour terbaik kami!', 'Start exploring our amazing tours!')); ?></p>
-        <a href="<?php echo esc_url(contenly_localized_url('/tour-packages/')); ?>" style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #539294, #539294); color: white; text-decoration: none; border-radius: 12px; font-weight: 600;"><?php echo esc_html(contenly_tr('Jelajahi Tour', 'Browse Tours')); ?></a>
-    </div>
-<?php else : 
-    $recent_bookings = array_slice($bookings, 0, 6);
-?>
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-bottom: 24px;">
-    <?php foreach ($recent_bookings as $booking) :
-        $tour_id = get_post_meta($booking->ID, '_tour_id', true);
-        $tour = get_post($tour_id);
-        $status = get_post_meta($booking->ID, '_booking_status', true);
-        $total = get_post_meta($booking->ID, '_total_amount', true);
-        $pax = get_post_meta($booking->ID, '_pax', true);
-        $travel_date = get_post_meta($booking->ID, '_travel_date', true);
-        
-        $status_labels = [
-            'pending_payment' => ['label' => '⏳ ' . contenly_tr('Pending', 'Pending'), 'color' => '#fbbf24', 'bg' => '#fef3c7'],
-            'payment_uploaded' => ['label' => '📤 ' . contenly_tr('Bukti Diupload', 'Uploaded'), 'color' => '#539294', 'bg' => '#DCE9E6'],
-            'paid' => ['label' => '✅ ' . contenly_tr('Lunas', 'Paid'), 'color' => '#10b981', 'bg' => '#d1fae5'],
-            'confirmed' => ['label' => '✓ ' . contenly_tr('Terkonfirmasi', 'Confirmed'), 'color' => '#10b981', 'bg' => '#d1fae5'],
-            'cancelled' => ['label' => '❌ ' . contenly_tr('Dibatalkan', 'Cancelled'), 'color' => '#dc2626', 'bg' => '#fee2e2'],
-        ];
-        $status_info = $status_labels[$status] ?? ['label' => $status, 'color' => '#64748b', 'bg' => '#f1f5f9'];
-    ?>
-    <div style="border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; background: white; transition: all 0.3s;" onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,0.12)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)'">
-        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
-            <div style="flex: 1;">
-                <h3 style="font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 4px; line-height: 1.4;">
-                    <?php echo esc_html($tour ? $tour->post_title : contenly_tr('Booking Tour', 'Tour Booking')); ?>
-                </h3>
-                <div style="font-size: 13px; color: #94a3b8;"><?php echo esc_html(contenly_tr('Booking', 'Booking')); ?> #<?php echo esc_html($booking->ID); ?></div>
-            </div>
-            <span style="padding: 4px 12px; background: <?php echo $status_info['bg']; ?>; color: <?php echo $status_info['color']; ?>; border-radius: 9999px; font-size: 12px; font-weight: 600; white-space: nowrap;">
-                <?php echo esc_html($status_info['label']); ?>
-            </span>
-        </div>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding-top: 16px; border-top: 1px solid #f1f5f9; margin-top: 16px;">
-            <div>
-                <div style="font-size: 12px; color: #94a3b8; margin-bottom: 4px;"><?php echo esc_html(contenly_tr('Tanggal Perjalanan', 'Travel Date')); ?></div>
-                <div style="font-weight: 600; color: #0f172a; font-size: 14px;"><?php echo esc_html($travel_date ? date_i18n('M d, Y', strtotime($travel_date)) : contenly_tr('Belum diatur', 'Not set')); ?></div>
-            </div>
-            <div>
-                <div style="font-size: 12px; color: #94a3b8; margin-bottom: 4px;">Pax</div>
-                <div style="font-weight: 600; color: #0f172a; font-size: 14px;"><?php echo esc_html(($pax ?: 1) . ' ' . contenly_tr('orang', 'persons')); ?></div>
-            </div>
-        </div>
-        
-        <div style="display: flex; gap: 8px; margin-top: 16px;">
-            <a href="<?php echo esc_url(get_permalink($tour_id)); ?>" style="flex: 1; padding: 10px; background: #f0f9ff; color: #539294; text-align: center; text-decoration: none; border-radius: 10px; font-weight: 600; font-size: 13px;"><?php echo esc_html(contenly_tr('Lihat Tour', 'View Tour')); ?></a>
-            <?php if (in_array($status, ['pending_payment', 'payment_uploaded'])) : ?>
-            <button style="flex: 1; padding: 10px; background: #fee2e2; color: #dc2626; border: none; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer;"><?php echo esc_html(contenly_tr('Batalkan', 'Cancel')); ?></button>
-            <?php endif; ?>
-        </div>
-    </div>
-    <?php endforeach; ?>
+<div style="background:linear-gradient(135deg,#f8fdff,#eef9fc);border:1px solid #ccecf5;border-radius:20px;padding:22px;">
+    <div style="font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;color:#0b617c;margin-bottom:6px;">Recommended next step</div>
+    <h2 style="font-size:22px;color:#06384d;margin:0 0 6px;">Pick a course or request gear advice.</h2>
+    <p style="color:#64748b;margin:0 0 16px;line-height:1.6;">The member area now focuses on what Whale Dive Centre members need most: joining courses and buying the right dive gear.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;"><a href="/my-courses/" style="display:inline-flex;padding:10px 14px;border-radius:999px;background:#06384d;color:#fff;text-decoration:none;font-weight:900;">Browse Courses</a><a href="/my-gear/" style="display:inline-flex;padding:10px 14px;border-radius:999px;background:#fff;color:#06384d;text-decoration:none;font-weight:900;border:1px solid #ccecf5;">Browse Gear</a></div>
 </div>
-<div style="text-align: center;">
-    <a href="<?php echo esc_url(contenly_localized_url('/my-travels/')); ?>" style="display: inline-block; padding: 12px 32px; background: white; color: #539294; border: 2px solid #e2e8f0; text-decoration: none; border-radius: 12px; font-weight: 600; transition: all 0.3s;" onmouseover="this.style.background='#f0f9ff'; this.style.borderColor='#539294'"><?php echo esc_html(contenly_tr('Lihat semua booking →', 'View all bookings →')); ?></a>
-</div>
-<?php endif; ?>
-
 <?php require_once get_template_directory() . '/dashboard-footer.php'; ?>

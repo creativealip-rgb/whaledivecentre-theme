@@ -20,15 +20,15 @@ get_header();
     <header class="wd-header">
         <a href="<?php echo home_url('/'); ?>" class="wd-brand">
             <img src="<?php echo get_template_directory_uri(); ?>/assets/logo.jpg" alt="Whale Dive Centre">
-            <span>Whale Dive Centre</span>
+            <span>WHALE DIVE CENTRE</span>
         </a>
         <nav class="wd-menu">
             <a href="<?php echo home_url('/'); ?>#membership">MEMBERSHIP</a>
-            <a href="<?php echo home_url('/courses/'); ?>">COURSES</a>
-            <a href="<?php echo home_url('/equipment/'); ?>">EQUIPMENT</a>
+            <a href="<?php echo home_url('/courses/'); ?>">Courses</a>
+            <a href="<?php echo home_url('/equipment/'); ?>">Equipment</a>
             <a href="<?php echo home_url('/trips/'); ?>">DIVE TRIPS</a>
             <a href="<?php echo home_url('/gallery/'); ?>">GALLERY</a>
-            <a href="<?php echo home_url('/blog/'); ?>">BLOG</a>
+            <a href="<?php echo home_url('/blog/'); ?>">Blog</a>
             <a href="<?php echo home_url('/our-crew/'); ?>">OUR CREW</a>
             <a href="<?php echo home_url('/faq/'); ?>">FAQ</a>
             <a href="<?php echo home_url('/contact/'); ?>">CONTACT</a>

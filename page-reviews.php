@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: My Reviews
+ * Template Name: My Dive Dive Reviews
  */
 require_once get_template_directory() . '/dashboard-header.php';
 
@@ -45,8 +45,8 @@ function contenly_review_filter_link($status) {
 }
 ?>
 
-<h1 class="page-title">⭐ <?php echo esc_html(contenly_tr('Review Saya', 'My Reviews')); ?></h1>
-<p class="page-subtitle"><?php echo esc_html(contenly_tr('Review yang pernah kamu berikan untuk trip yang sudah completed', 'Reviews you have written for trips that are already completed.')); ?></p>
+<h1 class="page-title">⭐ <?php echo esc_html(contenly_tr('Dive Review Saya', 'My Dive Dive Reviews')); ?></h1>
+<p class="page-subtitle"><?php echo esc_html(contenly_tr('Dive review yang pernah kamu berikan untuk dive yang sudah completed', 'Dive reviews you have written for completed dives.')); ?></p>
 
 <div style="display:flex; gap:8px; flex-wrap:wrap; margin:0 0 18px;">
     <?php foreach (['all' => contenly_tr('Semua', 'All'), 'publish' => 'Published', 'pending' => 'Pending'] as $key => $label) :
@@ -62,8 +62,8 @@ function contenly_review_filter_link($status) {
 <div style="text-align: center; padding: 56px 20px; background: #f8fafc; border-radius: 16px; border:1px solid #e2e8f0;">
     <div style="font-size: 56px; margin-bottom: 12px;">⭐</div>
     <h3 style="font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 8px;"><?php echo esc_html(contenly_tr('Belum ada review', 'No reviews yet')); ?></h3>
-    <p style="color: #64748b; margin-bottom: 20px;"><?php echo esc_html(contenly_tr('Selesaikan trip dulu, lalu tulis review dari halaman My Travels (Completed).', 'Complete a trip first, then write a review from the My Travels page (Completed).')); ?></p>
-    <a href="<?php echo esc_url(add_query_arg('tab', 'completed', contenly_localized_url('/my-travels/'))); ?>" style="display:inline-block; padding:12px 20px; background:linear-gradient(135deg,#539294,#539294); color:#fff; text-decoration:none; border-radius:10px; font-weight:600;"><?php echo esc_html(contenly_tr('Buka My Travels', 'Open My Travels')); ?></a>
+    <p style="color: #64748b; margin-bottom: 20px;"><?php echo esc_html(contenly_tr('Selesaikan dive dulu, lalu tulis review dari halaman My Dives (Completed).', 'Complete a dive first, then write a review from the My Dives page (Completed).')); ?></p>
+    <a href="<?php echo esc_url(add_query_arg('tab', 'completed', contenly_localized_url('/my-travels/'))); ?>" style="display:inline-block; padding:12px 20px; background:linear-gradient(135deg,#539294,#539294); color:#fff; text-decoration:none; border-radius:10px; font-weight:600;"><?php echo esc_html(contenly_tr('Buka My Dives', 'Open My Dives')); ?></a>
 </div>
 <?php else : ?>
 <div style="display:grid; gap:14px;">
@@ -72,7 +72,7 @@ function contenly_review_filter_link($status) {
         $tour_id = absint(get_post_meta($review->ID, '_review_tour_id', true));
         $booking_id = absint(get_post_meta($review->ID, '_review_booking_id', true));
         $visit_date = get_post_meta($review->ID, '_visit_date', true);
-        $tour_title = $tour_id ? get_the_title($tour_id) : 'Tour';
+        $tour_title = $tour_id ? get_the_title($tour_id) : 'Dive';
         $tour_link = $tour_id ? get_permalink($tour_id) : '#';
         $when = $visit_date ? date_i18n('d M Y', strtotime($visit_date)) : get_the_date('d M Y', $review);
         $status_key = $review->post_status;
@@ -83,9 +83,9 @@ function contenly_review_filter_link($status) {
             <div>
                 <h3 style="margin:0 0 6px; font-size:18px; color:#0f172a;"><?php echo esc_html($review->post_title); ?></h3>
                 <div style="font-size:13px; color:#64748b;">
-                    <?php echo esc_html(contenly_tr('Tour', 'Tour')); ?>: <a href="<?php echo esc_url($tour_link); ?>" style="color:#539294; text-decoration:none;"><?php echo esc_html($tour_title); ?></a>
+                    <?php echo esc_html(contenly_tr('Dive', 'Dive')); ?>: <a href="<?php echo esc_url($tour_link); ?>" style="color:#539294; text-decoration:none;"><?php echo esc_html($tour_title); ?></a>
                     • <?php echo esc_html(contenly_tr('Kunjungan', 'Visit')); ?>: <?php echo esc_html($when); ?>
-                    <?php if ($booking_id) : ?> • <?php echo esc_html(contenly_tr('Booking', 'Booking')); ?> #<?php echo esc_html($booking_id); ?><?php endif; ?>
+                    <?php if ($booking_id) : ?> • <?php echo esc_html(contenly_tr('Dive Plan', 'Dive Plan')); ?> #<?php echo esc_html($booking_id); ?><?php endif; ?>
                 </div>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
@@ -130,7 +130,7 @@ document.querySelectorAll('.js-delete-review').forEach(function (btn) {
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                alert(data.data?.message || <?php echo wp_json_encode(contenly_tr('Review berhasil dihapus', 'Review deleted successfully')); ?>);
+                alert(data.data?.message || <?php echo wp_json_encode(contenly_tr('Dive Review berhasil dihapus', 'Dive Review deleted successfully')); ?>);
                 location.reload();
                 return;
             }

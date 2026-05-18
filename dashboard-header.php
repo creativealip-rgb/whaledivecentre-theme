@@ -6,62 +6,42 @@
 
 if (!is_user_logged_in()) {
     $requested_uri = isset($_SERVER['REQUEST_URI']) ? wp_unslash($_SERVER['REQUEST_URI']) : contenly_localized_url('/dashboard/');
-    wp_redirect(add_query_arg('redirect_to', $requested_uri, contenly_localized_url('/login/')));
+    wp_redirect(add_query_arg('redirect_to', $requested_uri, home_url('/member-login/')));
     exit;
 }
 
 $user_id = get_current_user_id();
 $user = wp_get_current_user();
-$tier_data_live = contenly_get_user_tier_data($user_id);
-$current_tier = $tier_data_live['tier'];
-$total_spend = (int) $tier_data_live['total_spend'];
-$dynamic_points = 0;
-$booking_posts = get_posts([
-    'post_type' => 'tour_booking',
-    'posts_per_page' => -1,
-    'post_status' => 'any',
-    'fields' => 'ids',
-    'meta_query' => [[ 'key' => '_user_id', 'value' => $user_id ]],
-]);
-
-// Always use live booking count for sidebar badge (real-time).
-$booking_count = count($booking_posts);
-
-foreach ($booking_posts as $bid) {
-    $st = get_post_meta($bid, '_booking_status', true);
-    if (in_array($st, ['paid', 'confirmed', 'completed'], true)) {
-        $dynamic_points += 100;
-    }
-}
-
-$review_posts = get_posts([
-    'post_type' => 'destination',
-    'posts_per_page' => -1,
-    'post_status' => ['publish', 'pending'],
-    'fields' => 'ids',
-    'meta_query' => [
-        'relation' => 'AND',
-        ['key' => '_user_id', 'value' => $user_id],
-        ['key' => '_is_review', 'value' => '1'],
-    ],
-]);
-
-$dynamic_points += (count($review_posts) * 25);
-
-// Rewards sidebar should reflect live points, not stale user_meta snapshot.
-$points = $dynamic_points;
-
-// Tier data
-$tier_data = contenly_get_member_tier_map();
-$tier_info = $tier_data[$current_tier];
+$course_requests = get_user_meta($user_id, '_wdc_course_requests', true);
+$gear_requests = get_user_meta($user_id, '_wdc_gear_requests', true);
+$course_requests = is_array($course_requests) ? $course_requests : [];
+$gear_requests = is_array($gear_requests) ? $gear_requests : [];
+$total_spend = (int) get_user_meta($user_id, '_wdc_total_spend', true);
+$current_tier = $total_spend >= 15000000 ? 'pro' : ($total_spend >= 5000000 ? 'advanced' : 'starter');
+$tier_info = [
+    'starter' => ['icon' => 'OW', 'name' => 'Starter Diver'],
+    'advanced' => ['icon' => 'AD', 'name' => 'Advanced Diver'],
+    'pro' => ['icon' => 'DM', 'name' => 'Pro Diver'],
+][$current_tier];
+$points = count($course_requests) * 100 + count($gear_requests) * 25;
 
 // Get current page slug
 $current_page = basename($_SERVER['PHP_SELF'], '.php');
+$wdc_member_icon = function ($path) {
+    $icons = [
+        'home' => '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/>',
+        'dashboard' => '<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
+        'courses' => '<path d="M5 5.5h9a3 3 0 0 1 3 3V19H8a3 3 0 0 1-3-3V5.5Z"/><path d="M17 8.5h2v10.5"/><path d="M8 9h6"/><path d="M8 13h5"/>',
+        'gear' => '<circle cx="8" cy="12" r="4"/><circle cx="16" cy="12" r="4"/><path d="M12 12h0"/><path d="M4 12H2"/><path d="M22 12h-2"/>',
+        'account' => '<circle cx="12" cy="8" r="4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/>',
+        'logout' => '<path d="M10 5H5v14h5"/><path d="M14 8l4 4-4 4"/><path d="M18 12H9"/>',
+    ];
+    return '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' . ($icons[$path] ?? $icons['dashboard']) . '</svg>';
+};
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head><meta charset="utf-8">
-    ">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -93,7 +73,8 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
         .dashboard-menu li { margin-bottom: 4px; }
         .dashboard-menu a { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #64748b; text-decoration: none; border-radius: 10px; transition: all 0.2s; font-weight: 500; font-size: 14px; }
         .dashboard-menu a:hover, .dashboard-menu a.active { background: #EEF5F4; color: #539294; }
-        .dashboard-menu .menu-icon { width: 22px; height: 22px; border-radius: 7px; display: inline-flex; align-items: center; justify-content: center; background: #e2e8f0; color: #334155; font-size: 10px; font-weight: 700; letter-spacing: .02em; flex: 0 0 22px; }
+        .dashboard-menu .menu-icon { width: 28px; height: 28px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; background: #e8f8fc; color: #0b617c; flex: 0 0 28px; }
+        .dashboard-menu .menu-icon svg { width: 16px; height: 16px; display: block; }
         .dashboard-menu .badge { margin-left: auto; background: #fee2e2; color: #dc2626; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600; }
         .dashboard-main { background: #f8fafc; padding: 32px; min-height: 100vh; }
         .dashboard-content { background: white; border-radius: 16px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
@@ -162,6 +143,32 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
         .mobile-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 998; backdrop-filter: blur(2px); }
         .mobile-topbar { display: none; }
         
+        /* WDC brand palette for member dashboard */
+        :root { --wdc-black:#000000; --wdc-blue-violet:#3B44AC; --wdc-cyan:#4CC8ED; --wdc-aqua:#96DAEA; --wdc-red:#C31C4A; --wdc-blue:#004A98; --wdc-white:#FFFFFF; --wdc-deep:#061a36; --wdc-ink:#0b1930; --wdc-muted:#63748a; }
+        body { background: linear-gradient(180deg, #f7fcff 0%, rgba(150,218,234,.22) 100%) !important; color: var(--wdc-ink) !important; }
+        .dashboard-sidebar { background: rgba(255,255,255,.96) !important; border-right-color: rgba(0,74,152,.12) !important; }
+        .dashboard-main { background: linear-gradient(180deg,#f7fcff 0%,#eefaff 100%) !important; }
+        .dashboard-content, .dashboard-main article, .dashboard-main section { border-color: rgba(0,74,152,.12) !important; box-shadow: 0 18px 44px rgba(0,74,152,.08) !important; }
+        .user-avatar, .welcome-banner, .dashboard-home-btn { background: linear-gradient(135deg,var(--wdc-blue),var(--wdc-blue-violet)) !important; color: var(--wdc-white) !important; }
+        .user-name, .page-title, .dashboard-main h1, .dashboard-main h2, .dashboard-main strong { color: var(--wdc-deep) !important; }
+        .user-email, .page-subtitle, .dashboard-main p, .dashboard-main div { border-color: rgba(0,74,152,.12); }
+        .user-tier { background: rgba(76,200,237,.16) !important; color: var(--wdc-blue) !important; }
+        .dashboard-menu a { color: var(--wdc-muted) !important; }
+        .dashboard-menu a:hover, .dashboard-menu a.active { background: rgba(76,200,237,.14) !important; color: var(--wdc-blue) !important; }
+        .dashboard-menu .menu-icon { background: rgba(76,200,237,.16) !important; color: var(--wdc-blue) !important; }
+        .dashboard-menu .badge { background: rgba(195,28,74,.12) !important; color: var(--wdc-red) !important; }
+        .dashboard-menu a.dashboard-home-btn, .dashboard-menu a.dashboard-home-btn span:not(.menu-icon) { color: var(--wdc-white) !important; }
+        .dashboard-menu a.dashboard-home-btn .menu-icon { background: rgba(255,255,255,.18) !important; color: var(--wdc-white) !important; }
+        .dashboard-main > div:has(> h1), .dashboard-main > section:has(> h1), .dashboard-main > h1.page-title, .dashboard-main > p.page-subtitle { background: linear-gradient(135deg,rgba(150,218,234,.28),#f8fcff) !important; border-color: rgba(0,74,152,.14) !important; }
+        .dashboard-main a[style*="background:#06384d"], .dashboard-main a[style*="background: #06384d"], .dashboard-main a[style*="background:#539294"], .dashboard-main a[style*="background: #539294"] { background: linear-gradient(135deg,var(--wdc-blue),var(--wdc-blue-violet)) !important; color: var(--wdc-white) !important; }
+        .dashboard-main a[style*="background:#fff"], .dashboard-main a[style*="background: #fff"] { color: var(--wdc-blue) !important; border-color: rgba(0,74,152,.18) !important; }
+        .dashboard-main span[style*="color:#0b617c"], .dashboard-main div[style*="color:#0b617c"] { color: var(--wdc-blue) !important; }
+        .dashboard-main span[style*="background:#e8f8fc"], .dashboard-main div[style*="background:#e8f8fc"] { background: rgba(76,200,237,.16) !important; color: var(--wdc-blue) !important; }
+        .mobile-topbar { background:#ffffff !important; border-bottom-color:rgba(0,74,152,.12) !important; }
+        .mobile-menu-toggle span { background: var(--wdc-blue) !important; }
+        body.wdc-brand-font-mode, body.wdc-brand-font-mode input, body.wdc-brand-font-mode select, body.wdc-brand-font-mode textarea, body.wdc-brand-font-mode button { font-family:'Open Sans',Arial,sans-serif !important; }
+        body.wdc-brand-font-mode h1, body.wdc-brand-font-mode h2, body.wdc-brand-font-mode h3, body.wdc-brand-font-mode .page-title { font-family:'iBrand','Open Sans',Arial,sans-serif !important; font-weight:400; }
+
         @media (max-width: 768px) {
             .dashboard-wrapper { grid-template-columns: 1fr; padding: 0; width:100%; max-width:100vw; overflow-x:hidden; }
             .dashboard-sidebar { position: fixed; top: 0; left: -100%; width: 75%; max-width: 260px; height: 100vh; z-index: 1001; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; background: white; box-shadow: 4px 0 24px rgba(0,0,0,0.12); }
@@ -187,7 +194,8 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
             .dashboard-menu li { margin-bottom: 2px; }
             .dashboard-menu a { padding: 10px 12px !important; border-radius: 8px !important; font-weight: 500 !important; color: #475569 !important; font-size: 13px !important; }
             .dashboard-menu a:hover, .dashboard-menu a.active { background: #f0f9ff !important; color: #539294 !important; }
-            .dashboard-menu .menu-icon { width: 20px; height: 20px; border-radius: 6px; display:inline-flex; align-items:center; justify-content:center; background:#e2e8f0; color:#334155; font-size:9px; font-weight:700; letter-spacing:.02em; flex:0 0 20px; }
+            .dashboard-menu .menu-icon { width:24px; height:24px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; background:#e8f8fc; color:#0b617c; flex:0 0 24px; }
+            .dashboard-menu .menu-icon svg { width:14px; height:14px; }
             .dashboard-menu .badge { background: #fee2e2 !important; color: #dc2626 !important; padding: 2px 6px !important; border-radius: 9999px !important; font-size: 10px !important; font-weight: 600 !important; }
             .dashboard-home-btn, .dashboard-home-btn * { color: #ffffff !important; }
             .dashboard-home-btn .menu-icon { color: #355F72 !important; background: #eaf2ff !important; }
@@ -220,7 +228,7 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
             /* Tier progress mobile */
             .dashboard-content > div[style*="background: linear-gradient(135deg, #f0f9ff"] { padding: 16px !important; margin-bottom: 20px !important; }
             
-            /* Recent bookings mobile - 1 column */
+            /* Member cards mobile - 1 column */
             .dashboard-content h2 { font-size: 18px !important; margin-bottom: 16px !important; }
         }
     </style>
@@ -253,17 +261,12 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
         </div>
         
         <ul class="dashboard-menu">
-            <li><a href="<?php echo esc_url(contenly_localized_url('/')); ?>" class="dashboard-home-btn"><span class="menu-icon">HM</span> <?php echo esc_html(contenly_tr('Kembali ke Homepage', 'Back to Homepage')); ?></a></li>
-            <li><a href="<?php echo esc_url(contenly_localized_url('/dashboard/')); ?>" class="<?php echo is_page('dashboard') ? 'active' : ''; ?>"><span class="menu-icon">OV</span> <?php echo esc_html(contenly_tr('Overview', 'Overview')); ?></a></li>
-            <li><a href="<?php echo esc_url(contenly_localized_url('/my-travels/')); ?>" class="<?php echo (is_page('my-travels') || is_page('my-bookings')) ? 'active' : ''; ?>"><span class="menu-icon">TR</span> <?php echo esc_html(contenly_tr('Perjalanan Saya', 'My Travels')); ?> <span class="badge"><?php echo esc_html($booking_count); ?></span></a></li>
-            <li><a href="<?php echo esc_url(contenly_localized_url('/wishlist/')); ?>" class="<?php echo is_page('wishlist') ? 'active' : ''; ?>"><span class="menu-icon">WL</span> <?php echo esc_html(contenly_tr('Wishlist', 'Wishlist')); ?></a></li>
-            <li><a href="<?php echo esc_url(contenly_localized_url('/reviews/')); ?>" class="<?php echo is_page('reviews') ? 'active' : ''; ?>"><span class="menu-icon">RV</span> <?php echo esc_html(contenly_tr('Review', 'Reviews')); ?></a></li>
-            <li><a href="<?php echo esc_url(contenly_localized_url('/travel-story/')); ?>" class="<?php echo is_page('travel-story') ? 'active' : ''; ?>"><span class="menu-icon">TS</span> <?php echo esc_html(contenly_tr('Travel Story', 'Travel Story')); ?></a></li>
-            <li><a href="<?php echo esc_url(contenly_localized_url('/rewards/')); ?>" class="<?php echo is_page('rewards') ? 'active' : ''; ?>"><span class="menu-icon">RW</span> <?php echo esc_html(contenly_tr('Rewards', 'Rewards')); ?> <span class="badge" style="background:#fef3c7; color:#d97706;"><?php echo esc_html($points); ?></span></a></li>
-            <li><a href="<?php echo esc_url(contenly_localized_url('/membership/')); ?>" class="<?php echo is_page('membership') ? 'active' : ''; ?>"><span class="menu-icon">MB</span> <?php echo esc_html(contenly_tr('Tier Member', 'Member Tier')); ?></a></li>
-            <li><a href="<?php echo esc_url(contenly_localized_url('/notifications/')); ?>" class="<?php echo is_page('notifications') ? 'active' : ''; ?>"><span class="menu-icon">NT</span> <?php echo esc_html(contenly_tr('Notifikasi', 'Notifications')); ?></a></li>
-            <li><a href="<?php echo esc_url(contenly_localized_url('/settings/')); ?>" class="<?php echo (is_page('settings') || is_page('profile')) ? 'active' : ''; ?>"><span class="menu-icon">SE</span> <?php echo esc_html(contenly_tr('Pengaturan', 'Settings')); ?></a></li>
-            <li><a href="<?php echo esc_url(wp_logout_url(contenly_localized_url('/'))); ?>" style="color: #dc2626; margin-top: 16px; border-top: 1px solid #f1f5f9; padding-top: 12px;"><span class="menu-icon">LO</span> <?php echo esc_html(contenly_tr('Keluar', 'Logout')); ?></a></li>
+            <li><a href="<?php echo esc_url(contenly_localized_url('/')); ?>" class="dashboard-home-btn"><span class="menu-icon"><?php echo $wdc_member_icon('home'); ?></span> <?php echo esc_html(contenly_tr('Kembali ke Home', 'Back to Home')); ?></a></li>
+            <li><a href="<?php echo esc_url(contenly_localized_url('/dashboard/')); ?>" class="<?php echo is_page('dashboard') ? 'active' : ''; ?>"><span class="menu-icon"><?php echo $wdc_member_icon('dashboard'); ?></span> <?php echo esc_html(contenly_tr('Dashboard', 'Dashboard')); ?></a></li>
+            <li><a href="<?php echo esc_url(contenly_localized_url('/my-courses/')); ?>" class="<?php echo is_page('my-courses') ? 'active' : ''; ?>"><span class="menu-icon"><?php echo $wdc_member_icon('courses'); ?></span> <?php echo esc_html(contenly_tr('My Courses', 'My Courses')); ?></a></li>
+            <li><a href="<?php echo esc_url(contenly_localized_url('/my-gear/')); ?>" class="<?php echo is_page('my-gear') ? 'active' : ''; ?>"><span class="menu-icon"><?php echo $wdc_member_icon('gear'); ?></span> <?php echo esc_html(contenly_tr('My Gear', 'My Gear')); ?></a></li>
+            <li><a href="<?php echo esc_url(contenly_localized_url('/settings/')); ?>" class="<?php echo (is_page('settings') || is_page('profile')) ? 'active' : ''; ?>"><span class="menu-icon"><?php echo $wdc_member_icon('account'); ?></span> <?php echo esc_html(contenly_tr('Account Settings', 'Account Settings')); ?></a></li>
+            <li><a href="<?php echo esc_url(wp_logout_url(contenly_localized_url('/'))); ?>" style="color: #dc2626; margin-top: 16px; border-top: 1px solid #f1f5f9; padding-top: 12px;"><span class="menu-icon"><?php echo $wdc_member_icon('logout'); ?></span> <?php echo esc_html(contenly_tr('Keluar', 'Logout')); ?></a></li>
         </ul>
     </aside>
     

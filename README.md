@@ -1,279 +1,135 @@
-# 🎨 Contenly Theme - WordPress Theme
+# Whale Dive Centre Theme
 
-**Version:** 1.0.0  
-**Author:** Alip  
-**Description:** Premium content management theme with modern glassmorphism design
+Custom WordPress theme for the Whale Dive Centre public site, member dashboard, course catalogue, equipment rental flow, and direct-payment member ordering.
 
----
+## Status
 
-## 📁 THEME STRUCTURE
+- Theme version: 1.7.8 (see `style.css`)
+- Active development branch: `polish-public-cards`
+- Production/deploy notes live in `docs/production-checklist.md`
 
-```
-contenly-theme/
-├── style.css                 # Main stylesheet (23KB)
-├── functions.php             # Theme functions (7KB)
-├── index.php                 # Main template
-├── header.php                # Header template
-├── footer.php                # Footer template
-├── inc/
-│   ├── template-tags.php     # Custom template functions
-│   └── template-functions.php # Helper functions
-├── assets/
-│   ├── css/
-│   │   └── custom.css        # Custom styles
-│   ├── js/
-│   │   └── main.js           # Main JavaScript (13KB)
-│   └── images/               # Theme images
-├── template-parts/           # Template parts
-└── languages/                # Translation files
-```
+## Main Features
 
----
+### Public Site
 
-## ✨ FEATURES
+- Whale Dive Centre branded homepage, inner pages, blog archive, and article templates.
+- Responsive navigation and shared footer across public pages.
+- Polished course, equipment, blog, and journal card layouts.
+- Local iBrand font support through `assets/fonts/ibrand.otf`.
 
-### **Design System:**
-- ✅ Contenly Premium Design
-- ✅ Glassmorphism effects
-- ✅ Brand gradient (#2563eb → #3b82f6)
-- ✅ Dark mode ready
-- ✅ Mobile-first responsive
+### Course And Equipment Catalogue
 
-### **Components:**
-- ✅ `.glass` - Glass effects
-- ✅ `.card-clean` - Signature cards
-- ✅ `.btn-premium` - Gradient buttons
-- ✅ `.hero-section` - Hero with orbs
-- ✅ `.icon-container` - Icon holders
+- Course custom post type support through `wm_course`.
+- Equipment custom post type support through `wm_equipment`.
+- Course taxonomies including `course_level` and `course_agency`.
+- Equipment taxonomies including `equipment_category` and `equipment_brand`.
+- Dedicated archive/detail templates for courses, equipment, and dive sites.
 
-### **Animations:**
-- ✅ Float animation
-- ✅ Fade-up entrance
-- ✅ Shimmer loading
-- ✅ Pulse glow
-- ✅ Staggered animations
+### Member Area
 
-### **Performance:**
-- ✅ Lazy loading images
-- ✅ Debounced scroll
-- ✅ Throttled events
-- ✅ Minimal JavaScript
-- ✅ No jQuery dependency
+- Member-facing pages for dashboard, courses, gear, travels, rewards, reviews, notifications, wishlist, and settings.
+- Login and registration templates.
+- Dashboard header/footer components for member pages.
+- Direct course/equipment checkout flows with order status handling.
 
-### **Accessibility:**
-- ✅ WCAG 2.1 AA compliant
-- ✅ Skip links
-- ✅ Focus states
-- ✅ Reduced motion support
-- ✅ Screen reader friendly
+### Payments And Admin
 
----
+- Manual payment proof upload flow.
+- Payment proof storage expected at `wp-content/uploads/wdc-payment-proofs/`.
+- Member/admin pages for dashboard, members, payments, and reports.
+- Midtrans/manual payment integration files are included for payment configuration work.
 
-## 🚀 INSTALLATION
+## Important Files
 
-### **Method 1: Upload via WordPress**
-1. Zip the theme folder
-2. Go to **Appearance → Themes → Add New → Upload Theme**
-3. Upload `contenly-theme.zip`
-4. Click **Activate**
+| Path | Purpose |
+| --- | --- |
+| `style.css` | Main theme stylesheet and WordPress theme metadata. |
+| `functions.php` | Theme setup, custom post types, member/order logic, and AJAX hooks. |
+| `plugin-integration.php` | Integration helpers for Whale Dive/WordPress plugin data. |
+| `manual-payment-handler.php` | Manual payment proof handling. |
+| `midtrans-gateway.php` | Midtrans gateway integration. |
+| `page-courses.php` | Public courses page. |
+| `page-equipment.php` | Public equipment page. |
+| `page-checkout.php` | Checkout flow. |
+| `page-my-courses.php` | Member course orders page. |
+| `page-my-gear.php` | Member gear/equipment orders page. |
+| `admin/` | WDC member admin screens. |
+| `scripts/` | Local sync, production deploy, and catalogue QA scripts. |
 
-### **Method 2: FTP/SFTP**
-1. Upload `contenly-theme` folder to `/wp-content/themes/`
-2. Go to **Appearance → Themes**
-3. Click **Activate**
+## Installation
 
-### **Method 3: WP-CLI**
+Upload this directory to the active WordPress install as:
+
 ```bash
-# Copy theme
-cp -r contenly-theme /path/to/wordpress/wp-content/themes/
-
-# Activate
-wp theme activate contenly-theme
+wp-content/themes/whaledivecentre-theme
 ```
 
----
+Then activate it from WordPress admin:
 
-## ⚙️ CONFIGURATION
-
-### **1. Custom Logo:**
-- Go to **Appearance → Customize → Site Identity**
-- Upload logo (300x100px recommended)
-
-### **2. Navigation Menus:**
-- Go to **Appearance → Menus**
-- Create menus and assign:
-  - **Primary Menu** - Header navigation
-  - **Footer Menu** - Footer navigation
-  - **Mobile Menu** - Mobile navigation
-
-### **3. Colors:**
-Edit `style.css` CSS variables:
-```css
-:root {
-    --brand-primary: #2563eb;
-    --brand-secondary: #3b82f6;
-    --brand-gradient: linear-gradient(135deg, #1d4ed8, #2563eb, #3b82f6);
-}
+```bash
+wp theme activate whaledivecentre-theme
 ```
 
----
+If using SFTP/rsync, make sure the theme folder name stays consistent with the deployed path and any scripts that reference it.
 
-## 🎨 USAGE EXAMPLES
+## Required WordPress Data
 
-### **Premium Button:**
-```html
-<button class="btn-premium">Get Started</button>
+Courses (`wm_course`) should include:
+
+- `_wm_price`
+- `_wm_duration`
+- `course_level` taxonomy term
+
+Equipment (`wm_equipment`) should include:
+
+- `_wm_price`
+- `_wm_stock`
+
+The payment proof upload directory must be writable by the web server:
+
+```text
+wp-content/uploads/wdc-payment-proofs/
 ```
 
-### **Glass Card:**
-```html
-<div class="card-clean">
-    <h3>Card Title</h3>
-    <p>Card content</p>
-</div>
+## Development Notes
+
+- Keep generated deploy backups out of git; `deploy-backups/` is ignored intentionally.
+- Avoid committing production credentials, API keys, payment secrets, or uploaded proof files.
+- Use the checklist in `docs/production-checklist.md` before pushing to production.
+
+## QA
+
+Run PHP syntax checks before deploying changed PHP files:
+
+```bash
+find . -path './deploy-backups' -prune -o -name '*.php' -print0 | xargs -0 -n1 php -l
 ```
 
-### **Hero Section:**
-```html
-<section class="hero-section">
-    <div class="hero-orb hero-orb-1"></div>
-    <h1 class="text-gradient">Welcome</h1>
-    <p>Your subtitle here</p>
-    <button class="btn-premium">CTA Button</button>
-</section>
+Run catalogue data QA from the production WordPress root:
+
+```bash
+php wp-content/themes/whaledivecentre-theme/scripts/check-catalog-data.php /path/to/wordpress
 ```
 
-### **Benefits Grid:**
-```html
-<div class="benefits-grid">
-    <div class="benefit-item card-clean">
-        <div class="icon-container">✨</div>
-        <h3>Feature</h3>
-        <p>Description</p>
-    </div>
-</div>
+## Deploy
+
+Use the deploy helper with explicit target paths:
+
+```bash
+REMOTE_THEME_PATH=/path/to/wp-content/themes/whaledivecentre-theme \
+HEALTH_URL=https://example.com/ \
+./scripts/deploy-production.sh
 ```
 
----
+The helper backs up the current remote theme into `deploy-backups/`, syncs this checkout, and optionally checks `HEALTH_URL`.
 
-## 📱 RESPONSIVE BREAKPOINTS
+## Post-Deploy Smoke Test
 
-| Breakpoint | Width | Target |
-|------------|-------|--------|
-| Mobile | ≤768px | Phones |
-| Tablet | 769px - 1024px | Tablets |
-| Desktop | ≥1025px | Laptops+ |
-
----
-
-## ♿ ACCESSIBILITY
-
-### **Features:**
-- ✅ Skip link for keyboard navigation
-- ✅ Focus states on interactive elements
-- ✅ ARIA labels on buttons
-- ✅ Reduced motion support
-- ✅ Color contrast (WCAG AA)
-
----
-
-## 🚀 PERFORMANCE
-
-### **Optimizations:**
-- ✅ Lazy loading images
-- ✅ Debounced scroll events
-- ✅ Throttled resize handlers
-- ✅ Minimal JavaScript
-- ✅ No jQuery dependency
-- ✅ CSS containment
-
-### **PageSpeed Score:**
-- Desktop: 95+
-- Mobile: 90+
-
----
-
-## 📊 BROWSER SUPPORT
-
-| Browser | Version | Support |
-|---------|---------|---------|
-| Chrome | 90+ | ✅ Full |
-| Firefox | 88+ | ✅ Full |
-| Safari | 14+ | ✅ Full |
-| Edge | 90+ | ✅ Full |
-| Mobile Safari | 14+ | ✅ Full |
-
----
-
-## 🔧 CUSTOMIZATION
-
-### **Change Brand Colors:**
-```css
-:root {
-    --brand-primary: #YOUR_COLOR;
-    --brand-secondary: #YOUR_COLOR;
-    --brand-gradient: linear-gradient(...);
-}
-```
-
-### **Add New Animation:**
-```css
-@keyframes your-animation {
-    0% { ... }
-    100% { ... }
-}
-
-.animate-your {
-    animation: your-animation 1s ease;
-}
-```
-
----
-
-## ✅ CHECKLIST BEFORE LAUNCH
-
-- [ ] Test on multiple browsers
-- [ ] Test on multiple devices
-- [ ] Check all pages render correctly
-- [ ] Test navigation menus
-- [ ] Verify forms work
-- [ ] Optimize images
-- [ ] Test page speed
-- [ ] Check accessibility
-
----
-
-## 📄 DOCUMENTATION
-
-**Local Files:**
-```
-/home/ubuntu/.openclaw/workspace/themes/contenly-theme/
-├── style.css              (23KB)
-├── functions.php          (7KB)
-├── assets/
-│   ├── css/custom.css
-│   └── js/main.js         (13KB)
-└── README.md
-```
-
----
-
-## 🙏 CREDITS
-
-- **Design System:** Contenly
-- **Fonts:** Plus Jakarta Sans (Google Fonts)
-- **Icons:** Material Symbols
-- **Development:** Alip (via Kowhi 🦭)
-
----
-
-## 📞 SUPPORT
-
-**Author:** Alip  
-**Email:** hello@contenly.web.id  
-**Website:** https://contenly.web.id  
-
----
-
-*Contenly Theme v1.0.0*  
-*Built with ❤️ for premium content management*
+- Login as a test member.
+- Open `/my-courses/` and checkout one course.
+- Upload a dummy payment proof.
+- Verify the order in `WDC Members > Direct Orders`.
+- Open `/my-gear/` and checkout one in-stock equipment item.
+- Activate it in admin and confirm stock decrements.
+- Cancel it and confirm stock restores.
+- Set an equipment item to stock `0` and confirm checkout is blocked.

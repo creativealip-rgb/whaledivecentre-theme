@@ -21,7 +21,7 @@ require_once get_template_directory() . '/inc/template-functions.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_stylesheet_uri(), [], '2.1.9');
+    wp_enqueue_style('contenly-style', get_stylesheet_uri(), [], '2.2.11');
     
     // Google Fonts
     wp_enqueue_style('contenly-fonts', 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap', [], null);
@@ -29,23 +29,20 @@ function contenly_enqueue_scripts() {
     // jQuery
     wp_enqueue_script('jquery');
     
-    // Booking AJAX - inline script with localized data
-    $booking_config = [
+    // Member AJAX - inline script with localized data.
+    $member_ajax_config = [
         'ajaxUrl' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce('tmpb_booking_nonce'),
+        'nonce' => wp_create_nonce('wdc_member_nonce'),
         'i18n' => [
-            'bookingError' => 'Booking failed',
+            'requestError' => 'Request failed',
             'processing' => 'Processing...'
         ]
     ];
-    
-    wp_add_inline_script('jquery', 'var contenlyBooking = ' . json_encode($booking_config) . ';', 'before');
-    
-    // Also define tmpbAjax for compatibility with plugin scripts
-    wp_add_inline_script('jquery', 'var tmpbAjax = ' . json_encode($booking_config) . ';', 'before');
+
+    wp_add_inline_script('jquery', 'var wdcMemberAjax = ' . wp_json_encode($member_ajax_config) . ';', 'before');
     
     // Main theme JavaScript
-    wp_enqueue_script('contenly-main', get_template_directory_uri() . '/assets/js/main.js', ['jquery'], '1.0.0', true);
+    wp_enqueue_script('contenly-main', get_template_directory_uri() . '/assets/js/main.js', ['jquery'], '1.0.4', true);
 }
 add_action('wp_enqueue_scripts', 'contenly_enqueue_scripts');
 
@@ -77,10 +74,120 @@ function contenly_normalize_nav_menu_items($items) {
 add_filter('wp_nav_menu_objects', 'contenly_normalize_nav_menu_items', 5);
 
 /**
+ * Register course taxonomies used by the local course templates.
+ */
+function wdc_register_course_taxonomies() {
+    if (!post_type_exists('wm_course')) {
+        register_post_type('wm_course', [
+            'label' => 'Courses',
+            'labels' => [
+                'name' => 'Courses',
+                'singular_name' => 'Course',
+                'add_new_item' => 'Add New Course',
+                'edit_item' => 'Edit Course',
+            ],
+            'public' => true,
+            'has_archive' => true,
+            'rewrite' => ['slug' => 'course'],
+            'menu_icon' => 'dashicons-welcome-learn-more',
+            'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'page-attributes'],
+            'show_in_rest' => true,
+        ]);
+    }
+
+    if (!post_type_exists('wm_equipment')) {
+        register_post_type('wm_equipment', [
+            'label' => 'Equipment',
+            'labels' => [
+                'name' => 'Equipment',
+                'singular_name' => 'Equipment Item',
+                'add_new_item' => 'Add New Equipment',
+                'edit_item' => 'Edit Equipment',
+            ],
+            'public' => true,
+            'has_archive' => true,
+            'rewrite' => ['slug' => 'equipment-item'],
+            'menu_icon' => 'dashicons-products',
+            'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'page-attributes'],
+            'show_in_rest' => true,
+        ]);
+    }
+
+    if (!post_type_exists('wm_equipment')) {
+        register_post_type('wm_equipment', [
+            'label' => 'Equipment',
+            'public' => true,
+            'has_archive' => true,
+            'rewrite' => ['slug' => 'equipment'],
+            'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'page-attributes'],
+            'show_in_rest' => true,
+            'menu_icon' => 'dashicons-products',
+        ]);
+    }
+
+    if (!taxonomy_exists('equipment_category')) {
+        register_taxonomy('equipment_category', ['wm_equipment'], [
+            'label' => 'Equipment Categories',
+            'public' => true,
+            'hierarchical' => true,
+            'show_admin_column' => true,
+            'rewrite' => ['slug' => 'equipment-category'],
+            'show_in_rest' => true,
+        ]);
+    }
+
+    if (!taxonomy_exists('course_level')) {
+        register_taxonomy('course_level', ['wm_course'], [
+            'label' => 'Course Levels',
+            'public' => true,
+            'hierarchical' => true,
+            'show_admin_column' => true,
+            'rewrite' => ['slug' => 'course-level'],
+            'show_in_rest' => true,
+        ]);
+    }
+
+    if (!taxonomy_exists('course_agency')) {
+        register_taxonomy('course_agency', ['wm_course'], [
+            'label' => 'Course Agencies',
+            'public' => true,
+            'hierarchical' => false,
+            'show_admin_column' => true,
+            'rewrite' => ['slug' => 'course-agency'],
+            'show_in_rest' => true,
+        ]);
+    }
+
+    if (!taxonomy_exists('equipment_category')) {
+        register_taxonomy('equipment_category', ['wm_equipment'], [
+            'label' => 'Equipment Categories',
+            'public' => true,
+            'hierarchical' => true,
+            'show_admin_column' => true,
+            'rewrite' => ['slug' => 'equipment-category'],
+            'show_in_rest' => true,
+        ]);
+    }
+
+    if (!taxonomy_exists('equipment_brand')) {
+        register_taxonomy('equipment_brand', ['wm_equipment'], [
+            'label' => 'Equipment Brands',
+            'public' => true,
+            'hierarchical' => false,
+            'show_admin_column' => true,
+            'rewrite' => ['slug' => 'equipment-brand'],
+            'show_in_rest' => true,
+        ]);
+    }
+}
+add_action('init', 'wdc_register_course_taxonomies', 20);
+
+/**
  * Theme setup
  */
 function contenly_theme_setup() {
     add_theme_support('title-tag');
+    add_theme_support('post-thumbnails');
     load_theme_textdomain('contenly', get_template_directory() . '/languages');
     register_nav_menus([
         'primary' => __('Primary Menu', 'contenly'),
@@ -296,8 +403,8 @@ function contenly_localize_menu_item_title($title, $route_key, $lang) {
         'wishlist' => ['id' => 'Wishlist', 'en' => 'Wishlist'],
         'reviews' => ['id' => 'Ulasan', 'en' => 'Reviews'],
         'notifications' => ['id' => 'Notifikasi', 'en' => 'Notifications'],
-        'rewards' => ['id' => 'Reward', 'en' => 'Rewards'],
-        'my-travels' => ['id' => 'Perjalanan Saya', 'en' => 'My Travels'],
+        'rewards' => ['id' => 'Dive Rewards', 'en' => 'Dive Rewards'],
+        'my-travels' => ['id' => 'Dive Saya', 'en' => 'My Dives'],
         'checkout-success' => ['id' => 'Pembayaran Berhasil', 'en' => 'Payment Successful'],
     ];
 
@@ -701,11 +808,13 @@ function contenly_custom_document_title($title) {
         [['is_page_template', 'page-checkout.php'], ['Pembayaran Booking', 'Booking Payment']],
         [['is_page_template', 'page-checkout-success.php'], ['Pembayaran Berhasil', 'Payment Successful']],
         [['is_page_template', 'page-dashboard.php'], ['Dashboard Member', 'Member Dashboard']],
-        [['is_page_template', 'page-my-travels.php'], ['Perjalanan Saya', 'My Travels']],
-        [['is_page_template', 'page-wishlist.php'], ['Wishlist', 'Wishlist']],
-        [['is_page_template', 'page-reviews.php'], ['Review Saya', 'My Reviews']],
-        [['is_page_template', 'page-travel-story.php'], ['Cerita Perjalanan', 'Travel Story']],
-        [['is_page_template', 'page-rewards.php'], ['Rewards & Poin', 'Rewards & Points']],
+        [['is_page_template', 'page-my-courses.php'], ['My Courses', 'My Courses']],
+        [['is_page_template', 'page-my-gear.php'], ['My Gear', 'My Gear']],
+        [['is_page_template', 'page-my-travels.php'], ['Dive Saya', 'My Dives']],
+        [['is_page_template', 'page-wishlist.php'], ['Gear Wishlist', 'Gear Wishlist']],
+        [['is_page_template', 'page-reviews.php'], ['Dive Review Saya', 'My Dive Reviews']],
+        [['is_page_template', 'page-travel-story.php'], ['Dive Story', 'Dive Story']],
+        [['is_page_template', 'page-rewards.php'], ['Dive Rewards & Poin', 'Dive Rewards & Points']],
         [['is_page_template', 'page-membership.php'], ['Tier Member', 'Member Tier']],
         [['is_page_template', 'page-notifications.php'], ['Notifikasi', 'Notifications']],
         [['is_page_template', 'page-settings.php'], ['Pengaturan Akun', 'Account Settings']],
@@ -719,11 +828,13 @@ function contenly_custom_document_title($title) {
         [['is_page', 'checkout'], ['Pembayaran Booking', 'Booking Payment']],
         [['is_page', 'checkout-success'], ['Pembayaran Berhasil', 'Payment Successful']],
         [['is_page', 'dashboard'], ['Dashboard Member', 'Member Dashboard']],
-        [['is_page', 'my-travels'], ['Perjalanan Saya', 'My Travels']],
-        [['is_page', 'wishlist'], ['Wishlist', 'Wishlist']],
-        [['is_page', 'reviews'], ['Review Saya', 'My Reviews']],
-        [['is_page', 'travel-story'], ['Cerita Perjalanan', 'Travel Story']],
-        [['is_page', 'rewards'], ['Rewards & Poin', 'Rewards & Points']],
+        [['is_page', 'my-courses'], ['My Courses', 'My Courses']],
+        [['is_page', 'my-gear'], ['My Gear', 'My Gear']],
+        [['is_page', 'my-travels'], ['Dive Saya', 'My Dives']],
+        [['is_page', 'wishlist'], ['Gear Wishlist', 'Gear Wishlist']],
+        [['is_page', 'reviews'], ['Dive Review Saya', 'My Dive Reviews']],
+        [['is_page', 'travel-story'], ['Dive Story', 'Dive Story']],
+        [['is_page', 'rewards'], ['Dive Rewards & Poin', 'Dive Rewards & Points']],
         [['is_page', 'membership'], ['Tier Member', 'Member Tier']],
         [['is_page', 'notifications'], ['Notifikasi', 'Notifications']],
         [['is_page', 'settings'], ['Pengaturan Akun', 'Account Settings']],
@@ -805,13 +916,13 @@ function contenly_get_seo_context() {
         );
     } elseif (is_page('dashboard')) {
         $description = contenly_tr(
-            'Ringkasan dashboard member Whale Dive Centre untuk booking aktif, progress membership, dan aktivitas perjalanan terbaru.',
-            'Your Whale Dive Centre member dashboard overview for active bookings, membership progress, and recent trip activity.'
+            'Ringkasan member Whale Dive Centre untuk request course, gear, dan bantuan crew.',
+            'Your Whale Dive Centre member hub for course requests, gear requests, and crew support.'
         );
     } elseif (is_page('my-travels')) {
         $description = contenly_tr(
-            'Lihat daftar booking, status pembayaran, dan detail perjalanan Anda di halaman Perjalanan Saya.',
-            'Review your bookings, payment status, and trip details in the My Travels area.'
+            'Lihat request course, gear, dan detail akun Anda di member area.',
+            'Review your course requests, gear requests, and account details in the member area.'
         );
     } elseif (is_page('wishlist')) {
         $description = contenly_tr(
@@ -1600,12 +1711,17 @@ function contenly_booking_total_amount($booking_id) {
  */
 add_action('template_redirect', function () {
     $path = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
+    $path = preg_replace('#^index\.php/#', '', $path);
     $routes = array(
         'courses' => 'page-courses.php',
         'equipment' => 'page-equipment.php',
         'our-crew' => 'page-our-crew.php',
         'faq' => 'page-faq.php',
         'contact' => 'page-contact.php',
+        'dashboard' => 'page-dashboard.php',
+        'my-courses' => 'page-my-courses.php',
+        'my-gear' => 'page-my-gear.php',
+        'settings' => 'page-settings.php',
     );
 
     if (!isset($routes[$path])) {
@@ -1613,10 +1729,46 @@ add_action('template_redirect', function () {
     }
 
     $page = get_page_by_path($path);
+    global $post, $wp_query;
     if ($page) {
-        global $post;
         $post = $page;
         setup_postdata($post);
+    } else {
+        $post = (object) array(
+            'ID' => 0,
+            'post_author' => 0,
+            'post_date' => current_time('mysql'),
+            'post_date_gmt' => current_time('mysql', 1),
+            'post_content' => '',
+            'post_title' => ucwords(str_replace('-', ' ', $path)),
+            'post_excerpt' => '',
+            'post_status' => 'publish',
+            'comment_status' => 'closed',
+            'ping_status' => 'closed',
+            'post_password' => '',
+            'post_name' => $path,
+            'to_ping' => '',
+            'pinged' => '',
+            'post_modified' => current_time('mysql'),
+            'post_modified_gmt' => current_time('mysql', 1),
+            'post_content_filtered' => '',
+            'post_parent' => 0,
+            'guid' => home_url('/' . $path . '/'),
+            'menu_order' => 0,
+            'post_type' => 'page',
+            'post_mime_type' => '',
+            'comment_count' => 0,
+            'filter' => 'raw',
+        );
+        if ($wp_query) {
+            $wp_query->post = $post;
+            $wp_query->posts = array($post);
+            $wp_query->queried_object = $post;
+            $wp_query->queried_object_id = 0;
+            $wp_query->is_404 = false;
+            $wp_query->is_page = true;
+            $wp_query->is_singular = true;
+        }
     }
 
     status_header(200);
@@ -1652,6 +1804,25 @@ add_action('template_redirect', function () {
     }
 
     $slug = trim(substr($path, strlen('courses/')), '/');
+    $course_post = get_page_by_path($slug, OBJECT, 'wm_course');
+    if ($course_post) {
+        global $post, $wp_query;
+        $post = $course_post;
+        setup_postdata($post);
+        $wp_query->is_404 = false;
+        $wp_query->is_single = true;
+        $wp_query->is_home = false;
+        $wp_query->posts = array($course_post);
+        $wp_query->post = $course_post;
+        $wp_query->post_count = 1;
+        $wp_query->found_posts = 1;
+        $wp_query->current_post = -1;
+        $wp_query->queried_object = $course_post;
+        $wp_query->queried_object_id = $course_post->ID;
+        status_header(200);
+        include get_stylesheet_directory() . '/single-wm_course.php';
+        exit;
+    }
     if (!in_array($slug, $course_slugs, true)) {
         return;
     }
@@ -1796,3 +1967,771 @@ add_filter('register_url', function() {
     return home_url('/member-register/');
 });
 
+// Serve member templates even when the matching WP pages are not created yet.
+function wdc_member_template_route_map() {
+    return [
+        'login' => 'page-login.php',
+        'register' => 'page-register.php',
+        'member-login' => 'page-login.php',
+        'member-register' => 'page-register.php',
+        'dashboard' => 'page-dashboard.php',
+        'my-courses' => 'page-my-courses.php',
+        'my-gear' => 'page-my-gear.php',
+        'checkout' => 'page-checkout.php',
+        'settings' => 'page-settings.php',
+    ];
+}
+
+function wdc_current_clean_path() {
+    $path = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
+    $path = preg_replace('#^index\.php/#', '', $path);
+
+    // Normalize language-prefixed routes from multilingual plugins/localized URLs.
+    if (preg_match('#^[a-z]{2}(?:-[a-z]{2})?/(.+)$#i', $path, $matches)) {
+        $path = $matches[1];
+    }
+
+    return $path;
+}
+
+add_action('template_redirect', function () {
+    $legacy_member_routes = [
+        'my-travels' => '/my-courses/',
+        'my-bookings' => '/my-courses/',
+        'wishlist' => '/my-gear/',
+        'membership' => '/dashboard/',
+        'reviews' => '/dashboard/',
+        'rewards' => '/dashboard/',
+        'notifications' => '/dashboard/',
+        'profile' => '/settings/',
+    ];
+    $path = wdc_current_clean_path();
+    if (isset($legacy_member_routes[$path])) {
+        wp_redirect(home_url($legacy_member_routes[$path]), 301);
+        exit;
+    }
+}, 0);
+
+add_filter('pre_handle_404', function($preempt, $wp_query) {
+    $path = wdc_current_clean_path();
+    if (isset(wdc_member_template_route_map()[$path])) {
+        $wp_query->is_404 = false;
+        $wp_query->is_page = true;
+        status_header(200);
+        return true;
+    }
+    return $preempt;
+}, 0, 2);
+
+add_filter('template_include', function($template) {
+    $path = wdc_current_clean_path();
+    $map = wdc_member_template_route_map();
+    if (isset($map[$path])) {
+        $candidate = get_stylesheet_directory() . '/' . $map[$path];
+        if (file_exists($candidate)) {
+            global $wp_query;
+            if ($wp_query) {
+                $wp_query->is_404 = false;
+                $wp_query->is_page = true;
+            }
+            status_header(200);
+            return $candidate;
+        }
+    }
+    return $template;
+}, 0);
+
+add_filter('pre_get_document_title', function($title) {
+    $path = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
+    if ($path === 'member-login') {
+        return 'Member Login - Whale Dive Centre Local';
+    }
+    if ($path === 'member-register') {
+        return 'Member Register - Whale Dive Centre Local';
+    }
+    return $title;
+});
+
+
+
+/**
+ * Member commerce helpers for direct checkout and admin fulfilment.
+ */
+function wdc_member_direct_order_meta_key($type) {
+    return $type === 'equipment' ? '_wdc_gear_orders' : '_wdc_course_orders';
+}
+
+function wdc_member_request_meta_key($type) {
+    return $type === 'equipment' ? '_wdc_gear_requests' : '_wdc_course_requests';
+}
+
+function wdc_member_status_options() {
+    return ['Requested', 'Awaiting Payment', 'Payment Uploaded', 'Verified', 'Active', 'Completed', 'Cancelled'];
+}
+
+function wdc_send_member_commerce_email($user_id, $subject, $message) {
+    $user = get_userdata($user_id);
+    if (!$user || empty($user->user_email)) {
+        return false;
+    }
+    $headers = ['Content-Type: text/html; charset=UTF-8'];
+    return wp_mail($user->user_email, $subject, wpautop($message), $headers);
+}
+
+function wdc_send_admin_commerce_email($subject, $message) {
+    $headers = ['Content-Type: text/html; charset=UTF-8'];
+    return wp_mail(get_option('admin_email'), $subject, wpautop($message), $headers);
+}
+
+function wdc_find_equipment_post_by_title($title) {
+    if (!$title || !post_type_exists('wm_equipment')) {
+        return 0;
+    }
+    $post = get_page_by_title($title, OBJECT, 'wm_equipment');
+    return $post ? (int) $post->ID : 0;
+}
+
+function wdc_get_equipment_post_id_from_record($record) {
+    $post_id = absint($record['item_id'] ?? 0);
+    if ($post_id && get_post_type($post_id) === 'wm_equipment') {
+        return $post_id;
+    }
+    $item_title = $record['gear'] ?? $record['item'] ?? '';
+    return wdc_find_equipment_post_by_title($item_title);
+}
+
+function wdc_order_consumes_gear_stock($status) {
+    return in_array($status, ['Verified', 'Active'], true);
+}
+
+function wdc_maybe_adjust_gear_stock($record, $old_status, $new_status) {
+    $old_consumes = wdc_order_consumes_gear_stock($old_status);
+    $new_consumes = wdc_order_consumes_gear_stock($new_status);
+    if ($old_consumes === $new_consumes) {
+        return;
+    }
+    $post_id = wdc_get_equipment_post_id_from_record($record);
+    if (!$post_id) {
+        return;
+    }
+    $stock = get_post_meta($post_id, '_wm_stock', true);
+    if ($stock === '' || !is_numeric($stock)) {
+        return;
+    }
+    $delta = $new_consumes ? -1 : 1;
+    update_post_meta($post_id, '_wm_stock', max(0, (int) $stock + $delta));
+}
+
+function wdc_equipment_stock_available($item_id) {
+    $item_id = absint($item_id);
+    if (!$item_id || get_post_type($item_id) !== 'wm_equipment') {
+        return true;
+    }
+    $stock = get_post_meta($item_id, '_wm_stock', true);
+    return $stock === '' || !is_numeric($stock) || (int) $stock > 0;
+}
+
+function wdc_member_admin_pending_count($type, $bucket) {
+    $count = 0;
+    foreach (wdc_collect_member_records($type, $bucket) as $record) {
+        $status = $record['item']['status'] ?? 'Requested';
+        if (in_array($status, ['Requested', 'Awaiting Payment', 'Payment Uploaded'], true)) {
+            $count++;
+        }
+    }
+    return $count;
+}
+
+function wdc_admin_menu_badge($count) {
+    return $count > 0 ? ' <span class="awaiting-mod">' . esc_html($count) . '</span>' : '';
+}
+
+function wdc_ajax_save_direct_checkout() {
+    check_ajax_referer('wdc_member_nonce', 'nonce');
+
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Please login first.'], 401);
+    }
+
+    $type = sanitize_key(wp_unslash($_POST['direct_type'] ?? ''));
+    if (!in_array($type, ['course', 'equipment'], true)) {
+        wp_send_json_error(['message' => 'Invalid order type.'], 400);
+    }
+
+    $item = sanitize_text_field(wp_unslash($_POST['direct_item'] ?? ''));
+    $item_id = absint($_POST['direct_item_id'] ?? 0);
+    $expected_type = $type === 'course' ? 'wm_course' : 'wm_equipment';
+    if ($item_id && get_post_type($item_id) !== $expected_type) {
+        wp_send_json_error(['message' => 'Invalid catalog item.'], 400);
+    }
+    if ($type === 'equipment' && !wdc_equipment_stock_available($item_id)) {
+        wp_send_json_error(['message' => 'This gear is out of stock. Please request availability help.'], 409);
+    }
+    $price = (float) sanitize_text_field(wp_unslash($_POST['direct_price'] ?? '0'));
+    $notes = sanitize_textarea_field(wp_unslash($_POST['payment_notes'] ?? ''));
+    $proof_url = '';
+    if (!empty($_FILES['payment_proof'])) {
+        $file = $_FILES['payment_proof'];
+        $allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!in_array($file['type'] ?? '', $allowed_types, true)) {
+            wp_send_json_error(['message' => 'Invalid file type. Upload JPG, PNG, GIF, or WEBP.'], 400);
+        }
+        if (($file['size'] ?? 0) > 5 * 1024 * 1024) {
+            wp_send_json_error(['message' => 'File too large. Max 5MB.'], 400);
+        }
+        $upload_dir = wp_upload_dir();
+        $proof_dir = trailingslashit($upload_dir['basedir']) . 'wdc-payment-proofs/';
+        if (!file_exists($proof_dir)) {
+            wp_mkdir_p($proof_dir);
+        }
+        $filename = $order_safe_name = time() . '-' . wp_generate_password(6, false, false) . '-' . sanitize_file_name($file['name']);
+        if (!move_uploaded_file($file['tmp_name'], $proof_dir . $filename)) {
+            wp_send_json_error(['message' => 'Failed to upload payment proof.'], 500);
+        }
+        $proof_url = trailingslashit($upload_dir['baseurl']) . 'wdc-payment-proofs/' . $filename;
+    }
+    if (!$item) {
+        wp_send_json_error(['message' => 'Missing item.'], 400);
+    }
+
+    $user_id = get_current_user_id();
+    $meta_key = wdc_member_direct_order_meta_key($type);
+    $orders = get_user_meta($user_id, $meta_key, true);
+    $orders = is_array($orders) ? $orders : [];
+    $order_id = 'WDC-' . strtoupper($type[0]) . '-' . current_time('YmdHis') . '-' . $user_id;
+
+    array_unshift($orders, [
+        'id' => $order_id,
+        'item_id' => $item_id,
+        'item' => $item,
+        'price' => $price,
+        'notes' => $notes,
+        'payment_proof_url' => $proof_url,
+        'status' => 'Payment Uploaded',
+        'created_at' => current_time('mysql'),
+        'updated_at' => current_time('mysql'),
+    ]);
+
+    update_user_meta($user_id, $meta_key, array_slice($orders, 0, 25));
+
+    wdc_send_member_commerce_email($user_id, 'Payment proof received - ' . $order_id, 'Thanks. We received your payment proof for <strong>' . esc_html($item) . '</strong>. The crew will verify it soon.');
+    wdc_send_admin_commerce_email('New WDC direct order - ' . $order_id, 'A member uploaded payment proof for <strong>' . esc_html($item) . '</strong>.<br>Open WDC Members > Direct Orders to verify it.');
+
+    wp_send_json_success(['order_id' => $order_id]);
+}
+add_action('wp_ajax_wdc_save_direct_checkout', 'wdc_ajax_save_direct_checkout');
+
+function wdc_font_mode() {
+    $mode = get_option('wdc_font_mode', 'current');
+    return in_array($mode, ['current', 'brand'], true) ? $mode : 'current';
+}
+
+function wdc_is_brand_font_mode() {
+    return wdc_font_mode() === 'brand';
+}
+
+function wdc_body_font_mode_class($classes) {
+    $classes[] = wdc_is_brand_font_mode() ? 'wdc-brand-font-mode' : 'wdc-current-font-mode';
+    return $classes;
+}
+add_filter('body_class', 'wdc_body_font_mode_class');
+add_filter('admin_body_class', function($classes) {
+    return trim($classes . ' ' . (wdc_is_brand_font_mode() ? 'wdc-brand-font-mode' : 'wdc-current-font-mode'));
+});
+
+function wdc_enqueue_brand_font_assets() {
+    if (!wdc_is_brand_font_mode()) {
+        return;
+    }
+    wp_enqueue_style('wdc-brand-open-sans', 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap', [], null);
+}
+add_action('wp_enqueue_scripts', 'wdc_enqueue_brand_font_assets');
+add_action('admin_enqueue_scripts', 'wdc_enqueue_brand_font_assets');
+
+function wdc_render_font_mode_css() {
+    if (!wdc_is_brand_font_mode()) {
+        return;
+    }
+    ?>
+    <style id="wdc-brand-font-mode-css">
+        @font-face { font-family: 'iBrand'; src: url('<?php echo esc_url(get_template_directory_uri() . '/assets/fonts/ibrand.otf'); ?>') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+        body.wdc-brand-font-mode, body.wdc-brand-font-mode input, body.wdc-brand-font-mode select, body.wdc-brand-font-mode textarea, body.wdc-brand-font-mode button { font-family: 'Open Sans', Arial, sans-serif !important; }
+        body.wdc-brand-font-mode h1, body.wdc-brand-font-mode h2, body.wdc-brand-font-mode h3, body.wdc-brand-font-mode .wd-title, body.wdc-brand-font-mode .wd-brand span, body.wdc-brand-font-mode .page-title { font-family: 'iBrand', 'Open Sans', Arial, sans-serif !important; font-weight: 400; }
+        body.wdc-brand-font-mode .wd-brand span { letter-spacing: .045em !important; }
+    </style>
+    <?php
+}
+add_action('wp_head', 'wdc_render_font_mode_css', 99);
+add_action('admin_head', 'wdc_render_font_mode_css', 99);
+
+function wdc_handle_font_mode_update() {
+    if (!current_user_can('manage_options')) {
+        wp_die('Not allowed');
+    }
+    check_admin_referer('wdc_font_mode_update');
+    $mode = sanitize_key(wp_unslash($_POST['wdc_font_mode'] ?? 'current'));
+    update_option('wdc_font_mode', $mode === 'brand' ? 'brand' : 'current');
+    wp_safe_redirect(add_query_arg(['page' => 'wdc-member-admin', 'font-updated' => '1'], admin_url('admin.php')));
+    exit;
+}
+add_action('admin_post_wdc_update_font_mode', 'wdc_handle_font_mode_update');
+
+function wdc_register_member_admin_menu() {
+    add_menu_page('WDC Members', 'WDC Members', 'manage_options', 'wdc-member-admin', 'wdc_render_member_admin_dashboard', 'dashicons-groups', 30);
+    add_submenu_page('wdc-member-admin', 'Course Requests', 'Course Requests' . wdc_admin_menu_badge(wdc_member_admin_pending_count('course', 'requests')), 'manage_options', 'wdc-course-requests', 'wdc_render_course_admin_page');
+    add_submenu_page('wdc-member-admin', 'Gear Requests', 'Gear Requests' . wdc_admin_menu_badge(wdc_member_admin_pending_count('equipment', 'requests')), 'manage_options', 'wdc-gear-requests', 'wdc_render_gear_admin_page');
+    $direct_pending = wdc_member_admin_pending_count('course', 'orders') + wdc_member_admin_pending_count('equipment', 'orders');
+    add_submenu_page('wdc-member-admin', 'Direct Orders', 'Direct Orders' . wdc_admin_menu_badge($direct_pending), 'manage_options', 'wdc-direct-orders', 'wdc_render_direct_orders_admin_page');
+}
+add_action('admin_menu', 'wdc_register_member_admin_menu');
+
+function wdc_member_admin_handle_update() {
+    if (!current_user_can('manage_options') || empty($_POST['wdc_member_admin_nonce'])) {
+        return;
+    }
+    if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_member_admin_nonce'])), 'wdc_member_admin_update')) {
+        return;
+    }
+
+    $user_id = absint($_POST['user_id'] ?? 0);
+    $type = sanitize_key(wp_unslash($_POST['record_type'] ?? ''));
+    $bucket = sanitize_key(wp_unslash($_POST['bucket'] ?? 'requests'));
+    $index = absint($_POST['record_index'] ?? 0);
+    $status = sanitize_text_field(wp_unslash($_POST['status'] ?? ''));
+    $admin_note = sanitize_textarea_field(wp_unslash($_POST['admin_note'] ?? ''));
+
+    if (!in_array($status, wdc_member_status_options(), true)) {
+        return;
+    }
+
+    if (!empty($_POST['bulk_apply']) && !empty($_POST['bulk_records']) && is_array($_POST['bulk_records'])) {
+        foreach ($_POST['bulk_records'] as $packed) {
+            $parts = explode('|', sanitize_text_field(wp_unslash($packed)));
+            if (count($parts) !== 4) {
+                continue;
+            }
+            [$bulk_user_id, $bulk_type, $bulk_bucket, $bulk_index] = $parts;
+            $bulk_user_id = absint($bulk_user_id);
+            $bulk_type = sanitize_key($bulk_type);
+            $bulk_bucket = sanitize_key($bulk_bucket);
+            $bulk_index = absint($bulk_index);
+            if (!in_array($bulk_type, ['course', 'equipment'], true)) {
+                continue;
+            }
+            $bulk_meta_key = $bulk_bucket === 'orders' ? wdc_member_direct_order_meta_key($bulk_type) : wdc_member_request_meta_key($bulk_type);
+            $bulk_records = get_user_meta($bulk_user_id, $bulk_meta_key, true);
+            if (!is_array($bulk_records) || !isset($bulk_records[$bulk_index])) {
+                continue;
+            }
+            $old_status = $bulk_records[$bulk_index]['status'] ?? 'Requested';
+            wdc_maybe_adjust_gear_stock($bulk_records[$bulk_index], $old_status, $status);
+            $bulk_records[$bulk_index]['status'] = $status;
+            $bulk_records[$bulk_index]['admin_note'] = $admin_note;
+            $bulk_records[$bulk_index]['updated_at'] = current_time('mysql');
+            update_user_meta($bulk_user_id, $bulk_meta_key, $bulk_records);
+        }
+        wp_safe_redirect(add_query_arg(['updated' => '1'], wp_get_referer() ?: admin_url('admin.php?page=wdc-member-admin')));
+        exit;
+    }
+
+    if (!$user_id || !in_array($type, ['course', 'equipment'], true)) {
+        return;
+    }
+
+    $meta_key = $bucket === 'orders' ? wdc_member_direct_order_meta_key($type) : wdc_member_request_meta_key($type);
+    $records = get_user_meta($user_id, $meta_key, true);
+    $records = is_array($records) ? $records : [];
+    if (!isset($records[$index])) {
+        return;
+    }
+
+    $old_status = $records[$index]['status'] ?? 'Requested';
+    wdc_maybe_adjust_gear_stock($records[$index], $old_status, $status);
+
+    $records[$index]['status'] = $status;
+    $records[$index]['admin_note'] = $admin_note;
+    $records[$index]['updated_at'] = current_time('mysql');
+    update_user_meta($user_id, $meta_key, $records);
+
+    if ($old_status !== $status) {
+        $item_label = $records[$index]['course'] ?? $records[$index]['gear'] ?? $records[$index]['item'] ?? 'your WDC item';
+        wdc_send_member_commerce_email($user_id, 'WDC status updated: ' . $status, 'Your status for <strong>' . esc_html($item_label) . '</strong> is now <strong>' . esc_html($status) . '</strong>.' . ($admin_note ? '<br><br>Note from crew: ' . esc_html($admin_note) : ''));
+    }
+
+    wp_safe_redirect(add_query_arg(['updated' => '1'], wp_get_referer() ?: admin_url('admin.php?page=wdc-member-admin')));
+    exit;
+}
+add_action('admin_init', 'wdc_member_admin_handle_update');
+
+function wdc_collect_member_records($type, $bucket) {
+    $meta_key = $bucket === 'orders' ? wdc_member_direct_order_meta_key($type) : wdc_member_request_meta_key($type);
+    $records = [];
+    foreach (get_users(['fields' => ['ID', 'display_name', 'user_email']]) as $user) {
+        $items = get_user_meta($user->ID, $meta_key, true);
+        if (!is_array($items)) {
+            continue;
+        }
+        foreach ($items as $index => $item) {
+            $records[] = ['user' => $user, 'index' => $index, 'item' => $item, 'type' => $type, 'bucket' => $bucket];
+        }
+    }
+    usort($records, function($a, $b) {
+        return strcmp($b['item']['created_at'] ?? '', $a['item']['created_at'] ?? '');
+    });
+    return $records;
+}
+
+function wdc_render_low_stock_notice() {
+    if (!post_type_exists('wm_equipment')) {
+        return;
+    }
+    $low_stock = get_posts(['post_type' => 'wm_equipment', 'numberposts' => 8, 'post_status' => 'publish', 'meta_query' => [['key' => '_wm_stock', 'value' => 3, 'type' => 'NUMERIC', 'compare' => '<=']]]);
+    if (!$low_stock) {
+        return;
+    }
+    echo '<div class="notice notice-warning" style="margin:18px 0 0;"><p><strong>Low stock alert:</strong> ';
+    $items = [];
+    foreach ($low_stock as $post) {
+        $items[] = '<a href="' . esc_url(get_edit_post_link($post->ID)) . '">' . esc_html($post->post_title) . '</a> (' . esc_html(get_post_meta($post->ID, '_wm_stock', true)) . ')';
+    }
+    echo wp_kses_post(implode(', ', $items));
+    echo '</p></div>';
+}
+
+function wdc_render_member_admin_dashboard() {
+    $course_requests = wdc_collect_member_records('course', 'requests');
+    $gear_requests = wdc_collect_member_records('equipment', 'requests');
+    $course_orders = wdc_collect_member_records('course', 'orders');
+    $gear_orders = wdc_collect_member_records('equipment', 'orders');
+    ?>
+    <div class="wrap"><h1>WDC Member Admin</h1>
+        <?php if (!empty($_GET['font-updated'])) : ?>
+            <div class="notice notice-success is-dismissible"><p>WDC font mode updated.</p></div>
+        <?php endif; ?>
+        <div style="background:#fff;border:1px solid #dcdcde;border-left:4px solid #004A98;border-radius:12px;padding:18px;margin:18px 0 20px;max-width:900px;">
+            <h2 style="margin:0 0 8px;font-size:18px;">Brand Font Switch</h2>
+            <p style="margin:0 0 14px;color:#64748b;">Switch website and member dashboard typography. Current keeps the existing font; Brand Guideline uses Open Sans body and attempts iBrand for headings when available.</p>
+            <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+                <?php wp_nonce_field('wdc_font_mode_update'); ?>
+                <input type="hidden" name="action" value="wdc_update_font_mode">
+                <label style="display:inline-flex;gap:6px;align-items:center;"><input type="radio" name="wdc_font_mode" value="current" <?php checked(wdc_font_mode(), 'current'); ?>> Keep current font</label>
+                <label style="display:inline-flex;gap:6px;align-items:center;"><input type="radio" name="wdc_font_mode" value="brand" <?php checked(wdc_font_mode(), 'brand'); ?>> Brand Guideline font</label>
+                <?php submit_button('Save Font Mode', 'primary', 'submit', false); ?>
+            </form>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:20px 0;">
+            <?php foreach ([['Course Requests', count($course_requests)], ['Gear Requests', count($gear_requests)], ['Course Orders', count($course_orders)], ['Gear Orders', count($gear_orders)]] as $card) : ?>
+            <div style="background:#fff;border:1px solid #dcdcde;border-radius:12px;padding:18px;"><strong><?php echo esc_html($card[0]); ?></strong><div style="font-size:32px;font-weight:800;margin-top:8px;"><?php echo esc_html($card[1]); ?></div></div>
+            <?php endforeach; ?>
+        </div>
+        <?php wdc_render_low_stock_notice(); ?>
+        <p>Use the submenu to verify payments, approve course access, update gear fulfilment, and leave notes visible to members.</p>
+    </div>
+    <?php
+}
+
+function wdc_status_badge_style($status) {
+    $colors = [
+        'Requested' => '#0b617c;background:#e8f8fc',
+        'Awaiting Payment' => '#92400e;background:#fef3c7',
+        'Payment Uploaded' => '#1d4ed8;background:#dbeafe',
+        'Verified' => '#047857;background:#d1fae5',
+        'Active' => '#166534;background:#dcfce7',
+        'Completed' => '#334155;background:#e2e8f0',
+        'Cancelled' => '#991b1b;background:#fee2e2',
+    ];
+    return $colors[$status] ?? '#334155;background:#e2e8f0';
+}
+
+function wdc_record_matches_admin_filters($record) {
+    $status_filter = sanitize_text_field(wp_unslash($_GET['status_filter'] ?? ''));
+    $search = strtolower(sanitize_text_field(wp_unslash($_GET['s'] ?? '')));
+    $item = $record['item'];
+    if ($status_filter && ($item['status'] ?? 'Requested') !== $status_filter) {
+        return false;
+    }
+    if ($search) {
+        $haystack = strtolower(implode(' ', [
+            $record['user']->display_name,
+            $record['user']->user_email,
+            $item['course'] ?? '',
+            $item['gear'] ?? '',
+            $item['item'] ?? '',
+            $item['id'] ?? '',
+        ]));
+        return strpos($haystack, $search) !== false;
+    }
+    return true;
+}
+
+function wdc_render_member_records_table($records, $title) {
+    $records = array_values(array_filter($records, 'wdc_record_matches_admin_filters'));
+    ?>
+    <div class="wrap"><h1><?php echo esc_html($title); ?></h1>
+    <?php if (!empty($_GET['updated'])) : ?><div class="notice notice-success"><p>Status updated.</p></div><?php endif; ?>
+    <form method="get" style="display:flex;gap:10px;align-items:center;margin:16px 0;background:#fff;border:1px solid #dcdcde;border-radius:10px;padding:12px;">
+        <input type="hidden" name="page" value="<?php echo esc_attr(sanitize_key($_GET['page'] ?? 'wdc-member-admin')); ?>">
+        <input type="search" name="s" value="<?php echo esc_attr(sanitize_text_field(wp_unslash($_GET['s'] ?? ''))); ?>" placeholder="Search member or item" style="min-width:260px;">
+        <select name="status_filter"><option value="">All statuses</option><?php foreach (wdc_member_status_options() as $status) : ?><option value="<?php echo esc_attr($status); ?>" <?php selected(sanitize_text_field(wp_unslash($_GET['status_filter'] ?? '')), $status); ?>><?php echo esc_html($status); ?></option><?php endforeach; ?></select>
+        <button class="button">Filter</button><a class="button" href="<?php echo esc_url(admin_url('admin.php?page=' . sanitize_key($_GET['page'] ?? 'wdc-member-admin'))); ?>">Reset</a>
+    </form>
+    <form id="wdc-bulk-admin" method="post" style="display:flex;gap:8px;align-items:center;margin:12px 0;">
+        <?php wp_nonce_field('wdc_member_admin_update', 'wdc_member_admin_nonce'); ?>
+        <input type="hidden" name="bulk_apply" value="1">
+        <select name="status" required><option value="">Change status to...</option><?php foreach (wdc_member_status_options() as $status) : ?><option value="<?php echo esc_attr($status); ?>"><?php echo esc_html($status); ?></option><?php endforeach; ?></select>
+        <input type="text" name="admin_note" placeholder="Optional bulk note" style="min-width:260px;">
+        <button class="button button-primary">Apply to selected</button>
+    </form>
+    <table class="widefat striped" style="margin-top:16px;"><thead><tr><th><input type="checkbox" onclick="document.querySelectorAll('.wdc-bulk-record').forEach(function(cb){cb.checked=event.target.checked;});"></th><th>Date</th><th>Member</th><th>Item</th><th>Details</th><th>Status</th><th>Proof</th><th>Admin Note</th><th>Action</th></tr></thead><tbody>
+    <?php if (!$records) : ?><tr><td colspan="9">No records yet.</td></tr><?php endif; ?>
+    <?php foreach ($records as $record) : $item = $record['item']; $current_status = $item['status'] ?? 'Requested'; $item_label = $item['course'] ?? $item['gear'] ?? $item['item'] ?? 'Item'; $item_post_id = absint($item['item_id'] ?? 0); $item_link = $item_post_id ? get_edit_post_link($item_post_id) : ''; ?>
+        <tr><form method="post">
+            <td><input class="wdc-bulk-record" form="wdc-bulk-admin" type="checkbox" name="bulk_records[]" value="<?php echo esc_attr($record['user']->ID . '|' . $record['type'] . '|' . $record['bucket'] . '|' . $record['index']); ?>"></td>
+            <td><?php echo esc_html($item['created_at'] ?? '-'); ?></td>
+            <td><strong><?php echo esc_html($record['user']->display_name); ?></strong><br><small><?php echo esc_html($record['user']->user_email); ?></small></td>
+            <td><strong><?php if ($item_link) : ?><a href="<?php echo esc_url($item_link); ?>"><?php echo esc_html($item_label); ?></a><?php else : ?><?php echo esc_html($item_label); ?><?php endif; ?></strong><br><small><?php echo esc_html($item['id'] ?? ($item['created_at'] ?? '')); ?></small></td>
+            <td><?php echo esc_html($item['preferred_date'] ?? $item['request_type'] ?? (!empty($item['price']) ? 'Rp ' . number_format((float) $item['price'], 0, ',', '.') : 'Direct order')); ?><br><small><?php echo esc_html($item['message'] ?? $item['notes'] ?? $item['size_notes'] ?? ''); ?></small></td>
+            <td><span style="display:inline-flex;padding:5px 9px;border-radius:999px;font-weight:700;<?php echo esc_attr(wdc_status_badge_style($current_status)); ?>"><?php echo esc_html($current_status); ?></span><br><select name="status" style="margin-top:8px;"><?php foreach (wdc_member_status_options() as $status) : ?><option value="<?php echo esc_attr($status); ?>" <?php selected($current_status, $status); ?>><?php echo esc_html($status); ?></option><?php endforeach; ?></select></td>
+            <td><?php if (!empty($item['payment_proof_url'])) : ?><a class="button" href="<?php echo esc_url($item['payment_proof_url']); ?>" target="_blank" rel="noopener">View Proof</a><?php else : ?><span style="color:#64748b;">No proof</span><?php endif; ?></td>
+            <td><textarea name="admin_note" rows="2" style="width:100%;"><?php echo esc_textarea($item['admin_note'] ?? ''); ?></textarea></td>
+            <td><?php wp_nonce_field('wdc_member_admin_update', 'wdc_member_admin_nonce'); ?><input type="hidden" name="user_id" value="<?php echo esc_attr($record['user']->ID); ?>"><input type="hidden" name="record_type" value="<?php echo esc_attr($record['type']); ?>"><input type="hidden" name="bucket" value="<?php echo esc_attr($record['bucket']); ?>"><input type="hidden" name="record_index" value="<?php echo esc_attr($record['index']); ?>"><button class="button button-primary">Save</button><div style="margin-top:8px;display:flex;gap:4px;flex-wrap:wrap;"><button class="button button-small" name="status" value="Verified">Verify</button><button class="button button-small" name="status" value="Active">Activate</button><button class="button button-small" name="status" value="Cancelled">Cancel</button></div></td>
+        </form></tr>
+    <?php endforeach; ?>
+    </tbody></table></div>
+    <?php
+}
+
+function wdc_render_course_admin_page() { wdc_render_member_records_table(wdc_collect_member_records('course', 'requests'), 'Course Requests'); }
+function wdc_render_gear_admin_page() { wdc_render_member_records_table(wdc_collect_member_records('equipment', 'requests'), 'Gear Requests'); }
+function wdc_render_direct_orders_admin_page() {
+    wdc_render_member_records_table(array_merge(wdc_collect_member_records('course', 'orders'), wdc_collect_member_records('equipment', 'orders')), 'Direct Course / Gear Orders');
+}
+
+/**
+ * WDC editable content and catalog admin helpers.
+ */
+function wdc_content_defaults() {
+    return [
+        'hero_image_id' => 0,
+        'hero_eyebrow_id' => 'Curated trip planner untuk domestik & internasional',
+        'hero_eyebrow_en' => 'Curated trip planner for domestic and international journeys',
+        'hero_title_id' => 'Liburan Rapi, Berangkat Pasti',
+        'hero_title_en' => 'Plan Clearly, Travel Confidently',
+        'hero_text_id' => 'Dari trip private sampai open trip, kami bantu pilih itinerary yang pas budget, nyaman, dan minim drama.',
+        'hero_text_en' => 'From private trips to open departures, we help you choose itineraries that fit your budget, stay comfortable, and keep the journey hassle-free.',
+    ];
+}
+
+function wdc_get_content_settings() {
+    $saved = get_option('wdc_content_settings', []);
+    return wp_parse_args(is_array($saved) ? $saved : [], wdc_content_defaults());
+}
+
+function wdc_admin_content_menu() {
+    add_menu_page('WDC Content', 'WDC Content', 'manage_options', 'wdc-content-settings', 'wdc_render_content_settings_page', 'dashicons-edit-page', 26);
+}
+add_action('admin_menu', 'wdc_admin_content_menu');
+
+function wdc_use_classic_editor_for_catalog($use_block_editor, $post_type) {
+    if (in_array($post_type, ['wm_course', 'wm_equipment'], true)) {
+        return false;
+    }
+    return $use_block_editor;
+}
+add_filter('use_block_editor_for_post_type', 'wdc_use_classic_editor_for_catalog', 10, 2);
+
+function wdc_admin_assets($hook) {
+    if ($hook === 'toplevel_page_wdc-content-settings') {
+        wp_enqueue_media();
+    }
+}
+add_action('admin_enqueue_scripts', 'wdc_admin_assets');
+
+function wdc_render_content_settings_page() {
+    if (!current_user_can('manage_options')) {
+        wp_die('Not allowed.');
+    }
+
+    if (isset($_POST['wdc_content_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_content_nonce'])), 'wdc_save_content_settings')) {
+        $settings = [
+            'hero_image_id' => absint($_POST['hero_image_id'] ?? 0),
+            'hero_eyebrow_id' => sanitize_text_field(wp_unslash($_POST['hero_eyebrow_id'] ?? '')),
+            'hero_eyebrow_en' => sanitize_text_field(wp_unslash($_POST['hero_eyebrow_en'] ?? '')),
+            'hero_title_id' => sanitize_text_field(wp_unslash($_POST['hero_title_id'] ?? '')),
+            'hero_title_en' => sanitize_text_field(wp_unslash($_POST['hero_title_en'] ?? '')),
+            'hero_text_id' => sanitize_textarea_field(wp_unslash($_POST['hero_text_id'] ?? '')),
+            'hero_text_en' => sanitize_textarea_field(wp_unslash($_POST['hero_text_en'] ?? '')),
+        ];
+        update_option('wdc_content_settings', wp_parse_args($settings, wdc_content_defaults()));
+        echo '<div class="notice notice-success is-dismissible"><p>Homepage hero updated.</p></div>';
+    }
+
+    $settings = wdc_get_content_settings();
+    $image_url = $settings['hero_image_id'] ? wp_get_attachment_image_url((int) $settings['hero_image_id'], 'medium_large') : '';
+    ?>
+    <div class="wrap wdc-content-admin">
+        <h1>WDC Content</h1>
+        <p>Edit public homepage content without touching theme code.</p>
+        <form method="post">
+            <?php wp_nonce_field('wdc_save_content_settings', 'wdc_content_nonce'); ?>
+            <table class="form-table" role="presentation">
+                <tr>
+                    <th scope="row"><label for="hero_image_id">Hero Image</label></th>
+                    <td>
+                        <input type="hidden" id="hero_image_id" name="hero_image_id" value="<?php echo esc_attr($settings['hero_image_id']); ?>">
+                        <div id="wdc-hero-preview" style="max-width:420px;margin-bottom:12px;<?php echo $image_url ? '' : 'display:none;'; ?>">
+                            <img src="<?php echo esc_url($image_url); ?>" style="width:100%;height:auto;border-radius:12px;border:1px solid #dcdcde;" alt="Hero preview">
+                        </div>
+                        <button type="button" class="button button-secondary" id="wdc-select-hero">Choose Image</button>
+                        <button type="button" class="button" id="wdc-remove-hero">Remove</button>
+                        <p class="description">Recommended: wide image, 1800px+ width.</p>
+                    </td>
+                </tr>
+                <tr><th scope="row">Eyebrow / Kicker</th><td><input class="regular-text" name="hero_eyebrow_id" value="<?php echo esc_attr($settings['hero_eyebrow_id']); ?>" placeholder="Indonesian"><br><br><input class="regular-text" name="hero_eyebrow_en" value="<?php echo esc_attr($settings['hero_eyebrow_en']); ?>" placeholder="English"></td></tr>
+                <tr><th scope="row">Hero Title</th><td><input class="large-text" name="hero_title_id" value="<?php echo esc_attr($settings['hero_title_id']); ?>" placeholder="Indonesian"><br><br><input class="large-text" name="hero_title_en" value="<?php echo esc_attr($settings['hero_title_en']); ?>" placeholder="English"></td></tr>
+                <tr><th scope="row">Hero Subtitle</th><td><textarea class="large-text" rows="3" name="hero_text_id" placeholder="Indonesian"><?php echo esc_textarea($settings['hero_text_id']); ?></textarea><br><br><textarea class="large-text" rows="3" name="hero_text_en" placeholder="English"><?php echo esc_textarea($settings['hero_text_en']); ?></textarea></td></tr>
+            </table>
+            <?php submit_button('Save Hero Content'); ?>
+        </form>
+    </div>
+    <script>
+    jQuery(function($){
+        var frame;
+        $('#wdc-select-hero').on('click', function(e){
+            e.preventDefault();
+            frame = wp.media({title:'Choose hero image', button:{text:'Use this image'}, multiple:false});
+            frame.on('select', function(){
+                var img = frame.state().get('selection').first().toJSON();
+                $('#hero_image_id').val(img.id);
+                $('#wdc-hero-preview').show().html('<img src="'+img.url+'" style="width:100%;height:auto;border-radius:12px;border:1px solid #dcdcde;" alt="Hero preview">');
+            });
+            frame.open();
+        });
+        $('#wdc-remove-hero').on('click', function(){
+            $('#hero_image_id').val('0');
+            $('#wdc-hero-preview').hide().empty();
+        });
+    });
+    </script>
+    <?php
+}
+
+function wdc_add_catalog_meta_boxes() {
+    add_meta_box('wdc_course_details', 'Course Details', 'wdc_render_course_details_box', 'wm_course', 'normal', 'high');
+    add_meta_box('wdc_equipment_details', 'Equipment Details', 'wdc_render_equipment_details_box', 'wm_equipment', 'normal', 'high');
+}
+add_action('add_meta_boxes', 'wdc_add_catalog_meta_boxes');
+
+function wdc_meta_field($post_id, $key) {
+    return get_post_meta($post_id, $key, true);
+}
+
+function wdc_render_course_details_box($post) {
+    wp_nonce_field('wdc_save_course_details', 'wdc_course_details_nonce');
+    $fields = [
+        '_wm_price' => ['Price (IDR)', 'number', '4500000'],
+        '_wm_duration' => ['Duration', 'text', '3 days / 2 pool sessions'],
+        '_wm_max_students' => ['Max Students', 'number', '4'],
+        '_wm_prerequisites' => ['Prerequisites', 'text', 'Able to swim'],
+    ];
+    echo '<div class="wdc-admin-grid" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;max-width:920px">';
+    foreach ($fields as $key => $field) {
+        printf('<p><label><strong>%s</strong><br><input type="%s" name="%s" value="%s" placeholder="%s" style="width:100%%"></label></p>', esc_html($field[0]), esc_attr($field[1]), esc_attr($key), esc_attr(wdc_meta_field($post->ID, $key)), esc_attr($field[2]));
+    }
+    echo '</div>';
+    printf('<p><label><strong>What is Included</strong><br><textarea name="_wm_includes" rows="4" style="width:100%%" placeholder="Certification, instructor, pool session, rental gear...">%s</textarea></label></p>', esc_textarea(wdc_meta_field($post->ID, '_wm_includes')));
+    $visible = wdc_meta_field($post->ID, '_wdc_catalog_visible') !== '0';
+    echo '<p><label><input type="checkbox" name="_wdc_catalog_visible" value="1" ' . checked($visible, true, false) . '> Show in member course catalog</label></p>';
+    echo '<p class="description">Use Featured Image for the course hero/card image. Use Course Levels and Course Agencies panels for level/agency.</p>';
+}
+
+function wdc_render_equipment_details_box($post) {
+    wp_nonce_field('wdc_save_equipment_details', 'wdc_equipment_details_nonce');
+    $fields = [
+        '_wm_price' => ['Price (IDR)', 'number', '1250000'],
+        '_wm_stock' => ['Stock', 'number', '8'],
+        '_wm_sizes' => ['Sizes / Variants', 'text', 'S, M, L / Clear, Black'],
+        '_wdc_equipment_fit' => ['Fit / Usage Note', 'text', 'Best for training and warm-water dives'],
+    ];
+    echo '<div class="wdc-admin-grid" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;max-width:920px">';
+    foreach ($fields as $key => $field) {
+        printf('<p><label><strong>%s</strong><br><input type="%s" name="%s" value="%s" placeholder="%s" style="width:100%%"></label></p>', esc_html($field[0]), esc_attr($field[1]), esc_attr($key), esc_attr(wdc_meta_field($post->ID, $key)), esc_attr($field[2]));
+    }
+    echo '</div>';
+    $visible = wdc_meta_field($post->ID, '_wdc_catalog_visible') !== '0';
+    echo '<p><label><input type="checkbox" name="_wdc_catalog_visible" value="1" ' . checked($visible, true, false) . '> Show in member equipment catalog</label></p>';
+    echo '<p class="description">Use Featured Image for the product image. Use Equipment Categories and Equipment Brands panels for filtering/detail labels.</p>';
+}
+
+function wdc_save_catalog_details($post_id, $post) {
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    if ($post->post_type === 'wm_course') {
+        if (!isset($_POST['wdc_course_details_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_course_details_nonce'])), 'wdc_save_course_details')) {
+            return;
+        }
+        $keys = ['_wm_price' => 'float', '_wm_duration' => 'text', '_wm_max_students' => 'int', '_wm_prerequisites' => 'text', '_wm_includes' => 'textarea'];
+    } elseif ($post->post_type === 'wm_equipment') {
+        if (!isset($_POST['wdc_equipment_details_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_equipment_details_nonce'])), 'wdc_save_equipment_details')) {
+            return;
+        }
+        $keys = ['_wm_price' => 'float', '_wm_stock' => 'int', '_wm_sizes' => 'text', '_wdc_equipment_fit' => 'text'];
+    } else {
+        return;
+    }
+
+    foreach ($keys as $key => $type) {
+        $raw = wp_unslash($_POST[$key] ?? '');
+        if ($type === 'float') {
+            $value = $raw === '' ? '' : (float) $raw;
+        } elseif ($type === 'int') {
+            $value = $raw === '' ? '' : max(0, (int) $raw);
+        } elseif ($type === 'textarea') {
+            $value = sanitize_textarea_field($raw);
+        } else {
+            $value = sanitize_text_field($raw);
+        }
+        update_post_meta($post_id, $key, $value);
+    }
+
+    update_post_meta($post_id, '_wdc_catalog_visible', isset($_POST['_wdc_catalog_visible']) ? '1' : '0');
+}
+add_action('save_post', 'wdc_save_catalog_details', 10, 2);
+
+function wdc_catalog_admin_columns($columns) {
+    $new = [];
+    foreach ($columns as $key => $label) {
+        $new[$key] = $label;
+        if ($key === 'title') {
+            $new['wdc_price'] = 'Price';
+            $new['wdc_stock_duration'] = 'Stock / Duration';
+            $new['wdc_visible'] = 'Catalog';
+        }
+    }
+    return $new;
+}
+add_filter('manage_wm_course_posts_columns', 'wdc_catalog_admin_columns');
+add_filter('manage_wm_equipment_posts_columns', 'wdc_catalog_admin_columns');
+
+function wdc_render_catalog_admin_column($column, $post_id) {
+    if ($column === 'wdc_price') {
+        $price = get_post_meta($post_id, '_wm_price', true);
+        echo $price !== '' ? 'Rp ' . esc_html(number_format((float) $price, 0, ',', '.')) : '-';
+    } elseif ($column === 'wdc_stock_duration') {
+        if (get_post_type($post_id) === 'wm_equipment') {
+            $stock = get_post_meta($post_id, '_wm_stock', true);
+            echo $stock !== '' ? esc_html($stock) . ' in stock' : '-';
+        } else {
+            echo esc_html(get_post_meta($post_id, '_wm_duration', true) ?: '-');
+        }
+    } elseif ($column === 'wdc_visible') {
+        echo get_post_meta($post_id, '_wdc_catalog_visible', true) === '0' ? 'Hidden' : 'Visible';
+    }
+}
+add_action('manage_wm_course_posts_custom_column', 'wdc_render_catalog_admin_column', 10, 2);
+add_action('manage_wm_equipment_posts_custom_column', 'wdc_render_catalog_admin_column', 10, 2);
