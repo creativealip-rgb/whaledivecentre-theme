@@ -59,6 +59,7 @@ function wdc_course_image_url($title, $theme_uri) {
   .whaledive-courses,.whaledive-courses .wd-page,.whaledive-courses .wd-section{width:100%!important;max-width:100%!important;overflow-x:hidden!important}
   .whaledive-courses .wd-section{padding-top:52px!important;padding-bottom:52px!important}
   .whaledive-courses .wd-shell{width:calc(100% - 48px)!important;max-width:none!important;padding-left:0!important;padding-right:0!important;margin-left:24px!important;margin-right:24px!important}
+  .whaledive-courses .wdc-card-cta .wd-shell{width:calc(100% - 48px)!important;max-width:none!important;margin-left:24px!important;margin-right:24px!important;padding:76px 24px 68px!important}
   .whaledive-courses .wd-header .wd-shell{width:calc(100% - 28px)!important;margin-left:14px!important;margin-right:14px!important}
   .whaledive-courses .wd-nav,.whaledive-courses .wd-brand{min-width:0!important;max-width:100%!important}
   .whaledive-courses .wd-brand span{font-size:14px!important;line-height:1.05!important;white-space:normal!important}

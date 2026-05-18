@@ -2957,12 +2957,14 @@ body.whaledive-single-course .wd-community .wd-sub{margin-top:10px!important;mar
 
 /* WDC unified detail CTA card 2026-05-16 */
 .wdc-card-cta{padding:44px 0 56px;background:#fff;text-align:center;color:#06384d}
-.wdc-card-cta .wd-shell{max-width:920px;padding:38px 44px;border-radius:30px;background:radial-gradient(circle at 82% 10%,rgba(150,218,234,.34),transparent 30%),linear-gradient(135deg,#f7fbfd 0%,#eef8fb 100%);border:1px solid rgba(8,167,199,.18);box-shadow:0 22px 56px rgba(2,32,46,.1)}
-.wdc-card-cta .wd-kicker{background:rgba(8,167,199,.11);border-color:rgba(8,167,199,.2);color:#0b617c}
-.wdc-card-cta h2{margin:14px 0 10px;color:#06384d;font-size:clamp(32px,3.6vw,48px);line-height:1.04;letter-spacing:-.045em}
-.wdc-card-cta p{margin:0 auto 22px;max-width:620px;color:#607684;font-size:17px;line-height:1.7}
+.wdc-card-cta .wd-shell{max-width:920px;padding:64px 48px 60px;border-radius:30px;background:radial-gradient(circle at 82% 10%,rgba(150,218,234,.34),transparent 30%),linear-gradient(135deg,#f7fbfd 0%,#eef8fb 100%);border:1px solid rgba(8,167,199,.18);box-shadow:0 22px 56px rgba(2,32,46,.1);display:flex;flex-direction:column;align-items:center;gap:18px}
+.wdc-card-cta .wd-kicker{margin:0;background:rgba(8,167,199,.11);border-color:rgba(8,167,199,.2);color:#0b617c}
+.wdc-card-cta h2{margin:0;color:#06384d;font-size:clamp(32px,3.6vw,48px);line-height:1.04;letter-spacing:-.045em}
+.wdc-card-cta p{margin:0 auto;max-width:620px;color:#607684;font-size:17px;line-height:1.7}
+.wdc-card-cta .wd-btn{margin:8px 0 0}
 .whaledive-single-course .wd-content-section,.whaledive-single-equipment .wd-gear-detail-body{padding-bottom:46px}
-@media(max-width:680px){.wdc-card-cta{padding-bottom:38px}.wdc-card-cta .wd-shell{padding:30px 22px;border-radius:24px}}
+@media(max-width:900px){.wdc-card-cta .wd-shell{width:calc(100% - 128px)!important;max-width:620px!important;padding:60px 36px 54px!important;gap:17px}}
+@media(max-width:680px){.wdc-card-cta{padding:54px 0 60px}.wdc-card-cta .wd-shell{width:calc(100% - 48px)!important;max-width:none!important;padding:76px 24px 68px!important;border-radius:24px;gap:16px}.wdc-card-cta .wd-btn,.wdc-card-cta a.wd-btn.alt{margin-top:6px;margin-bottom:0}}
 
 /* WDC course sidebar price matches equipment detail 2026-05-16 */
 body.whaledive-single-course .wd-sidebar-card,
