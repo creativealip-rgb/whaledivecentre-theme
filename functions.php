@@ -21,7 +21,7 @@ require_once get_template_directory() . '/inc/template-functions.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_stylesheet_uri(), [], '2.1.9');
+    wp_enqueue_style('contenly-style', get_stylesheet_uri(), [], '2.2.1');
     
     // Google Fonts
     wp_enqueue_style('contenly-fonts', 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap', [], null);
@@ -42,7 +42,7 @@ function contenly_enqueue_scripts() {
     wp_add_inline_script('jquery', 'var wdcMemberAjax = ' . wp_json_encode($member_ajax_config) . ';', 'before');
     
     // Main theme JavaScript
-    wp_enqueue_script('contenly-main', get_template_directory_uri() . '/assets/js/main.js', ['jquery'], '1.0.0', true);
+    wp_enqueue_script('contenly-main', get_template_directory_uri() . '/assets/js/main.js', ['jquery'], '1.0.4', true);
 }
 add_action('wp_enqueue_scripts', 'contenly_enqueue_scripts');
 

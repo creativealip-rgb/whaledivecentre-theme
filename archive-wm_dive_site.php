@@ -100,8 +100,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   });
-  var b=document.querySelector('.wd-hamburger'),m=document.querySelector('.wd-menu');
-  if(b&&m){b.addEventListener('click',function(){var o=document.body.classList.toggle('wd-menu-open');b.setAttribute('aria-expanded',o?'true':'false')});m.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){document.body.classList.remove('wd-menu-open');b.setAttribute('aria-expanded','false')})})};
 });
 </script>
 <script>document.addEventListener('DOMContentLoaded',function(){var path=location.pathname;document.querySelectorAll('.wd-menu a[data-nav]').forEach(function(a){var key=a.getAttribute('data-nav');var active=(key==='home'&&path==='/')||(key!=='home'&&path.indexOf('/'+key+'/')===0);if(active){a.classList.add('is-active');a.setAttribute('aria-current','page');}});});</script><?php wp_footer(); ?></body></html>
