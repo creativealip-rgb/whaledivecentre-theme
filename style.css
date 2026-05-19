@@ -2947,13 +2947,15 @@ body.whaledive-single-course .wd-community .wd-sub{margin-top:10px!important;mar
 .whaledive-single .wd-story-checklist h3{margin:0 0 10px;color:#06384d;font-size:20px;letter-spacing:-.02em}
 .whaledive-single .wd-story-checklist ul{margin:0;padding-left:20px;color:#425466;line-height:1.75}
 .whaledive-single .wd-story-checklist li{margin:0 0 6px}
-.whaledive-single .wd-story-bottom-cta{padding:0 0 48px;background:#fff;text-align:center;color:#06384d}
-.whaledive-single .wd-story-bottom-cta .wd-shell{max-width:920px;padding:38px 44px;border-radius:30px;background:radial-gradient(circle at 82% 10%,rgba(150,218,234,.34),transparent 30%),linear-gradient(135deg,#f7fbfd 0%,#eef8fb 100%);border:1px solid rgba(8,167,199,.18);box-shadow:0 22px 56px rgba(2,32,46,.1)}
+.whaledive-single .wd-story-bottom-cta{padding:0 0 56px;background:#fff;text-align:center;color:#06384d}
+.whaledive-single .wd-story-bottom-cta .wd-shell{max-width:920px;padding:64px 48px 60px;border-radius:30px;background:radial-gradient(circle at 82% 10%,rgba(150,218,234,.34),transparent 30%),linear-gradient(135deg,#f7fbfd 0%,#eef8fb 100%);border:1px solid rgba(8,167,199,.18);box-shadow:0 22px 56px rgba(2,32,46,.1);display:flex;flex-direction:column;align-items:center;gap:18px}
 .whaledive-single .wd-story-bottom-cta .wd-kicker{background:rgba(8,167,199,.11);border-color:rgba(8,167,199,.2);color:#0b617c}
-.whaledive-single .wd-story-bottom-cta h2{margin:14px 0 10px;color:#06384d;font-size:clamp(32px,3.6vw,48px);line-height:1.04;letter-spacing:-.045em}
-.whaledive-single .wd-story-bottom-cta p{margin:0 auto 22px;max-width:620px;color:#607684;font-size:17px;line-height:1.7}
+.whaledive-single .wd-story-bottom-cta h2{margin:0;color:#06384d;font-size:clamp(32px,3.6vw,48px);line-height:1.04;letter-spacing:-.045em}
+.whaledive-single .wd-story-bottom-cta p{margin:0 auto;max-width:620px;color:#607684;font-size:17px;line-height:1.7}
+.whaledive-single .wd-story-bottom-cta .wd-btn{margin:8px 0 0}
 .whaledive-single .wd-side-card h3{letter-spacing:-.025em}
-@media(max-width:680px){.whaledive-single .wd-story-cover{aspect-ratio:4/3!important;border-radius:0}.whaledive-single .wd-story-bottom-cta{padding:42px 0 46px}}
+@media(max-width:900px){.whaledive-single .wd-story-bottom-cta .wd-shell{width:calc(100% - 128px)!important;max-width:620px!important;padding:60px 36px 54px!important;gap:17px}}
+@media(max-width:680px){.whaledive-single .wd-story-cover{aspect-ratio:4/3!important;border-radius:0}.whaledive-single .wd-story-bottom-cta{padding:54px 0 60px}.whaledive-single .wd-story-bottom-cta .wd-shell{width:calc(100% - 48px)!important;max-width:none!important;padding:76px 24px 68px!important;border-radius:24px;gap:16px}.whaledive-single .wd-story-bottom-cta h2{font-size:clamp(30px,8.8vw,40px)!important;line-height:1.06!important}.whaledive-single .wd-story-bottom-cta p{width:100%!important;max-width:100%!important;line-height:1.58!important}.whaledive-single .wd-story-bottom-cta .wd-btn{margin-top:6px;margin-bottom:0}}
 
 /* WDC unified detail CTA card 2026-05-16 */
 .wdc-card-cta{padding:44px 0 56px;background:#fff;text-align:center;color:#06384d}
@@ -3122,6 +3124,47 @@ body.wdc-brand-font-mode .wd-hero-simple p{
     line-height:1.08!important;
     letter-spacing:-.018em!important;
   }
+}
+
+/* WDC responsive spacing audit 2026-05-18 */
+body.whaledive-single-course .wd-section.white,
+body.whaledive-single-equipment .wd-gear-detail-body,
+body.whaledive-courses .wd-section.white,
+body.whaledive-equipment .wd-section.white{padding-top:clamp(72px,7vw,96px)!important;padding-bottom:clamp(72px,7vw,96px)!important}
+body.whaledive-single-course .wd-content-grid,
+body.whaledive-single-equipment .wd-gear-content-grid{gap:clamp(32px,4.5vw,58px)!important}
+body.whaledive-single-course .wd-content-main > .wd-kicker,
+body.whaledive-single-equipment .wd-gear-main > .wd-kicker{margin-bottom:18px!important}
+body.whaledive-single-course .wd-content-main > .wd-title,
+body.whaledive-single-equipment .wd-gear-main > .wd-title{margin-bottom:20px!important}
+body.whaledive-single-course .wd-content-main > p,
+body.whaledive-single-equipment .wd-gear-main > p{margin:0 0 30px!important;line-height:1.72!important}
+body.whaledive-single-course .wd-course-outcomes,
+body.whaledive-single-equipment .wd-gear-outcomes{margin-top:34px!important;gap:18px!important}
+body.whaledive-single-course .wd-course-outcomes article,
+body.whaledive-single-equipment .wd-gear-outcomes article,
+body.whaledive-inner .wd-detail-card{padding:24px!important;border-radius:22px!important}
+@media(max-width:900px){body.whaledive-single-course .wd-section.white,body.whaledive-single-equipment .wd-gear-detail-body,body.whaledive-courses .wd-section.white,body.whaledive-equipment .wd-section.white{padding-top:64px!important;padding-bottom:68px!important}body.whaledive-single-course .wd-content-grid,body.whaledive-single-equipment .wd-gear-content-grid{gap:34px!important}}
+@media(max-width:560px){body.whaledive-single-course .wd-section.white,body.whaledive-single-equipment .wd-gear-detail-body,body.whaledive-courses .wd-section.white,body.whaledive-equipment .wd-section.white{padding-top:56px!important;padding-bottom:60px!important}body.whaledive-single-course .wd-course-outcomes article,body.whaledive-single-equipment .wd-gear-outcomes article,body.whaledive-inner .wd-detail-card{padding:22px!important;border-radius:20px!important}}
+
+/* WDC detail page contained layout fix 2026-05-18 */
+@media(max-width:900px){
+  body.whaledive-single-course .wd-section.white > .wd-shell,
+  body.whaledive-single-equipment .wd-gear-detail-body > .wd-shell{width:min(calc(100% - 96px),660px)!important;max-width:660px!important;margin-left:auto!important;margin-right:auto!important;padding-left:0!important;padding-right:0!important}
+  body.whaledive-single-course .wd-content-grid,
+  body.whaledive-single-equipment .wd-gear-content-grid{width:100%!important;max-width:100%!important}
+}
+@media(max-width:560px){
+  body.whaledive-single-course .wd-section.white > .wd-shell,
+  body.whaledive-single-equipment .wd-gear-detail-body > .wd-shell{width:calc(100% - 40px)!important;max-width:none!important;margin-left:auto!important;margin-right:auto!important;padding-left:0!important;padding-right:0!important}
+  body.whaledive-single-course .wd-section.white,
+  body.whaledive-single-equipment .wd-gear-detail-body{padding-top:64px!important;padding-bottom:64px!important}
+  body.whaledive-single-course .wd-content-grid,
+  body.whaledive-single-equipment .wd-gear-content-grid{gap:28px!important}
+  body.whaledive-single-course .wd-sidebar-card,
+  body.whaledive-single-course .wd-course-outcomes article,
+  body.whaledive-single-equipment .wd-sidebar-card,
+  body.whaledive-single-equipment .wd-gear-outcomes article{width:100%!important;max-width:100%!important}
 }
 
 /* WDC mobile navbar unified behavior 2026-05-18 */

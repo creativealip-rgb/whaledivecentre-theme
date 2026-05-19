@@ -21,7 +21,7 @@ require_once get_template_directory() . '/inc/template-functions.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_stylesheet_uri(), [], '2.2.26');
+    wp_enqueue_style('contenly-style', get_stylesheet_uri(), [], '2.2.30');
     
     // Google Fonts
     wp_enqueue_style('contenly-fonts', 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap', [], null);
