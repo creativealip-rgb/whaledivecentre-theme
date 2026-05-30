@@ -540,7 +540,7 @@ function contenly_render_public_header() {
     $equipment_url = esc_url(contenly_localized_url('/equipment/'));
     $blog_url = esc_url(contenly_localized_url('/blog/'));
     $member_url = is_user_logged_in() ? esc_url(contenly_localized_url('/member-dashboard/')) : esc_url(contenly_localized_url('/member-login/'));
-    $member_label = is_user_logged_in() ? contenly_tr('Dashboard', 'Dashboard') : contenly_tr('Login', 'Login');
+    $member_label = is_user_logged_in() ? contenly_tr('Dashboard', 'Dashboard') : contenly_tr('Masuk', 'Login');
     $request_path = trailingslashit(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/');
     $active_key = ($request_path === '/' || $request_path === '/en/' || $request_path === '/home/' || $request_path === '/en/home/') ? 'home' : '';
     if (false !== strpos($request_path, '/courses/') || false !== strpos($request_path, '/course/')) {
@@ -554,13 +554,13 @@ function contenly_render_public_header() {
         return $key === $active_key ? ' class="is-active" aria-current="page"' : '';
     };
 
-    echo '<header class="wd-header"><div class="wd-shell"><div class="wd-nav">'
+    echo '<header class="wd-header"><meta charset="utf-8"><div class="wd-shell"><div class="wd-nav">'
         . '<a class="wd-brand" href="' . $home_url . '"><img class="wd-brand-logo" src="' . $brand_logo . '" alt="Whale Dive Centre"><span>Whale Dive Centre</span></a>'
         . '<button class="wd-hamburger" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>'
         . '<nav class="wd-menu" id="wd-mobile-menu">'
-        . '<a href="' . $home_url . '" data-nav="home"' . $active_class('home') . '>' . esc_html(contenly_tr('Home', 'Home')) . '</a>'
-        . '<a href="' . $courses_url . '" data-nav="courses"' . $active_class('courses') . '>' . esc_html(contenly_tr('Courses', 'Courses')) . '</a>'
-        . '<a href="' . $equipment_url . '" data-nav="equipment"' . $active_class('equipment') . '>' . esc_html(contenly_tr('Equipment', 'Equipment')) . '</a>'
+        . '<a href="' . $home_url . '" data-nav="home"' . $active_class('home') . '>' . esc_html(contenly_tr('Beranda', 'Home')) . '</a>'
+        . '<a href="' . $courses_url . '" data-nav="courses"' . $active_class('courses') . '>' . esc_html(contenly_tr('Kursus', 'Courses')) . '</a>'
+        . '<a href="' . $equipment_url . '" data-nav="equipment"' . $active_class('equipment') . '>' . esc_html(contenly_tr('Peralatan', 'Equipment')) . '</a>'
         . '<a href="' . $blog_url . '" data-nav="blog"' . $active_class('blog') . '>' . esc_html(contenly_tr('Blog', 'Blog')) . '</a>'
         . contenly_render_language_switcher('wd-lang-switcher')
         . '<a href="' . $member_url . '" class="wd-nav-member">' . esc_html($member_label) . '</a>'
