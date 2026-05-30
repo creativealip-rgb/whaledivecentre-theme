@@ -203,10 +203,8 @@ function contenly_current_lang() {
         return 'en';
     }
 
-    if (function_exists('pll_current_language')) {
-        return pll_current_language('slug') ?: 'id';
-    }
-
+    // Only use Polylang if it has a language prefix in the URL
+    // Without prefix, default to 'id' (matches live behavior without Polylang)
     return 'id';
 }
 
