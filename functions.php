@@ -22,7 +22,7 @@ require_once get_template_directory() . '/inc/template-functions.php';
 function contenly_enqueue_scripts() {
     // Theme stylesheet
     wp_enqueue_style('contenly-style', get_stylesheet_uri(), [], '2.2.1');
-    wp_add_inline_style('contenly-style', '.whaledive-home .wd-header .wd-menu{flex:1!important}.whaledive-home .wd-header .wd-nav-member{margin-left:auto!important}.whaledive-home .wd-header .gt-lang-switcher{margin-right:16px!important}');
+    wp_add_inline_style('contenly-style', '.whaledive-home .wd-header .gt-lang-switcher{margin-right:10px!important}.whaledive-home .wd-header .wd-nav-member{margin-left:8px!important}');
     
     // Google Fonts
     wp_enqueue_style('contenly-fonts', 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap', [], null);
