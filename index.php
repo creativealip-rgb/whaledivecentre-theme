@@ -50,8 +50,6 @@
   .whaledive-home .wd-header .wd-brand{min-width:0!important;max-width:none!important;flex:1 1 auto!important;overflow:hidden!important}
   .whaledive-home .wd-header .wd-brand span{max-width:calc(100vw - 124px)!important;font-size:17px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
   .whaledive-home .wd-header .wd-hamburger{display:inline-flex!important;flex:0 0 44px!important;width:44px!important;height:44px!important;margin-left:auto!important;pointer-events:auto!important}
-  .whaledive-home .wd-header .wd-nav-member{margin-left:auto!important}
-  .whaledive-home .wd-header .gt-lang-switcher{margin-right:16px!important}
   .whaledive-home .wd-hero-simple{padding-top:96px!important;padding-bottom:46px!important;overflow:hidden!important}
   .whaledive-home .wd-hero-focus{display:grid!important;grid-template-columns:1fr!important;gap:18px!important}
   .whaledive-home .wd-hero-copy,.whaledive-home .wd-hero-card{width:100%!important;max-width:100%!important;min-width:0!important}
