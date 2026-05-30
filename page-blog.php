@@ -161,15 +161,15 @@ $wd_blog_fallback_image = function($post_id, $cat_name = '') use ($theme_uri) {
 </style></head>
 <body <?php body_class('whaledive-inner whaledive-blog'); ?>><?php wp_body_open(); ?>
 <main class="wd-page">
-  <header class="wd-header"><div class="wd-shell"><div class="wd-nav"><a class="wd-brand" href="/"><img class="wd-brand-logo" src="<?php echo esc_url(get_template_directory_uri() . '/assets/wdc-navbar-logo.jpg?v=20260514b'); ?>" alt="Whale Dive Centre"><span>WHALE DIVE CENTRE</span></a><button class="wd-hamburger" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="wd-menu" id="wd-mobile-menu"><a href="/" data-nav="home">Home</a><a href="/courses/" data-nav="courses">Courses</a><a href="/equipment/" data-nav="equipment">Equipment</a><a href="/blog/" data-nav="blog">Blog</a><?php if(is_user_logged_in()){ $u=wp_get_current_user(); echo '<a href="/member-dashboard/" class="wd-nav-member">Dashboard</a>'; } else { echo '<a href="/member-login/" class="wd-nav-member">Login</a>'; } ?></nav></div></div></header>
+  <?php contenly_render_public_header(); ?>
 
   <!-- BLOG POSTS -->
   <section class="wd-section wd-blog-simple" id="articles">
     <div class="wd-shell">
       <?php if ($paged === 1 && $featured_q->have_posts()) : ?>
       <div class="wd-blog-simple-head">
-        <span class="wd-kicker">Dive Journal</span>
-        <h1>Featured Article</h1>
+        <span class="wd-kicker"><?php echo esc_html(contenly_tr('Jurnal Selam', 'Dive Journal')); ?></span>
+        <h1><?php echo esc_html(contenly_tr('Artikel Pilihan', 'Featured Article')); ?></h1>
       </div>
         <?php $featured_q->the_post(); $cats=get_the_category(); $cat_name=$cats?$cats[0]->name:'Article'; $read_time=max(2,(int)ceil(str_word_count(wp_strip_all_tags(get_the_content()))/220)); ?>
         <article class="wd-blog-featured-simple">
@@ -178,20 +178,20 @@ $wd_blog_fallback_image = function($post_id, $cat_name = '') use ($theme_uri) {
             <div class="wd-card-meta"><span class="wd-card-cat"><?php echo esc_html($cat_name); ?></span><span class="wd-card-time"><?php echo esc_html($read_time); ?> min</span></div>
             <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
             <p><?php echo esc_html(wp_trim_words(get_the_excerpt() ?: get_the_content(), 24)); ?></p>
-            <a class="wd-featured-read" href="<?php the_permalink(); ?>">Read More →</a>
+            <a class="wd-featured-read" href="<?php the_permalink(); ?>"><?php echo contenly_tr('Baca Selengkapnya →', 'Read More →'); ?></a>
           </div>
         </article>
         <?php wp_reset_postdata(); ?>
       <?php else : ?>
       <div class="wd-blog-simple-head wd-blog-archive-head">
-        <span class="wd-kicker">Dive Journal</span>
-        <h1>More from the journal</h1>
+        <span class="wd-kicker"><?php echo esc_html(contenly_tr('Jurnal Selam', 'Dive Journal')); ?></span>
+        <h1><?php echo esc_html(contenly_tr('Artikel lainnya', 'More from the Journal')); ?></h1>
       </div>
       <?php endif; ?>
 
       <?php if ($paged === 1) : ?>
       <div class="wd-blog-latest-head">
-        <span>More from the journal</span>
+        <span><?php echo esc_html(contenly_tr('Artikel lainnya', 'More from the Journal')); ?></span>
       </div>
       <?php endif; ?>
       <?php if ($posts_q->have_posts()) : ?>
@@ -199,23 +199,23 @@ $wd_blog_fallback_image = function($post_id, $cat_name = '') use ($theme_uri) {
           <?php while ($posts_q->have_posts()) : $posts_q->the_post(); $cats=get_the_category(); $cat_name=$cats?$cats[0]->name:'Article'; $read_time=max(2,(int)ceil(str_word_count(wp_strip_all_tags(get_the_content()))/220)); ?>
             <article class="wd-blog-card-modern wd-blog-card-compact">
               <a class="wd-blog-card-media" href="<?php the_permalink(); ?>"><?php if(has_post_thumbnail()){the_post_thumbnail('medium_large');} else { echo '<img src="' . esc_url($wd_blog_fallback_image(get_the_ID(), $cat_name)) . '" alt="' . esc_attr(get_the_title()) . '">'; } ?></a>
-              <div class="wd-blog-card-body"><div class="wd-card-meta"><span class="wd-card-cat"><?php echo esc_html($cat_name); ?></span><span class="wd-card-time"><?php echo esc_html($read_time); ?> min</span></div><h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3><p><?php echo esc_html(wp_trim_words(get_the_excerpt() ?: get_the_content(), 12)); ?></p><a href="<?php the_permalink(); ?>">Read More →</a></div>
+              <div class="wd-blog-card-body"><div class="wd-card-meta"><span class="wd-card-cat"><?php echo esc_html($cat_name); ?></span><span class="wd-card-time"><?php echo esc_html($read_time); ?> min</span></div><h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3><p><?php echo esc_html(wp_trim_words(get_the_excerpt() ?: get_the_content(), 12)); ?></p><a href="<?php the_permalink(); ?>"><?php echo contenly_tr('Baca Selengkapnya →', 'Read More →'); ?></a></div>
             </article>
           <?php endwhile; ?>
         </div>
         <nav class="wd-blog-pagination" aria-label="Blog pagination">
-          <?php $older = get_next_posts_link('Next: Older Posts →', $posts_q->max_num_pages); $newer = get_previous_posts_link('← Newer Posts'); ?>
+          <?php $older = get_next_posts_link(contenly_tr('Selanjutnya: Artikel Lama →', 'Next: Older Posts →'), $posts_q->max_num_pages); $newer = get_previous_posts_link(contenly_tr('← Artikel Baru', '← Newer Posts')); ?>
           <?php if ($newer) : ?><span><?php echo $newer; ?></span><?php endif; ?>
           <?php if ($older) : ?><span><?php echo $older; ?></span><?php endif; ?>
         </nav>
       <?php else : ?>
-        <p class="wd-empty">No latest articles published yet.</p>
+        <p class="wd-empty"><?php echo contenly_tr('Belum ada artikel yang dipublikasikan.', 'No latest articles published yet.'); ?></p>
       <?php endif; ?>
       <?php wp_reset_postdata(); ?>
     </div>
   </section>
 
-  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/contact/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>Phone: (021) 27939068</p><p>Jl. Tanah Kusir II No.3, Kebayoran Lama, Jakarta Selatan 12240</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram">Instagram</a></div></div></div><div class="wd-footer-bottom"><span>© <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
+  <?php get_footer(); ?>
 </main>
 <script>document.addEventListener('DOMContentLoaded',function(){var path=location.pathname;document.querySelectorAll('.wd-menu a[data-nav]').forEach(function(a){var key=a.getAttribute('data-nav');var active=(key==='home'&&path==='/')||(key!=='home'&&path.indexOf('/'+key+'/')===0);if(active){a.classList.add('is-active');a.setAttribute('aria-current','page');}});});</script><?php wp_footer(); ?>
 </body>
