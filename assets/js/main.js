@@ -44,7 +44,7 @@
                     wdcMenu.style.setProperty('opacity', '1', 'important');
                     wdcMenu.style.setProperty('visibility', 'visible', 'important');
                     wdcMenu.style.setProperty('pointer-events', 'auto', 'important');
-                    wdcMenu.style.setProperty('transform', 'translateX(0)', 'important');
+                    wdcMenu.style.setProperty('transform', 'translateY(0)', 'important');
                 } else {
                     wdcMenu.removeAttribute('style');
                 }

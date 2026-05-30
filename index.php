@@ -91,6 +91,65 @@
   .whaledive-home #articles .wd-article-head .wd-btn,.whaledive-home #membership .wd-btn,.whaledive-home .wd-section-cta .wd-btn,.whaledive-home .wd-footer .wd-btn{width:100%!important;max-width:100%!important;justify-content:center!important;margin-left:0!important;margin-right:0!important;box-sizing:border-box!important}
   .whaledive-home .wd-footer-bottom{display:grid!important;grid-template-columns:1fr!important;gap:10px!important;text-align:center!important;width:100%!important;max-width:100%!important}
 }
+/* ============================================================
+   UIUX normalization pass 2026-05-30 — unify section rhythm + card breathing.
+   Supersedes stacked "tightening pass" blocks in style.css.
+   ============================================================ */
+.whaledive-home .wd-section{padding-top:72px!important;padding-bottom:72px!important}
+.whaledive-home #courses.wd-section,
+.whaledive-home #equipment.wd-section{padding-top:72px!important;padding-bottom:72px!important}
+/* card grid: looser premium gap */
+.whaledive-home .wd-course-grid,
+.whaledive-home .wd-equipment-grid{gap:22px!important}
+/* card inner body: more breathing room */
+.whaledive-home .wd-course-body,
+.whaledive-home .wd-equip-home-body,
+.whaledive-home .wd-home-equip-body,
+.whaledive-home #courses .wd-course-body,
+.whaledive-home #equipment .wd-home-equip-body{padding:16px!important;gap:6px!important}
+/* card media: taller ~16:10 visuals */
+.whaledive-home .wd-course-photo,
+.whaledive-home .wd-equip-photo,
+.whaledive-home .wd-home-equip-photo,
+.whaledive-home #courses .wd-course-photo{height:165px!important}
+/* card title: relaxed line-height */
+.whaledive-home .wd-course-body h3,
+.whaledive-home .wd-course-grid .wd-course-body h3,
+.whaledive-home .wd-home-equip-body h3,
+.whaledive-home .wd-equip-home-body h3,
+.whaledive-home #courses .wd-course-body h3,
+.whaledive-home #equipment .wd-home-equip-body h3{line-height:1.28!important;margin:0 0 6px!important;min-height:0!important}
+/* card link/CTA: slightly larger tap target */
+.whaledive-home .wd-course-body a,
+.whaledive-home .wd-course-grid .wd-course-body a,
+.whaledive-home .wd-home-equip-body a,
+.whaledive-home .wd-equip-home-body a,
+.whaledive-home #courses .wd-course-body a,
+.whaledive-home #equipment .wd-home-equip-body a{font-size:13px!important}
+@media(max-width:760px){
+  .whaledive-home .wd-section,
+  .whaledive-home #courses.wd-section,
+  .whaledive-home #equipment.wd-section{padding-top:56px!important;padding-bottom:56px!important}
+  .whaledive-home .wd-course-grid,
+  .whaledive-home .wd-equipment-grid{gap:16px!important}
+  .whaledive-home .wd-course-photo,
+  .whaledive-home .wd-equip-photo,
+  .whaledive-home .wd-home-equip-photo,
+  .whaledive-home #courses .wd-course-photo{height:150px!important}
+}
+/* UIUX 2026-05-30 — win specificity vs #courses ID-scoped overrides in style.css */
+body.whaledive-home #courses .wd-course-grid,
+body.whaledive-home #equipment .wd-equipment-grid{gap:22px!important}
+body.whaledive-home #courses .wd-course-photo,
+body.whaledive-home #equipment .wd-home-equip-photo,
+body.whaledive-home #equipment .wd-equip-photo{height:165px!important}
+@media(max-width:760px){
+  body.whaledive-home #courses .wd-course-grid,
+  body.whaledive-home #equipment .wd-equipment-grid{gap:16px!important}
+  body.whaledive-home #courses .wd-course-photo,
+  body.whaledive-home #equipment .wd-home-equip-photo,
+  body.whaledive-home #equipment .wd-equip-photo{height:150px!important}
+}
 </style></head>
 <body <?php body_class('whaledive-home'); ?>><?php wp_body_open(); ?>
 <main class="wd-page">
@@ -105,7 +164,7 @@
   <section class="wd-section white wd-center"><div class="wd-shell"><div class="wd-divider"><h2 class="wd-title"><?php echo esc_html(contenly_tr('Afiliasi Kami', 'Our Affiliations')); ?></h2></div><p class="wd-sub"><?php echo esc_html(contenly_tr('Training pathway dan dive standard yang selaras dengan organisasi scuba global.', 'Training pathways and dive standards aligned with globally recognized scuba organizations.')); ?></p><div class="wd-logos"><div class="wd-logo-pill">PADI<span>Recreational training</span></div><div class="wd-logo-pill">SSI<span>Dive education</span></div><div class="wd-logo-pill">NAUI<span>Safety standards</span></div><div class="wd-logo-pill">TDI<span>Technical pathway</span></div></div></div></section>
 
   <!-- COURSES -->
-  <section id="courses" class="wd-section wd-dark wd-center"><div class="wd-shell"><div class="wd-divider"><h2 class="wd-title"><?php echo esc_html(contenly_tr('Kursus Selam Kami', 'Our Dive Courses')); ?></h2></div><p class="wd-sub"><?php echo esc_html(contenly_tr('Jalur terstruktur dari napas pertama di bawah air hingga kepemimpinan dive profesional.', 'A structured pathway from your first breath underwater to pro-level dive leadership.')); ?></p><div class="wd-course-slider" aria-label="Dive course slider" style="overflow:visible!important"><div class="wd-course-grid" style="width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;display:grid!important;grid-auto-flow:row!important;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))!important;gap:14px!important;"><?php $courses=[['Open Water',contenly_tr('Pemula', 'Beginner'),contenly_tr('3-4 hari', '3-4 days'),contenly_tr('Sertifikasi pertama untuk dive aman bersama buddy.', 'Your first certification to dive safely with a buddy.'),'open-water-diver','wdc-course-open-water-real.png'],['Advanced Open Water',contenly_tr('Level lanjut', 'Next level'),contenly_tr('2 hari', '2 days'),contenly_tr('Bangun kepercayaan diri dengan dive lebih dalam, navigasi, dan skill khusus.', 'Build confidence with deeper dives, navigation, and specialty skills.'),'advanced-open-water','wdc-course-advanced-open-water-real.png'],['Rescue Diver',contenly_tr('Keselamatan', 'Safety'),contenly_tr('2-3 hari', '2-3 days'),contenly_tr('Pelajari pencegahan, respons, dan pemikiran rescue di dunia nyata.', 'Learn prevention, response, and real-world rescue thinking.'),'rescue-diver','wdc-course-rescue-diver-real.png'],['Divemaster',contenly_tr('Jalur pro', 'Pro track'),contenly_tr('Fleksibel', 'Flexible'),contenly_tr('Pimpin dive, bantu kelas, dan berkembang jadi dive professional.', 'Lead dives, assist classes, and grow into a dive professional.'),'divemaster','wdc-course-divemaster-real.png']]; foreach($courses as $i=>$c): ?><article class="wd-course-card" style="border-radius:18px!important;overflow:hidden!important;background:#fff!important;border:1px solid rgba(6,56,77,.08)!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important;padding:0!important;min-width:0!important;"><div class="wd-course-photo" style="height:138px!important;min-height:0!important;border-radius:0!important;margin:0!important;overflow:hidden!important;"><img src="<?php echo esc_url(get_template_directory_uri() . '/assets/' . $c[5]); ?>" alt="<?php echo esc_attr($c[0]); ?> course" loading="lazy"></div><div class="wd-course-body"><div class="wd-course-no" style="display:none!important;">0<?php echo $i+1; ?></div><h3><?php echo esc_html($c[0]); ?></h3><div class="wd-course-meta"><span><?php echo esc_html($c[1]); ?></span><span><?php echo esc_html($c[2]); ?></span></div><p><?php echo esc_html($c[3]); ?></p><a href="/courses/"><?php echo esc_html(contenly_tr('Lihat Detail', 'View Details')); ?></a></div></article><?php endforeach; ?></div></div><div class="wd-slider-hint"><?php echo esc_html(contenly_tr('Geser ke samping untuk lihat semua kursus', 'Swipe sideways to see all courses')); ?></div><div class="wd-section-cta"><a class="wd-btn" href="/courses/"><?php echo esc_html(contenly_tr('Lihat Semua Kursus', 'View All Courses')); ?></a></div></div></section>
+  <section id="courses" class="wd-section wd-dark wd-center"><div class="wd-shell"><div class="wd-divider"><h2 class="wd-title"><?php echo esc_html(contenly_tr('Kursus Selam Kami', 'Our Dive Courses')); ?></h2></div><p class="wd-sub"><?php echo esc_html(contenly_tr('Jalur terstruktur dari napas pertama di bawah air hingga kepemimpinan dive profesional.', 'A structured pathway from your first breath underwater to pro-level dive leadership.')); ?></p><div class="wd-course-slider" aria-label="Dive course slider" style="overflow:visible!important"><div class="wd-course-grid" style="width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;display:grid!important;grid-auto-flow:row!important;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))!important;gap:22px!important;"><?php $courses=[['Open Water',contenly_tr('Pemula', 'Beginner'),contenly_tr('3-4 hari', '3-4 days'),contenly_tr('Sertifikasi pertama untuk dive aman bersama buddy.', 'Your first certification to dive safely with a buddy.'),'open-water-diver','wdc-course-open-water-real.png'],['Advanced Open Water',contenly_tr('Level lanjut', 'Next level'),contenly_tr('2 hari', '2 days'),contenly_tr('Bangun kepercayaan diri dengan dive lebih dalam, navigasi, dan skill khusus.', 'Build confidence with deeper dives, navigation, and specialty skills.'),'advanced-open-water','wdc-course-advanced-open-water-real.png'],['Rescue Diver',contenly_tr('Keselamatan', 'Safety'),contenly_tr('2-3 hari', '2-3 days'),contenly_tr('Pelajari pencegahan, respons, dan pemikiran rescue di dunia nyata.', 'Learn prevention, response, and real-world rescue thinking.'),'rescue-diver','wdc-course-rescue-diver-real.png'],['Divemaster',contenly_tr('Jalur pro', 'Pro track'),contenly_tr('Fleksibel', 'Flexible'),contenly_tr('Pimpin dive, bantu kelas, dan berkembang jadi dive professional.', 'Lead dives, assist classes, and grow into a dive professional.'),'divemaster','wdc-course-divemaster-real.png']]; foreach($courses as $i=>$c): ?><article class="wd-course-card" style="border-radius:18px!important;overflow:hidden!important;background:#fff!important;border:1px solid rgba(6,56,77,.08)!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important;padding:0!important;min-width:0!important;"><div class="wd-course-photo" style="height:165px!important;min-height:0!important;border-radius:0!important;margin:0!important;overflow:hidden!important;"><img src="<?php echo esc_url(get_template_directory_uri() . '/assets/' . $c[5]); ?>" alt="<?php echo esc_attr($c[0]); ?> course" loading="lazy"></div><div class="wd-course-body"><div class="wd-course-no" style="display:none!important;">0<?php echo $i+1; ?></div><h3><?php echo esc_html($c[0]); ?></h3><div class="wd-course-meta"><span><?php echo esc_html($c[1]); ?></span><span><?php echo esc_html($c[2]); ?></span></div><p><?php echo esc_html($c[3]); ?></p><a href="/courses/"><?php echo esc_html(contenly_tr('Lihat Detail', 'View Details')); ?></a></div></article><?php endforeach; ?></div></div><div class="wd-slider-hint"><?php echo esc_html(contenly_tr('Geser ke samping untuk lihat semua kursus', 'Swipe sideways to see all courses')); ?></div><div class="wd-section-cta"><a class="wd-btn" href="/courses/"><?php echo esc_html(contenly_tr('Lihat Semua Kursus', 'View All Courses')); ?></a></div></div></section>
 
   <!-- DIVE SITES HIDDEN -->
 <!-- EQUIPMENT -->

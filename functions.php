@@ -21,8 +21,8 @@ require_once get_template_directory() . '/inc/template-functions.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_stylesheet_uri(), [], '2.2.1');
-    wp_add_inline_style('contenly-style', '.whaledive-home .wd-header .gt-lang-switcher{margin-right:10px!important}.whaledive-home .wd-header .wd-nav-member{margin-left:8px!important}');
+    wp_enqueue_style('contenly-style', get_stylesheet_uri(), [], '2.3.4');
+    wp_add_inline_style('contenly-style', '.wd-header .gt-lang-switcher,.wd-header .wd-lang-switcher{margin-right:10px!important}.wd-header .wd-nav-member{margin-left:8px!important}');
     
     // Google Fonts
     wp_enqueue_style('contenly-fonts', 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap', [], null);
@@ -442,6 +442,31 @@ function contenly_get_switcher_target_url($target_lang) {
                 }
             }
         }
+    }
+
+    // UIUX 2026-05-30 (Plan B): single blog posts have no per-post EN
+    // translation yet (Polylang inactive / no /en/<slug>/ content). Without
+    // this, the EN link falls through to the generic /en/<slug>/ fallback
+    // below, which has no real page and bounces straight back to the ID post
+    // — making the switcher look broken. Route single posts to the blog
+    // listing instead (EN -> /en/journal/, ID -> /blog/) so the toggle always
+    // lands on a real localized page. Remove once per-post EN content exists.
+    if (is_singular('post')) {
+        return contenly_localized_url('/blog/', $target_lang);
+    }
+
+    // UIUX 2026-05-30 (Plan B): course/equipment detail have no per-item EN
+    // translation yet (Polylang inactive). The generic /en/<path>/ fallback
+    // produces dead 404 URLs (e.g. /en/course/<slug>/), making the switcher
+    // look broken. Route detail pages to their localized listing instead so
+    // the toggle always lands on a real page (EN -> /en/courses/ | /en/equipment/,
+    // ID -> /courses/ | /equipment/). Remove once per-item EN content exists.
+    if (is_singular('wm_course')) {
+        return contenly_localized_url('/courses/', $target_lang);
+    }
+
+    if (is_singular('wm_equipment')) {
+        return contenly_localized_url('/equipment/', $target_lang);
     }
 
     $route_key = contenly_menu_route_key_from_path($request_path);

@@ -67,7 +67,7 @@ $wdc_member_icon = function ($path) {
         .user-profile { text-align: center; padding: 24px 16px; border-bottom: 1px solid #f1f5f9; margin-bottom: 16px; }
         .user-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #539294, #539294); display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; font-weight: 700; margin: 0 auto 12px; }
         .user-name { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
-        .user-email { font-size: 13px; color: #94a3b8; margin-bottom: 8px; }
+        .user-email { font-size: 13px; color: #5f7180; margin-bottom: 8px; }
         .user-tier { display: inline-block; padding: 4px 12px; border-radius: 9999px; font-size: 11px; font-weight: 600; background: #fef3c7; color: #d97706; }
         .dashboard-menu { list-style: none; padding: 0; margin: 0; }
         .dashboard-menu li { margin-bottom: 4px; }
@@ -93,13 +93,13 @@ $wdc_member_icon = function ($path) {
         .dashboard-main > div:has(> h1) h1,
         .dashboard-main > section:has(> h1) h1 {
             margin: 0 0 6px !important;
-            color: #0f172a !important;
+            color: var(--wdc-deep) !important;
             line-height: 1.2 !important;
         }
         .dashboard-main > div:has(> h1) p,
         .dashboard-main > section:has(> h1) p {
             margin: 0 !important;
-            color: #475569 !important;
+            color: #5f7180 !important;
         }
 
         /* Fallback for pages that render heading directly (h1 + subtitle) */
@@ -110,7 +110,7 @@ $wdc_member_icon = function ($path) {
             border: 1px solid #DCE9E6 !important;
             border-bottom: 0 !important;
             border-radius: 14px 14px 0 0 !important;
-            color: #0f172a !important;
+            color: var(--wdc-deep) !important;
             line-height: 1.2 !important;
         }
         .dashboard-main > p.page-subtitle {
@@ -166,8 +166,14 @@ $wdc_member_icon = function ($path) {
         .dashboard-main span[style*="background:#e8f8fc"], .dashboard-main div[style*="background:#e8f8fc"] { background: rgba(76,200,237,.16) !important; color: var(--wdc-blue) !important; }
         .mobile-topbar { background:#ffffff !important; border-bottom-color:rgba(0,74,152,.12) !important; }
         .mobile-menu-toggle span { background: var(--wdc-blue) !important; }
+        /* UIUX 2026-05-30 — map leftover slate text in inline styles to brand tokens across ALL member pages. Status colors (success/error/warning) untouched. */
+        .dashboard-main [style*="color:#0f172a"], .dashboard-main [style*="color: #0f172a"], .dashboard-main [style*="color:#0F172A"] { color: var(--wdc-deep) !important; }
+        .dashboard-main [style*="color:#64748b"], .dashboard-main [style*="color: #64748b"], .dashboard-main [style*="color:#475569"], .dashboard-main [style*="color: #475569"], .dashboard-main [style*="color:#94a3b8"], .dashboard-main [style*="color: #94a3b8"] { color: #5f7180 !important; }
+        .dashboard-main [style*="background:#f8fafc"], .dashboard-main [style*="background: #f8fafc"] { background: #f5fbff !important; }
+        .dashboard-main [style*="border:1px solid #e2e8f0"], .dashboard-main [style*="border: 1px solid #e2e8f0"] { border-color: rgba(0,74,152,.12) !important; }
+        .dashboard-main input, .dashboard-main select, .dashboard-main textarea { font-size: 16px !important; }
         body.wdc-brand-font-mode, body.wdc-brand-font-mode input, body.wdc-brand-font-mode select, body.wdc-brand-font-mode textarea, body.wdc-brand-font-mode button { font-family:'Open Sans',Arial,sans-serif !important; }
-        body.wdc-brand-font-mode h1, body.wdc-brand-font-mode h2, body.wdc-brand-font-mode h3, body.wdc-brand-font-mode .page-title { font-family:'iBrand','Open Sans',Arial,sans-serif !important; font-weight:400; letter-spacing:.035em !important; }
+        body.wdc-brand-font-mode h1, body.wdc-brand-font-mode h2, body.wdc-brand-font-mode h3, body.wdc-brand-font-mode .page-title { font-family:'iBrand','Open Sans',Arial,sans-serif !important; font-weight:400; }
 
         @media (max-width: 768px) {
             .dashboard-wrapper { grid-template-columns: 1fr; padding: 0; width:100%; max-width:100vw; overflow-x:hidden; }
