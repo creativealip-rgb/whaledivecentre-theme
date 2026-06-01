@@ -107,12 +107,12 @@ endwhile; rewind_posts();
 document.addEventListener('DOMContentLoaded', function(){
   document.querySelectorAll('.wd-equipment-add-cart').forEach(function(btn){
     btn.addEventListener('click', function(){
-      if (!window.wmCart || !wmCart.addToCart) { window.location.href = '/checkout/'; return; }
+      if (!window.wmCart || !wmCart.addToCart) { window.location.href = '/direct-checkout/'; return; }
       var original = btn.textContent;
       btn.disabled = true;
       btn.textContent = '<?php echo contenly_tr('Menambahkan...', 'Adding...'); ?>';
       wmCart.addToCart('equipment', btn.getAttribute('data-item-id'), 1, {}).then(function(data){
-        if (data && data.success) { window.location.href = '/checkout/'; return; }
+        if (data && data.success) { window.location.href = '/direct-checkout/'; return; }
         btn.disabled = false;
         btn.textContent = original;
       }).catch(function(){ btn.disabled = false; btn.textContent = original; });

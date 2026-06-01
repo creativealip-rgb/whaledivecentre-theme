@@ -31,13 +31,13 @@ endwhile; rewind_posts();
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_head(); ?></head>
 <body <?php body_class('whaledive-inner whaledive-courses whaledive-single-course'); ?>><?php wp_body_open(); ?>
 <main class="wd-page">
-  <?php contenly_render_public_header(); ?>
+  <header class="wd-header"><div class="wd-shell"><div class="wd-nav"><a class="wd-brand" href="/"><img class="wd-brand-logo" src="<?php echo esc_url(get_template_directory_uri() . '/assets/wdc-navbar-logo.jpg?v=20260514b'); ?>" alt="Whale Dive Centre"><span>WHALE DIVE CENTRE</span></a><button class="wd-hamburger" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="wd-menu" id="wd-mobile-menu"><a href="/" data-nav="home">Home</a><a href="/courses/" data-nav="courses">Courses</a><a href="/equipment/" data-nav="equipment">Equipment</a><a href="/blog/" data-nav="blog">Blog</a><?php if(is_user_logged_in()){ $u=wp_get_current_user(); echo '<a href="/member-dashboard/" class="wd-nav-member">Dashboard - '.esc_html($u->display_name).'</a>'; } else { echo '<a href="/member-login/" class="wd-nav-member">Login</a>'; } ?></nav></div></div></header>
 
   <section class="wd-compact-hero wd-courses-hero wd-course-full-image-hero" style="--course-hero-image:url('<?php echo esc_url($course_image); ?>');background-image:linear-gradient(90deg,rgba(2,17,38,.9) 0%,rgba(2,17,38,.76) 36%,rgba(2,17,38,.42) 68%,rgba(2,17,38,.5) 100%),url('<?php echo esc_url($course_image); ?>')!important;background-size:cover!important;background-position:center 45%!important;">
     <div class="wd-shell wd-inner-grid">
       <div>
-        <div class="wd-breadcrumb"><a href="/"><?php echo contenly_tr('Beranda', 'Home'); ?></a> <span>/</span> <a href="/courses/"><?php echo contenly_tr('Kursus', 'Courses'); ?></a> <span>/</span> <?php the_title(); ?></div>
-        <?php if($agency_name): ?><span class="wd-kicker"><?php echo esc_html($agency_name); ?> <?php echo contenly_tr('Kursus', 'Course'); ?></span><?php endif; ?>
+        <div class="wd-breadcrumb"><a href="/">Home</a> <span>/</span> <a href="/courses/">Courses</a> <span>/</span> <?php the_title(); ?></div>
+        <?php if($agency_name): ?><span class="wd-kicker"><?php echo esc_html($agency_name); ?> Course</span><?php endif; ?>
         <h1><?php the_title(); ?></h1>
         <p><?php echo esc_html(get_the_excerpt()); ?></p>
         <div class="wd-detail-meta">
@@ -46,17 +46,17 @@ endwhile; rewind_posts();
           <?php if($price): ?><span class="wd-agency-badge">Rp <?php echo number_format((float)$price,0,',','.'); ?></span><?php endif; ?>
         </div>
         <div class="wd-actions">
-          <a class="wd-btn" href="/contact/"><?php echo contenly_tr('Daftar Kursus', 'Request Enrollment'); ?></a>
-          <a class="wd-btn alt" href="/courses/"><?php echo contenly_tr('Semua Kursus', 'All Courses'); ?></a>
+          <a class="wd-btn" href="<?php echo esc_url(add_query_arg(['type' => 'course', 'item_id' => get_the_ID(), 'item' => get_the_title(), 'price' => $price], '/direct-checkout/')); ?>">Enroll Now</a>
+          <a class="wd-btn alt" href="/courses/">All Courses</a>
         </div>
       </div>
       <aside class="wd-course-hero-card">
-        <span><?php echo contenly_tr('Ringkasan Kursus', 'Course snapshot'); ?></span>
-        <b><?php echo esc_html($level_name ?: contenly_tr('Pelatihan menyelam', 'Dive training')); ?></b>
+        <span>Course snapshot</span>
+        <b><?php echo esc_html($level_name ?: 'Dive training'); ?></b>
         <ul>
-          <?php if($duration): ?><li><?php echo contenly_tr('Durasi', 'Duration'); ?>: <?php echo esc_html($duration); ?></li><?php endif; ?>
-          <?php if($max_students): ?><li><?php echo contenly_tr('Grup kecil', 'Small group'); ?>: <?php echo contenly_tr('maks', 'max'); ?> <?php echo esc_html($max_students); ?> <?php echo contenly_tr('penyelam', 'divers'); ?></li><?php endif; ?>
-          <?php if($prereqs): ?><li><?php echo contenly_tr('Prasyarat', 'Prerequisite'); ?>: <?php echo esc_html($prereqs); ?></li><?php endif; ?>
+          <?php if($duration): ?><li>Duration: <?php echo esc_html($duration); ?></li><?php endif; ?>
+          <?php if($max_students): ?><li>Small group: max <?php echo esc_html($max_students); ?> divers</li><?php endif; ?>
+          <?php if($prereqs): ?><li>Prerequisite: <?php echo esc_html($prereqs); ?></li><?php endif; ?>
         </ul>
       </aside>
     </div>
@@ -69,39 +69,39 @@ endwhile; rewind_posts();
         <?php if(get_the_content()): ?>
           <?php the_content(); ?>
         <?php else: ?>
-          <span class="wd-kicker"><?php echo contenly_tr('Tentang Kursus Ini', 'About this course'); ?></span>
+          <span class="wd-kicker">About this course</span>
           <h2 class="wd-title"><?php the_title(); ?></h2>
-          <p><?php echo contenly_tr('Kursus ini dirancang untuk membangun keterampilan dan kepercayaan diri Anda di bawah air. Hubungi tim kami untuk jadwal dan ketersediaan.', 'This course is designed to build your skills and confidence underwater. Contact the crew for detailed scheduling and availability.'); ?></p>
+          <p>This course is designed to build your skills and confidence underwater. Contact the crew for detailed scheduling and availability.</p>
         <?php endif; ?>
         <?php endwhile; ?>
         <div class="wd-course-outcomes">
-          <article><b><?php echo contenly_tr('Yang Anda bangun', 'What you build'); ?></b><span><?php echo contenly_tr('Buoyancy lebih tenang, komunikasi buddy lebih jelas, kebiasaan perencanaan lebih aman, dan kepercayaan diri lebih di bawah air.', 'Calmer buoyancy, clearer buddy communication, safer planning habits, and more confidence underwater.'); ?></span></article>
-          <article><b><?php echo contenly_tr('Cara kami mengajar', 'How we teach'); ?></b><span><?php echo contenly_tr('Briefing, demo, praktik, umpan balik, dan siklus debrief yang dirancang untuk pemahaman nyata.', 'Briefing, demo, practice, feedback, and debrief cycles designed for real understanding.'); ?></span></article>
-          <article><b><?php echo contenly_tr('Standar keselamatan', 'Safety standard'); ?></b><span><?php echo contenly_tr('Batas konservatif, pemeriksaan peralatan, dan keputusan berdasarkan kondisi laut tetap menjadi inti selama kursus.', 'Conservative limits, equipment checks, and condition-aware decisions stay central throughout the course.'); ?></span></article>
+          <article><b>What you build</b><span>Calmer buoyancy, clearer buddy communication, safer planning habits, and more confidence underwater.</span></article>
+          <article><b>How we teach</b><span>Briefing, demo, practice, feedback, and debrief cycles designed for real understanding.</span></article>
+          <article><b>Safety standard</b><span>Conservative limits, equipment checks, and condition-aware decisions stay central throughout the course.</span></article>
         </div>
       </div>
       <aside class="wd-content-sidebar">
         <div class="wd-sidebar-card">
           <?php if($price): ?>
           <div class="wd-sidebar-price">
-            <span class="wd-price-label"><?php echo contenly_tr('Biaya Kursus', 'Course fee'); ?></span>
+            <span class="wd-price-label">Course fee</span>
             <span class="wd-price-amount">Rp <?php echo number_format((float)$price,0,',','.'); ?></span>
           </div>
           <?php endif; ?>
           <?php if($includes_text): ?>
-          <h4><?php echo contenly_tr('Termasuk', 'What&rsquo;s Included'); ?></h4>
+          <h4>What&rsquo;s Included</h4>
           <p class="wd-sidebar-includes"><?php echo esc_html($includes_text); ?></p>
           <?php endif; ?>
-          <a class="wd-btn" href="/contact/" style="width:100%;text-align:center;margin-top:16px"><?php echo contenly_tr('Daftar Kursus', 'Request Enrollment'); ?></a>
-          <p class="wd-sidebar-note"><?php echo contenly_tr('Atau <a href="/member-register/">buat akun</a> untuk mendaftar dari dashboard Anda.', 'Or <a href="/member-register/">create an account</a> to enroll from your dashboard.'); ?></p>
+          <a class="wd-btn" href="<?php echo esc_url(add_query_arg(['type' => 'course', 'item_id' => get_the_ID(), 'item' => get_the_title(), 'price' => $price], '/direct-checkout/')); ?>" style="width:100%;text-align:center;margin-top:16px">Enroll Now</a>
+          <p class="wd-sidebar-note">Or <a href="/member-register/">create an account</a> to enroll from your dashboard.</p>
         </div>
       </aside>
     </div>
   </section>
 
-  <section class="wdc-card-cta"><div class="wd-shell"><span class="wd-kicker"><?php echo contenly_tr('Siap kapan pun Anda siap', 'Ready when you are'); ?></span><h2><?php echo contenly_tr('Tanyakan ketersediaan kursus ke tim kami.', 'Ask the crew for course availability.'); ?></h2><p><?php echo contenly_tr('Kirimkan sertifikasi target, tanggal, dan ukuran grup Anda.', 'Send your target certification, dates, and group size.'); ?></p><a class="wd-btn alt" href="/contact/"><?php echo contenly_tr('Cek Ketersediaan', 'Check Availability'); ?></a></div></section>
+  <section class="wdc-card-cta"><div class="wd-shell"><span class="wd-kicker">Ready when you are</span><h2>Ask the crew for course availability.</h2><p>Send your target certification, dates, and group size.</p><a class="wd-btn alt" href="/contact/">Check Availability</a></div></section>
 
-  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker"><?php echo contenly_tr('Siap menyelam?', 'Ready to dive?'); ?></span><h2>Whale Dive Centre</h2><p><?php echo contenly_tr('Pelatihan menyelam, perjalanan komunitas, dukungan peralatan, dan pengalaman berwawasan laut untuk petualangan lebih aman di bawah permukaan.', 'Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.'); ?></p><a class="wd-btn alt" href="/contact/"><?php echo contenly_tr('Mulai Konsultasi', 'Start Inquiry'); ?></a></div><nav class="wd-footer-col"><h3><?php echo contenly_tr('Jelajahi', 'Explore'); ?></h3><a href="/courses/"><?php echo contenly_tr('Kursus Menyelam', 'Dive Courses'); ?></a><a href="/equipment/"><?php echo contenly_tr('Peralatan Selam', 'Scuba Equipment'); ?></a><a href="/about/"><?php echo contenly_tr('Tentang Kami', 'About Us'); ?></a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3><?php echo contenly_tr('Kursus', 'Courses'); ?></h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course/">Instructor</a></nav><div class="wd-footer-col"><h3><?php echo contenly_tr('Kontak', 'Contact'); ?></h3><p>Email: info@whaledivecentre.com</p><p>Telepon: (021) 27939068</p><p>Jl. Tanah Kusir II No.3, Kebayoran Lama, Jakarta Selatan 12240</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram">Instagram</a></div></div></div><div class="wd-footer-bottom"><span>&copy; <?php echo date('Y'); ?> Whale Dive Centre. <?php echo contenly_tr('Hak cipta dilindungi.', 'All rights reserved.'); ?></span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
+  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/about/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>Phone: (021) 27939068</p><p>Jl. Tanah Kusir II No.3, Kebayoran Lama, Jakarta Selatan 12240</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram">Instagram</a></div></div></div><div class="wd-footer-bottom"><span>&copy; <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
 </main>
 
 <script>document.addEventListener('DOMContentLoaded',function(){var path=location.pathname;document.querySelectorAll('.wd-menu a[data-nav]').forEach(function(a){var key=a.getAttribute('data-nav');var active=(key==='home'&&path==='/')||(key!=='home'&&path.indexOf('/'+key+'/')===0);if(active){a.classList.add('is-active');a.setAttribute('aria-current','page');}});});</script><?php wp_footer(); ?></body></html>

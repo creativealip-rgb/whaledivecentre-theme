@@ -95,7 +95,7 @@ if (!$courses) {
                 <h3 style="font-size:19px;font-weight:900;color:#0f172a;margin:0 0 8px;"><?php echo esc_html($course['title']); ?></h3>
                 <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0 0 18px;">Review prerequisites, schedule options, and training outcomes before enrolling.</p>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-                    <a href="<?php echo esc_url(add_query_arg(['type' => 'course', 'item_id' => $course['id'] ?? 0, 'item' => $course['title'], 'price' => $course['price']], '/checkout/')); ?>" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#4cc8ed;color:#06384d;text-decoration:none;font-weight:950;font-size:13px;">Enroll / Checkout</a>
+                    <a href="<?php echo esc_url(add_query_arg(['type' => 'course', 'item_id' => $course['id'] ?? 0, 'item' => $course['title'], 'price' => $course['price']], '/direct-checkout/')); ?>" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#4cc8ed;color:#06384d;text-decoration:none;font-weight:950;font-size:13px;">Enroll / Checkout</a>
                     <a href="<?php echo esc_url($course['href']); ?>" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#f3fbff;color:#06384d;text-decoration:none;font-weight:900;font-size:13px;border:1px solid rgba(6,56,77,.12);">Details</a>
                 </div>
             </article>

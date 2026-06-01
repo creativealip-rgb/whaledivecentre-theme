@@ -2136,6 +2136,7 @@ function wdc_member_template_route_map() {
         'my-courses' => 'page-my-courses.php',
         'my-gear' => 'page-my-gear.php',
         'checkout' => 'page-checkout.php',
+        'direct-checkout' => 'page-direct-checkout.php',
         'settings' => 'page-settings.php',
     ];
 }
@@ -2213,6 +2214,19 @@ add_filter('template_include', function($template) {
     }
     return $template;
 }, 0);
+
+// Force our direct-checkout template at high priority (999) so it wins over
+// any plugin (e.g. whale-membership) that overrides the checkout template.
+add_filter('template_include', function($template) {
+    if (isset($_GET['type'], $_GET['item']) && in_array(sanitize_key($_GET['type']), ['course', 'equipment'], true)) {
+        $candidate = get_stylesheet_directory() . '/page-checkout.php';
+        if (file_exists($candidate)) {
+            status_header(200);
+            return $candidate;
+        }
+    }
+    return $template;
+}, 999);
 
 add_filter('pre_get_document_title', function($title) {
     $path = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
