@@ -44,13 +44,13 @@ $active_items = array_filter(array_merge($course_orders, $gear_orders), function
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-bottom:28px;">
     <article style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:24px;box-shadow:0 12px 34px rgba(15,23,42,.06);">
         <span style="font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;color:#0b617c;">Learn</span>
-        <h2 style="font-size:24px;color:#0f172a;margin:10px 0 10px;">Join a dive course</h2>
+        <h2 style="font-size:24px;color:#0f172a;margin:10px 0 10px;letter-spacing:0;">Join a dive course</h2>
         <p style="color:#64748b;line-height:1.65;margin:0 0 18px;">Start Open Water, continue to Advanced, or build safer rescue and leadership skills with the crew.</p>
         <a href="/my-courses/" style="display:inline-flex;padding:11px 16px;border-radius:999px;background:#06384d;color:#fff;text-decoration:none;font-weight:900;">Open My Courses</a>
     </article>
     <article style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:24px;box-shadow:0 12px 34px rgba(15,23,42,.06);">
         <span style="font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;color:#0b617c;">Gear</span>
-        <h2 style="font-size:24px;color:#0f172a;margin:10px 0 10px;">Buy scuba equipment</h2>
+        <h2 style="font-size:24px;color:#0f172a;margin:10px 0 10px;letter-spacing:0;">Buy scuba equipment</h2>
         <p style="color:#64748b;line-height:1.65;margin:0 0 18px;">Browse masks, fins, BCDs, regulators, wetsuits, and dive computers with fit support before checkout.</p>
         <a href="/my-gear/" style="display:inline-flex;padding:11px 16px;border-radius:999px;background:#06384d;color:#fff;text-decoration:none;font-weight:900;">Open My Gear</a>
     </article>
@@ -63,7 +63,7 @@ $status_steps = ['Payment Uploaded' => 'Proof received', 'Verified' => 'Payment 
 ?>
 <?php if (!empty($recent_activity)) : ?>
 <section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;margin-bottom:28px;box-shadow:0 12px 34px rgba(15,23,42,.05);">
-    <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;">Latest Activity</h2>
+    <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;letter-spacing:0;">Latest Activity</h2>
     <div style="display:grid;gap:10px;">
         <?php foreach ($recent_activity as $item) : $status = $item['status'] ?? 'Requested'; ?>
         <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc;flex-wrap:wrap;">
@@ -85,7 +85,7 @@ $status_steps = ['Payment Uploaded' => 'Proof received', 'Verified' => 'Payment 
 
 <div style="background:linear-gradient(135deg,#f8fdff,#eef9fc);border:1px solid #ccecf5;border-radius:20px;padding:22px;">
     <div style="font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;color:#0b617c;margin-bottom:6px;">Recommended next step</div>
-    <h2 style="font-size:22px;color:#06384d;margin:0 0 6px;">Pick a course or request gear advice.</h2>
+    <h2 style="font-size:22px;color:#06384d;margin:0 0 6px;letter-spacing:0;">Pick a course or request gear advice.</h2>
     <p style="color:#64748b;margin:0 0 16px;line-height:1.6;">The member area now focuses on what Whale Dive Centre members need most: joining courses and buying the right dive gear.</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap;"><a href="/my-courses/" style="display:inline-flex;padding:10px 14px;border-radius:999px;background:#06384d;color:#fff;text-decoration:none;font-weight:900;">Browse Courses</a><a href="/my-gear/" style="display:inline-flex;padding:10px 14px;border-radius:999px;background:#fff;color:#06384d;text-decoration:none;font-weight:900;border:1px solid #ccecf5;">Browse Gear</a></div>
 </div>

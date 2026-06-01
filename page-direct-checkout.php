@@ -85,7 +85,7 @@ get_header();
             
             <!-- Booking Info -->
             <div style="background: #f0f9ff; border-radius: 12px; padding: 24px; margin-bottom: 32px;">
-                <h2 style="font-size: 18px; font-weight: 600; color: #0f172a; margin-bottom: 16px;"><?php echo esc_html(contenly_tr('Detail Booking', 'Booking Details')); ?></h2>
+                <h2 style="font-size: 18px; font-weight: 600; color: #0f172a; margin-bottom: 16px; letter-spacing: 0;"><?php echo esc_html(contenly_tr('Detail Booking', 'Booking Details')); ?></h2>
                 
                 <div style="display: grid; gap: 12px;">
                     <div style="display: flex; justify-content: space-between;">
@@ -114,7 +114,7 @@ get_header();
             
             <!-- Payment Instructions -->
             <div style="margin-bottom: 32px;">
-                <h2 style="font-size: 18px; font-weight: 600; color: #0f172a; margin-bottom: 16px;"><?php echo esc_html(contenly_tr('Instruksi Pembayaran', 'Payment Instructions')); ?></h2>
+                <h2 style="font-size: 18px; font-weight: 600; color: #0f172a; margin-bottom: 16px; letter-spacing: 0;"><?php echo esc_html(contenly_tr('Instruksi Pembayaran', 'Payment Instructions')); ?></h2>
                 
                 <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 16px; border-radius: 8px; margin-bottom: 16px;">
                     <p style="color: #92400e; margin: 0; font-size: 14px; line-height: 1.6;">
@@ -170,7 +170,7 @@ get_header();
             <!-- Success Message (hidden by default) -->
             <div id="payment-success" style="display: none; text-align: center; padding: 32px;">
                 <div style="font-size: 64px; margin-bottom: 16px;">✅</div>
-                <h2 style="font-size: 24px; font-weight: 700; color: #0f172a; margin-bottom: 8px;"><?php echo esc_html(contenly_tr('Bukti Pembayaran Berhasil Diupload!', 'Payment Uploaded!')); ?></h2>
+                <h2 style="font-size: 24px; font-weight: 700; color: #0f172a; margin-bottom: 8px; letter-spacing: 0;"><?php echo esc_html(contenly_tr('Bukti Pembayaran Berhasil Diupload!', 'Payment Uploaded!')); ?></h2>
                 <p style="color: #64748b; margin-bottom: 24px;"><?php echo esc_html(contenly_tr('Pembayaran kamu akan kami verifikasi dalam 24 jam.', 'We will verify your payment within 24 hours.')); ?></p>
                 <a href="<?php echo esc_url(contenly_localized_url($direct_type === 'equipment' ? '/my-gear/' : '/my-courses/')); ?>" style="display: inline-block; padding: 14px 32px; background: #059669; color: white; text-decoration: none; border-radius: 12px; font-weight: 600;">
                     <?php echo esc_html($direct_type === 'equipment' ? contenly_tr('Lihat Gear Saya', 'View My Gear') : contenly_tr('Lihat Kursus Saya', 'View My Courses')); ?>
