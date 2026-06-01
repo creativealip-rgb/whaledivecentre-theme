@@ -2987,14 +2987,14 @@ body.whaledive-single-course .wd-sidebar-note,
 .wdc-auth-hero{position:relative;overflow:hidden;padding:132px 0 76px;background:radial-gradient(circle at 12% 18%,rgba(76,200,237,.28),transparent 34%),linear-gradient(135deg,#021126 0%,#083c5d 46%,#0b617c 100%);color:#fff}
 .wdc-auth-hero:before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(180deg,#000,transparent 78%)}
 .wdc-auth-grid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 470px;gap:48px;align-items:center}
-.wdc-auth-copy h1{margin:14px 0 14px;font-size:clamp(44px,7vw,84px);line-height:1.05;letter-spacing:-.03em;color:#fff}
+.wdc-auth-copy h1{margin:14px 0 14px;font-size:clamp(44px,7vw,84px);line-height:1.05;letter-spacing:.01em;color:#fff}
 .wdc-auth-copy p{max-width:560px;margin:0;color:rgba(255,255,255,.78);font-size:18px;line-height:1.65}
 .wdc-auth-back{display:inline-flex;align-items:center;gap:8px;margin-bottom:18px;color:#9ee8ff;font-weight:900;text-decoration:none}
 .wdc-auth-proof{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:34px;max-width:650px}
 .wdc-auth-proof div{padding:16px;border-radius:18px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(12px)}
 .wdc-auth-proof b{display:block;color:#fff;font-size:22px}.wdc-auth-proof span{color:rgba(255,255,255,.72);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
 .wdc-auth-card{padding:30px;border-radius:30px;background:linear-gradient(180deg,#fff,#eefaff);box-shadow:0 30px 80px rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.65);color:#06384d}
-.wdc-auth-card h2{margin:0 0 16px;font-size:32px;letter-spacing:0}.wdc-auth-card p{margin:0 0 24px;color:#5f7180;line-height:1.55}
+.wdc-auth-card h2{margin:0 0 16px;font-size:32px;letter-spacing:.03em}.wdc-auth-card p{margin:0 0 24px;color:#5f7180;line-height:1.55}
 .wdc-auth-form{display:grid;gap:18px}.wdc-auth-field label{display:block;margin:0 0 10px;color:#5b7180;font-size:12px;font-weight:950;letter-spacing:.08em;text-transform:uppercase}
 .wdc-auth-field input{width:100%;height:52px;border:1px solid rgba(6,56,77,.12);border-radius:16px;padding:0 14px;background:#fff;color:#061a36;box-sizing:border-box;box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
 .wdc-auth-field input:focus{outline:3px solid rgba(76,200,237,.26);border-color:#4cc8ed}

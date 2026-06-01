@@ -87,12 +87,12 @@ if (!$gear) {
 
 <div style="display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:20px;align-items:start;margin-bottom:28px;">
     <section>
-        <h2 style="font-size:20px;font-weight:800;color:#0f172a;margin:0 0 16px;letter-spacing:0;">Featured Gear</h2>
+        <h2 style="font-size:20px;font-weight:800;color:#0f172a;margin:0 0 16px;letter-spacing:.03em;">Featured Gear</h2>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;">
             <?php foreach ($gear as $item) : ?>
             <article style="background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:20px;box-shadow:0 12px 30px rgba(15,23,42,.05);">
                 <span style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#0b617c;background:#e8f8fc;border-radius:999px;padding:6px 10px;">Buy / fit advice</span>
-                <h3 style="font-size:20px;font-weight:900;color:#0f172a;margin:16px 0 8px;letter-spacing:0;"><?php echo esc_html($item['title']); ?></h3>
+                <h3 style="font-size:20px;font-weight:900;color:#0f172a;margin:16px 0 8px;letter-spacing:.03em;"><?php echo esc_html($item['title']); ?></h3>
                 <p style="font-size:15px;color:#06384d;font-weight:900;margin:0 0 6px;"><?php echo esc_html($item['price']); ?></p>
                 <p style="font-size:12px;color:<?php echo (!empty($item['stock']) && $item['stock'] === 'Out of stock') ? '#991b1b' : '#64748b'; ?>;font-weight:800;margin:0 0 16px;"><?php echo esc_html($item['stock'] ?? 'Availability on request'); ?></p>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
@@ -109,7 +109,7 @@ if (!$gear) {
     </section>
 
     <aside style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;box-shadow:0 12px 34px rgba(15,23,42,.06);">
-        <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;letter-spacing:0;">Need Fit / Availability Help?</h2>
+        <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;letter-spacing:.03em;">Need Fit / Availability Help?</h2>
         <form method="post" style="display:grid;gap:12px;">
             <?php wp_nonce_field('wdc_gear_request', 'wdc_gear_nonce'); ?>
             <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;">Gear
@@ -141,7 +141,7 @@ if (!$gear) {
 
 <?php if (!empty($gear_orders)) : ?>
 <section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;margin-bottom:28px;">
-    <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;letter-spacing:0;">Gear Orders</h2>
+    <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;letter-spacing:.03em;">Gear Orders</h2>
     <div style="display:grid;gap:10px;">
         <?php foreach (array_slice($gear_orders, 0, 5) as $order) : $order_link = !empty($order['item_id']) ? get_permalink((int) $order['item_id']) : ''; ?>
         <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc;flex-wrap:wrap;">

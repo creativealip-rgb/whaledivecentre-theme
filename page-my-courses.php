@@ -84,7 +84,7 @@ if (!$courses) {
 
 <div style="display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:20px;align-items:start;margin-bottom:28px;">
     <section>
-        <h2 style="font-size:20px;font-weight:800;color:#0f172a;margin:0 0 16px;letter-spacing:0;">Available Course Pathways</h2>
+        <h2 style="font-size:20px;font-weight:800;color:#0f172a;margin:0 0 16px;letter-spacing:.03em;">Available Course Pathways</h2>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;">
             <?php foreach ($courses as $course) : ?>
             <article style="background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:20px;box-shadow:0 12px 30px rgba(15,23,42,.05);">
@@ -92,7 +92,7 @@ if (!$courses) {
                     <span style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#0b617c;background:#e8f8fc;border-radius:999px;padding:6px 10px;"><?php echo esc_html($course['level']); ?></span>
                     <span style="font-size:12px;color:#64748b;font-weight:700;"><?php echo esc_html($course['duration']); ?></span>
                 </div>
-                <h3 style="font-size:19px;font-weight:900;color:#0f172a;margin:0 0 8px;letter-spacing:0;"><?php echo esc_html($course['title']); ?></h3>
+                <h3 style="font-size:19px;font-weight:900;color:#0f172a;margin:0 0 8px;letter-spacing:.03em;"><?php echo esc_html($course['title']); ?></h3>
                 <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0 0 18px;">Review prerequisites, schedule options, and training outcomes before enrolling.</p>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
                     <a href="<?php echo esc_url(add_query_arg(['type' => 'course', 'item_id' => $course['id'] ?? 0, 'item' => $course['title'], 'price' => $course['price']], '/direct-checkout/')); ?>" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#4cc8ed;color:#06384d;text-decoration:none;font-weight:950;font-size:13px;">Enroll / Checkout</a>
@@ -104,7 +104,7 @@ if (!$courses) {
     </section>
 
     <aside style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;box-shadow:0 12px 34px rgba(15,23,42,.06);">
-        <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;letter-spacing:0;">Need Crew Review?</h2>
+        <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;letter-spacing:.03em;">Need Crew Review?</h2>
         <form method="post" style="display:grid;gap:12px;">
             <?php wp_nonce_field('wdc_course_request', 'wdc_course_nonce'); ?>
             <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;">Course
@@ -136,7 +136,7 @@ if (!$courses) {
 
 <?php if (!empty($course_orders)) : ?>
 <section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;margin-bottom:28px;">
-    <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;letter-spacing:0;">Course Orders</h2>
+    <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;letter-spacing:.03em;">Course Orders</h2>
     <div style="display:grid;gap:10px;">
         <?php foreach (array_slice($course_orders, 0, 5) as $order) : $order_link = !empty($order['item_id']) ? get_permalink((int) $order['item_id']) : ''; ?>
         <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc;flex-wrap:wrap;">
