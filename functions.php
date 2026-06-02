@@ -2487,6 +2487,13 @@ function wdc_register_member_admin_menu() {
 }
 add_action('admin_menu', 'wdc_register_member_admin_menu');
 
+// Hide unnecessary menus — Comments (0 comments), Tools (only converter)
+function wdc_cleanup_admin_menus() {
+    remove_menu_page('edit-comments.php');  // Comments
+    remove_menu_page('tools.php');          // Tools
+}
+add_action('admin_menu', 'wdc_cleanup_admin_menus', 999);
+
 // Hide Whale Members menu — handled directly in plugin class-wm-admin.php
 // Payment Settings page — reads/writes same options as whale-membership plugin
 function wdc_render_payment_settings_page() {
