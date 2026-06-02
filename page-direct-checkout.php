@@ -70,16 +70,16 @@ if (get_current_user_id() !== $user_id) {
 get_header();
 ?>
 
-<main class="site-main" style="min-height: 80vh; padding: 60px 0; background: #f8fafc;">
-    <div class="site-container" style="max-width: 600px; margin: 0 auto; padding: 0 20px;">
+<section style="padding:120px 0 60px;background:#f8fafc;">
+    <div class="wd-shell" style="max-width:640px;">
         
         <!-- Checkout Card -->
-        <div style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+        <div style="background:#fff;border-radius:24px;padding:40px;box-shadow:0 20px 60px rgba(2,21,43,.08);border:1px solid rgba(6,56,77,.06);">
             
             <!-- Header -->
             <div style="text-align: center; margin-bottom: 32px;">
                 <div style="font-size: 48px; margin-bottom: 16px;">💳</div>
-                <h1 style="font-size: 28px; font-weight: 700; color: #0f172a; margin-bottom: 8px;"><?php echo esc_html(contenly_tr('Checkout', 'Checkout')); ?></h1>
+                <h1 style="font-size:28px;font-weight:800;color:#0f172a;margin-bottom:8px;letter-spacing:0;"><?php echo esc_html(contenly_tr('Checkout', 'Checkout')); ?></h1>
                 <p style="color: #64748b; font-size: 15px;"><?php echo esc_html($is_direct_checkout ? contenly_tr('Langsung checkout tanpa request admin dulu.', 'Checkout directly without an admin request first.') : contenly_tr('Selesaikan pembayaran untuk mengonfirmasi booking kamu', 'Complete your payment to confirm your booking.')); ?></p>
             </div>
             
@@ -187,7 +187,7 @@ get_header();
         </div>
         
     </div>
-</main>
+</section>
 
 <script>
 jQuery(document).ready(function($) {
