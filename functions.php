@@ -540,7 +540,7 @@ function contenly_render_public_header() {
     $courses_url = esc_url(contenly_localized_url('/courses/'));
     $equipment_url = esc_url(contenly_localized_url('/equipment/'));
     $blog_url = esc_url(contenly_localized_url('/blog/'));
-    $member_url = is_user_logged_in() ? esc_url(contenly_localized_url('/member-dashboard/')) : esc_url(contenly_localized_url('/member-login/'));
+    $member_url = is_user_logged_in() ? esc_url(contenly_localized_url('/dashboard/')) : esc_url(contenly_localized_url('/member-login/'));
     $member_label = is_user_logged_in() ? contenly_tr('Dashboard', 'Dashboard') : contenly_tr('Masuk', 'Login');
     $request_path = trailingslashit(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/');
     $active_key = ($request_path === '/' || $request_path === '/en/' || $request_path === '/home/' || $request_path === '/en/home/') ? 'home' : '';
