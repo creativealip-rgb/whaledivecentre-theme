@@ -2483,8 +2483,83 @@ function wdc_register_member_admin_menu() {
     add_submenu_page('wdc-member-admin', 'Gear Requests', 'Gear Requests' . wdc_admin_menu_badge(wdc_member_admin_pending_count('equipment', 'requests')), 'manage_options', 'wdc-gear-requests', 'wdc_render_gear_admin_page');
     $direct_pending = wdc_member_admin_pending_count('course', 'orders') + wdc_member_admin_pending_count('equipment', 'orders');
     add_submenu_page('wdc-member-admin', 'Direct Orders', 'Direct Orders' . wdc_admin_menu_badge($direct_pending), 'manage_options', 'wdc-direct-orders', 'wdc_render_direct_orders_admin_page');
+    add_submenu_page('wdc-member-admin', 'Payment Settings', 'Payment Settings', 'manage_options', 'wdc-payment-settings', 'wdc_render_payment_settings_page');
 }
 add_action('admin_menu', 'wdc_register_member_admin_menu');
+
+// Hide Whale Members menu — handled directly in plugin class-wm-admin.php
+// Payment Settings page — reads/writes same options as whale-membership plugin
+function wdc_render_payment_settings_page() {
+    if (!current_user_can('manage_options')) {
+        wp_die('Not allowed');
+    }
+
+    // Handle bank account updates
+    if (isset($_POST['wdc_save_bank_accounts']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_wpnonce'] ?? '')), 'wdc_bank_accounts')) {
+        $accounts = [];
+        if (!empty($_POST['bank_name']) && is_array($_POST['bank_name'])) {
+            foreach ($_POST['bank_name'] as $i => $name) {
+                if (!empty($name)) {
+                    $accounts[] = [
+                        'bank' => sanitize_text_field($name),
+                        'account_name' => sanitize_text_field($_POST['account_name'][$i] ?? ''),
+                        'account_number' => sanitize_text_field($_POST['account_number'][$i] ?? ''),
+                    ];
+                }
+            }
+        }
+        update_option('wm_bank_accounts', $accounts);
+        echo '<div class="notice notice-success"><p>Bank accounts saved.</p></div>';
+    }
+
+    // Handle Midtrans settings
+    if (isset($_POST['wdc_save_settings']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_wpnonce'] ?? '')), 'wdc_payment_settings')) {
+        update_option('wm_midtrans_server_key', sanitize_text_field($_POST['wm_midtrans_server_key'] ?? ''));
+        update_option('wm_midtrans_client_key', sanitize_text_field($_POST['wm_midtrans_client_key'] ?? ''));
+        update_option('wm_midtrans_production', !empty($_POST['wm_midtrans_production']));
+        echo '<div class="notice notice-success"><p>Settings saved.</p></div>';
+    }
+
+    echo '<div class="wrap">';
+    echo '<h1>Payment Settings</h1>';
+
+    // Midtrans Section
+    echo '<h2 style="margin-top:1.5rem">Midtrans Payment Gateway</h2>';
+    echo '<form method="post">';
+    wp_nonce_field('wdc_payment_settings');
+    echo '<table class="form-table"><tbody>';
+    echo '<tr><th>Server Key</th><td><input type="text" name="wm_midtrans_server_key" value="' . esc_attr(get_option('wm_midtrans_server_key', '')) . '" class="regular-text"></td></tr>';
+    echo '<tr><th>Client Key</th><td><input type="text" name="wm_midtrans_client_key" value="' . esc_attr(get_option('wm_midtrans_client_key', '')) . '" class="regular-text"></td></tr>';
+    echo '<tr><th>Production Mode</th><td><label><input type="checkbox" name="wm_midtrans_production" value="1"' . checked(get_option('wm_midtrans_production'), true, false) . '> Enable production (live payments)</label></td></tr>';
+    echo '</tbody></table>';
+    echo '<p><button type="submit" name="wdc_save_settings" value="1" class="button button-primary">Save Settings</button></p>';
+    echo '</form>';
+
+    // Bank Accounts Section
+    $bank_accounts = get_option('wm_bank_accounts', [
+        ['bank' => 'BCA', 'account_name' => 'Whale Dive Centre', 'account_number' => '1234567890'],
+        ['bank' => 'Mandiri', 'account_name' => 'Whale Dive Centre', 'account_number' => '9876543210'],
+    ]);
+
+    echo '<h2 style="margin-top:2rem">Bank Accounts (for Manual Payments)</h2>';
+    echo '<form method="post">';
+    wp_nonce_field('wdc_bank_accounts');
+    echo '<table class="form-table"><tbody>';
+
+    for ($i = 0; $i < 3; $i++) {
+        $account = $bank_accounts[$i] ?? ['bank' => '', 'account_name' => '', 'account_number' => ''];
+        echo '<tr><th>Bank ' . ($i + 1) . '</th><td>';
+        echo '<input type="text" name="bank_name[]" value="' . esc_attr($account['bank']) . '" placeholder="Bank name (BCA, Mandiri...)" style="width:150px;margin-right:10px">';
+        echo '<input type="text" name="account_number[]" value="' . esc_attr($account['account_number']) . '" placeholder="Account number" style="width:180px;margin-right:10px">';
+        echo '<input type="text" name="account_name[]" value="' . esc_attr($account['account_name']) . '" placeholder="Account holder name" style="width:200px">';
+        echo '</td></tr>';
+    }
+
+    echo '</tbody></table>';
+    echo '<p><button type="submit" name="wdc_save_bank_accounts" value="1" class="button button-primary">Save Bank Accounts</button></p>';
+    echo '</form>';
+    echo '</div>';
+}
 
 function wdc_member_admin_handle_update() {
     if (!current_user_can('manage_options') || empty($_POST['wdc_member_admin_nonce'])) {
