@@ -28,9 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wdc_gear_nonce']) && 
             'created_at' => current_time('mysql'),
         ]);
         update_user_meta($user_id, '_wdc_gear_requests', array_slice($gear_requests, 0, 10));
-        $notice = 'Gear request saved. The crew can help confirm fit and next steps.';
+        $notice = contenly_tr('Permintaan peralatan tersimpan. Kru akan membantu konfirmasi fitting dan langkah selanjutnya.', 'Gear request saved. The crew can help confirm fit and next steps.');
     } else {
-        $notice = 'Please choose gear first.';
+        $notice = contenly_tr('Pilih peralatan terlebih dahulu.', 'Please choose gear first.');
         $notice_type = 'error';
     }
 }
@@ -64,8 +64,8 @@ if (!$gear) {
 }
 ?>
 <div style="margin-bottom:24px;">
-    <h1 style="font-size:28px;font-weight:800;color:#0f172a;margin-bottom:8px;">My Gear</h1>
-    <p style="font-size:15px;color:#64748b;">Buy standard gear directly, or request fit/availability help when sizing and setup need crew guidance.</p>
+    <h1 style="font-size:28px;font-weight:800;color:#0f172a;margin-bottom:8px;"><?php echo contenly_tr('Peralatan Saya', 'My Gear'); ?></h1>
+    <p style="font-size:15px;color:#64748b;"><?php echo contenly_tr('Beli peralatan standar langsung, atau minta bantuan fitting/ketersediaan saat ukuran dan setup butuh panduan kru.', 'Buy standard gear directly, or request fit/availability help when sizing and setup need crew guidance.'); ?></p>
 </div>
 
 <?php if ($notice) : ?>
@@ -76,32 +76,32 @@ if (!$gear) {
 
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:26px;">
     <div style="background:#eef9fc;border:1px solid #ccecf5;border-radius:16px;padding:18px;">
-        <div style="font-size:12px;color:#0b617c;text-transform:uppercase;font-weight:800;letter-spacing:.08em;">Gear Activity</div>
+        <div style="font-size:12px;color:#0b617c;text-transform:uppercase;font-weight:800;letter-spacing:.08em;"><?php echo contenly_tr('Aktivitas Peralatan', 'Gear Activity'); ?></div>
         <div style="font-size:32px;font-weight:900;color:#06384d;margin-top:6px;"><?php echo count($gear_requests); ?></div>
     </div>
     <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:16px;padding:18px;">
-        <div style="font-size:12px;color:#9a3412;text-transform:uppercase;font-weight:800;letter-spacing:.08em;">Fit Check</div>
-        <div style="font-size:20px;font-weight:900;color:#7c2d12;margin-top:8px;">Optional for fit-sensitive items</div>
+        <div style="font-size:12px;color:#9a3412;text-transform:uppercase;font-weight:800;letter-spacing:.08em;"><?php echo contenly_tr('Cek Fitting', 'Fit Check'); ?></div>
+        <div style="font-size:20px;font-weight:900;color:#7c2d12;margin-top:8px;"><?php echo contenly_tr('Opsional untuk item sensitif fitting', 'Optional for fit-sensitive items'); ?></div>
     </div>
 </div>
 
 <div style="display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:20px;align-items:start;margin-bottom:28px;">
     <section>
-        <h2 style="font-size:20px;font-weight:800;color:#0f172a;margin:0 0 16px;letter-spacing:.03em;">Featured Gear</h2>
+        <h2 style="font-size:20px;font-weight:800;color:#0f172a;margin:0 0 16px;letter-spacing:.03em;"><?php echo contenly_tr('Peralatan Unggulan', 'Featured Gear'); ?></h2>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;">
             <?php foreach ($gear as $item) : ?>
             <article style="background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:20px;box-shadow:0 12px 30px rgba(15,23,42,.05);">
-                <span style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#0b617c;background:#e8f8fc;border-radius:999px;padding:6px 10px;">Buy / fit advice</span>
+                <span style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#0b617c;background:#e8f8fc;border-radius:999px;padding:6px 10px;"><?php echo contenly_tr('Beli / saran fitting', 'Buy / fit advice'); ?></span>
                 <h3 style="font-size:20px;font-weight:900;color:#0f172a;margin:16px 0 8px;letter-spacing:.03em;"><?php echo esc_html($item['title']); ?></h3>
                 <p style="font-size:15px;color:#06384d;font-weight:900;margin:0 0 6px;"><?php echo esc_html($item['price']); ?></p>
                 <p style="font-size:12px;color:<?php echo (!empty($item['stock']) && $item['stock'] === 'Out of stock') ? '#991b1b' : '#64748b'; ?>;font-weight:800;margin:0 0 16px;"><?php echo esc_html($item['stock'] ?? 'Availability on request'); ?></p>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
                     <?php if (!empty($item['checkout'])) : ?>
-                    <a href="<?php echo esc_url(add_query_arg(['type' => 'equipment', 'item_id' => $item['id'] ?? 0, 'item' => $item['title'], 'price' => preg_replace('/[^0-9]/', '', $item['price'])], '/direct-checkout/')); ?>" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#4cc8ed;color:#06384d;text-decoration:none;font-weight:950;font-size:13px;">Buy Now</a>
+                    <a href="<?php echo esc_url(add_query_arg(['type' => 'equipment', 'item_id' => $item['id'] ?? 0, 'item' => $item['title'], 'price' => preg_replace('/[^0-9]/', '', $item['price'])], '/direct-checkout/')); ?>" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#4cc8ed;color:#06384d;text-decoration:none;font-weight:950;font-size:13px;"><?php echo contenly_tr('Beli Sekarang', 'Buy Now'); ?></a>
                     <?php else : ?>
-                    <a href="#" onclick="event.preventDefault();document.querySelector('select[name=selected_gear]').value='<?php echo esc_js($item['title']); ?>';document.querySelector('select[name=request_type]').value='Availability check';document.querySelector('aside form').scrollIntoView({behavior:'smooth'});" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#4cc8ed;color:#06384d;text-decoration:none;font-weight:950;font-size:13px;">Check Availability</a>
+                    <a href="#" onclick="event.preventDefault();document.querySelector('select[name=selected_gear]').value='<?php echo esc_js($item['title']); ?>';document.querySelector('select[name=request_type]').value='Availability check';document.querySelector('aside form').scrollIntoView({behavior:'smooth'});" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#4cc8ed;color:#06384d;text-decoration:none;font-weight:950;font-size:13px;"><?php echo contenly_tr('Cek Ketersediaan', 'Check Availability'); ?></a>
                     <?php endif; ?>
-                    <a href="<?php echo esc_url($item['href']); ?>" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#f3fbff;color:#06384d;text-decoration:none;font-weight:900;font-size:13px;border:1px solid rgba(6,56,77,.12);">Details</a>
+                    <a href="<?php echo esc_url($item['href']); ?>" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#f3fbff;color:#06384d;text-decoration:none;font-weight:900;font-size:13px;border:1px solid rgba(6,56,77,.12);"><?php echo contenly_tr('Detail', 'Details'); ?></a>
                 </div>
             </article>
             <?php endforeach; ?>
@@ -109,39 +109,39 @@ if (!$gear) {
     </section>
 
     <aside style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;box-shadow:0 12px 34px rgba(15,23,42,.06);">
-        <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;letter-spacing:.03em;">Need Fit / Availability Help?</h2>
+        <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;letter-spacing:.03em;"><?php echo contenly_tr('Butuh Bantuan Fitting / Ketersediaan?', 'Need Fit / Availability Help?'); ?></h2>
         <form method="post" style="display:grid;gap:12px;">
             <?php wp_nonce_field('wdc_gear_request', 'wdc_gear_nonce'); ?>
-            <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;">Gear
+            <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;"><?php echo contenly_tr('Peralatan', 'Gear'); ?>
                 <select name="selected_gear" required style="border:1px solid #dbe4ea;border-radius:12px;padding:11px 12px;">
-                    <option value="">Choose gear</option>
+                    <option value=""><?php echo contenly_tr('Pilih peralatan', 'Choose gear'); ?></option>
                     <?php foreach ($gear as $item) : ?>
                     <option value="<?php echo esc_attr($item['title']); ?>"><?php echo esc_html($item['title']); ?></option>
                     <?php endforeach; ?>
                 </select>
             </label>
-            <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;">Request type
+            <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;"><?php echo contenly_tr('Jenis permintaan', 'Request type'); ?>
                 <select name="request_type" style="border:1px solid #dbe4ea;border-radius:12px;padding:11px 12px;">
-                    <option value="Buy advice">Buy advice</option>
-                    <option value="Fit check">Fit check</option>
-                    <option value="Availability check">Availability check</option>
-                    <option value="Setup recommendation">Setup recommendation</option>
+                    <option value="Buy advice"><?php echo contenly_tr('Saran pembelian', 'Buy advice'); ?></option>
+                    <option value="Fit check"><?php echo contenly_tr('Cek fitting', 'Fit check'); ?></option>
+                    <option value="Availability check"><?php echo contenly_tr('Cek ketersediaan', 'Availability check'); ?></option>
+                    <option value="Setup recommendation"><?php echo contenly_tr('Rekomendasi setup', 'Setup recommendation'); ?></option>
                 </select>
             </label>
-            <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;">Size / fit notes
-                <input name="size_notes" placeholder="Height, weight, shoe size, mask fit issue..." style="border:1px solid #dbe4ea;border-radius:12px;padding:11px 12px;">
+            <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;"><?php echo contenly_tr('Catatan ukuran / fitting', 'Size / fit notes'); ?>
+                <input name="size_notes" placeholder="<?php echo contenly_tr('Tinggi badan, berat badan, ukuran sepatu, masalah fitting masker...', 'Height, weight, shoe size, mask fit issue...'); ?>" style="border:1px solid #dbe4ea;border-radius:12px;padding:11px 12px;">
             </label>
-            <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;">Notes
-                <textarea name="message" rows="4" placeholder="Budget, diving frequency, course plan..." style="border:1px solid #dbe4ea;border-radius:12px;padding:11px 12px;resize:vertical;"></textarea>
+            <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;"><?php echo contenly_tr('Catatan', 'Notes'); ?>
+                <textarea name="message" rows="4" placeholder="<?php echo contenly_tr('Anggaran, frekuensi menyelam, rencana kursus...', 'Budget, diving frequency, course plan...'); ?>" style="border:1px solid #dbe4ea;border-radius:12px;padding:11px 12px;resize:vertical;"></textarea>
             </label>
-            <button type="submit" style="border:0;border-radius:999px;background:#4cc8ed;color:#06384d;padding:12px 16px;font-weight:950;cursor:pointer;">Request Help</button>
+            <button type="submit" style="border:0;border-radius:999px;background:#4cc8ed;color:#06384d;padding:12px 16px;font-weight:950;cursor:pointer;"><?php echo contenly_tr('Minta Bantuan', 'Request Help'); ?></button>
         </form>
     </aside>
 </div>
 
 <?php if (!empty($gear_orders)) : ?>
 <section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;margin-bottom:28px;">
-    <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;letter-spacing:.03em;">Gear Orders</h2>
+    <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;letter-spacing:.03em;"><?php echo contenly_tr('Pesanan Peralatan', 'Gear Orders'); ?></h2>
     <div style="display:grid;gap:10px;">
         <?php foreach (array_slice($gear_orders, 0, 5) as $order) : $order_link = !empty($order['item_id']) ? get_permalink((int) $order['item_id']) : ''; ?>
         <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc;flex-wrap:wrap;">
@@ -158,7 +158,7 @@ if (!$gear) {
 
 <?php if (!empty($gear_requests)) : ?>
 <section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;margin-bottom:28px;">
-    <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;">Recent Gear Activity</h2>
+    <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;"><?php echo contenly_tr('Aktivitas Peralatan Terbaru', 'Recent Gear Activity'); ?></h2>
     <div style="display:grid;gap:10px;">
         <?php foreach (array_slice($gear_requests, 0, 5) as $request) : ?>
         <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc;flex-wrap:wrap;">
