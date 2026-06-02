@@ -970,6 +970,7 @@ function contenly_custom_document_title($title) {
         [['is_page', 'rewards'], ['Dive Rewards & Poin', 'Dive Rewards & Points']],
         [['is_page', 'membership'], ['Tier Member', 'Member Tier']],
         [['is_page', 'notifications'], ['Notifikasi', 'Notifications']],
+        [['is_page', 'direct-checkout'], ['Checkout', 'Checkout']],
         [['is_page', 'settings'], ['Pengaturan Akun', 'Account Settings']],
     ];
 

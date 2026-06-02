@@ -130,7 +130,7 @@ get_header();
             
             <?php if ($direct_out_of_stock) : ?>
             <div style="background:#fee2e2;border:1px solid #fecaca;color:#991b1b;border-radius:12px;padding:16px;margin-bottom:18px;font-weight:800;line-height:1.5;">
-                This gear is currently out of stock. Please go back to My Gear and request availability help so the crew can confirm the next restock or alternative setup.
+                <?php echo esc_html(contenly_tr('Gear ini sedang stok habis. Silakan kembali ke Gear Saya dan minta bantuan ketersediaan supaya kru bisa konfirmasi restock berikutnya atau alternatif setup.', 'This gear is currently out of stock. Please go back to My Gear and request availability help so the crew can confirm the next restock or alternative setup.')); ?>
             </div>
             <?php endif; ?>
 
@@ -163,7 +163,7 @@ get_header();
                 
                 <button type="submit" id="upload-btn" <?php disabled($direct_out_of_stock); ?>
                         style="width: 100%; padding: 16px; background: linear-gradient(135deg, #539294, #539294); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; transition: all 0.3s;<?php echo $direct_out_of_stock ? 'opacity:.55;cursor:not-allowed;' : ''; ?>">
-                    <?php echo esc_html($direct_out_of_stock ? 'Out of Stock' : contenly_tr('Upload Bukti Pembayaran', 'Upload Payment Proof')); ?>
+                    <?php echo esc_html($direct_out_of_stock ? contenly_tr('Stok Habis', 'Out of Stock') : contenly_tr('Upload Bukti Pembayaran', 'Upload Payment Proof')); ?>
                 </button>
             </form>
             
