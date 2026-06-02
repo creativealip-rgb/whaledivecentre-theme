@@ -69,7 +69,14 @@ if (get_current_user_id() !== $user_id) {
 
 get_header();
 ?>
-
+<style>
+header a, header nav a, footer a, footer nav a,
+.wd-header a, .wd-nav a, .wd-footer a,
+sectionheader a, sectionfooter a,
+nav a[data-nav] {
+    text-decoration: none !important;
+}
+</style>
 <section style="padding:120px 0 60px;background:#f8fafc;">
     <div class="wd-shell" style="max-width:640px;">
         
