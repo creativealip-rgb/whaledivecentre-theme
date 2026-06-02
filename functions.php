@@ -21,8 +21,8 @@ require_once get_template_directory() . '/inc/template-functions.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_stylesheet_uri(), [], '2.3.4');
-    wp_add_inline_style('contenly-style', '.wd-header .gt-lang-switcher,.wd-header .wd-lang-switcher{margin-right:10px!important}.wd-header .wd-nav-member{margin-left:8px!important}');
+    wp_enqueue_style('contenly-style', get_stylesheet_uri(), [], '2.2.1');
+    wp_add_inline_style('contenly-style', '.whaledive-home .wd-header .gt-lang-switcher{margin-right:10px!important}.whaledive-home .wd-header .wd-nav-member{margin-left:8px!important}');
     
     // Google Fonts
     wp_enqueue_style('contenly-fonts', 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap', [], null);
@@ -442,31 +442,6 @@ function contenly_get_switcher_target_url($target_lang) {
                 }
             }
         }
-    }
-
-    // UIUX 2026-05-30 (Plan B): single blog posts have no per-post EN
-    // translation yet (Polylang inactive / no /en/<slug>/ content). Without
-    // this, the EN link falls through to the generic /en/<slug>/ fallback
-    // below, which has no real page and bounces straight back to the ID post
-    // — making the switcher look broken. Route single posts to the blog
-    // listing instead (EN -> /en/journal/, ID -> /blog/) so the toggle always
-    // lands on a real localized page. Remove once per-post EN content exists.
-    if (is_singular('post')) {
-        return contenly_localized_url('/blog/', $target_lang);
-    }
-
-    // UIUX 2026-05-30 (Plan B): course/equipment detail have no per-item EN
-    // translation yet (Polylang inactive). The generic /en/<path>/ fallback
-    // produces dead 404 URLs (e.g. /en/course/<slug>/), making the switcher
-    // look broken. Route detail pages to their localized listing instead so
-    // the toggle always lands on a real page (EN -> /en/courses/ | /en/equipment/,
-    // ID -> /courses/ | /equipment/). Remove once per-item EN content exists.
-    if (is_singular('wm_course')) {
-        return contenly_localized_url('/courses/', $target_lang);
-    }
-
-    if (is_singular('wm_equipment')) {
-        return contenly_localized_url('/equipment/', $target_lang);
     }
 
     $route_key = contenly_menu_route_key_from_path($request_path);
@@ -1071,6 +1046,42 @@ function contenly_get_seo_context() {
         $description = contenly_tr(
             'Create a Whale Dive Centre account to keep course planning, gear requests, certification notes, and dive updates in one place.',
             'Create a Whale Dive Centre account to keep course planning, gear requests, certification notes, and dive updates in one place.'
+        );
+
+    } elseif (is_page('courses') || is_post_type_archive('wm_course')) {
+        $description = contenly_tr(
+            'Jelajahi kursus selam PADI/SSI dari Open Water hingga Divemaster di Whale Dive Centre Jakarta.',
+            'Explore PADI/SSI dive courses from Open Water to Divemaster at Whale Dive Centre Jakarta.'
+        );
+    } elseif (is_page('equipment') || is_post_type_archive('wm_equipment')) {
+        $description = contenly_tr(
+            'Beli peralatan selam berkualitas — masker, wetsuit, BCD, regulator, fin, dive computer — di Whale Dive Centre.',
+            'Buy quality dive gear — masks, wetsuits, BCDs, regulators, fins, dive computers — at Whale Dive Centre.'
+        );
+    } elseif (is_page('member-login')) {
+        $description = contenly_tr(
+            'Masuk ke akun member Whale Dive Centre untuk kelola kursus, gear, dan sertifikasi selam Anda.',
+            'Sign in to your Whale Dive Centre member account to manage courses, gear, and dive certifications.'
+        );
+    } elseif (is_page('member-register')) {
+        $description = contenly_tr(
+            'Buat akun member Whale Dive Centre untuk akses kursus selam, peralatan, dan dukungan crew.',
+            'Create a Whale Dive Centre member account for access to dive courses, gear, and crew support.'
+        );
+    } elseif (is_page('direct-checkout')) {
+        $description = contenly_tr(
+            'Checkout dan bayar kursus selam atau peralatan diving langsung di Whale Dive Centre.',
+            'Checkout and pay for dive courses or equipment directly at Whale Dive Centre.'
+        );
+    } elseif (is_page('my-courses')) {
+        $description = contenly_tr(
+            'Kelola kursus selam Anda — lihat status, daftar kursus baru, dan lacak progres sertifikasi.',
+            'Manage your dive courses — view status, enroll in new courses, and track certification progress.'
+        );
+    } elseif (is_page('my-gear')) {
+        $description = contenly_tr(
+            'Beli peralatan selam dan kelola request gear Anda di member area Whale Dive Centre.',
+            'Buy dive equipment and manage your gear requests in the Whale Dive Centre member area.'
         );
     } elseif (is_page('dashboard')) {
         $description = contenly_tr(
@@ -2219,7 +2230,7 @@ add_filter('template_include', function($template) {
 // any plugin (e.g. whale-membership) that overrides the checkout template.
 add_filter('template_include', function($template) {
     if (isset($_GET['type'], $_GET['item']) && in_array(sanitize_key($_GET['type']), ['course', 'equipment'], true)) {
-        $candidate = get_stylesheet_directory() . '/page-checkout.php';
+        $candidate = get_stylesheet_directory() . '/page-direct-checkout.php';
         if (file_exists($candidate)) {
             status_header(200);
             return $candidate;
@@ -2231,10 +2242,10 @@ add_filter('template_include', function($template) {
 add_filter('pre_get_document_title', function($title) {
     $path = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
     if ($path === 'member-login') {
-        return 'Member Login - Whale Dive Centre Local';
+        return 'Member Login - Whale Dive Centre';
     }
     if ($path === 'member-register') {
-        return 'Member Register - Whale Dive Centre Local';
+        return 'Member Register - Whale Dive Centre';
     }
     return $title;
 });
