@@ -41,12 +41,13 @@ if (post_type_exists('wm_equipment')) {
     foreach ($gear_posts as $gear_post) {
         $price = (float) get_post_meta($gear_post->ID, '_wm_price', true);
         $stock = get_post_meta($gear_post->ID, '_wm_stock', true);
-        $stock_label = $stock === '' || !is_numeric($stock) ? 'In stock' : ((int) $stock > 0 ? (int) $stock . ' left' : 'Out of stock');
+        $stock_label = $stock === '' || !is_numeric($stock) ? contenly_tr('Tersedia', 'In stock') : ((int) $stock > 0 ? (int) $stock . ' ' . contenly_tr('tersisa', 'left') : contenly_tr('Stok habis', 'Out of stock'));
         $gear[] = [
             'id' => $gear_post->ID,
             'title' => $gear_post->post_title,
-            'price' => $price > 0 ? 'Rp ' . number_format($price, 0, ',', '.') : 'Ask crew',
+            'price' => $price > 0 ? 'Rp ' . number_format($price, 0, ',', '.') : contenly_tr('Tanya kru', 'Ask crew'),
             'stock' => $stock_label,
+            'stock_raw' => $stock,
             'checkout' => $price > 0 && ($stock === '' || (int) $stock > 0),
             'href' => get_permalink($gear_post),
         ];
@@ -54,12 +55,12 @@ if (post_type_exists('wm_equipment')) {
 }
 if (!$gear) {
     $gear = [
-        ['id' => 0, 'title' => 'Masks', 'price' => 'From Rp 1.250.000', 'checkout' => true, 'href' => '/equipment/masks/'],
-        ['id' => 0, 'title' => 'Fins', 'price' => 'From Rp 950.000', 'checkout' => true, 'href' => '/equipment/fins/'],
-        ['id' => 0, 'title' => 'BCD', 'price' => 'From Rp 5.500.000', 'checkout' => true, 'href' => '/equipment/bcd/'],
-        ['id' => 0, 'title' => 'Regulators', 'price' => 'From Rp 4.850.000', 'checkout' => true, 'href' => '/equipment/regulators/'],
-        ['id' => 0, 'title' => 'Wetsuits', 'price' => 'Fit advice required', 'checkout' => false, 'href' => '/equipment/wetsuits/'],
-        ['id' => 0, 'title' => 'Dive Computers', 'price' => 'Ask crew', 'checkout' => false, 'href' => '/equipment/dive-computers/'],
+        ['id' => 0, 'title' => 'Masks', 'price' => contenly_tr('Mulai Rp 1.250.000', 'From Rp 1.250.000'), 'checkout' => true, 'href' => '/equipment/masks/'],
+        ['id' => 0, 'title' => 'Fins', 'price' => contenly_tr('Mulai Rp 950.000', 'From Rp 950.000'), 'checkout' => true, 'href' => '/equipment/fins/'],
+        ['id' => 0, 'title' => 'BCD', 'price' => contenly_tr('Mulai Rp 5.500.000', 'From Rp 5.500.000'), 'checkout' => true, 'href' => '/equipment/bcd/'],
+        ['id' => 0, 'title' => 'Regulators', 'price' => contenly_tr('Mulai Rp 4.850.000', 'From Rp 4.850.000'), 'checkout' => true, 'href' => '/equipment/regulators/'],
+        ['id' => 0, 'title' => 'Wetsuits', 'price' => contenly_tr('Butuh saran fitting', 'Fit advice required'), 'checkout' => false, 'href' => '/equipment/wetsuits/'],
+        ['id' => 0, 'title' => 'Dive Computers', 'price' => contenly_tr('Tanya kru', 'Ask crew'), 'checkout' => false, 'href' => '/equipment/dive-computers/'],
     ];
 }
 ?>
@@ -94,7 +95,7 @@ if (!$gear) {
                 <span style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#0b617c;background:#e8f8fc;border-radius:999px;padding:6px 10px;"><?php echo contenly_tr('Beli / saran fitting', 'Buy / fit advice'); ?></span>
                 <h3 style="font-size:20px;font-weight:900;color:#0f172a;margin:16px 0 8px;letter-spacing:.03em;"><?php echo esc_html($item['title']); ?></h3>
                 <p style="font-size:15px;color:#06384d;font-weight:900;margin:0 0 6px;"><?php echo esc_html($item['price']); ?></p>
-                <p style="font-size:12px;color:<?php echo (!empty($item['stock']) && $item['stock'] === 'Out of stock') ? '#991b1b' : '#64748b'; ?>;font-weight:800;margin:0 0 16px;"><?php echo esc_html($item['stock'] ?? 'Availability on request'); ?></p>
+                <p style="font-size:12px;color:<?php echo (!empty($item['stock_raw']) && is_numeric($item['stock_raw']) && (int) $item['stock_raw'] <= 0) ? '#991b1b' : '#64748b'; ?>;font-weight:800;margin:0 0 16px;"><?php echo esc_html($item['stock'] ?? contenly_tr('Ketersediaan atas permintaan', 'Availability on request')); ?></p>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
                     <?php if (!empty($item['checkout'])) : ?>
                     <a href="<?php echo esc_url(add_query_arg(['type' => 'equipment', 'item_id' => $item['id'] ?? 0, 'item' => $item['title'], 'price' => preg_replace('/[^0-9]/', '', $item['price'])], '/direct-checkout/')); ?>" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#4cc8ed;color:#06384d;text-decoration:none;font-weight:950;font-size:13px;"><?php echo contenly_tr('Beli Sekarang', 'Buy Now'); ?></a>
