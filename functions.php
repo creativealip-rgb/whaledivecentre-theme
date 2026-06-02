@@ -532,6 +532,9 @@ function contenly_render_language_switcher($class = '') {
 }
 
 function contenly_render_public_header() {
+    if (is_user_logged_in() && !headers_sent()) {
+        nocache_headers();
+    }
     $brand_logo = esc_url(get_template_directory_uri() . '/assets/wdc-navbar-logo.jpg?v=20260514b');
     $home_url = esc_url(contenly_localized_url('/home/'));
     $courses_url = esc_url(contenly_localized_url('/courses/'));
