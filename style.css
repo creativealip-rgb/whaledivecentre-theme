@@ -2989,7 +2989,9 @@ body.whaledive-single-course .wd-sidebar-note,
 .wdc-auth-grid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 470px;gap:48px;align-items:center}
 .wdc-auth-copy h1{margin:14px 0 14px;font-size:clamp(44px,7vw,84px);line-height:1.05;letter-spacing:.01em;color:#fff}
 .wdc-auth-copy p{max-width:560px;margin:0;color:rgba(255,255,255,.78);font-size:18px;line-height:1.65}
-.wdc-auth-back{display:inline-flex;align-items:center;gap:8px;margin-bottom:18px;color:#9ee8ff;font-weight:900;text-decoration:none}
+.wdc-auth-back{display:inline-flex;align-items:center;gap:8px;margin-bottom:18px;color:#9ee8ff;font-weight:900;text-decoration:none;transition:all .2s ease}
+.wdc-auth-back:hover{color:#fff;transform:translateX(-4px)}
+.wdc-auth-back:before{content:'←';font-size:1.1em}
 .wdc-auth-proof{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:34px;max-width:650px}
 .wdc-auth-proof div{padding:16px;border-radius:18px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(12px)}
 .wdc-auth-proof b{display:block;color:#fff;font-size:22px}.wdc-auth-proof span{color:rgba(255,255,255,.72);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
