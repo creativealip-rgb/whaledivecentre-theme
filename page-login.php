@@ -4,7 +4,16 @@
  */
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_head(); ?></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_head(); ?>
+<style>
+.wdc-auth-back{display:block!important;margin-bottom:18px}
+.wd-kicker{display:block!important;margin-bottom:18px}
+@media(max-width:700px){
+  .wdc-auth-back{display:block!important;color:#9ee8ff;font-size:14px;margin-bottom:14px}
+  .wd-kicker{display:none!important}
+}
+</style>
+</head>
 <body <?php body_class('whaledive-inner whaledive-login wdc-auth-page'); ?>><?php wp_body_open(); ?>
 <main class="wd-page">
   <?php contenly_render_public_header(); ?>
