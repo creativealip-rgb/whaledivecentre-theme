@@ -34,11 +34,11 @@ function wdc_course_image_url($title, $theme_uri) {
         'nitrox' => 'wdc-course-nitrox-real-v2.jpg',
         'enriched air' => 'wdc-course-nitrox-real-v2.jpg',
         'discover' => 'wdc-course-discover-scuba-pexels.jpg',
-        'advanced' => 'wdc-course-advanced-open-water-real.png',
-        'rescue' => 'wdc-course-rescue-diver-real.png',
-        'divemaster' => 'wdc-course-divemaster-real.png',
-        'instructor' => 'wdc-course-instructor-course-real.png',
-        'open water' => 'wdc-course-open-water-real.png',
+        'advanced' => 'wdc-course-advanced-open-water-real.webp',
+        'rescue' => 'wdc-course-rescue-diver-real.webp',
+        'divemaster' => 'wdc-course-divemaster-real.webp',
+        'instructor' => 'wdc-course-instructor-course-real.webp',
+        'open water' => 'wdc-course-open-water-real.webp',
     ];
     foreach ($map as $needle => $file) {
         if (strpos($key, $needle) !== false) {

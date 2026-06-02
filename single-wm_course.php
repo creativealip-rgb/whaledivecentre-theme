@@ -14,11 +14,11 @@ $level_name = (!is_wp_error($level) && !empty($level)) ? $level[0]->name : '';
 $agency_name = (!is_wp_error($agency) && !empty($agency)) ? $agency[0]->name : '';
 $theme_uri = get_stylesheet_directory_uri();
 $course_image_map = array(
-  'open-water-diver' => 'wdc-course-open-water-real.png',
-  'advanced-open-water' => 'wdc-course-advanced-open-water-real.png',
-  'rescue-diver' => 'wdc-course-rescue-diver-real.png',
-  'divemaster' => 'wdc-course-divemaster-real.png',
-  'instructor-course' => 'wdc-course-instructor-course-real.png',
+  'open-water-diver' => 'wdc-course-open-water-real.webp',
+  'advanced-open-water' => 'wdc-course-advanced-open-water-real.webp',
+  'rescue-diver' => 'wdc-course-rescue-diver-real.webp',
+  'divemaster' => 'wdc-course-divemaster-real.webp',
+  'instructor-course' => 'wdc-course-instructor-course-real.webp',
 );
 $course_image = get_the_post_thumbnail_url(get_the_ID(), 'full');
 if (!$course_image) {
