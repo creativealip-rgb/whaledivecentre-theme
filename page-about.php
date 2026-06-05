@@ -3,9 +3,48 @@
  * Template Name: About Page
  */
 $theme_uri = get_stylesheet_directory_uri();
+
+$wd_contact_notice = '';
+$wd_contact_notice_type = '';
+if ('POST' === ($_SERVER['REQUEST_METHOD'] ?? '') && isset($_POST['wd_contact_submit'])) {
+    $nonce_ok = isset($_POST['wd_contact_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wd_contact_nonce'])), 'wd_contact_inquiry');
+    $honeypot = trim((string) ($_POST['website'] ?? ''));
+    $name = sanitize_text_field(wp_unslash($_POST['your-name'] ?? ''));
+    $email = sanitize_email(wp_unslash($_POST['email'] ?? ''));
+    $whatsapp = sanitize_text_field(wp_unslash($_POST['whatsapp'] ?? ''));
+    $category = sanitize_text_field(wp_unslash($_POST['category'] ?? ''));
+    $message = sanitize_textarea_field(wp_unslash($_POST['message'] ?? ''));
+
+    if ($nonce_ok && '' === $honeypot && $name && $whatsapp) {
+        $recipient = get_option('admin_email') ?: 'info@whaledivecentre.com';
+        $subject = 'New Whale Dive Centre inquiry - ' . ($category ?: 'General');
+        $body = "Name: {$name}\nEmail: " . ($email ?: '-') . "\nWhatsApp: {$whatsapp}\nCategory: " . ($category ?: '-') . "\n\nMessage:\n" . ($message ?: '-');
+        $headers = ['Content-Type: text/plain; charset=UTF-8'];
+        if ($email) {
+            $headers[] = 'Reply-To: ' . $name . ' <' . $email . '>';
+        }
+        $sent = wp_mail($recipient, $subject, $body, $headers);
+        $target = add_query_arg('wd_contact', $sent ? 'sent' : 'mail-error', get_permalink());
+        wp_safe_redirect($target . '#contact-form');
+        exit;
+    }
+
+    $wd_contact_notice = contenly_tr('Mohon isi nama dan nomor WhatsApp dengan benar.', 'Please fill in your name and WhatsApp number correctly.');
+    $wd_contact_notice_type = 'error';
+}
+
+if (isset($_GET['wd_contact'])) {
+    if ('sent' === $_GET['wd_contact']) {
+        $wd_contact_notice = contenly_tr('Terima kasih. Pesan Anda sudah terkirim dan crew akan membalas dalam 24 jam.', 'Thank you. Your inquiry has been sent and our crew will reply within 24 hours.');
+        $wd_contact_notice_type = 'success';
+    } elseif ('mail-error' === $_GET['wd_contact']) {
+        $wd_contact_notice = contenly_tr('Pesan belum berhasil dikirim oleh server email. Silakan hubungi kami via telepon jika urgent.', 'The mail server could not send your inquiry yet. Please call us if urgent.');
+        $wd_contact_notice_type = 'error';
+    }
+}
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_head(); ?><style id="wd-about-ux-pass">.wd-crew-proof{padding-top:56px!important}.wd-instructor-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:30px}.wd-instructor-grid article{padding:24px;border-radius:28px;background:linear-gradient(180deg,#fff,#eef8fb);border:1px solid rgba(0,91,122,.1);box-shadow:0 16px 38px rgba(2,32,46,.07)}.wd-instructor-grid div{width:74px;height:74px;border-radius:26px;display:grid;place-items:center;margin-bottom:18px;background:linear-gradient(135deg,#06384d,#08a7c7);color:#fff;font-size:28px;font-weight:900}.wd-instructor-grid h3{margin:0 0 8px;color:#06384d}.wd-instructor-grid b{display:block;margin-bottom:10px;color:#0b617c}.wd-instructor-grid span{color:#5b7180;line-height:1.65}.whaledive-about .wd-sub{max-width:720px}.wd-contact-form small{display:block;margin-top:7px;color:#64748b;font-size:12px;line-height:1.45;text-transform:none;letter-spacing:0}.wd-form-privacy{margin:0;color:#64748b;font-size:13px;line-height:1.5}.whaledive-about .wd-contact-grid{margin-top:30px!important}.whaledive-about #contact-form .wd-sub{margin-bottom:0!important}.wd-contact-card{display:flex;flex-direction:column;gap:8px}.wd-contact-card strong{color:#06384d;font-size:13px;letter-spacing:.08em;text-transform:uppercase}.wd-contact-card span,.wd-contact-card a{line-height:1.55}.wd-contact-card a{display:inline-flex;color:#0b617c;font-weight:800}.wd-map-link{width:max-content;margin-top:4px!important;padding:9px 13px;border-radius:999px;background:#f3fbff;border:1px solid rgba(6,56,77,.14);text-decoration:none}.wd-menu a[data-nav="about"]{color:#06384d;background:rgba(8,167,199,.12)}@media(max-width:800px){.wd-instructor-grid{grid-template-columns:1fr}}</style></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_head(); ?><style id="wd-about-ux-pass">.wd-crew-proof{padding-top:56px!important}.wd-instructor-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:30px}.wd-instructor-grid article{padding:24px;border-radius:28px;background:linear-gradient(180deg,#fff,#eef8fb);border:1px solid rgba(0,91,122,.1);box-shadow:0 16px 38px rgba(2,32,46,.07)}.wd-instructor-grid div{width:74px;height:74px;border-radius:26px;display:grid;place-items:center;margin-bottom:18px;background:linear-gradient(135deg,#06384d,#08a7c7);color:#fff;font-size:28px;font-weight:900}.wd-instructor-grid h3{margin:0 0 8px;color:#06384d}.wd-instructor-grid b{display:block;margin-bottom:10px;color:#0b617c}.wd-instructor-grid span{color:#5b7180;line-height:1.65}.whaledive-about .wd-sub{max-width:720px}.wd-contact-form small{display:block;margin-top:7px;color:#64748b;font-size:12px;line-height:1.45;text-transform:none;letter-spacing:0}.wd-form-privacy{margin:0;color:#64748b;font-size:13px;line-height:1.5}.wd-contact-notice{margin:18px 0 0;padding:14px 16px;border-radius:16px;font-weight:800;line-height:1.45}.wd-contact-notice.success{background:#e7f8ef;color:#05603a;border:1px solid rgba(5,96,58,.18)}.wd-contact-notice.error{background:#fff3e8;color:#9a3412;border:1px solid rgba(154,52,18,.18)}.wd-contact-hp{position:absolute;left:-9999px;opacity:0;pointer-events:none}.whaledive-about .wd-contact-grid{margin-top:30px!important}.whaledive-about #contact-form .wd-sub{margin-bottom:0!important}.wd-contact-card{display:flex;flex-direction:column;gap:8px}.wd-contact-card strong{color:#06384d;font-size:13px;letter-spacing:.08em;text-transform:uppercase}.wd-contact-card span,.wd-contact-card a{line-height:1.55}.wd-contact-card a{display:inline-flex;color:#0b617c;font-weight:800}.wd-map-link{width:max-content;margin-top:4px!important;padding:9px 13px;border-radius:999px;background:#f3fbff;border:1px solid rgba(6,56,77,.14);text-decoration:none}.wd-menu a[data-nav="about"]{color:#06384d;background:rgba(8,167,199,.12)}@media(max-width:800px){.wd-instructor-grid{grid-template-columns:1fr}}</style></head>
 <body <?php body_class('whaledive-inner whaledive-about'); ?>><?php wp_body_open(); ?>
 <main class="wd-page">
   <?php contenly_render_public_header(); ?>
@@ -57,6 +96,7 @@ $theme_uri = get_stylesheet_directory_uri();
     <div class="wd-shell">
       <span class="wd-kicker"><?php echo esc_html(contenly_tr('Hubungi Kami', 'Get in Touch')); ?></span>
       <h2 class="wd-title"><?php echo esc_html(contenly_tr('Mulai percakapan', 'Start the conversation')); ?></h2>
+      <?php if ($wd_contact_notice) : ?><div class="wd-contact-notice <?php echo esc_attr($wd_contact_notice_type); ?>" role="status"><?php echo esc_html($wd_contact_notice); ?></div><?php endif; ?>
       <div class="wd-contact-grid">
         <div class="wd-contact-cards">
 <div class="wd-contact-card"><strong>Email</strong><a href="mailto:info@whaledivecentre.com">info@whaledivecentre.com</a></div>
@@ -65,6 +105,9 @@ $theme_uri = get_stylesheet_directory_uri();
           <div class="wd-contact-card"><strong><?php echo contenly_tr('Lokasi', 'Location'); ?></strong><span>Jl. Tanah Kusir II No.3, RT.10/RW.9, Kebayoran Lama Selatan, Jakarta Selatan 12240</span><a class="wd-map-link" href="https://www.google.com/maps/search/?api=1&query=Jl.%20Tanah%20Kusir%20II%20No.3%20Jakarta%20Selatan" target="_blank" rel="noopener"><?php echo contenly_tr('Buka di Google Maps', 'Open in Google Maps'); ?></a></div>
         </div>
         <form class="wd-contact-form" method="post">
+          <?php wp_nonce_field('wd_contact_inquiry', 'wd_contact_nonce'); ?>
+          <input type="hidden" name="wd_contact_submit" value="1">
+          <label class="wd-contact-hp" aria-hidden="true">Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
           <label><?php echo contenly_tr('Nama Anda', 'Your Name'); ?><input type="text" name="your-name" placeholder="<?php echo contenly_tr('Nama Anda', 'Your name'); ?>" required></label>
           <label><?php echo contenly_tr('Email', 'Email'); ?><input type="email" name="email" placeholder="you@example.com"><small><?php echo contenly_tr('Gunakan email jika Anda lebih suka balasan tertulis.', 'Use email if you prefer a written reply.'); ?></small></label>
           <label><?php echo contenly_tr('Nomor WhatsApp', 'WhatsApp Number'); ?><input type="tel" name="whatsapp" placeholder="+62..." required><small><?php echo contenly_tr('Wajib agar crew bisa membalas dalam 24 jam.', 'Required so our crew can reply within 24 hours.'); ?></small></label>
@@ -76,10 +119,7 @@ $theme_uri = get_stylesheet_directory_uri();
     </div>
   </section>
 
-  <?php get_footer(); ?>
-</main>
-
-<script>
+  <script>
 document.addEventListener('DOMContentLoaded', function(){
   var p = new URLSearchParams(window.location.search);
   var name = p.get('name');
@@ -102,6 +142,5 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 });
 </script>
-<script>document.addEventListener('DOMContentLoaded',function(){var path=location.pathname;document.querySelectorAll('.wd-menu a[data-nav]').forEach(function(a){var key=a.getAttribute('data-nav');var active=(key==='home'&&path==='/')||(key!=='home'&&path.indexOf('/'+key+'/')===0);if(active){a.classList.add('is-active');a.setAttribute('aria-current','page');}});});</script><?php wp_footer(); ?>
-</body>
-</html>
+<script>document.addEventListener('DOMContentLoaded',function(){var path=location.pathname;document.querySelectorAll('.wd-menu a[data-nav]').forEach(function(a){var key=a.getAttribute('data-nav');var active=(key==='home'&&path==='/')||(key!=='home'&&path.indexOf('/'+key+'/')===0);if(active){a.classList.add('is-active');a.setAttribute('aria-current','page');}});});</script>
+  <?php get_footer(); ?>
