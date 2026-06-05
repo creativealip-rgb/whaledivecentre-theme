@@ -944,8 +944,8 @@ function contenly_custom_document_title($title) {
         [['is_page_template', 'page-checkout.php'], ['Pembayaran Booking', 'Booking Payment']],
         [['is_page_template', 'page-checkout-success.php'], ['Pembayaran Berhasil', 'Payment Successful']],
         [['is_page_template', 'page-dashboard.php'], ['Dashboard Member', 'Member Dashboard']],
-        [['is_page_template', 'page-my-courses.php'], ['My Courses', 'My Courses']],
-        [['is_page_template', 'page-my-gear.php'], ['My Gear', 'My Gear']],
+        [['is_page_template', 'page-my-courses.php'], ['Kursus Saya', 'My Courses']],
+        [['is_page_template', 'page-my-gear.php'], ['Peralatan Saya', 'My Gear']],
         [['is_page_template', 'page-my-travels.php'], ['Dive Saya', 'My Dives']],
         [['is_page_template', 'page-wishlist.php'], ['Gear Wishlist', 'Gear Wishlist']],
         [['is_page_template', 'page-reviews.php'], ['Dive Review Saya', 'My Dive Reviews']],
@@ -964,8 +964,8 @@ function contenly_custom_document_title($title) {
         [['is_page', 'checkout'], ['Pembayaran Booking', 'Booking Payment']],
         [['is_page', 'checkout-success'], ['Pembayaran Berhasil', 'Payment Successful']],
         [['is_page', 'dashboard'], ['Dashboard Member', 'Member Dashboard']],
-        [['is_page', 'my-courses'], ['My Courses', 'My Courses']],
-        [['is_page', 'my-gear'], ['My Gear', 'My Gear']],
+        [['is_page', 'my-courses'], ['Kursus Saya', 'My Courses']],
+        [['is_page', 'my-gear'], ['Peralatan Saya', 'My Gear']],
         [['is_page', 'my-travels'], ['Dive Saya', 'My Dives']],
         [['is_page', 'wishlist'], ['Gear Wishlist', 'Gear Wishlist']],
         [['is_page', 'reviews'], ['Dive Review Saya', 'My Dive Reviews']],
@@ -1129,8 +1129,8 @@ function contenly_get_seo_context() {
         );
     } elseif (is_page('settings')) {
         $description = contenly_tr(
-            'Perbarui profil akun, password, dan pengaturan member Whale Dive Centre di satu halaman.',
-            'Update your account profile, password, and member settings from one Whale Dive Centre page.'
+            'Perbarui profil diver, kontak, sertifikasi, dan catatan ukuran gear Anda di satu halaman member Whale Dive Centre.',
+            'Update your diver profile, contact details, certification level, and gear sizing notes from one Whale Dive Centre member page.'
         );
     } elseif (is_singular('tour')) {
         $description = wp_strip_all_tags(get_the_excerpt() ?: get_post_meta(get_the_ID(), 'location', true) ?: contenly_tr('Dive program from Whale Dive Centre.', 'Dive program from Whale Dive Centre.'));
