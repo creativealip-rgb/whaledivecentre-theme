@@ -2042,6 +2042,7 @@ body:has(.wm-checkout) .wd-page{min-height:100vh;background:#f4f8fb!important}
 /* WDC navbar label refinement 2026-05-10 */
 .wd-nav a { text-transform: none !important; letter-spacing: .01em !important; }
 .wd-nav-member { text-transform: none !important; letter-spacing: .01em !important; }
+.wd-menu > .wd-nav-member { margin-left: 8px !important; }
 
 /* WDC homepage trust cleanup 2026-05-10 */
 .home .wd-photo-note {

@@ -22,7 +22,7 @@ require_once get_template_directory() . '/inc/template-functions.php';
 function contenly_enqueue_scripts() {
     // Theme stylesheet
     wp_enqueue_style('contenly-style', get_stylesheet_uri(), [], '2.2.3');
-    wp_add_inline_style('contenly-style', '.whaledive-home .wd-header .gt-lang-switcher{margin-right:10px!important}.whaledive-home .wd-header .wd-nav-member{margin-left:8px!important}');
+    wp_add_inline_style('contenly-style', '.wd-header .gt-lang-switcher{margin-right:10px!important}.wd-header .wd-nav-member{margin-left:8px!important}');
     
     // Google Fonts
     wp_enqueue_style('contenly-fonts', 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap', [], null);
@@ -248,7 +248,7 @@ function contenly_localized_url($path = '/', $lang = null) {
     }
 
     $alias_map = [
-        '/about' => ['id' => '/tentang/', 'en' => '/en/about/'],
+        '/about' => ['id' => '/about/', 'en' => '/en/about/'],
         '/contact' => ['id' => '/kontak/', 'en' => '/en/contact/'],
         '/tour-packages' => ['id' => '/paket-tour/', 'en' => '/en/tour-packages/'],
         '/blog' => ['id' => '/blog/', 'en' => '/en/journal/'],
@@ -368,7 +368,7 @@ function contenly_menu_route_key_from_path($path) {
 function contenly_url_for_route_key($route_key, $lang) {
     $route_targets = [
         'home' => ['id' => '/', 'en' => '/en/'],
-        'about' => ['id' => '/tentang/', 'en' => '/en/about/'],
+        'about' => ['id' => '/about/', 'en' => '/en/about/'],
         'contact' => ['id' => '/kontak/', 'en' => '/en/contact/'],
         'tour-packages' => ['id' => '/paket-tour/', 'en' => '/en/tour-packages/'],
         'blog' => ['id' => '/blog/', 'en' => '/en/journal/'],
@@ -548,6 +548,7 @@ function contenly_render_public_header() {
     $home_url = esc_url(contenly_localized_url('/home/'));
     $courses_url = esc_url(contenly_localized_url('/courses/'));
     $equipment_url = esc_url(contenly_localized_url('/equipment/'));
+    $about_url = esc_url(contenly_localized_url('/about/'));
     $blog_url = esc_url(contenly_localized_url('/blog/'));
     $member_url = is_user_logged_in() ? esc_url(contenly_localized_url('/dashboard/')) : esc_url(contenly_localized_url('/member-login/'));
     $member_label = is_user_logged_in() ? contenly_tr('Dashboard', 'Dashboard') : contenly_tr('Masuk', 'Login');
@@ -557,6 +558,8 @@ function contenly_render_public_header() {
         $active_key = 'courses';
     } elseif (false !== strpos($request_path, '/equipment/')) {
         $active_key = 'equipment';
+    } elseif (false !== strpos($request_path, '/about/') || false !== strpos($request_path, '/tentang/')) {
+        $active_key = 'about';
     } elseif (false !== strpos($request_path, '/blog/') || false !== strpos($request_path, '/journal/') || is_singular('post')) {
         $active_key = 'blog';
     }
@@ -571,6 +574,7 @@ function contenly_render_public_header() {
         . '<a href="' . $home_url . '" data-nav="home"' . $active_class('home') . '>' . esc_html(contenly_tr('Beranda', 'Home')) . '</a>'
         . '<a href="' . $courses_url . '" data-nav="courses"' . $active_class('courses') . '>' . esc_html(contenly_tr('Kursus', 'Courses')) . '</a>'
         . '<a href="' . $equipment_url . '" data-nav="equipment"' . $active_class('equipment') . '>' . esc_html(contenly_tr('Peralatan', 'Equipment')) . '</a>'
+        . '<a href="' . $about_url . '" data-nav="about"' . $active_class('about') . '>' . esc_html(contenly_tr('Tentang', 'About')) . '</a>'
         . '<a href="' . $blog_url . '" data-nav="blog"' . $active_class('blog') . '>' . esc_html(contenly_tr('Blog', 'Blog')) . '</a>'
         . contenly_render_language_switcher('wd-lang-switcher')
         . '<a href="' . $member_url . '" class="wd-nav-member">' . esc_html($member_label) . '</a>'

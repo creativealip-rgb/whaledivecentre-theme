@@ -4,9 +4,43 @@ Custom WordPress theme for the Whale Dive Centre public site, member dashboard, 
 
 ## Status
 
-- Theme version: 1.7.8 (see `style.css`)
-- Active development branch: `polish-public-cards`
+- Theme version: 2.2.3 (see `style.css`)
+- Active development branch: `main`
+- Local dev: `http://168.144.37.19:8088/` via `whaledive-local-wp`
+- Live cPanel: `https://whaledivecentre.com/` (About page not yet synced with latest local changes)
 - Production/deploy notes live in `docs/production-checklist.md`
+
+## Recent Progress
+
+### About Page Refresh (local only, 2026-06-20)
+
+Files changed:
+
+- `page-about.php`
+- `functions.php`
+- `style.css`
+- `assets/wdc-about-ebram-pool.jpg`
+- `assets/wdc-about-mimi-pool.jpg`
+- `assets/wdc-about-jovan.jpg`
+
+Completed:
+
+- Rebuilt About page content from supplied WDC About document.
+- Added WDC institutional intro: founded 2009, Jakarta, NAUI Indonesia Headquarters, NAUI/TDI/DAN affiliation.
+- Added leadership profiles for Ebram Harimurti, Mimi Amilia, and Jovan Lesmana.
+- Standardized crew profile photos to fixed `220x220` presentation with compact profile cards.
+- Polished `Nilai Kerja` cards with stronger contrast, border, shadow, badge, and hover treatment.
+- Polished `Hubungi Kami` section with distinct contact cards, stronger form card, compact inputs, and clearer Google Maps CTA.
+- Fixed broken About page blank render caused by missing `</head>` in `page-about.php`.
+- Added `Tentang` to global navbar and set active state for `/about/`.
+- Fixed navbar `Tentang` URL from `/tentang/` to `/about/`.
+- Matched language switcher to `Masuk` spacing across Home and About (`24px` visual gap).
+
+Verified locally:
+
+- `http://168.144.37.19:8088/about/` returns `200`.
+- `page-about.php` and `functions.php` pass PHP syntax checks inside `whaledive-local-wp`.
+- Latest About content appears locally; live cPanel still needs file sync/upload.
 
 ## Main Features
 
