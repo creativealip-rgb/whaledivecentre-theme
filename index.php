@@ -200,16 +200,6 @@ function wdSwitchTab(tab) {
   });
   document.getElementById('wd-tab-naui').classList.toggle('wd-hidden', tab !== 'naui');
   document.getElementById('wd-tab-tdi').classList.toggle('wd-hidden', tab !== 'tdi');
-});
-  var naui = document.getElementById('wd-tab-naui');
-  var tdi = document.getElementById('wd-tab-tdi');
-  if (tab === 'naui') {
-    naui.style.cssText = naui.style.cssText.replace(/display\s*:\s*[^;!]+/gi, '').replace(/visibility\s*:\s*[^;!]+/gi, '') + ';display:grid!important;visibility:visible!important;height:auto!important;overflow:visible!important;';
-    tdi.style.cssText = tdi.style.cssText.replace(/display\s*:\s*[^;!]+/gi, '').replace(/visibility\s*:\s*[^;!]+/gi, '') + ';display:none!important;visibility:hidden!important;height:0!important;overflow:hidden!important;';
-  } else {
-    tdi.style.cssText = tdi.style.cssText.replace(/display\s*:\s*[^;!]+/gi, '').replace(/visibility\s*:\s*[^;!]+/gi, '') + ';display:grid!important;visibility:visible!important;height:auto!important;overflow:visible!important;';
-    naui.style.cssText = naui.style.cssText.replace(/display\s*:\s*[^;!]+/gi, '').replace(/visibility\s*:\s*[^;!]+/gi, '') + ';display:none!important;visibility:hidden!important;height:0!important;overflow:hidden!important;';
-  }
 }
 </script>
 <div class="wd-section-cta"><a class="wd-btn alt" href="/courses/"><?php echo esc_html(contenly_tr('Lihat Semua Kursus','View All Courses')); ?></a></div></div></section>
