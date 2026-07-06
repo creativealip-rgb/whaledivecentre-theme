@@ -184,6 +184,166 @@ function wdc_register_course_taxonomies() {
 add_action('init', 'wdc_register_course_taxonomies', 20);
 
 /**
+ * Register Informasi & Cerita Kamu CPTs
+ */
+function wdc_register_member_cpts() {
+    // Informasi CPT
+    if (!post_type_exists('wdc_info')) {
+        register_post_type('wdc_info', [
+            'label' => 'Informasi',
+            'labels' => [
+                'name' => 'Informasi',
+                'singular_name' => 'Info',
+                'add_new_item' => 'Tambah Info Baru',
+                'edit_item' => 'Edit Info',
+                'all_items' => 'Semua Informasi',
+                'view_item' => 'Lihat Info',
+                'search_items' => 'Cari Informasi',
+            ],
+            'public' => true,
+            'has_archive' => true,
+            'rewrite' => ['slug' => 'informasi'],
+            'menu_icon' => 'dashicons-megaphone',
+            'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'page-attributes'],
+            'show_in_rest' => true,
+        ]);
+    }
+
+    if (!taxonomy_exists('info_type')) {
+        register_taxonomy('info_type', ['wdc_info'], [
+            'label' => 'Tipe Informasi',
+            'labels' => [
+                'name' => 'Tipe Informasi',
+                'singular_name' => 'Tipe',
+                'add_new_item' => 'Tambah Tipe Baru',
+            ],
+            'public' => true,
+            'hierarchical' => true,
+            'show_admin_column' => true,
+            'rewrite' => ['slug' => 'info-type'],
+            'show_in_rest' => true,
+        ]);
+        // Seed default terms
+        if (!get_option('wdc_info_types_seeded')) {
+            $defaults = ['1st Giveaway', 'Event', 'Trip', 'Update NAUI/WDC/TDI/DAN'];
+            foreach ($defaults as $d) {
+                if (!term_exists($d, 'info_type')) {
+                    wp_insert_term($d, 'info_type');
+                }
+            }
+            update_option('wdc_info_types_seeded', 1);
+        }
+    }
+
+    // Cerita Kamu CPT
+    if (!post_type_exists('wdc_story')) {
+        register_post_type('wdc_story', [
+            'label' => 'Cerita Kamu',
+            'labels' => [
+                'name' => 'Cerita Kamu',
+                'singular_name' => 'Cerita',
+                'add_new_item' => 'Tambah Cerita',
+                'edit_item' => 'Edit Cerita',
+                'all_items' => 'Semua Cerita',
+            ],
+            'public' => true,
+            'has_archive' => true,
+            'rewrite' => ['slug' => 'cerita'],
+            'menu_icon' => 'dashicons-book-alt',
+            'supports' => ['title', 'editor', 'thumbnail', 'excerpt'],
+            'show_in_rest' => true,
+        ]);
+    }
+
+    if (!taxonomy_exists('story_type')) {
+        register_taxonomy('story_type', ['wdc_story'], [
+            'label' => 'Jenis Cerita',
+            'labels' => [
+                'name' => 'Jenis Cerita',
+                'singular_name' => 'Jenis',
+            ],
+            'public' => true,
+            'hierarchical' => true,
+            'show_admin_column' => true,
+            'rewrite' => ['slug' => 'story-type'],
+            'show_in_rest' => true,
+        ]);
+        if (!get_option('wdc_story_types_seeded')) {
+            foreach (['Cerita Kursus', 'Cerita Trip'] as $d) {
+                if (!term_exists($d, 'story_type')) {
+                    wp_insert_term($d, 'story_type');
+                }
+            }
+            update_option('wdc_story_types_seeded', 1);
+        }
+    }
+}
+add_action('init', 'wdc_register_member_cpts', 21);
+
+/**
+ * Rewrite rules for member pages
+ */
+add_action('init', function() {
+    add_rewrite_rule('^informasi/?$', 'index.php?pagename=informasi', 'top');
+    add_rewrite_rule('^cerita-kamu/?$', 'index.php?pagename=cerita-kamu', 'top');
+});
+
+/**
+ * Handle story submission from frontend
+ */
+add_action('init', function() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wdc_story_nonce']) && is_user_logged_in()) {
+        if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_story_nonce'])), 'wdc_story_submit')) {
+            return;
+        }
+        $title = sanitize_text_field(wp_unslash($_POST['story_title'] ?? ''));
+        $content = wp_kses_post(wp_unslash($_POST['story_content'] ?? ''));
+        $type = sanitize_text_field(wp_unslash($_POST['story_type'] ?? 'Cerita Kursus'));
+        $user = wp_get_current_user();
+
+        if ($title && $content) {
+            $post_id = wp_insert_post([
+                'post_type' => 'wdc_story',
+                'post_title' => $title,
+                'post_content' => $content,
+                'post_status' => 'pending',
+                'post_author' => $user->ID,
+            ]);
+            if ($post_id && !is_wp_error($post_id)) {
+                wp_set_object_terms($post_id, $type, 'story_type');
+                update_post_meta($post_id, '_wdc_story_author_name', $user->display_name);
+                update_post_meta($post_id, '_wdc_story_approved', '0');
+                wp_redirect(add_query_arg(['submitted' => '1'], contenly_localized_url('/cerita-kamu/')));
+                exit;
+            }
+        }
+    }
+});
+
+/**
+ * Add meta box for story approval
+ */
+add_action('add_meta_boxes', function() {
+    add_meta_box('wdc_story_approval', 'Approval Status', function($post) {
+        $approved = get_post_meta($post->ID, '_wdc_story_approved', true);
+        wp_nonce_field('wdc_story_approval', 'wdc_story_approval_nonce');
+        echo '<label><input type="checkbox" name="wdc_story_approved" value="1" ' . checked($approved, '1', false) . '> Approved for publication</label>';
+        echo '<p class="description">Centang untuk approve cerita ini. Story akan tampil di halaman Cerita Kamu.</p>';
+    }, 'wdc_story', 'side', 'high');
+});
+
+add_action('save_post_wdc_story', function($post_id) {
+    if (!isset($_POST['wdc_story_approval_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_story_approval_nonce'])), 'wdc_story_approval')) {
+        return;
+    }
+    $approved = isset($_POST['wdc_story_approved']) ? '1' : '0';
+    update_post_meta($post_id, '_wdc_story_approved', $approved);
+    if ($approved === '1') {
+        wp_update_post(['ID' => $post_id, 'post_status' => 'publish']);
+    }
+});
+
+/**
  * Theme setup
  */
 function contenly_theme_setup() {

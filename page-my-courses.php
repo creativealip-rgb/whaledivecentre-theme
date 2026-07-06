@@ -61,7 +61,6 @@ if (!$courses) {
 ?>
 <div style="margin-bottom:24px;">
     <h1 style="font-size:28px;font-weight:800;color:#0f172a;margin-bottom:8px;"><?php echo contenly_tr('Kursus Saya', 'My Courses'); ?></h1>
-    <p style="font-size:15px;color:#64748b;"><?php echo contenly_tr('Pilih jalur kursus, checkout langsung kursus harga tetap, atau minta slot review kru saat tanggal/prasyarat perlu konfirmasi.', 'Choose a pathway, checkout fixed-price courses directly, or request a crew-reviewed slot when dates/prerequisites need confirmation.'); ?></p>
 </div>
 
 <?php if ($notice) : ?>
@@ -69,18 +68,6 @@ if (!$courses) {
     <?php echo esc_html($notice); ?>
 </div>
 <?php endif; ?>
-
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:26px;">
-    <div style="background:#eef9fc;border:1px solid #ccecf5;border-radius:16px;padding:18px;">
-        <div style="font-size:12px;color:#0b617c;text-transform:uppercase;font-weight:800;letter-spacing:.08em;"><?php echo contenly_tr('Aktivitas Kursus', 'Course Activity'); ?></div>
-        <div style="font-size:32px;font-weight:900;color:#06384d;margin-top:6px;"><?php echo count($course_requests); ?></div>
-    </div>
-    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:16px;padding:18px;">
-        <div style="font-size:12px;color:#64748b;text-transform:uppercase;font-weight:800;letter-spacing:.08em;"><?php echo contenly_tr('Checkout Cepat', 'Fast Checkout'); ?></div>
-        <div style="font-size:20px;font-weight:900;color:#0f172a;margin-top:8px;"><?php echo contenly_tr('Bayar lalu latihan', 'Pay then train'); ?></div>
-        <p style="margin:6px 0 0;color:#64748b;font-size:13px;line-height:1.5;"><?php echo contenly_tr('Kursus harga tetap bisa langsung checkout. Request hanya untuk kursus dengan slot terbatas, tanggal fleksibel, atau review jalur profesional.', 'Fixed-price courses can go straight to checkout. Request is only for limited seats, flexible dates, or pro-track review.'); ?></p>
-    </div>
-</div>
 
 <div style="display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:20px;align-items:start;margin-bottom:28px;">
     <section>

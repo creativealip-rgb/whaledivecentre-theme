@@ -32,6 +32,8 @@ $wdc_member_icon = function ($path) {
         'home' => '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/>',
         'dashboard' => '<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
         'courses' => '<path d="M5 5.5h9a3 3 0 0 1 3 3V19H8a3 3 0 0 1-3-3V5.5Z"/><path d="M17 8.5h2v10.5"/><path d="M8 9h6"/><path d="M8 13h5"/>',
+        'info' => '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>',
+        'stories' => '<path d="M4 19V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v14l-7-3-7 3z"/>',
         'gear' => '<circle cx="8" cy="12" r="4"/><circle cx="16" cy="12" r="4"/><path d="M12 12h0"/><path d="M4 12H2"/><path d="M22 12h-2"/>',
         'account' => '<circle cx="12" cy="8" r="4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/>',
         'logout' => '<path d="M10 5H5v14h5"/><path d="M14 8l4 4-4 4"/><path d="M18 12H9"/>',
@@ -270,6 +272,8 @@ $wdc_member_icon = function ($path) {
             <li><a href="<?php echo esc_url(contenly_localized_url('/')); ?>" class="dashboard-home-btn"><span class="menu-icon"><?php echo $wdc_member_icon('home'); ?></span> <?php echo esc_html(contenly_tr('Kembali ke Home', 'Back to Home')); ?></a></li>
             <li><a href="<?php echo esc_url(contenly_localized_url('/dashboard/')); ?>" class="<?php echo is_page('dashboard') ? 'active' : ''; ?>"><span class="menu-icon"><?php echo $wdc_member_icon('dashboard'); ?></span> <?php echo esc_html(contenly_tr('Dashboard', 'Dashboard')); ?></a></li>
             <li><a href="<?php echo esc_url(contenly_localized_url('/my-courses/')); ?>" class="<?php echo is_page('my-courses') ? 'active' : ''; ?>"><span class="menu-icon"><?php echo $wdc_member_icon('courses'); ?></span> <?php echo esc_html(contenly_tr('Kursus Saya', 'My Courses')); ?></a></li>
+            <li><a href="<?php echo esc_url(contenly_localized_url('/informasi/')); ?>" class="<?php echo is_page('informasi') ? 'active' : ''; ?>"><span class="menu-icon"><?php echo $wdc_member_icon('info'); ?></span> <?php echo esc_html(contenly_tr('Informasi', 'Information')); ?></a></li>
+            <li><a href="<?php echo esc_url(contenly_localized_url('/cerita-kamu/')); ?>" class="<?php echo is_page('cerita-kamu') ? 'active' : ''; ?>"><span class="menu-icon"><?php echo $wdc_member_icon('stories'); ?></span> <?php echo esc_html(contenly_tr('Cerita Kamu', 'Your Stories')); ?></a></li>
             <li><a href="<?php echo esc_url(contenly_localized_url('/my-gear/')); ?>" class="<?php echo is_page('my-gear') ? 'active' : ''; ?>"><span class="menu-icon"><?php echo $wdc_member_icon('gear'); ?></span> <?php echo esc_html(contenly_tr('Peralatan Saya', 'My Gear')); ?></a></li>
             <li><a href="<?php echo esc_url(contenly_localized_url('/settings/')); ?>" class="<?php echo (is_page('settings') || is_page('profile')) ? 'active' : ''; ?>"><span class="menu-icon"><?php echo $wdc_member_icon('account'); ?></span> <?php echo esc_html(contenly_tr('Pengaturan Akun', 'Account Settings')); ?></a></li>
             <li><a href="<?php echo esc_url(wp_logout_url(contenly_localized_url('/'))); ?>" style="color: #dc2626; margin-top: 16px; border-top: 1px solid #f1f5f9; padding-top: 12px;"><span class="menu-icon"><?php echo $wdc_member_icon('logout'); ?></span> <?php echo esc_html(contenly_tr('Keluar', 'Logout')); ?></a></li>
