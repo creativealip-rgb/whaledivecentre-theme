@@ -166,8 +166,8 @@ body.whaledive-home #equipment .wd-equip-photo{height:165px!important}
 
   <!-- COURSES -->
   <section id="courses" class="wd-section wd-dark wd-center"><div class="wd-shell"><div class="wd-divider"><h2 class="wd-title"><?php echo esc_html(contenly_tr('Kursus Selam Kami', 'Our Dive Courses')); ?></h2></div><p class="wd-sub"><?php echo esc_html(contenly_tr('Jalur terstruktur dari napas pertama di bawah air hingga kepemimpinan dive profesional.', 'A structured pathway from your first breath underwater to pro-level dive leadership.')); ?></p><div class="wd-course-tabs" aria-label="Course category tabs" style="display:flex!important;flex-direction:row!important;gap:16px!important;justify-content:center!important;flex-wrap:wrap!important;margin:0 0 36px!important;">
-<button class="wd-tab active" data-tab="naui" onclick="wdSwitchTab('naui')" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;padding:14px 40px!important;border-radius:999px!important;border:2px solid #4cc8ed!important;background:rgba(76,200,237,.15)!important;color:#fff!important;font-size:16px!important;font-weight:700!important;letter-spacing:.06em!important;cursor:pointer!important;transition:all .2s ease!important;min-width:100px!important;text-transform:uppercase!important;">NAUI</button>
-<button class="wd-tab" data-tab="tdi" onclick="wdSwitchTab('tdi')" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;padding:14px 40px!important;border-radius:999px!important;border:2px solid rgba(255,255,255,.2)!important;background:transparent!important;color:rgba(255,255,255,.5)!important;font-size:16px!important;font-weight:700!important;letter-spacing:.06em!important;cursor:pointer!important;transition:all .2s ease!important;min-width:100px!important;text-transform:uppercase!important;">TDI</button>
+<button class="wd-tab active" data-tab="naui" onclick="wdSwitchTab('naui')" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;padding:11px 28px!important;border-radius:999px!important;border:1px solid #06384d!important;background:#06384d!important;color:#fff!important;font-size:14px!important;font-weight:700!important;letter-spacing:.04em!important;cursor:pointer!important;transition:all .2s ease!important;min-width:90px!important;text-transform:uppercase!important;box-shadow:0 4px 14px rgba(6,56,77,.18)!important;">NAUI</button>
+<button class="wd-tab" data-tab="tdi" onclick="wdSwitchTab('tdi')" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;padding:11px 28px!important;border-radius:999px!important;border:1px solid rgba(255,255,255,.3)!important;background:rgba(255,255,255,.08)!important;color:rgba(255,255,255,.7)!important;font-size:14px!important;font-weight:700!important;letter-spacing:.04em!important;cursor:pointer!important;transition:all .2s ease!important;min-width:90px!important;text-transform:uppercase!important;box-shadow:0 2px 8px rgba(0,0,0,.1)!important;">TDI</button>
 </div>
 <div class="wd-course-grid" id="wd-tab-naui" style="width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;display:grid!important;grid-auto-flow:row!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:22px!important;">
 <?php
@@ -193,9 +193,10 @@ foreach($tdi_courses as $e): ?><article class="wd-course-card"><div class="wd-co
 function wdSwitchTab(tab) {
   document.querySelectorAll('.wd-tab').forEach(function(b) {
     var isActive = b.dataset.tab === tab;
-    b.style.setProperty('background', isActive ? 'rgba(76,200,237,.15)' : 'transparent', 'important');
-    b.style.setProperty('border-color', isActive ? '#4cc8ed' : 'rgba(255,255,255,.2)', 'important');
-    b.style.setProperty('color', isActive ? '#fff' : 'rgba(255,255,255,.5)', 'important');
+    b.style.setProperty('background', isActive ? '#06384d' : 'rgba(255,255,255,.08)', 'important');
+    b.style.setProperty('border-color', isActive ? '#06384d' : 'rgba(255,255,255,.3)', 'important');
+    b.style.setProperty('color', isActive ? '#fff' : 'rgba(255,255,255,.7)', 'important');
+    b.style.setProperty('box-shadow', isActive ? '0 4px 14px rgba(6,56,77,.18)' : '0 2px 8px rgba(0,0,0,.1)', 'important');
     b.classList.toggle('active', isActive);
   });
   var showEl = document.getElementById(tab === 'naui' ? 'wd-tab-naui' : 'wd-tab-tdi');
