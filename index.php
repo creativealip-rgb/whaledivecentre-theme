@@ -193,13 +193,22 @@ foreach($tdi_courses as $e): ?><article class="wd-course-card"><div class="wd-co
 function wdSwitchTab(tab) {
   document.querySelectorAll('.wd-tab').forEach(function(b) {
     var isActive = b.dataset.tab === tab;
-    b.style.background = isActive ? 'rgba(76,200,237,.15)' : 'rgba(255,255,255,.06)';
-    b.style.borderColor = isActive ? '#4cc8ed' : 'rgba(255,255,255,.25)';
-    b.style.color = isActive ? '#fff' : 'rgba(255,255,255,.7)';
+    b.style.setProperty('background', isActive ? 'rgba(76,200,237,.15)' : 'rgba(255,255,255,.06)', 'important');
+    b.style.setProperty('border-color', isActive ? '#4cc8ed' : 'rgba(255,255,255,.25)', 'important');
+    b.style.setProperty('color', isActive ? '#fff' : 'rgba(255,255,255,.7)', 'important');
     b.classList.toggle('active', isActive);
   });
-  document.getElementById('wd-tab-naui').classList.toggle('wd-hidden', tab !== 'naui');
-  document.getElementById('wd-tab-tdi').classList.toggle('wd-hidden', tab !== 'tdi');
+  var showEl = document.getElementById(tab === 'naui' ? 'wd-tab-naui' : 'wd-tab-tdi');
+  var hideEl = document.getElementById(tab === 'naui' ? 'wd-tab-tdi' : 'wd-tab-naui');
+  showEl.style.setProperty('display', 'grid', 'important');
+  showEl.style.setProperty('visibility', 'visible', 'important');
+  showEl.style.setProperty('height', 'auto', 'important');
+  showEl.style.setProperty('position', 'static', 'important');
+  showEl.style.setProperty('left', 'auto', 'important');
+  hideEl.style.setProperty('display', 'none', 'important');
+  hideEl.style.setProperty('visibility', 'hidden', 'important');
+  hideEl.style.setProperty('height', '0', 'important');
+  hideEl.style.setProperty('overflow', 'hidden', 'important');
 }
 </script>
 <div class="wd-section-cta"><a class="wd-btn alt" href="/courses/"><?php echo esc_html(contenly_tr('Lihat Semua Kursus','View All Courses')); ?></a></div></div></section>
