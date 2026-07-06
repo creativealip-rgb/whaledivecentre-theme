@@ -1970,6 +1970,7 @@ body:has(.wm-dashboard) .wa-float-btn,
 body:has(.wm-checkout) .wd-header,
 body:has(.wm-checkout) .wd-footer,
 body:has(.wm-checkout) .wa-float-btn{display:none!important}
+body .wa-float-btn, body .wd-wa-float, body a[aria-label*="Call Whale"]{display:none!important}
 body.wm-member-app,
 body:has(.wm-dashboard),
 body:has(.wm-checkout){background:#f4f8fb!important}
