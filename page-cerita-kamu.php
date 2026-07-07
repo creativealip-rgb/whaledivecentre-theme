@@ -24,7 +24,7 @@ $active_filter = sanitize_text_field($_GET['type'] ?? '');
 <!-- Submit form -->
 <section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:24px;margin-bottom:28px;box-shadow:0 12px 34px rgba(15,23,42,.05);">
     <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 16px;letter-spacing:.03em;"><?php echo contenly_tr('Tulis Cerita', 'Write a Story'); ?></h2>
-    <form method="post" style="display:grid;gap:14px;">
+    <form method="post" enctype="multipart/form-data" id="wdc-story-form" style="display:grid;gap:14px;">
         <?php wp_nonce_field('wdc_story_submit', 'wdc_story_nonce'); ?>
         <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;"><?php echo contenly_tr('Judul Cerita', 'Story Title'); ?>
             <input type="text" name="story_title" required placeholder="<?php echo contenly_tr('Misal: Pengalaman pertama Open Water di Seribu Islands', 'e.g. My first Open Water experience at Seribu Islands'); ?>" style="border:1px solid #dbe4ea;border-radius:12px;padding:11px 14px;font-size:15px;">
@@ -35,12 +35,190 @@ $active_filter = sanitize_text_field($_GET['type'] ?? '');
                 <option value="Cerita Trip"><?php echo contenly_tr('Cerita Trip', 'Trip Story'); ?></option>
             </select>
         </label>
-        <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;"><?php echo contenly_tr('Cerita Kamu', 'Your Story'); ?>
-            <textarea name="story_content" rows="6" required placeholder="<?php echo contenly_tr('Ceritakan pengalaman dive kamu...', 'Tell us about your dive experience...'); ?>" style="border:1px solid #dbe4ea;border-radius:12px;padding:11px 14px;font-size:15px;resize:vertical;"></textarea>
+        <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;"><?php echo contenly_tr('Upload Gambar', 'Upload Images'); ?> <span style="font-weight:400;color:#94a3b8;">(<?php echo contenly_tr('opsional, bisa lebih dari 1', 'optional, multiple allowed'); ?>)</span>
+            <input type="file" name="story_images[]" id="wdc-story-images" accept="image/*" multiple style="border:1px solid #dbe4ea;border-radius:12px;padding:11px 14px;font-size:14px;background:#f8fafc;">
         </label>
+        <div id="wdc-image-preview" style="display:none;flex-wrap:wrap;gap:8px;"></div>
+        <div style="display:grid;gap:6px;">
+            <span style="font-size:13px;font-weight:800;color:#334155;"><?php echo contenly_tr('Cerita Kamu', 'Your Story'); ?></span>
+            <?php
+            $editor_id = 'wdc_story_editor';
+            $settings = [
+                'textarea_name' => 'story_content',
+                'textarea_rows' => 12,
+                'media_buttons' => true,
+                'teeny' => false,
+                'quicktags' => true,
+                'tinymce' => [
+                    'toolbar1' => 'formatselect,bold,italic,underline,strikethrough,bullist,numlist,blockquote,link,unlink,wp_adv',
+                    'toolbar2' => 'alignleft,aligncenter,alignright,forecolor,backcolor,removeformat,charmap,outdent,indent,undo,redo',
+                    'block_formats' => 'Paragraph=p;Heading 2=h2;Heading 3=h3;Heading 4=h4',
+                    'paste_as_text' => true,
+                    'theme_advanced_statusbar_location' => 'none',
+                ],
+            ];
+            wp_editor('', $editor_id, $settings);
+            ?>
+        </div>
         <button type="submit" style="border:0;border-radius:999px;background:#06384d;color:#fff;padding:12px 24px;font-weight:900;font-size:15px;cursor:pointer;justify-self:start;"><?php echo contenly_tr('Kirim Cerita', 'Submit Story'); ?></button>
     </form>
 </section>
+
+<style>
+/* Dashboard wp_editor styling overrides */
+#wp-wdc_story_editor-wrap {
+    border: 1px solid #dbe4ea !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+}
+#wp-wdc_story_editor-wrap .wp-editor-tabs {
+    background: #f8fafc !important;
+    border-bottom: 1px solid #dbe4ea !important;
+    padding: 0 8px !important;
+}
+#wp-wdc_story_editor-wrap .wp-switch-editor {
+    border: 0 !important;
+    background: transparent !important;
+    padding: 10px 14px !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    color: #64748b !important;
+}
+#wp-wdc_story_editor-wrap .wp-switch-editor.switch-tmce,
+#wp-wdc_story_editor-wrap .wp-switch-editor.switch-html {
+    background: transparent !important;
+}
+#wp-wdc_story_editor-wrap .wp-switch-editor.active {
+    color: #06384d !important;
+    background: #fff !important;
+    border-bottom: 2px solid #4cc8ed !important;
+}
+#wp-wdc_story_editor-wrap .mce-toolbar-grp {
+    background: #f8fafc !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+#wp-wdc_story_editor-wrap .mce-btn {
+    border-radius: 6px !important;
+}
+#wp-wdc_story_editor-wrap .mce-quicktags {
+    background: #f8fafc !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    padding: 6px !important;
+}
+#wp-wdc_story_editor-wrap .quicktags-toolbar input {
+    border-radius: 6px !important;
+    background: #fff !important;
+    border: 1px solid #dbe4ea !important;
+    padding: 4px 10px !important;
+    font-size: 12px !important;
+}
+#wp-wdc_story_editor-wrap .wp-editor-container {
+    border-radius: 0 !important;
+}
+#wp-wdc_story_editor-wrap iframe {
+    min-height: 280px !important;
+}
+#wp-wdc_story_editor-wrap .wp-editor-area {
+    min-height: 280px !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-size: 15px !important;
+    padding: 12px !important;
+}
+/* Media buttons */
+#wp-wdc_story_editor-wrap .wp-media-buttons {
+    background: #f8fafc !important;
+    padding: 8px 12px !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+#wp-wdc_story_editor-wrap .wp-media-buttons .button {
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    padding: 6px 14px !important;
+}
+/* Hide admin bar and unwanted WP UI */
+#wp-wdc_story_editor-wrap .mce-statusbar {
+    display: none !important;
+}
+/* Image preview thumbnails */
+#wdc-image-preview img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid #e2e8f0;
+}
+#wdc-image-preview .wdc-remove-thumb {
+    position: relative;
+    display: inline-block;
+}
+#wdc-image-preview .wdc-remove-thumb button {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #dc2626;
+    color: #fff;
+    border: 2px solid #fff;
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+}
+/* Mobile responsive */
+@media (max-width: 768px) {
+    #wp-wdc_story_editor-wrap .mce-toolbar-grp .mce-flow-layout {
+        flex-wrap: wrap !important;
+    }
+}
+</style>
+
+<script>
+// Image preview
+(function(){
+    var input = document.getElementById('wdc-story-images');
+    var preview = document.getElementById('wdc-image-preview');
+    if (!input || !preview) return;
+    
+    var dt = new DataTransfer();
+    
+    input.addEventListener('change', function(){
+        preview.innerHTML = '';
+        preview.style.display = 'flex';
+        
+        for (var i = 0; i < input.files.length; i++) {
+            (function(file, index){
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var wrap = document.createElement('span');
+                    wrap.className = 'wdc-remove-thumb';
+                    wrap.innerHTML = '<img src="'+e.target.result+'" alt="preview"><button type="button" data-index="'+index+'">✕</button>';
+                    preview.appendChild(wrap);
+                };
+                reader.readAsDataURL(file);
+            })(input.files[i], i);
+        }
+    });
+    
+    preview.addEventListener('click', function(e){
+        var btn = e.target.closest('button[data-index]');
+        if (!btn) return;
+        e.preventDefault();
+        var idx = parseInt(btn.getAttribute('data-index'));
+        dt.clear();
+        for (var i = 0; i < input.files.length; i++) {
+            if (i !== idx) dt.items.add(input.files[i]);
+        }
+        input.files = dt.files;
+        input.dispatchEvent(new Event('change'));
+    });
+})();
+</script>
 
 <!-- Filter chips -->
 <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;">
@@ -64,17 +242,28 @@ $stories = new WP_Query($story_args);
         $types = wp_get_post_terms(get_the_ID(), 'story_type', ['fields' => 'names']);
         $type_name = !is_wp_error($types) && $types ? $types[0] : 'Cerita';
         $author = get_post_meta(get_the_ID(), '_wdc_story_author_name', true) ?: get_the_author();
+        $gallery_ids = get_post_meta(get_the_ID(), '_wdc_story_gallery', true);
+        $gallery_ids = is_array($gallery_ids) ? $gallery_ids : [];
     ?>
     <article style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;overflow:hidden;box-shadow:0 12px 34px rgba(15,23,42,.06);">
         <?php if (has_post_thumbnail()) : ?>
         <div style="height:180px;overflow:hidden;">
             <?php the_post_thumbnail('medium_large', ['style' => 'width:100%;height:100%;object-fit:cover;']); ?>
         </div>
+        <?php elseif ($gallery_ids) : ?>
+        <div style="height:180px;overflow:hidden;">
+            <img src="<?php echo esc_url(wp_get_attachment_url($gallery_ids[0])); ?>" alt="" style="width:100%;height:100%;object-fit:cover;">
+        </div>
         <?php endif; ?>
         <div style="padding:20px;">
             <span style="display:inline-block;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#0b617c;background:#e8f8fc;border-radius:999px;padding:5px 10px;margin-bottom:12px;"><?php echo esc_html($type_name); ?></span>
             <h3 style="font-size:18px;font-weight:900;color:#0f172a;margin:0 0 8px;letter-spacing:.03em;"><?php echo esc_html(get_the_title()); ?></h3>
             <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0 0 14px;"><?php echo wp_trim_words(get_the_excerpt(), 25); ?></p>
+            <?php if ($gallery_ids && count($gallery_ids) > 1) : ?>
+            <div style="display:flex;gap:4px;margin-bottom:12px;">
+                <span style="font-size:11px;color:#94a3b8;">📷 <?php echo count($gallery_ids); ?> <?php echo contenly_tr('foto', 'photos'); ?></span>
+            </div>
+            <?php endif; ?>
             <div style="display:flex;justify-content:space-between;align-items:center;">
                 <span style="font-size:12px;color:#94a3b8;"><?php echo esc_html($author); ?> · <?php echo get_the_date(); ?></span>
                 <a href="<?php the_permalink(); ?>" style="font-size:13px;font-weight:800;color:#0b617c;text-decoration:none;"><?php echo contenly_tr('Baca →', 'Read →'); ?></a>

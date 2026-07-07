@@ -21,7 +21,7 @@ require_once get_template_directory() . '/inc/template-functions.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_stylesheet_uri(), [], '2.2.3');
+    wp_enqueue_style('contenly-style', get_stylesheet_uri(), [], '2.2.4');
     wp_add_inline_style('contenly-style', '.wd-header .gt-lang-switcher{margin-right:10px!important}.wd-header .wd-nav-member{margin-left:8px!important}');
     
     // Google Fonts
@@ -44,6 +44,11 @@ function contenly_enqueue_scripts() {
     
     // Main theme JavaScript
     wp_enqueue_script('contenly-main', get_template_directory_uri() . '/assets/js/main.js', ['jquery'], '1.0.4', true);
+    
+    // Media uploader for story pages (wp_editor + image upload)
+    if (is_page_template('page-cerita-kamu.php') && is_user_logged_in()) {
+        wp_enqueue_media();
+    }
 }
 add_action('wp_enqueue_scripts', 'contenly_enqueue_scripts');
 
@@ -289,7 +294,7 @@ add_action('init', function() {
 });
 
 /**
- * Handle story submission from frontend
+ * Handle story submission from frontend (with image uploads + rich content)
  */
 add_action('init', function() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wdc_story_nonce']) && is_user_logged_in()) {
@@ -313,6 +318,39 @@ add_action('init', function() {
                 wp_set_object_terms($post_id, $type, 'story_type');
                 update_post_meta($post_id, '_wdc_story_author_name', $user->display_name);
                 update_post_meta($post_id, '_wdc_story_approved', '0');
+
+                // Handle image uploads
+                if (!empty($_FILES['story_images']['name'][0])) {
+                    require_once ABSPATH . 'wp-admin/includes/image.php';
+                    require_once ABSPATH . 'wp-admin/includes/file.php';
+                    require_once ABSPATH . 'wp-admin/includes/media.php';
+
+                    $gallery_ids = [];
+                    $files = $_FILES['story_images'];
+                    for ($i = 0; $i < count($files['name']); $i++) {
+                        if ($files['error'][$i] !== UPLOAD_ERR_OK) continue;
+                        $file = [
+                            'name'     => $files['name'][$i],
+                            'type'     => $files['type'][$i],
+                            'tmp_name' => $files['tmp_name'][$i],
+                            'error'    => $files['error'][$i],
+                            'size'     => $files['size'][$i],
+                        ];
+                        $_FILES['story_image_single'] = $file;
+                        $attachment_id = media_handle_upload('story_image_single', $post_id);
+                        if (!is_wp_error($attachment_id)) {
+                            $gallery_ids[] = $attachment_id;
+                        }
+                        unset($_FILES['story_image_single']);
+                    }
+
+                    if ($gallery_ids) {
+                        update_post_meta($post_id, '_wdc_story_gallery', $gallery_ids);
+                        // Set first image as featured image
+                        set_post_thumbnail($post_id, $gallery_ids[0]);
+                    }
+                }
+
                 wp_redirect(add_query_arg(['submitted' => '1'], contenly_localized_url('/cerita-kamu/')));
                 exit;
             }
@@ -3197,6 +3235,235 @@ function wdc_save_catalog_details($post_id, $post) {
     update_post_meta($post_id, '_wdc_catalog_visible', isset($_POST['_wdc_catalog_visible']) ? '1' : '0');
 }
 add_action('save_post', 'wdc_save_catalog_details', 10, 2);
+
+/**
+ * Completed Courses — AJAX: Add
+ */
+function wdc_ajax_add_completed_course() {
+    check_ajax_referer('wdc_member_nonce', 'nonce');
+
+    $uid = isset($_POST['user_id']) ? (int) $_POST['user_id'] : get_current_user_id();
+    if (!$uid) {
+        wp_send_json_error('No user.');
+    }
+
+    // Only admin can add for others
+    $current = get_current_user_id();
+    if ($uid !== $current && !current_user_can('manage_options')) {
+        wp_send_json_error('Permission denied.');
+    }
+
+    $course_title = sanitize_text_field(wp_unslash($_POST['course_title'] ?? ''));
+    if (!$course_title) {
+        wp_send_json_error('Course title required.');
+    }
+
+    $completed = get_user_meta($uid, '_wdc_completed_courses', true);
+    $completed = is_array($completed) ? $completed : [];
+
+    $entry = [
+        'course_id'      => (int) ($_POST['course_id'] ?? 0),
+        'course_title'   => $course_title,
+        'level'          => sanitize_text_field(wp_unslash($_POST['level'] ?? '')),
+        'date_completed' => sanitize_text_field(wp_unslash($_POST['date_completed'] ?? '')),
+        'cert_number'    => sanitize_text_field(wp_unslash($_POST['cert_number'] ?? '')),
+        'notes'          => sanitize_textarea_field(wp_unslash($_POST['notes'] ?? '')),
+        'added_by'       => ($uid === $current) ? 'user' : 'admin',
+        'created_at'     => current_time('mysql'),
+    ];
+
+    array_unshift($completed, $entry);
+    update_user_meta($uid, '_wdc_completed_courses', array_slice($completed, 0, 50));
+
+    wp_send_json_success(['entry' => $entry, 'total' => count($completed)]);
+}
+add_action('wp_ajax_wdc_add_completed_course', 'wdc_ajax_add_completed_course');
+
+/**
+ * Completed Courses — AJAX: Remove
+ */
+function wdc_ajax_remove_completed_course() {
+    check_ajax_referer('wdc_member_nonce', 'nonce');
+
+    $uid = isset($_POST['user_id']) ? (int) $_POST['user_id'] : get_current_user_id();
+    if (!$uid) {
+        wp_send_json_error('No user.');
+    }
+
+    $current = get_current_user_id();
+    if ($uid !== $current && !current_user_can('manage_options')) {
+        wp_send_json_error('Permission denied.');
+    }
+
+    $index = (int) ($_POST['index'] ?? -1);
+    $completed = get_user_meta($uid, '_wdc_completed_courses', true);
+    $completed = is_array($completed) ? $completed : [];
+
+    if ($index < 0 || $index >= count($completed)) {
+        wp_send_json_error('Invalid index.');
+    }
+
+    array_splice($completed, $index, 1);
+    update_user_meta($uid, '_wdc_completed_courses', $completed);
+
+    wp_send_json_success(['total' => count($completed)]);
+}
+add_action('wp_ajax_wdc_remove_completed_course', 'wdc_ajax_remove_completed_course');
+
+/**
+ * Admin: Completed Courses section on User Profile
+ */
+function wdc_admin_completed_courses_fields($user) {
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+    $completed = get_user_meta($user->ID, '_wdc_completed_courses', true);
+    $completed = is_array($completed) ? $completed : [];
+
+    // Get all courses for dropdown
+    $all_courses = get_posts(['post_type' => 'wm_course', 'numberposts' => -1, 'post_status' => 'publish', 'orderby' => 'title', 'order' => 'ASC']);
+    ?>
+    <h2 style="font-size:16px;margin:20px 0 8px;">🎓 Completed Courses</h2>
+    <p class="description">Kursus yang sudah pernah diikuti oleh member ini. Bisa ditambah/dihapus dari sini.</p>
+
+    <?php if ($completed) : ?>
+    <table class="widefat striped" style="max-width:800px;margin:12px 0;">
+        <thead>
+            <tr>
+                <th>Kursus</th>
+                <th>Level</th>
+                <th>Tanggal</th>
+                <th>No. Sertifikat</th>
+                <th>Ditambah Oleh</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($completed as $i => $c) : ?>
+            <tr>
+                <td><strong><?php echo esc_html($c['course_title']); ?></strong>
+                    <?php if (!empty($c['notes'])) : ?><br><small style="color:#666;"><?php echo esc_html($c['notes']); ?><?php endif; ?>
+                </td>
+                <td><?php echo esc_html($c['level'] ?: '-'); ?></td>
+                <td><?php echo esc_html($c['date_completed'] ?: '-'); ?></td>
+                <td><?php echo esc_html($c['cert_number'] ?: '-'); ?></td>
+                <td><span style="padding:2px 8px;border-radius:4px;background:<?php echo ($c['added_by'] ?? '') === 'admin' ? '#dbeafe' : '#dcfce7'; ?>;font-size:12px;"><?php echo esc_html(($c['added_by'] ?? 'user') === 'admin' ? 'Admin' : 'User'); ?></span></td>
+                <td>
+                    <form method="post" style="display:inline;">
+                        <?php wp_nonce_field('wdc_admin_remove_completed', 'wdc_admin_remove_nonce'); ?>
+                        <input type="hidden" name="wdc_remove_index" value="<?php echo $i; ?>">
+                        <input type="hidden" name="wdc_remove_uid" value="<?php echo $user->ID; ?>">
+                        <button type="submit" class="button button-small" onclick="return confirm('Hapus kursus ini dari daftar?');">Hapus</button>
+                    </form>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+    <?php endif; ?>
+
+    <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;max-width:800px;margin:12px 0;">
+        <strong>Tambah Kursus Selesai</strong>
+        <table class="form-table" style="margin:8px 0 0;">
+            <tr>
+                <th><label>Kursus</label></th>
+                <td>
+                    <select name="wdc_new_completed_course_id" id="wdc-admin-completed-course-select" style="min-width:300px;">
+                        <option value="">— Pilih kursus dari daftar —</option>
+                        <?php foreach ($all_courses as $ac) :
+                            $level_terms = wp_get_post_terms($ac->ID, 'course_level', ['fields' => 'names']);
+                            $level = (!is_wp_error($level_terms) && $level_terms) ? $level_terms[0] : '';
+                        ?>
+                            <option value="<?php echo esc_attr($ac->ID); ?>" data-title="<?php echo esc_attr($ac->post_title); ?>" data-level="<?php echo esc_attr($level); ?>"><?php echo esc_html($ac->post_title); ?><?php if ($level) echo ' (' . esc_html($level) . ')'; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <input type="text" name="wdc_new_completed_course_custom" placeholder="Atau ketik nama kursus manual..." style="min-width:300px;margin-top:6px;">
+                </td>
+            </tr>
+            <tr>
+                <th><label>Tanggal Selesai</label></th>
+                <td><input type="date" name="wdc_new_completed_date" style="min-width:200px;"></td>
+            </tr>
+            <tr>
+                <th><label>No. Sertifikat</label></th>
+                <td><input type="text" name="wdc_new_completed_cert" placeholder="Opsional" style="min-width:200px;"></td>
+            </tr>
+            <tr>
+                <th><label>Catatan</label></th>
+                <td><textarea name="wdc_new_completed_notes" rows="2" placeholder="Opsional" style="min-width:300px;"></textarea></td>
+            </tr>
+        </table>
+        <input type="hidden" name="wdc_new_completed_uid" value="<?php echo $user->ID; ?>">
+        <p><button type="submit" name="wdc_admin_add_completed" value="1" class="button button-primary">Tambah Kursus Selesai</button></p>
+    </div>
+    <?php
+}
+add_action('show_user_profile', 'wdc_admin_completed_courses_fields');
+add_action('edit_user_profile', 'wdc_admin_completed_courses_fields');
+
+/**
+ * Admin: Save completed course from user profile
+ */
+function wdc_admin_save_completed_courses($user_id) {
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+
+    // Handle remove
+    if (isset($_POST['wdc_admin_remove_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_admin_remove_nonce'])), 'wdc_admin_remove_completed')) {
+        $remove_uid = (int) ($_POST['wdc_remove_uid'] ?? 0);
+        $remove_idx = (int) ($_POST['wdc_remove_index'] ?? -1);
+        if ($remove_uid > 0 && $remove_idx >= 0) {
+            $completed = get_user_meta($remove_uid, '_wdc_completed_courses', true);
+            $completed = is_array($completed) ? $completed : [];
+            if ($remove_idx < count($completed)) {
+                array_splice($completed, $remove_idx, 1);
+                update_user_meta($remove_uid, '_wdc_completed_courses', $completed);
+            }
+        }
+    }
+
+    // Handle add
+    if (isset($_POST['wdc_admin_add_completed']) && $_POST['wdc_admin_add_completed'] === '1') {
+        $target_uid = (int) ($_POST['wdc_new_completed_uid'] ?? $user_id);
+        $course_id = (int) ($_POST['wdc_new_completed_course_id'] ?? 0);
+        $custom_title = sanitize_text_field(wp_unslash($_POST['wdc_new_completed_course_custom'] ?? ''));
+
+        $course_title = '';
+        $level = '';
+        if ($course_id) {
+            $cp = get_post($course_id);
+            $course_title = $cp ? $cp->post_title : '';
+            $level_terms = wp_get_post_terms($course_id, 'course_level', ['fields' => 'names']);
+            $level = (!is_wp_error($level_terms) && $level_terms) ? $level_terms[0] : '';
+        } elseif ($custom_title) {
+            $course_title = $custom_title;
+        }
+
+        if (!$course_title) {
+            return;
+        }
+
+        $completed = get_user_meta($target_uid, '_wdc_completed_courses', true);
+        $completed = is_array($completed) ? $completed : [];
+
+        $entry = [
+            'course_id'      => $course_id,
+            'course_title'   => $course_title,
+            'level'          => $level,
+            'date_completed' => sanitize_text_field(wp_unslash($_POST['wdc_new_completed_date'] ?? '')),
+            'cert_number'    => sanitize_text_field(wp_unslash($_POST['wdc_new_completed_cert'] ?? '')),
+            'notes'          => sanitize_textarea_field(wp_unslash($_POST['wdc_new_completed_notes'] ?? '')),
+            'added_by'       => 'admin',
+            'created_at'     => current_time('mysql'),
+        ];
+
+        array_unshift($completed, $entry);
+        update_user_meta($target_uid, '_wdc_completed_courses', array_slice($completed, 0, 50));
+    }
+}
+add_action('personal_options_update', 'wdc_admin_save_completed_courses');
+add_action('edit_user_profile_update', 'wdc_admin_save_completed_courses');
 
 function wdc_catalog_admin_columns($columns) {
     $new = [];
