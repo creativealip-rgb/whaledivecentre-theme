@@ -3371,3 +3371,11 @@ body.whaledive-single-course .wd-sidebar-card{border-radius:24px!important}
   transform: translateY(-4px) !important;
   box-shadow: 0 20px 50px rgba(2,21,43,.14) !important;
 }
+
+/* Fix: course body flex-grow so margin-top:auto on links works */
+.home #courses .wd-course-body {
+  flex: 1 1 auto !important;
+}
+.home .wd-eq .wd-equip-card .wd-equip-home-body {
+  flex: 1 1 auto !important;
+}
