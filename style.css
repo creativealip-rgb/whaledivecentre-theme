@@ -3184,6 +3184,12 @@ body.whaledive-single-course .wd-sidebar-card{border-radius:24px!important}
    4) About contact form card radius 32px -> 24px token. */
 .wdc-card-cta .wd-shell,.wd-story-bottom-cta .wd-shell,.whaledive-single .wd-story-bottom-cta .wd-shell{border-radius:24px!important}
 .wdc-card-cta .wd-btn.alt,.wd-story-bottom-cta .wd-btn.alt,.wd-community .wd-btn.alt{background:linear-gradient(135deg,var(--wdc-blue,#004A98),var(--wdc-blue-violet,#3B44AC))!important;color:#fff!important;border-color:transparent!important;box-shadow:0 14px 34px rgba(0,74,152,.32)!important;min-height:54px!important;padding:0 34px!important;font-size:16.5px!important;font-weight:900!important;letter-spacing:.01em!important}
+/* Dark section CTA + chips (homepage courses) */
+.wd-dark .wd-section-cta .wd-btn.alt{background:rgba(255,255,255,.94)!important;color:#06384d!important;border:1px solid rgba(255,255,255,.5)!important;box-shadow:0 8px 24px rgba(0,0,0,.22)!important;font-weight:700!important}
+.wd-dark .wd-section-cta .wd-btn.alt:hover{background:#fff!important;box-shadow:0 12px 32px rgba(0,0,0,.3)!important;transform:translateY(-1px)!important}
+.wd-dark .wd-filter-bar .wd-chip:not(.active){background:rgba(255,255,255,.12)!important;color:rgba(255,255,255,.85)!important;border-color:rgba(255,255,255,.28)!important}
+.wd-dark .wd-filter-bar .wd-chip:not(.active):hover{background:rgba(255,255,255,.2)!important;color:#fff!important;border-color:rgba(255,255,255,.4)!important}
+.wd-dark .wd-filter-bar .wd-chip.active{background:var(--cyan,#4CC8ED)!important;color:#04172d!important;border-color:var(--cyan,#4CC8ED)!important}
 .wdc-card-cta .wd-btn.alt:hover,.wd-story-bottom-cta .wd-btn.alt:hover,.wd-community .wd-btn.alt:hover{background:linear-gradient(135deg,var(--wdc-blue-violet,#3B44AC),var(--wdc-blue,#004A98))!important;box-shadow:0 18px 42px rgba(0,74,152,.4)!important;transform:translateY(-1px)!important}
 .wdc-card-cta,.wd-story-bottom-cta{padding-top:24px!important;padding-bottom:64px!important}
 .wd-contact-form{border-radius:24px!important}
