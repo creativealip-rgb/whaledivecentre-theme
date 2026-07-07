@@ -211,6 +211,13 @@ function wdSwitchTab(tab) {
 
   <!-- DIVE SITES HIDDEN -->
 <!-- EQUIPMENT -->
+  <style>
+.home .wd-eq .wd-home-equip-card{transition:transform .3s ease,box-shadow .3s ease!important}
+.home .wd-eq .wd-home-equip-card:hover{transform:translateY(-6px)!important;box-shadow:0 20px 50px rgba(0,0,0,.28)!important}
+.home .wd-eq .wd-home-equip-card:hover .wd-home-equip-photo img{transform:scale(1.06)!important}
+.home .wd-eq .wd-sub{margin-bottom:28px!important}
+</style>
+
   <section id="equipment" class="wd-section white wd-center wd-eq"><div class="wd-shell"><div class="wd-divider"><h2 class="wd-title"><?php echo esc_html(contenly_tr('Peralatan Selam', 'Scuba Equipment')); ?></h2></div><p class="wd-sub"><?php echo esc_html(contenly_tr('Gear berkualitas untuk latihan, fun dive, dan kenyamanan bawah air yang lebih aman. Beli atau sewa melalui crew.', 'Quality gear for training, fun dives, and safer underwater comfort. Buy or rent through the crew.')); ?></p><div class="wd-equipment-grid"><?php $eq=[['Masks',contenly_tr('Visi jelas dan pas yang bisa diandalkan', 'Clear vision and reliable fit'),'wdc-equipment-mask-real.webp'],['Wetsuits',contenly_tr('Kenyamanan termal untuk dive lebih lama', 'Thermal comfort for longer dives'),'wdc-equipment-wetsuit-real.webp'],['BCD',contenly_tr('Kontrol buoyancy dan dukungan trim', 'Buoyancy control and trim support'),'wdc-equipment-bcd-real.webp'],['Regulators',contenly_tr('Pernapasan lancar dan pengiriman udara yang aman', 'Smooth breathing and safe air delivery'),'wdc-equipment-regulator-real.webp']]; foreach($eq as $e): ?><article class="wd-course-card wd-home-equip-card"><div class="wd-course-photo wd-home-equip-photo" style="background-image:linear-gradient(135deg,rgba(232,251,255,.28),rgba(255,255,255,.42)),url('<?php echo esc_url(get_template_directory_uri() . '/assets/' . $e[2]); ?>')!important;background-size:cover,contain!important;background-position:center!important;background-repeat:no-repeat!important;"><img src="<?php echo esc_url(get_template_directory_uri() . '/assets/' . $e[2]); ?>" alt="<?php echo esc_attr($e[0]); ?>" loading="eager" decoding="async"></div><div class="wd-course-body wd-home-equip-body"><div class="wd-course-meta"><span><?php echo esc_html($e[0]); ?></span><?php echo '<span>' . contenly_tr('Peralatan', 'Gear') . '</span>'; ?></div><h3><?php echo esc_html($e[0]); ?></h3><p><?php echo esc_html($e[1]); ?></p><a href="/equipment/"><?php echo esc_html(contenly_tr('Lihat Detail', 'View Details')); ?></a></div></article><?php endforeach; ?></div><div class="wd-section-cta"><a class="wd-btn alt" href="/equipment/"><?php echo esc_html(contenly_tr('Lihat Semua Peralatan', 'View All Equipment')); ?></a></div></div></section>
 
   <!-- SOCIAL PROOF (NEW) -->
