@@ -3233,8 +3233,9 @@ body.whaledive-single-course .wd-sidebar-card{border-radius:24px!important}
 /* Home welcome logo strip */
 .wd-welcome-logos{display:grid!important;gap:18px!important;max-width:900px!important;margin:32px auto 0!important}
 .wd-welcome-logo-row{display:flex!important;flex-wrap:wrap!important;justify-content:center!important;align-items:center!important;gap:28px!important}
+.wd-logo-row-5{flex-wrap:nowrap!important;gap:20px!important}
 .wd-welcome-logo-row img{height:52px!important;width:auto!important;object-fit:contain!important;filter:grayscale(100%)!important;opacity:.7!important;transition:all .25s ease!important}.wd-welcome-logo-row img:hover{filter:grayscale(0%)!important;opacity:1!important}
-@media(max-width:760px){.wd-welcome-logos{margin-top:24px!important}.wd-welcome-logo-row{gap:16px!important}.wd-welcome-logo-row img{height:38px!important}}
+@media(max-width:760px){.wd-welcome-logos{margin-top:24px!important}.wd-welcome-logo-row{gap:16px!important}.wd-welcome-logo-row img{height:38px!important}.wd-logo-row-5{flex-wrap:wrap!important;gap:12px!important}}
 
 /* Home course affiliation strip */
 .wd-course-affiliations{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:14px!important;max-width:760px!important;margin:24px auto 30px!important}
