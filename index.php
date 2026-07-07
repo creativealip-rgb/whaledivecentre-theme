@@ -165,9 +165,9 @@ body.whaledive-home #equipment .wd-equip-photo{height:165px!important}
   <section class="wd-section wd-dark wd-center"><div class="wd-shell"><span class="wd-kicker"><?php echo esc_html(contenly_tr('Fokus Kami', 'Our Focus')); ?></span><h2 class="wd-title"><?php echo esc_html(contenly_tr('Dari first dive sampai level profesional.', 'From first dive to professional level.')); ?></h2><div class="wd-safety-grid"><article><b><?php echo esc_html(contenly_tr('Pelatihan rekreasional', 'Recreational training')); ?></b><span><?php echo esc_html(contenly_tr('Membangun fondasi skill, buoyancy, buddy awareness, dan confidence untuk diver baru.', 'Build core skills, buoyancy, buddy awareness, and confidence for new divers.')); ?></span></article><article><b><?php echo esc_html(contenly_tr('Pelatihan profesional', 'Professional training')); ?></b><span><?php echo esc_html(contenly_tr('Mengembangkan leadership, briefing, rescue awareness, dan standar kerja profesional.', 'Develop leadership, briefing, rescue awareness, and professional working standards.')); ?></span></article><article><b><?php echo esc_html(contenly_tr('Technical & safety culture', 'Technical & safety culture')); ?></b><span><?php echo esc_html(contenly_tr('Mendorong perencanaan konservatif, disiplin prosedur, dan keputusan yang sadar risiko.', 'Promote conservative planning, procedural discipline, and risk-aware decisions.')); ?></span></article></div></div></section>
 
   <!-- COURSES -->
-  <section id="courses" class="wd-section wd-dark wd-center"><div class="wd-shell"><div class="wd-divider"><h2 class="wd-title"><?php echo esc_html(contenly_tr('Kursus Selam Kami', 'Our Dive Courses')); ?></h2></div><p class="wd-sub" style="margin-bottom:28px!important;"><?php echo esc_html(contenly_tr('Jalur terstruktur dari napas pertama di bawah air hingga kepemimpinan dive profesional.', 'A structured pathway from your first breath underwater to pro-level dive leadership.')); ?></p><div class="wd-course-tabs" aria-label="Course category tabs" style="display:flex!important;flex-direction:row!important;gap:16px!important;justify-content:center!important;flex-wrap:wrap!important;margin:0 0 36px!important;">
-<button class="wd-tab active" data-tab="naui" onclick="wdSwitchTab('naui')" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;padding:11px 24px!important;border-radius:999px!important;border:1px solid #06384d!important;background:#06384d!important;color:#fff!important;font-size:14px!important;font-weight:700!important;letter-spacing:.01em!important;cursor:pointer!important;transition:all .2s ease!important;min-width:90px!important;box-shadow:0 4px 14px rgba(6,56,77,.18)!important;">NAUI</button>
-<button class="wd-tab" data-tab="tdi" onclick="wdSwitchTab('tdi')" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;padding:11px 24px!important;border-radius:999px!important;border:1px solid #dde3ea!important;background:#fff!important;color:#06384d!important;font-size:14px!important;font-weight:700!important;letter-spacing:.01em!important;cursor:pointer!important;transition:all .2s ease!important;min-width:90px!important;box-shadow:0 2px 8px rgba(2,21,43,.06)!important;">TDI</button>
+  <section id="courses" class="wd-section wd-dark wd-center"><div class="wd-shell"><div class="wd-divider"><h2 class="wd-title"><?php echo esc_html(contenly_tr('Kursus Selam Kami', 'Our Dive Courses')); ?></h2></div><p class="wd-sub" style="margin-bottom:28px!important;"><?php echo esc_html(contenly_tr('Jalur terstruktur dari napas pertama di bawah air hingga kepemimpinan dive profesional.', 'A structured pathway from your first breath underwater to pro-level dive leadership.')); ?></p><div class="wd-filter-bar" aria-label="Course category tabs" style="margin-bottom:36px!important;">
+<button class="wd-chip active" data-tab="naui" onclick="wdSwitchTab('naui')">NAUI</button>
+<button class="wd-chip" data-tab="tdi" onclick="wdSwitchTab('tdi')">TDI</button>
 </div>
 <div class="wd-course-grid" id="wd-tab-naui" style="width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;display:grid!important;grid-auto-flow:row!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:22px!important;">
 <?php
@@ -191,13 +191,8 @@ foreach($tdi_courses as $e): ?><article class="wd-course-card"><div class="wd-co
 </div>
 <script>
 function wdSwitchTab(tab) {
-  document.querySelectorAll('.wd-tab').forEach(function(b) {
-    var isActive = b.dataset.tab === tab;
-    b.style.setProperty('background', isActive ? '#06384d' : '#ffffff', 'important');
-    b.style.setProperty('border-color', isActive ? '#06384d' : '#dde3ea', 'important');
-    b.style.setProperty('color', isActive ? '#fff' : '#06384d', 'important');
-    b.style.setProperty('box-shadow', isActive ? '0 4px 14px rgba(6,56,77,.18)' : '0 2px 8px rgba(2,21,43,.06)', 'important');
-    b.classList.toggle('active', isActive);
+  document.querySelectorAll('.wd-chip[data-tab]').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.tab === tab);
   });
   var showEl = document.getElementById(tab === 'naui' ? 'wd-tab-naui' : 'wd-tab-tdi');
   var hideEl = document.getElementById(tab === 'naui' ? 'wd-tab-tdi' : 'wd-tab-naui');
@@ -212,7 +207,7 @@ function wdSwitchTab(tab) {
   hideEl.style.setProperty('overflow', 'hidden', 'important');
 }
 </script>
-<div class="wd-section-cta"><a class="wd-btn alt" href="/courses/" style="background:#fff!important;color:#06384d!important;border:1px solid rgba(255,255,255,.3)!important;padding:14px 36px!important;font-weight:700!important;font-size:15px!important;border-radius:999px!important;box-shadow:0 4px 16px rgba(0,0,0,.15)!important;transition:all .2s ease!important;text-decoration:none!important;display:inline-flex!important;align-items:center!important;gap:8px!important;"><?php echo esc_html(contenly_tr('Lihat Semua Kursus','View All Courses')); ?> →</a></div></div></section>
+<div class="wd-section-cta"><a class="wd-btn alt" href="/courses/"><?php echo esc_html(contenly_tr('Lihat Semua Kursus','View All Courses')); ?> →</a></div></div></section>
 
   <!-- DIVE SITES HIDDEN -->
 <!-- EQUIPMENT -->
