@@ -42,7 +42,7 @@ $active_items = array_filter(array_merge($course_orders, $gear_orders), function
 </div>
 
 <!-- Giveaway Section (only for users who haven't claimed) — pulls from Informasi post -->
-<?php if (is_user_logged_in() && get_option('wdc_giveaway_enabled', '1') && !wdc_user_claimed_giveaway()) :
+<?php if (is_user_logged_in() && get_option('wdc_giveaway_enabled', '1') && wdc_is_new_user() && !wdc_user_claimed_giveaway()) :
     // Get active giveaway from Informasi
     $giveaway_post = get_posts([
         'post_type' => 'wdc_info',

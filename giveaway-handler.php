@@ -55,6 +55,27 @@ function wdc_user_claimed_giveaway($user_id = 0) {
 }
 
 /**
+ * Check if user is "new" — registered within X days
+ * Filter: wdc_giveaway_new_user_days (default 30)
+ */
+function wdc_is_new_user($user_id = 0) {
+    if (!$user_id) {
+        $user_id = get_current_user_id();
+    }
+    if (!$user_id) {
+        return false;
+    }
+    $user = get_userdata($user_id);
+    if (!$user) {
+        return false;
+    }
+    $max_days = apply_filters('wdc_giveaway_new_user_days', 30);
+    $registered = strtotime($user->user_registered);
+    $days_since = (time() - $registered) / (60 * 60 * 24);
+    return $days_since <= $max_days;
+}
+
+/**
  * AJAX: Get giveaway items
  */
 add_action('wp_ajax_wdc_get_giveaway_items', function() {
