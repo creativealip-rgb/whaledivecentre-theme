@@ -3240,13 +3240,24 @@ body.whaledive-single-course .wd-sidebar-card{border-radius:24px!important}
   box-shadow:0 8px 20px rgba(76,200,237,.22)!important}
 
 
-/* Home welcome logo strip */
-.wd-welcome-logos{display:flex!important;flex-direction:column!important;align-items:center!important;gap:18px!important;max-width:900px!important;margin:32px auto 0!important}
-.wd-welcome-logo-row{display:flex!important;flex-wrap:wrap!important;justify-content:center!important;align-items:center!important;gap:28px!important}
-.wd-welcome-logo-row img{height:52px!important;width:auto!important;object-fit:contain!important;filter:grayscale(100%)!important;opacity:.7!important;transition:all .25s ease!important}.wd-welcome-logo-row img:hover{filter:grayscale(0%)!important;opacity:1!important}
-.wd-logo-row-5{flex-wrap:nowrap!important;gap:14px!important}
-.wd-logo-row-5 img{height:40px!important}
-@media(max-width:760px){.wd-welcome-logos{margin-top:24px!important}.wd-welcome-logo-row{gap:16px!important}.wd-welcome-logo-row img{height:38px!important}.wd-logo-row-5{flex-wrap:wrap!important;gap:12px!important}}
+/* Trust bar — dark compact strip between hero and focus */
+.wd-trust-bar{background:#0a1628!important;padding:56px 0!important;text-align:center!important}
+.wd-trust-bar .wd-shell{max-width:960px!important;margin:0 auto!important}
+.wd-trust-text{color:rgba(255,255,255,.65)!important;font-size:15px!important;line-height:1.65!important;max-width:680px!important;margin:0 auto 28px!important;letter-spacing:.005em!important}
+.wd-trust-logos{display:flex!important;flex-direction:column!important;align-items:center!important;gap:14px!important;max-width:880px!important;margin:0 auto!important}
+.wd-trust-row{display:flex!important;flex-wrap:wrap!important;justify-content:center!important;align-items:center!important;gap:12px!important;margin:0!important}
+.wd-trust-row img{height:auto!important;max-height:36px!important;width:auto!important;object-fit:contain!important;filter:none!important;opacity:1!important;background:#fff!important;border-radius:8px!important;padding:6px 10px!important;box-sizing:content-box!important;transition:transform .25s ease,box-shadow .25s ease!important}
+.wd-trust-row img:hover{transform:scale(1.05)!important;box-shadow:0 4px 16px rgba(0,0,0,.3)!important}
+.wd-trust-row-5{gap:10px!important}
+.wd-trust-row-5 img{max-height:28px!important;padding:5px 8px!important}
+@media(max-width:760px){
+  .wd-trust-bar{padding:40px 0!important}
+  .wd-trust-text{font-size:14px!important;margin-bottom:22px!important}
+  .wd-trust-row{gap:10px!important}
+  .wd-trust-row img{max-height:28px!important;padding:5px 8px!important;border-radius:6px!important}
+  .wd-trust-row-5{gap:8px!important}
+  .wd-trust-row-5 img{max-height:22px!important;padding:4px 6px!important}
+}
 
 /* Home course affiliation strip */
 .wd-course-affiliations{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:14px!important;max-width:760px!important;margin:24px auto 30px!important}
@@ -3390,4 +3401,65 @@ body.whaledive-single-course .wd-sidebar-card{border-radius:24px!important}
 }
 .home .wd-eq .wd-equip-card .wd-equip-home-body {
   flex: 1 1 auto !important;
+}
+
+
+/* === CTA cards fix: override trust-bar flex!important === */
+.whaledive-home .wd-community .wd-trust-row{
+  display:grid!important;
+  grid-template-columns:repeat(3,1fr)!important;
+  gap:12px!important;
+  max-width:860px!important;
+  margin:30px auto!important;
+}
+.wd-community .wd-trust-row div{
+  border-radius:22px!important;
+  background:#fff!important;
+  padding:20px!important;
+  box-shadow:0 14px 34px rgba(0,74,152,.08)!important;
+}
+.wd-community .wd-trust-row b{
+  display:block!important;
+  color:var(--navy)!important;
+  margin-bottom:0!important;
+}
+.wd-community .wd-trust-row span{
+  color:var(--muted)!important;
+  font-size:13px!important;
+}
+@media(max-width:760px){
+  .whaledive-home .wd-community .wd-trust-row{
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+    max-width:100%!important;
+    margin:20px 0!important;
+  }
+  .wd-community .wd-trust-row div{
+    padding:16px 18px!important;
+  }
+  /* Articles: center heading + sub on mobile */
+  .wd-article-head{
+    flex-direction:column!important;
+    align-items:center!important;
+    text-align:center!important;
+  }
+  .wd-article-head>div{
+    text-align:center!important;
+    max-width:100%!important;
+  }
+  .wd-article-head .wd-title{
+    text-align:center!important;
+  }
+  .wd-article-head .wd-sub{
+    text-align:center!important;
+  }
+  .wd-article-head .wd-btn{
+    margin:16px auto 0!important;
+  }
+  /* Testimonials: ensure center */
+  .wd-proof .wd-title,
+  .wd-proof .wd-sub,
+  .wd-proof .wd-kicker{
+    text-align:center!important;
+  }
 }
