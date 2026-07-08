@@ -11,6 +11,7 @@ if (!defined('ABSPATH')) {
 require_once get_template_directory() . '/plugin-integration.php';
 require_once get_template_directory() . '/membership-plans.php';
 require_once get_template_directory() . '/manual-payment-handler.php';
+require_once get_template_directory() . '/giveaway-handler.php';
 
 // Load theme helper functions/tags
 require_once get_template_directory() . '/inc/template-tags.php';
@@ -552,6 +553,7 @@ function contenly_menu_route_key_from_path($path) {
         'rewards' => ['/rewards/', '/en/rewards/'],
         'my-travels' => ['/my-travels/', '/en/my-travels/'],
         'checkout-success' => ['/checkout-success/', '/en/checkout-success/'],
+        'giveaway-checkout' => ['/giveaway-checkout/', '/en/giveaway-checkout/'],
     ];
 
     foreach ($route_map as $key => $paths) {
@@ -581,6 +583,7 @@ function contenly_url_for_route_key($route_key, $lang) {
         'rewards' => ['id' => '/rewards/', 'en' => '/en/rewards/'],
         'my-travels' => ['id' => '/my-travels/', 'en' => '/en/my-travels/'],
         'checkout-success' => ['id' => '/checkout-success/', 'en' => '/en/checkout-success/'],
+        'giveaway-checkout' => ['id' => '/giveaway-checkout/', 'en' => '/en/giveaway-checkout/'],
     ];
 
     if (isset($route_targets[$route_key][$lang])) {
@@ -608,6 +611,7 @@ function contenly_localize_menu_item_title($title, $route_key, $lang) {
         'rewards' => ['id' => 'Dive Rewards', 'en' => 'Dive Rewards'],
         'my-travels' => ['id' => 'Dive Saya', 'en' => 'My Dives'],
         'checkout-success' => ['id' => 'Pembayaran Berhasil', 'en' => 'Payment Successful'],
+        'giveaway-checkout' => ['id' => 'Checkout Giveaway', 'en' => 'Giveaway Checkout'],
     ];
 
     if ($route_key && isset($labels[$route_key][$lang])) {
@@ -933,7 +937,7 @@ function contenly_public_page_slugs() {
 }
 
 function contenly_private_page_slugs() {
-    return ['sample-page', 'travel-dashboard', 'daftar-travel', 'login', 'register', 'membership', 'checkout', 'checkout-success', 'checkout-manual', 'payment-pending', 'my-account', 'my-bookings', 'dashboard', 'my-travels', 'wishlist', 'reviews', 'rewards', 'notifications', 'profile', 'settings', 'travel-story', 'booking-detail'];
+    return ['sample-page', 'travel-dashboard', 'daftar-travel', 'login', 'register', 'membership', 'checkout', 'checkout-success', 'checkout-manual', 'payment-pending', 'my-account', 'my-bookings', 'dashboard', 'my-travels', 'wishlist', 'reviews', 'rewards', 'notifications', 'profile', 'settings', 'travel-story', 'booking-detail', 'giveaway-checkout'];
 }
 
 function contenly_blog_category_map() {
