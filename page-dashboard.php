@@ -41,14 +41,27 @@ $active_items = array_filter(array_merge($course_orders, $gear_orders), function
     </div>
 </div>
 
-<!-- Giveaway Section (only for users who haven't claimed) -->
-<?php if (is_user_logged_in() && get_option('wdc_giveaway_enabled', '1') && !wdc_user_claimed_giveaway()) : ?>
+<!-- Giveaway Section (only for users who haven't claimed) — pulls from Informasi post -->
+<?php if (is_user_logged_in() && get_option('wdc_giveaway_enabled', '1') && !wdc_user_claimed_giveaway()) :
+    // Get active giveaway from Informasi
+    $giveaway_post = get_posts([
+        'post_type' => 'wdc_info',
+        'meta_key' => '_wdc_giveaway_active',
+        'meta_value' => '1',
+        'posts_per_page' => 1,
+        'post_status' => 'publish',
+    ]);
+    $gw_title = $giveaway_post ? $giveaway_post[0]->post_title : contenly_tr('Pilih Giveaway Kamu', 'Pick Your Giveaway');
+    $gw_excerpt = $giveaway_post ? $giveaway_post[0]->post_excerpt : contenly_tr('Barangnya gratis — kamu cukup bayar ongkirnya aja!', 'Items are free — just pay for shipping!');
+    $gw_link = $giveaway_post ? get_permalink($giveaway_post[0]->ID) : contenly_localized_url('/informasi/');
+?>
 <section id="wdc-giveaway-section" style="background:linear-gradient(135deg,#fef9c3,#fef08a);border:2px solid #facc15;border-radius:20px;padding:28px;margin-bottom:28px;">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
         <span style="font-size:32px;">🎁</span>
         <div>
-            <h2 style="font-size:22px;font-weight:900;color:#0f172a;margin:0;"><?php echo contenly_tr('Selamat Datang! Pilih Giveaway Kamu', 'Welcome! Pick Your Giveaway'); ?></h2>
-            <p style="font-size:14px;color:#713f12;margin:4px 0 0;"><?php echo contenly_tr('Barangnya gratis — kamu cukup bayar ongkirnya aja!', 'Items are free — just pay for shipping!'); ?></p>
+            <h2 style="font-size:22px;font-weight:900;color:#0f172a;margin:0;"><?php echo esc_html($gw_title); ?></h2>
+            <p style="font-size:14px;color:#713f12;margin:4px 0 0;"><?php echo esc_html($gw_excerpt); ?></p>
+            <a href="<?php echo esc_url($gw_link); ?>" style="font-size:13px;font-weight:800;color:#0b617c;text-decoration:none;"><?php echo contenly_tr('Baca selengkapnya →', 'Read more →'); ?></a>
         </div>
     </div>
 
