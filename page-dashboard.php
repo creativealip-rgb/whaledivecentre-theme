@@ -16,6 +16,25 @@ $gear_orders = is_array($gear_orders) ? $gear_orders : [];
 $active_items = array_filter(array_merge($course_orders, $gear_orders), function($item) {
     return in_array($item['status'] ?? '', ['Verified', 'Active', 'Completed'], true);
 });
+
+// Manual orders from admin (wdc_order CPT)
+$manual_orders = get_posts([
+    'post_type'      => 'wdc_order',
+    'posts_per_page' => -1,
+    'post_status'    => 'publish',
+    'meta_query'     => [['key' => '_wdc_customer_id', 'value' => $user_id]],
+]);
+$manual_pending = 0;
+$manual_total = 0;
+$manual_statuses = [];
+foreach ($manual_orders as $mo) {
+    $s = get_post_meta($mo->ID, '_wdc_order_status', true) ?: 'pending';
+    $manual_statuses[] = $s;
+    $manual_total++;
+    if ($s === 'pending') {
+        $manual_pending++;
+    }
+}
 ?>
 <div style="margin-bottom:24px;">
     <h1 style="font-size:28px;font-weight:800;color:#0f172a;margin-bottom:8px;"><?php echo contenly_tr('Dashboard Member', 'Member Dashboard'); ?></h1>
@@ -33,7 +52,7 @@ $active_items = array_filter(array_merge($course_orders, $gear_orders), function
     </div>
     <div style="background:linear-gradient(135deg,#f8fafc,#eef2ff);padding:20px;border-radius:16px;border:1px solid #e2e8f0;">
         <div style="font-size:12px;color:#475569;text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:8px;"><?php echo contenly_tr('Pesanan Langsung', 'Direct Orders'); ?></div>
-        <div style="font-size:34px;font-weight:950;color:#0f172a;"><?php echo count($course_orders) + count($gear_orders); ?></div>
+        <div style="font-size:34px;font-weight:950;color:#0f172a;"><?php echo count($course_orders) + count($gear_orders) + $manual_total; ?></div>
     </div>
     <div style="background:linear-gradient(135deg,#ecfdf5,#dcfce7);padding:20px;border-radius:16px;border:1px solid #bbf7d0;">
         <div style="font-size:12px;color:#166534;text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:8px;"><?php echo contenly_tr('Terverifikasi / Aktif', 'Verified / Active'); ?></div>
@@ -360,6 +379,39 @@ jQuery(document).ready(function($) {
 $recent_activity = array_slice(array_merge($course_orders, $gear_orders, $course_requests, $gear_requests), 0, 5);
 $status_steps = ['Payment Uploaded' => 'Proof received', 'Verified' => 'Payment verified', 'Active' => 'Ready / active', 'Completed' => 'Completed', 'Cancelled' => 'Cancelled', 'Requested' => 'Crew review', 'Awaiting Payment' => 'Waiting for payment'];
 ?>
+
+<!-- Manual Orders Section (from WA / admin input) -->
+<?php if (!empty($manual_orders)) :
+    $order_statuses = wdc_get_order_statuses();
+?>
+<section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;margin-bottom:28px;box-shadow:0 12px 34px rgba(15,23,42,.05);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0;letter-spacing:.03em;"><?php echo contenly_tr('Pesanan Saya', 'My Orders'); ?></h2>
+        <span style="font-size:12px;font-weight:800;background:#e8f8fc;color:#0b617c;border-radius:999px;padding:6px 12px;"><?php echo $manual_total; ?> <?php echo contenly_tr('pesanan', 'orders'); ?></span>
+    </div>
+    <div style="display:grid;gap:10px;">
+        <?php foreach ($manual_orders as $mo) :
+            $code    = get_post_meta($mo->ID, '_wdc_order_code', true);
+            $item    = get_post_meta($mo->ID, '_wdc_item_name', true);
+            $total   = get_post_meta($mo->ID, '_wdc_total_price', true);
+            $os      = get_post_meta($mo->ID, '_wdc_order_status', true) ?: 'pending';
+            $s_info  = $order_statuses[$os] ?? ['label' => $os, 'color' => '#6b7280'];
+        ?>
+        <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc;flex-wrap:wrap;">
+            <div>
+                <strong style="color:#0f172a;"><?php echo esc_html($item); ?></strong>
+                <div style="font-size:13px;color:#64748b;"><?php echo esc_html($code); ?> · Rp <?php echo number_format($total, 0, ',', '.'); ?></div>
+                <div style="font-size:12px;color:#94a3b8;"><?php echo get_the_date('d M Y', $mo); ?></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+                <span style="font-size:12px;font-weight:900;color:<?php echo $s_info['color']; ?>;background:<?php echo $s_info['color']; ?>22;border-radius:999px;padding:6px 12px;"><?php echo esc_html($s_info['label']); ?></span>
+                <a href="<?php echo esc_url(home_url('/invoice/' . $code . '/')); ?>" style="font-size:12px;font-weight:800;color:#0b617c;text-decoration:none;">📄 Invoice</a>
+            </div>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</section>
+<?php endif; ?>
 <?php if (!empty($recent_activity)) : ?>
 <section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;margin-bottom:28px;box-shadow:0 12px 34px rgba(15,23,42,.05);">
     <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;letter-spacing:.03em;"><?php echo contenly_tr('Aktivitas Terbaru', 'Latest Activity'); ?></h2>

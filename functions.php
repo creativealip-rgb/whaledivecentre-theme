@@ -12,6 +12,7 @@ require_once get_template_directory() . '/plugin-integration.php';
 require_once get_template_directory() . '/membership-plans.php';
 require_once get_template_directory() . '/manual-payment-handler.php';
 require_once get_template_directory() . '/giveaway-handler.php';
+require_once get_template_directory() . '/admin-orders.php';
 
 // Load theme helper functions/tags
 require_once get_template_directory() . '/inc/template-tags.php';
