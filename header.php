@@ -13,7 +13,8 @@ $nav_items = [
 $nav_html = '';
 foreach ($nav_items as $item) {
     $is_active = ('home' === $item['slug'] && ('/' === $request_path || '/index.php' === $request_path))
-        || ('home' !== $item['slug'] && 0 === strpos($request_path, $item['href']));
+        || ('blog' === $item['slug'] && (0 === strpos($request_path, $item['href']) || is_singular('post')))
+        || ('home' !== $item['slug'] && 'blog' !== $item['slug'] && 0 === strpos($request_path, $item['href']));
     $active_attr = $is_active ? ' class="is-active" aria-current="page"' : '';
     $nav_html .= '<a href="' . esc_url($item['href']) . '" data-nav="' . esc_attr($item['slug']) . '"' . $active_attr . '>' . esc_html(contenly_tr($item['id'], $item['en'])) . '</a>';
 }
