@@ -1,0 +1,43 @@
+
+.wd-header .gt-lang-switcher{margin-right:10px!important}.wd-header .wd-nav-member{margin-left:8px!important}
+/*# sourceURL=contenly-style-inline-css */
+
+
+@media (max-width: 760px) {
+  .wa-float-btn {
+    right: 14px !important;
+    bottom: calc(14px + env(safe-area-inset-bottom)) !important;
+    width: 54px !important;
+    height: 54px !important;
+    padding: 13px !important;
+    border-radius: 999px !important;
+  }
+  .wd-panel, .wd-hero-form, .wd-form {
+    margin-bottom: 30px !important;
+  }
+  .wd-hero { overflow: hidden; }
+  .wd-hero-grid, .wd-form-row { grid-template-columns: 1fr !important; }
+  .wd-menu.is-open { max-height: 80vh; overflow-y: auto; }
+}
+.wd-equipment-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+@media (max-width: 900px) {
+  .wd-equipment-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .wd-equipment-grid { grid-template-columns: 1fr; }
+}
+.wd-social-note { color: rgba(255,255,255,.68); font-size: 14px; margin-top: 12px; }
+/*# sourceURL=wdc-launch-polish-inline-css */
+
+
+      @media(max-width:760px){
+        .wd-nav.wd-menu-open .wd-menu{opacity:1!important;visibility:visible!important;transform:translateY(0)!important}
+        .wd-nav .gt-lang-switcher{justify-content:flex-start!important;margin:4px 0!important}
+        .wd-nav .wd-nav-member{display:inline-flex!important;justify-content:center!important;min-height:42px!important}
+        a[aria-label="Call Whale Dive Centre"],a[aria-label*="Call Whale Dive"]{right:14px!important;bottom:14px!important;z-index:900!important}
+      }
+    

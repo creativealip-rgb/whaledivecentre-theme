@@ -1,0 +1,211 @@
+/* WDC blog archive heading visibility fix */
+.whaledive-blog .wd-blog-section-head{position:relative!important;z-index:2!important;text-align:center!important;margin:0 auto 24px!important;max-width:820px!important;color:#fff!important}
+.whaledive-blog .wd-blog-section-head .wd-kicker{display:inline-flex!important;align-items:center!important;justify-content:center!important;margin:0 0 14px!important;padding:8px 14px!important;border-radius:999px!important;background:rgba(76,200,237,.18)!important;border:1px solid rgba(76,200,237,.38)!important;color:#96DAEA!important;-webkit-text-fill-color:#96DAEA!important;font-size:12px!important;font-weight:900!important;letter-spacing:.13em!important;text-transform:uppercase!important;opacity:1!important;visibility:visible!important}
+.whaledive-blog .wd-blog-section-head h2{display:block!important;position:relative!important;margin:0 auto 14px!important;max-width:760px!important;color:#fff!important;-webkit-text-fill-color:#fff!important;font-family:'Plus Jakarta Sans',sans-serif!important;font-size:clamp(36px,5.6vw,72px)!important;font-weight:900!important;line-height:.95!important;letter-spacing:-.065em!important;text-shadow:0 16px 40px rgba(0,0,0,.45)!important;opacity:1!important;visibility:visible!important;transform:none!important;clip:auto!important;clip-path:none!important;height:auto!important;overflow:visible!important}
+.whaledive-blog .wd-blog-section-head p{display:block!important;margin:0 auto!important;max-width:680px!important;color:rgba(255,255,255,.78)!important;-webkit-text-fill-color:rgba(255,255,255,.78)!important;font-size:17px!important;line-height:1.7!important;opacity:1!important;visibility:visible!important}
+.whaledive-blog .wd-blog-section-head h2{font-size:42px!important}
+.whaledive-blog .wd-blog-section-head p{font-size:15px!important}
+.whaledive-blog{--wd-sea:#06384d;--wd-cyan:#4CC8ED;--wd-foam:#dff8ff;--wd-sand:#f7efe2;--wd-ink:#061a36;background:#03172d!important}
+.whaledive-blog .wd-blog-section-clean{position:relative;isolation:isolate;padding:160px 0 84px!important;background:radial-gradient(circle at 16% 16%,rgba(76,200,237,.26),transparent 28%),radial-gradient(circle at 86% 8%,rgba(150,218,234,.2),transparent 24%),linear-gradient(180deg,#03172d 0%,#06384d 42%,#f3fbff 42%,#fff 100%)!important;overflow:hidden}
+.whaledive-blog .wd-blog-section-clean:before{content:"";position:absolute;inset:0 0 auto;height:520px;background:linear-gradient(180deg,rgba(2,15,32,.18),rgba(2,15,32,.56)),url('https://whaledivecentre.com/wp-content/themes/theme-travel-master/assets/wdc-home-hero-diving-clean3.webp') center/cover no-repeat;opacity:.42;z-index:-2}
+.whaledive-blog .wd-blog-section-clean:after{content:"";position:absolute;inset:0;background:repeating-radial-gradient(circle at 50% 0,rgba(255,255,255,.055) 0 1px,transparent 1px 38px);z-index:-1;pointer-events:none}
+.whaledive-blog .wd-blog-section-head{max-width:940px!important;margin-bottom:26px!important}
+.whaledive-blog .wd-blog-section-head h2{max-width:900px!important;font-size:clamp(42px,7vw,86px)!important}
+.whaledive-blog .wd-blog-section-head p{max-width:720px!important;font-size:18px!important}
+.whaledive-blog .wd-blog-category-filter{display:flex!important;gap:10px!important;justify-content:center!important;flex-wrap:wrap!important;margin:0 auto 30px!important;max-width:960px!important}
+.whaledive-blog .wd-blog-category-filter .wd-chip{display:inline-flex!important;align-items:center!important;min-height:42px!important;padding:0 15px!important;border-radius:999px!important;background:rgba(255,255,255,.94)!important;color:#06384d!important;border:1px solid rgba(255,255,255,.7)!important;box-shadow:0 12px 28px rgba(0,0,0,.08)!important;font-weight:900!important}
+/* WDC blog readable cards, rounded corners, reliable image fallback */
+.whaledive-blog .wd-blog-featured-card,.whaledive-blog .wd-blog-side-card,.whaledive-blog .wd-blog-card-modern{border-radius:26px!important;overflow:hidden!important;background:#fff!important;color:#061a36!important}
+.whaledive-blog .wd-blog-featured-media{border-radius:26px 26px 0 0!important;overflow:hidden!important}
+.whaledive-blog .wd-blog-card-media{border-radius:26px 26px 0 0!important;overflow:hidden!important}
+.whaledive-blog .wd-blog-mini a{border-radius:18px!important;background:#fff!important;color:#061a36!important}
+.whaledive-blog .wd-blog-mini-thumb{border-radius:14px!important;overflow:hidden!important;background:linear-gradient(135deg,#004A98,#4CC8ED)!important}
+.whaledive-blog .wd-blog-featured-body,.whaledive-blog .wd-blog-card-body,.whaledive-blog .wd-blog-side-card{background:#fff!important;color:#061a36!important}
+.whaledive-blog .wd-blog-featured-body h2,.whaledive-blog .wd-blog-featured-body h2 a,.whaledive-blog .wd-blog-card-body h3,.whaledive-blog .wd-blog-card-body h3 a,.whaledive-blog .wd-blog-mini strong{color:#061a36!important;text-shadow:none!important;opacity:1!important}
+.whaledive-blog .wd-blog-featured-body p,.whaledive-blog .wd-blog-card-body p,.whaledive-blog .wd-blog-meta-row em{color:#50697b!important;opacity:1!important;text-shadow:none!important}
+.whaledive-blog .wd-blog-card-body span,.whaledive-blog .wd-blog-meta-row span,.whaledive-blog .wd-blog-mini small{color:#004A98!important;opacity:1!important}
+.whaledive-blog .wd-blog-card-body>a{background:#eef8fb!important;color:#004A98!important;border-color:rgba(0,74,152,.16)!important}
+.whaledive-blog .wd-blog-featured-media img,.whaledive-blog .wd-blog-card-media img,.whaledive-blog .wd-blog-mini-thumb img{background:linear-gradient(135deg,#004A98,#4CC8ED)!important;min-height:100%!important}
+/* WDC blog force readable text in every card */
+.whaledive-blog article.wd-blog-featured-card,
+.whaledive-blog article.wd-blog-card-modern,
+.whaledive-blog .wd-blog-side-card,
+.whaledive-blog article.wd-blog-mini{background:#fff!important;color:#061a36!important;border-radius:26px!important;overflow:hidden!important}
+.whaledive-blog .wd-blog-featured-body,
+.whaledive-blog .wd-blog-card-body{display:flex!important;flex-direction:column!important;background:#fff!important;color:#061a36!important;position:relative!important;z-index:2!important;visibility:visible!important;opacity:1!important}
+.whaledive-blog .wd-blog-featured-body *,
+.whaledive-blog .wd-blog-card-body *,
+.whaledive-blog .wd-blog-side-card *,
+.whaledive-blog .wd-blog-mini *{visibility:visible!important;opacity:1!important;text-shadow:none!important;mix-blend-mode:normal!important;filter:none!important}
+.whaledive-blog .wd-blog-featured-body h2,
+.whaledive-blog .wd-blog-featured-body h2 a,
+.whaledive-blog .wd-blog-card-body h3,
+.whaledive-blog .wd-blog-card-body h3 a,
+.whaledive-blog .wd-blog-side-card h3,
+.whaledive-blog .wd-blog-mini strong{color:#061a36!important;background:transparent!important;-webkit-text-fill-color:#061a36!important}
+.whaledive-blog .wd-blog-featured-body p,
+.whaledive-blog .wd-blog-card-body p,
+.whaledive-blog .wd-blog-meta-row em{color:#334155!important;background:transparent!important;-webkit-text-fill-color:#334155!important}
+.whaledive-blog .wd-blog-meta-row span,
+.whaledive-blog .wd-blog-card-body span,
+.whaledive-blog .wd-blog-mini small,
+.whaledive-blog .wd-blog-side-card>span{color:#004A98!important;background:transparent!important;-webkit-text-fill-color:#004A98!important}
+.whaledive-blog .wd-blog-featured-media b{background:#fff!important;color:#061a36!important;-webkit-text-fill-color:#061a36!important;border:1px solid rgba(255,255,255,.55)!important}
+.whaledive-blog .wd-blog-read{background:#004A98!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
+.whaledive-blog .wd-blog-card-body>a{background:#eef8fb!important;color:#004A98!important;-webkit-text-fill-color:#004A98!important}
+/* WDC blog hard layout fix: keep text outside image overlays */
+.whaledive-blog .wd-blog-latest-layout{align-items:start!important}
+.whaledive-blog .wd-blog-featured-card,
+.whaledive-blog .wd-blog-card-modern{display:flex!important;flex-direction:column!important;position:relative!important;border-radius:26px!important;background:#fff!important;overflow:hidden!important;color:#061a36!important}
+.whaledive-blog .wd-blog-featured-media,
+.whaledive-blog .wd-blog-card-media{display:block!important;position:relative!important;inset:auto!important;width:100%!important;min-height:0!important;margin:0!important;transform:none!important;z-index:1!important;overflow:hidden!important;background:#eaf8fb!important}
+.whaledive-blog .wd-blog-featured-media{aspect-ratio:16/8.5!important;height:auto!important}
+.whaledive-blog .wd-blog-card-media{aspect-ratio:16/10!important;height:auto!important}
+.whaledive-blog .wd-blog-featured-media img,
+.whaledive-blog .wd-blog-card-media img{display:block!important;position:static!important;width:100%!important;height:100%!important;object-fit:cover!important;opacity:1!important;visibility:visible!important;filter:none!important;transform:none!important}
+.whaledive-blog .wd-blog-featured-media:before,
+.whaledive-blog .wd-blog-featured-media:after,
+.whaledive-blog .wd-blog-card-media:before,
+.whaledive-blog .wd-blog-card-media:after{display:none!important;content:none!important}
+.whaledive-blog .wd-blog-featured-body{padding:30px!important}
+.whaledive-blog .wd-blog-featured-body h2,
+.whaledive-blog .wd-blog-card-body h3{display:block!important;position:static!important;margin:0 0 12px!important;height:auto!important;min-height:0!important;overflow:visible!important;color:#061a36!important;line-height:1.08!important;opacity:1!important;visibility:visible!important}
+.whaledive-blog .wd-blog-featured-body h2 a,
+.whaledive-blog .wd-blog-card-body h3 a{display:inline!important;position:static!important;color:#061a36!important;-webkit-text-fill-color:#061a36!important;text-decoration:none!important;opacity:1!important;visibility:visible!important}
+.whaledive-blog .wd-blog-featured-body p,
+.whaledive-blog .wd-blog-card-body p{display:block!important;position:static!important;margin:0 0 18px!important;height:auto!important;min-height:0!important;overflow:visible!important;color:#334155!important;-webkit-text-fill-color:#334155!important;line-height:1.65!important;opacity:1!important;visibility:visible!important}
+.whaledive-blog .wd-blog-meta-row,
+.whaledive-blog .wd-blog-card-body>span{display:flex!important;position:static!important;height:auto!important;overflow:visible!important;color:#004A98!important;-webkit-text-fill-color:#004A98!important;opacity:1!important;visibility:visible!important}
+.whaledive-blog .wd-blog-card-body>a,
+.whaledive-blog .wd-blog-read{position:static!important;margin-top:auto!important;z-index:4!important;opacity:1!important;visibility:visible!important}
+.whaledive-blog .wd-blog-side-card{border-radius:26px!important;background:#fff!important;color:#061a36!important;overflow:visible!important}
+.whaledive-blog .wd-blog-mini a{background:#fff!important;color:#061a36!important;border-radius:18px!important;overflow:hidden!important}
+.whaledive-blog .wd-blog-mini strong{color:#061a36!important;-webkit-text-fill-color:#061a36!important;opacity:1!important;visibility:visible!important}
+.whaledive-blog .wd-blog-featured-body,.whaledive-blog .wd-blog-card-body{padding:20px!important}
+.whaledive-blog .wd-blog-featured-media{aspect-ratio:16/10!important}
+.whaledive-blog .wd-blog-section-clean{padding-top:148px!important;background:radial-gradient(circle at 16% 16%,rgba(76,200,237,.22),transparent 28%),radial-gradient(circle at 86% 8%,rgba(150,218,234,.16),transparent 24%),linear-gradient(180deg,#03172d 0%,#06384d 36%,#f3fbff 36%,#fff 100%)!important}
+.whaledive-blog .wd-blog-section-clean:before{height:500px!important;opacity:.36!important}
+.whaledive-blog .wd-blog-section-head{margin-bottom:22px!important}
+.whaledive-blog .wd-blog-section-head h2{font-size:clamp(40px,6.2vw,76px)!important;line-height:1!important;letter-spacing:-.055em!important}
+.whaledive-blog .wd-blog-section-head p{font-size:17px!important}
+.whaledive-blog .wd-blog-category-filter{margin-bottom:18px!important}
+.whaledive-blog .wd-blog-card-modern{border-radius:28px!important;overflow:hidden!important}
+.whaledive-blog .wd-blog-card-media{aspect-ratio:4/3!important;background:#dff8ff!important}
+.whaledive-blog .wd-blog-card-media img{transition:transform .35s ease!important}
+.whaledive-blog .wd-blog-section-clean{padding-top:128px!important;padding-bottom:70px!important;background:radial-gradient(circle at 16% 16%,rgba(76,200,237,.18),transparent 26%),radial-gradient(circle at 86% 8%,rgba(150,218,234,.12),transparent 22%),linear-gradient(180deg,#03172d 0%,#06384d 32%,#f3fbff 32%,#fff 100%)!important}
+.whaledive-blog .wd-blog-section-clean:before{height:460px!important;opacity:.32!important}
+.whaledive-blog .wd-blog-section-head{margin-bottom:18px!important}
+.whaledive-blog .wd-blog-section-head h2{font-size:clamp(38px,5.7vw,68px)!important;max-width:820px!important}
+.whaledive-blog .wd-blog-section-head p{font-size:16px!important;max-width:660px!important}
+.whaledive-blog .wd-blog-category-filter{margin-bottom:16px!important}
+.whaledive-blog{background:#f4fbff!important}
+.whaledive-blog .wd-blog-simple{position:relative;padding:112px 0 56px!important;background:#f4fbff!important}
+.wd-blog-simple .wd-shell{position:relative}
+.wd-blog-simple-head{display:block;margin:0 0 22px;color:#061a36}
+.wd-blog-simple-head .wd-kicker{display:inline-flex!important;margin:0!important;padding:8px 13px!important;border-radius:999px!important;background:rgba(76,200,237,.16)!important;border:1px solid rgba(76,200,237,.34)!important;color:#96DAEA!important;font-size:12px!important;font-weight:900!important;letter-spacing:.13em!important;text-transform:uppercase!important}
+.wd-blog-simple-head h1{margin:10px 0 0;color:#061a36;font-size:clamp(30px,3.8vw,44px);line-height:1;letter-spacing:-.035em}
+.whaledive-blog .wd-blog-category-filter{justify-content:flex-start!important;margin:0 0 24px!important;max-width:none!important;gap:8px!important}
+.whaledive-blog .wd-blog-category-filter .wd-chip{min-height:38px!important;padding:0 13px!important;border-radius:999px!important;background:#fff!important;color:#06384d!important;border:1px solid rgba(6,56,77,.08)!important;box-shadow:0 10px 22px rgba(2,21,43,.08)!important;font-size:13px!important;font-weight:900!important}
+.whaledive-blog .wd-blog-category-filter .wd-chip.active{background:#4CC8ED!important;color:#03172d!important;border-color:#4CC8ED!important}
+.whaledive-blog .wd-blog-grid-compact{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:16px!important;margin:0!important}
+.whaledive-blog .wd-blog-card-compact{border-radius:20px!important;background:#fff!important;border:1px solid rgba(6,56,77,.08)!important;box-shadow:0 16px 36px rgba(2,21,43,.08)!important;overflow:hidden!important;display:flex!important;flex-direction:column!important;min-height:0!important;transition:transform .18s ease,box-shadow .18s ease!important}
+.whaledive-blog .wd-blog-grid-compact{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:14px!important}
+.whaledive-blog .wd-blog-card-compact .wd-blog-card-body{padding:14px!important;gap:7px!important;min-height:158px!important}
+.whaledive-blog .wd-card-meta{display:flex!important;align-items:center!important;gap:6px!important;min-width:0!important;margin:0!important}
+.whaledive-blog .wd-card-meta span{display:inline-flex!important;align-items:center!important;min-width:0!important;width:auto!important;max-width:100%!important;margin:0!important;padding:5px 8px!important;border-radius:999px!important;font-size:10px!important;font-weight:900!important;line-height:1!important;letter-spacing:.035em!important;text-transform:uppercase!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.whaledive-blog .wd-card-meta .wd-card-cat{flex:1 1 auto!important;background:#e9f8fd!important;color:#006b8f!important;-webkit-text-fill-color:#006b8f!important}
+.whaledive-blog .wd-card-meta .wd-card-time{flex:0 0 auto!important;background:#06384d!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
+.whaledive-blog .wd-blog-card-compact .wd-blog-card-body>span{display:none!important}
+.whaledive-blog .wd-blog-card-compact .wd-blog-card-body h3{font-size:clamp(15px,1.18vw,18px)!important;line-height:1.16!important;-webkit-line-clamp:2!important;margin:0!important}
+.whaledive-blog .wd-blog-card-compact .wd-blog-card-body p{font-size:12.5px!important;line-height:1.42!important;-webkit-line-clamp:2!important;margin:0!important}
+.whaledive-blog .wd-blog-card-compact .wd-blog-card-body>a{padding:7px 10px!important;font-size:12px!important;background:#eef8fb!important;color:#004A98!important;-webkit-text-fill-color:#004A98!important;border:1px solid rgba(0,74,152,.12)!important}
+.whaledive-blog .wd-blog-card-compact .wd-blog-card-media{aspect-ratio:16/9!important}
+.whaledive-blog .wd-blog-grid-compact{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.whaledive-blog .wd-blog-grid-compact{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.whaledive-blog .wd-blog-simple{padding-top:96px!important}
+.whaledive-blog .wd-blog-grid-compact{grid-template-columns:1fr!important;gap:14px!important}
+.whaledive-blog .wd-blog-card-compact{display:grid!important;grid-template-columns:112px minmax(0,1fr)!important;border-radius:18px!important}
+.whaledive-blog .wd-blog-card-compact .wd-blog-card-media{height:100%!important;aspect-ratio:auto!important}
+.whaledive-blog .wd-blog-card-compact .wd-blog-card-body{min-height:142px!important;padding:12px!important}
+.whaledive-blog .wd-card-meta .wd-card-cat{max-width:135px!important}
+.whaledive-blog .wd-blog-card-compact .wd-blog-card-body p{display:none!important}
+.whaledive-blog .wd-blog-card-compact .wd-blog-card-body>a{margin-top:auto!important}
+.wd-blog-simple-head h1{font-size:32px!important}
+.whaledive-blog .wd-blog-featured-simple{display:grid!important;grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr)!important;gap:0!important;margin:0 0 20px!important;border-radius:24px!important;overflow:hidden!important;background:#fff!important;border:1px solid rgba(6,56,77,.08)!important;box-shadow:0 18px 42px rgba(2,21,43,.08)!important}
+.whaledive-blog .wd-featured-media{display:block!important;min-height:240px!important;background:#dff8ff!important}
+.whaledive-blog .wd-featured-media img{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important}
+.whaledive-blog .wd-featured-body{display:flex!important;flex-direction:column!important;justify-content:center!important;padding:28px!important;color:#061a36!important}
+.whaledive-blog .wd-featured-body h2{margin:10px 0 10px!important;font-size:clamp(28px,3.3vw,46px)!important;line-height:1!important;letter-spacing:-.045em!important}
+.whaledive-blog .wd-featured-body h2 a{color:#061a36!important;text-decoration:none!important}
+.whaledive-blog .wd-featured-body p{margin:0 0 18px!important;color:#50697b!important;font-size:15px!important;line-height:1.55!important}
+.whaledive-blog .wd-featured-read{align-self:flex-start!important;margin-top:auto!important;padding:10px 14px!important;border-radius:999px!important;background:#06384d!important;color:#fff!important;-webkit-text-fill-color:#fff!important;text-decoration:none!important;font-weight:900!important;font-size:13px!important}
+.whaledive-blog .wd-blog-pagination{display:flex!important;justify-content:center!important;gap:12px!important;flex-wrap:wrap!important;margin:28px 0 0!important}
+.whaledive-blog .wd-blog-pagination span{background:transparent!important;padding:0!important;border:0!important;box-shadow:none!important}
+.whaledive-blog .wd-blog-pagination a{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:44px!important;padding:0 18px!important;border-radius:999px!important;background:#06384d!important;color:#fff!important;-webkit-text-fill-color:#fff!important;text-decoration:none!important;font-weight:900!important;box-shadow:0 14px 28px rgba(2,21,43,.12)!important}
+.whaledive-blog .wd-blog-pagination a:hover{background:#004A98!important}
+.whaledive-blog .wd-blog-featured-simple{grid-template-columns:1fr!important}
+.whaledive-blog .wd-featured-media{min-height:220px!important}
+.whaledive-blog .wd-featured-body{padding:22px!important}
+.whaledive-blog .wd-featured-media{min-height:190px!important}
+.whaledive-blog .wd-featured-body h2{font-size:27px!important}
+.whaledive-blog .wd-blog-pagination{justify-content:stretch!important}
+.whaledive-blog .wd-blog-pagination span,.whaledive-blog .wd-blog-pagination a{width:100%!important}
+.wd-blog-simple-head{margin-bottom:16px!important}
+.wd-blog-simple-head .wd-kicker{background:#06384d!important;border-color:#06384d!important;color:#fff!important;-webkit-text-fill-color:#fff!important;box-shadow:0 10px 22px rgba(2,21,43,.12)!important}
+.wd-blog-simple-head h1{font-size:clamp(34px,4vw,52px)!important}
+.wd-blog-latest-head{display:flex!important;align-items:end!important;justify-content:space-between!important;gap:16px!important;margin:30px 0 14px!important;padding-top:4px!important}
+.wd-blog-latest-head span{color:#006b8f!important;font-size:12px!important;font-weight:900!important;letter-spacing:.12em!important;text-transform:uppercase!important}
+.wd-blog-latest-head h2{margin:0!important;color:#061a36!important;font-size:clamp(26px,3vw,38px)!important;line-height:1!important;letter-spacing:-.035em!important}
+.wd-blog-latest-head{display:block!important}
+.wd-blog-latest-head h2{margin-top:8px!important}
+.whaledive-blog .wd-blog-simple{padding-top:132px!important}
+.wd-blog-simple-head{margin:0 0 10px!important;max-width:760px!important}
+.wd-blog-simple-head .wd-kicker{padding:7px 12px!important;font-size:11px!important;letter-spacing:.12em!important}
+.wd-blog-simple-head h1{margin-top:12px!important;font-size:clamp(30px,3.2vw,42px)!important;line-height:1.05!important;letter-spacing:-.03em!important}
+.whaledive-blog .wd-blog-featured-simple{margin-bottom:20px!important}
+.wd-blog-latest-head{position:relative!important;display:flex!important;align-items:center!important;justify-content:space-between!important;margin:0 0 4px!important;padding:12px 0 0!important;border-top:1px solid rgba(6,56,77,.12)!important}
+.wd-blog-latest-head span{color:#061a36!important;font-size:clamp(24px,2.6vw,36px)!important;font-weight:900!important;line-height:1!important;letter-spacing:-.03em!important;text-transform:none!important}
+.wd-blog-latest-head:after{content:"";width:54px;height:3px;border-radius:99px;background:#4CC8ED}
+.whaledive-blog .wd-blog-simple{padding-top:104px!important}
+.wd-blog-simple-head h1{font-size:30px!important}
+.wd-blog-latest-head{align-items:flex-start!important}
+.wd-blog-latest-head:after{width:42px;margin-top:8px}
+.whaledive-blog .wd-blog-simple{padding-bottom:56px!important}
+.whaledive-blog .wd-blog-card-compact{height:100%!important}
+.whaledive-blog .wd-blog-card-compact .wd-blog-card-body{flex:1 1 auto!important}
+.whaledive-blog .wd-blog-card-compact .wd-blog-card-body>a{display:inline-flex!important;align-items:center!important;justify-content:center!important;align-self:flex-start!important;margin-top:auto!important;min-height:40px!important;padding:0 16px!important;border-radius:999px!important;background:#eef8fb!important;color:#004A98!important;-webkit-text-fill-color:#004A98!important;border:1px solid rgba(0,74,152,.16)!important;font-weight:900!important;line-height:1!important;text-decoration:none!important;box-shadow:0 10px 22px rgba(0,74,152,.08)!important}
+.whaledive-blog .wd-blog-card-compact .wd-blog-card-body>a:hover{background:#004A98!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
+.whaledive-blog .wd-blog-pagination{margin:0!important}
+.whaledive-blog .wd-blog-grid-compact{margin-bottom:0!important}
+.whaledive-blog .wa-float-btn,.whaledive-blog .wd-wa-float,.whaledive-blog a[aria-label*="Call"]{display:none!important}
+.whaledive-blog .wd-blog-featured-simple{grid-template-columns:minmax(0,1.18fr) minmax(300px,.82fr)!important}
+.whaledive-blog .wd-featured-body{justify-content:flex-start!important;gap:12px!important;padding:24px!important}
+.whaledive-blog .wd-featured-body h2{margin:4px 0 0!important;font-size:clamp(25px,2.7vw,38px)!important}
+.whaledive-blog .wd-featured-body p{margin:0!important}
+.whaledive-blog .wd-featured-read{margin-top:2px!important}
+.whaledive-blog .wd-blog-latest-head{justify-content:flex-start!important;border-top:1px solid rgba(6,56,77,.14)!important;margin:28px 0 10px!important;padding-top:18px!important}
+.whaledive-blog .wd-blog-latest-head:after{display:none!important;content:none!important}
+.whaledive-blog .wd-blog-card-compact{display:flex!important;flex-direction:column!important;height:100%!important;width:100%!important;max-width:none!important;min-width:0!important}
+.whaledive-blog .wd-blog-card-compact .wd-blog-card-media{aspect-ratio:16/9!important;min-height:0!important}
+.whaledive-blog .wd-blog-card-compact .wd-blog-card-body{min-height:158px!important;padding:14px!important}
+.whaledive-blog .wd-blog-featured-simple,.whaledive-blog .wd-blog-grid-compact{grid-template-columns:1fr!important}
+/* UIUX 2026-05-30 — unify blog cards with site card tokens (radius 18, readable 18px title, 16px body, 20px gap, 13px read-more). Last block wins cascade. */
+.whaledive-blog .wd-blog-card-compact{border-radius:18px!important}
+body.whaledive-blog article.wd-blog-card-compact{border-radius:18px!important}
+.whaledive-blog .wd-blog-grid-compact{gap:20px!important}
+.whaledive-blog .wd-blog-card-compact .wd-blog-card-body{padding:16px!important}
+.whaledive-blog .wd-blog-card-compact .wd-blog-card-body h3{font-size:18px!important;line-height:1.28!important}
+.whaledive-blog .wd-blog-card-compact .wd-blog-card-body>a{font-size:13px!important}
+.whaledive-blog .wd-blog-grid-compact{gap:16px!important}
+.whaledive-blog .wd-blog-card-compact .wd-blog-card-body h3{font-size:17px!important}
+
+/* Featured card grid layout (from live site) */
+.whaledive-blog .wd-blog-featured-simple{display:grid!important;grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr)!important;gap:0!important;margin:0 0 20px!important;border-radius:24px!important;background:#fff!important;overflow:hidden!important}
+.whaledive-blog .wd-featured-media{display:block!important;min-height:240px!important;background:#dff8ff!important}
+.whaledive-blog .wd-featured-media img{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important}
+.whaledive-blog .wd-featured-body{display:flex!important;flex-direction:column!important;justify-content:center!important;padding:28px!important;color:#061a36!important}
+.whaledive-blog .wd-featured-body h2{display:block!important;margin:0 0 12px!important;color:#061a36!important;font-size:clamp(20px,2.6vw,28px)!important;line-height:1.25!important}
+.whaledive-blog .wd-featured-body h2 a{color:#061a36!important;-webkit-text-fill-color:#061a36!important;text-decoration:none!important}
+.whaledive-blog .wd-featured-body p{display:block!important;margin:0 0 18px!important;color:#061a36!important;font-size:15px!important;line-height:1.6!important}
+.whaledive-blog .wd-featured-read{align-self:flex-start!important;margin-top:auto!important;padding:10px 14px!important;border-radius:999px!important;background:#06384d!important;color:#fff!important;font-size:14px!important;text-decoration:none!important}
+@media(max-width:760px){.whaledive-blog .wd-blog-featured-simple{grid-template-columns:1fr!important}}

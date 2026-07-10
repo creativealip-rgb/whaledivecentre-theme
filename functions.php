@@ -932,6 +932,20 @@ add_filter('body_class', function($classes) {
     } else {
         $classes[] = 'whaledive-inner';
     }
+    // Page-specific body classes (match live site)
+    if (is_page_template('page-blog.php') || is_home() || is_archive()) {
+        $classes[] = 'whaledive-blog';
+    }
+    if (is_singular('post')) {
+        $classes[] = 'whaledive-single';
+    }
+    if (is_singular('wm_course')) {
+        $classes[] = 'whaledive-home'; // live uses whaledive-home for single courses
+    }
+    if (is_singular('wm_equipment')) {
+        $classes[] = 'whaledive-equipment';
+        $classes[] = 'whaledive-single-equipment';
+    }
     return array_values(array_unique($classes));
 }, 20);
 
@@ -2705,12 +2719,42 @@ function wdc_enqueue_brand_font_assets() {
 add_action('wp_enqueue_scripts', 'wdc_enqueue_brand_font_assets');
 add_action('admin_enqueue_scripts', 'wdc_enqueue_brand_font_assets');
 
-// Enqueue homepage section styles (inline CSS from live site)
-add_action('wp_enqueue_scripts', function () {
+// Enqueue page-specific section styles (from live site inline CSS)
+add_action('wp_head', function () {
+    $css_file = null;
     if (is_front_page()) {
-        wp_enqueue_style('wdc-home-sections', get_template_directory_uri() . '/assets/home-sections.css', [], '2.3.2');
+        $css_file = 'home-sections.css';
+    } elseif (is_page_template('page-blog.php') || is_home() || is_archive()) {
+        $css_file = 'blog-sections.css';
+    } elseif (is_singular('wm_course')) {
+        $css_file = 'single-course-sections.css';
+    } elseif (is_singular('wm_equipment')) {
+        $css_file = 'single-equipment-sections.css';
+    } elseif (is_singular('post')) {
+        $css_file = 'single-post-sections.css';
     }
-});
+    if ($css_file) {
+        $path = get_template_directory() . '/assets/' . $css_file;
+        if (file_exists($path)) {
+            $css = file_get_contents($path);
+            // Split into individual style blocks to match live site's inline injection
+            $blocks = preg_split('/\\/\\* STYLE \\d+[^*]*\\*\\//', $css);
+            foreach ($blocks as $block) {
+                $block = trim($block);
+                if (!empty($block)) {
+                    echo '<style>' . "\n" . $block . "\n" . '</style>' . "\n";
+                }
+            }
+        }
+        // Also load blog-page.css as separate stylesheet (card/featured styles)
+        if (is_page_template('page-blog.php') || is_home() || is_archive()) {
+            $blog_css = get_template_directory() . '/assets/blog-page.css';
+            if (file_exists($blog_css)) {
+                echo '<link rel="stylesheet" href="' . get_template_directory_uri() . '/assets/blog-page.css">' . "\n";
+            }
+        }
+    }
+}, 5);
 
 function wdc_render_font_mode_css() {
     if (!wdc_is_brand_font_mode()) {
