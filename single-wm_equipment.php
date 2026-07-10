@@ -15,12 +15,12 @@ $theme_uri = get_stylesheet_directory_uri();
 function wdc_single_equipment_image_url($title, $cat_slug, $theme_uri) {
     $key = strtolower($title . ' ' . $cat_slug);
     $map = [
-        'mask' => 'wdc-mask-compressed.png',
-        'fin' => 'wdc-fins-compressed.png',
-        'bcd' => 'wdc-bcd-compressed.png',
-        'regulator' => 'wdc-regulators-compressed.png',
-        'computer' => 'wdc-dive-computer-compressed.png',
-        'wetsuit' => 'wdc-wetsuit-compressed.png',
+        'mask' => 'wdc-mask.webp',
+        'fin' => 'wdc-fins.webp',
+        'bcd' => 'wdc-bcd.webp',
+        'regulator' => 'wdc-regulators.webp',
+        'computer' => 'wdc-dive-computer.webp',
+        'wetsuit' => 'wdc-wetsuit.webp',
     ];
     foreach ($map as $needle => $file) {
         if (strpos($key, $needle) !== false) {

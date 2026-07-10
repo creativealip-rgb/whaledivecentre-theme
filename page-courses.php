@@ -27,13 +27,28 @@ $theme_uri = get_stylesheet_directory_uri();
 function wdc_course_image_url($title, $theme_uri) {
     $key = strtolower($title);
     $map = [
-        'underwater photography' => 'wdc-course-underwater-photography-real-v2.jpg',
-        'photography' => 'wdc-course-underwater-photography-real-v2.jpg',
+        'underwater photography' => 'wdc-course-underwater-photography.webp',
+        'photography' => 'wdc-course-underwater-photography.webp',
+        'decompression' => 'wdc-course-decompression.webp',
         'deep diver' => 'wdc-course-deep-diver-real-v2.jpg',
         'deep' => 'wdc-course-deep-diver-real-v2.jpg',
-        'nitrox' => 'wdc-course-nitrox-real-v2.jpg',
-        'enriched air' => 'wdc-course-nitrox-real-v2.jpg',
-        'discover' => 'wdc-course-discover-scuba-pexels.jpg',
+        'intro to tech' => 'wdc-course-intro-tech.webp',
+        'advanced nitrox' => 'wdc-course-adv-nitrox.webp',
+        'nitrox' => 'wdc-course-nitrox.webp',
+        'enriched air' => 'wdc-course-nitrox.webp',
+        'decompression' => 'wdc-course-decompression.webp',
+        'deep diver' => 'wdc-course-deep-diver-real-v2.jpg',
+        'deep' => 'wdc-course-deep-diver-real-v2.jpg',
+        'night' => 'wdc-course-discover-scuba.webp',
+        'first aid' => 'wdc-course-decompression.webp',
+        'cpr' => 'wdc-course-decompression.webp',
+        'oxygen' => 'wdc-course-nitrox.webp',
+        'full face' => 'wdc-course-intro-tech.webp',
+        'junior' => 'wdc-course-open-water-real.webp',
+        'trial' => 'wdc-course-discover-scuba.webp',
+        'master scuba' => 'wdc-course-rescue-diver-real.webp',
+        'instructor' => 'wdc-course-instructor-course-real.webp',
+        'discover' => 'wdc-course-discover-scuba.webp',
         'advanced' => 'wdc-course-advanced-open-water-real.webp',
         'rescue' => 'wdc-course-rescue-diver-real.webp',
         'divemaster' => 'wdc-course-divemaster-real.webp',
@@ -49,7 +64,7 @@ function wdc_course_image_url($title, $theme_uri) {
 }
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_head(); ?><style id="wd-courses-equipment-copy">.whaledive-courses .wd-gear-note{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;max-width:820px;margin:0 auto 22px;padding:14px 18px;border-radius:18px;background:#eef8fb;border:1px solid rgba(0,91,122,.1);color:#5b7180}.whaledive-courses .wd-gear-note b{color:#06384d}.whaledive-courses #courseGrid > article[data-visible="1"]{display:flex!important}.whaledive-courses #courseGrid > article[data-visible="0"]{display:none!important}.whaledive-courses .wd-gear-finder{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:0 0 28px}.whaledive-courses .wd-gear-finder span,.whaledive-courses .wd-gear-finder a{min-height:42px;display:inline-flex;align-items:center;border-radius:999px;padding:0 14px;font-weight:800;font-size:13px}.whaledive-courses .wd-gear-finder span{background:#06384d;color:#fff}.whaledive-courses .wd-gear-finder a{background:#fff;color:#0b617c;border:1px solid rgba(11,97,124,.16);text-decoration:none}.whaledive-courses .wd-mini-btn{background:#06384d!important;color:#fff!important}.whaledive-courses .wd-mini-link{border-color:rgba(11,97,124,.24)!important;color:#0b617c!important}.whaledive-courses .wd-equip-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}.whaledive-courses .wd-equip-visual.has-photo:before{background:linear-gradient(180deg,rgba(3,23,45,.05),rgba(3,23,45,.55));z-index:1}.whaledive-courses .wd-equip-visual.has-photo:after{z-index:1}.whaledive-courses .wd-equip-visual.has-photo .wd-equip-type{background:rgba(3,23,45,.62);backdrop-filter:blur(8px)}.whaledive-courses #courseFilters .wd-chip{background:#fff!important;color:#06384d!important;border:1px solid #dde3ea!important;padding:11px 24px!important;border-radius:999px!important;font-size:14px!important;font-weight:700!important;letter-spacing:.01em!important;box-shadow:0 2px 8px rgba(2,21,43,.06)!important;transition:all .2s ease!important;cursor:pointer!important}.whaledive-courses #courseFilters .wd-chip:hover{background:#f7fbfd!important;border-color:#b8c4ce!important}.whaledive-courses #courseFilters .wd-chip.active{background:#06384d!important;color:#fff!important;border-color:#06384d!important;box-shadow:0 4px 14px rgba(6,56,77,.18)!important}.whaledive-courses #courseGrid.wd-page-grid{width:100%!important;max-width:none!important;margin-left:0!important;margin-right:0!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:14px!important}.whaledive-courses .wd-course-card{border-radius:18px!important;overflow:hidden!important;background:#fff!important;border:1px solid rgba(6,56,77,.08)!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important;padding:0!important}.whaledive-courses .wd-course-card .wd-equip-visual{height:138px!important;min-height:0!important;border-radius:0!important;margin:0!important}.whaledive-courses .wd-course-card .wd-equip-type{top:10px!important;left:10px!important;padding:6px 9px!important;border-radius:999px!important;font-size:10px!important;letter-spacing:.08em!important}.whaledive-courses .wd-course-card .wd-equip-card-body{padding:14px!important;display:flex!important;flex-direction:column!important;min-height:238px!important}.whaledive-courses .wd-course-card .wd-course-meta{gap:6px!important;margin:0 0 4px!important}.whaledive-courses .wd-course-card .wd-course-meta span{padding:5px 8px!important;border-radius:999px!important;background:#eef8fb!important;color:#0b617c!important;font-size:10px!important;font-weight:900!important;line-height:1!important;letter-spacing:.02em!important}.whaledive-courses .wd-course-card h3{font-size:20px!important;line-height:1.08!important;letter-spacing:-.03em!important;margin:0 0 2px!important;color:#061a36!important;min-height:0!important}.whaledive-courses .wd-course-card .wd-equip-price{margin:0 0 6px!important;padding:0!important;background:transparent!important;border:0!important}.whaledive-courses .wd-course-card .wd-price-label{display:block!important;font-size:11px!important;color:#6f7f8d!important;line-height:1.2!important;margin-bottom:4px!important}.whaledive-courses .wd-course-card .wd-price-amount{display:block!important;font-size:clamp(15px,1.2vw,17px)!important;font-weight:900!important;color:#06384d!important;line-height:1!important;white-space:nowrap!important;letter-spacing:-.02em!important}.whaledive-courses .wd-course-card .wd-equip-chips{gap:6px!important;margin:0 0 12px!important}.whaledive-courses .wd-course-card .wd-equip-chips span{padding:6px 8px!important;border-radius:999px!important;background:#f1fbff!important;color:#4f6575!important;font-size:10px!important;font-weight:800!important;line-height:1.1!important}.whaledive-courses .wd-course-card .wd-equip-actions{margin-top:8px!important;padding-top:0!important;border-top:0!important}.whaledive-courses .wd-course-card .wd-mini-link{min-height:34px!important;width:auto!important;padding:0 12px!important;border-radius:999px!important;font-size:12px!important;font-weight:900!important;background:#f3fbff!important;border:1px solid rgba(6,56,77,.12)!important;color:#06384d!important}.whaledive-courses .wd-course-card .wd-mini-link:after{content:' →'}@media(max-width:980px){.whaledive-courses #courseGrid.wd-page-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}@media(max-width:760px){.whaledive-courses #courseGrid.wd-page-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.whaledive-courses .wd-course-card .wd-equip-card-body{min-height:220px!important}}@media(max-width:540px){.whaledive-courses #courseGrid.wd-page-grid{grid-template-columns:1fr!important}.whaledive-courses .wd-course-card{display:grid!important;grid-template-columns:118px minmax(0,1fr)!important}.whaledive-courses .wd-course-card .wd-equip-visual{height:100%!important;min-height:178px!important}.whaledive-courses .wd-course-card .wd-equip-card-body{min-height:0!important;padding:12px!important}.whaledive-courses .wd-course-card h3{font-size:18px!important}}
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_head(); ?><style id="wd-courses-equipment-copy">.whaledive-courses .wd-gear-note{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;max-width:820px;margin:0 auto 22px;padding:14px 18px;border-radius:18px;background:#eef8fb;border:1px solid rgba(0,91,122,.1);color:#5b7180}.whaledive-courses .wd-gear-note b{color:#06384d}.whaledive-courses #courseGrid > article[data-visible="1"]{display:flex!important}.whaledive-courses #courseGrid > article[data-visible="0"]{display:none!important}.whaledive-courses .wd-gear-finder{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:0 0 28px}.whaledive-courses .wd-gear-finder span,.whaledive-courses .wd-gear-finder a{min-height:42px;display:inline-flex;align-items:center;border-radius:999px;padding:0 14px;font-weight:800;font-size:13px}.whaledive-courses .wd-gear-finder span{background:#06384d;color:#fff}.whaledive-courses .wd-gear-finder a{background:#fff;color:#0b617c;border:1px solid rgba(11,97,124,.16);text-decoration:none}.whaledive-courses .wd-mini-btn{background:#06384d!important;color:#fff!important}.whaledive-courses .wd-mini-link{border-color:rgba(11,97,124,.24)!important;color:#0b617c!important}.whaledive-courses .wd-equip-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}.whaledive-courses .wd-equip-visual.has-photo:before{background:linear-gradient(180deg,rgba(3,23,45,.05),rgba(3,23,45,.55));z-index:1}.whaledive-courses .wd-equip-visual.has-photo:after{display:none!important;content:none!important}.whaledive-courses .wd-equip-visual.has-photo .wd-equip-type{background:rgba(3,23,45,.62);backdrop-filter:blur(8px)}.whaledive-courses #courseFilters .wd-chip{background:#fff!important;color:#06384d!important;border:1px solid #dde3ea!important;padding:11px 24px!important;border-radius:999px!important;font-size:14px!important;font-weight:700!important;letter-spacing:.01em!important;box-shadow:0 2px 8px rgba(2,21,43,.06)!important;transition:all .2s ease!important;cursor:pointer!important}.whaledive-courses #courseFilters .wd-chip:hover{background:#f7fbfd!important;border-color:#b8c4ce!important}.whaledive-courses #courseFilters .wd-chip.active{background:#06384d!important;color:#fff!important;border-color:#06384d!important;box-shadow:0 4px 14px rgba(6,56,77,.18)!important}.whaledive-courses #courseGrid.wd-page-grid{width:100%!important;max-width:none!important;margin-left:0!important;margin-right:0!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:14px!important}.whaledive-courses .wd-course-card{border-radius:18px!important;overflow:hidden!important;background:#fff!important;border:1px solid rgba(6,56,77,.08)!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important;padding:0!important}.whaledive-courses .wd-course-card .wd-equip-visual{height:138px!important;min-height:0!important;border-radius:0!important;margin:0!important}.whaledive-courses .wd-course-card .wd-equip-type{top:10px!important;left:10px!important;padding:6px 9px!important;border-radius:999px!important;font-size:10px!important;letter-spacing:.08em!important}.whaledive-courses .wd-course-card .wd-equip-card-body{padding:14px!important;display:flex!important;flex-direction:column!important;min-height:238px!important}.whaledive-courses .wd-course-card .wd-course-meta{gap:6px!important;margin:0 0 4px!important}.whaledive-courses .wd-course-card .wd-course-meta span{padding:5px 8px!important;border-radius:999px!important;background:#eef8fb!important;color:#0b617c!important;font-size:10px!important;font-weight:900!important;line-height:1!important;letter-spacing:.02em!important}.whaledive-courses .wd-course-card h3{font-size:20px!important;line-height:1.08!important;letter-spacing:-.03em!important;margin:0 0 2px!important;color:#061a36!important;min-height:0!important}.whaledive-courses .wd-course-card .wd-equip-price{margin:0 0 6px!important;padding:0!important;background:transparent!important;border:0!important}.whaledive-courses .wd-course-card .wd-price-label{display:block!important;font-size:11px!important;color:#6f7f8d!important;line-height:1.2!important;margin-bottom:4px!important}.whaledive-courses .wd-course-card .wd-price-amount{display:block!important;font-size:clamp(15px,1.2vw,17px)!important;font-weight:900!important;color:#06384d!important;line-height:1!important;white-space:nowrap!important;letter-spacing:-.02em!important}.whaledive-courses .wd-course-card .wd-equip-chips{gap:6px!important;margin:0 0 12px!important}.whaledive-courses .wd-course-card .wd-equip-chips span{padding:6px 8px!important;border-radius:999px!important;background:#f1fbff!important;color:#4f6575!important;font-size:10px!important;font-weight:800!important;line-height:1.1!important}.whaledive-courses .wd-course-card .wd-equip-actions{margin-top:8px!important;padding-top:0!important;border-top:0!important}.whaledive-courses .wd-course-card .wd-mini-link{min-height:34px!important;width:auto!important;padding:0 12px!important;border-radius:999px!important;font-size:12px!important;font-weight:900!important;background:#f3fbff!important;border:1px solid rgba(6,56,77,.12)!important;color:#06384d!important}.whaledive-courses .wd-course-card .wd-mini-link:after{content:' →'}@media(max-width:980px){.whaledive-courses #courseGrid.wd-page-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}@media(max-width:760px){.whaledive-courses #courseGrid.wd-page-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.whaledive-courses .wd-course-card .wd-equip-card-body{min-height:220px!important}}@media(max-width:540px){.whaledive-courses #courseGrid.wd-page-grid{grid-template-columns:1fr!important}.whaledive-courses .wd-course-card{display:grid!important;grid-template-columns:118px minmax(0,1fr)!important}.whaledive-courses .wd-course-card .wd-equip-visual{height:100%!important;min-height:178px!important}.whaledive-courses .wd-course-card .wd-equip-card-body{min-height:0!important;padding:12px!important}.whaledive-courses .wd-course-card h3{font-size:18px!important}}
 .whaledive-courses #courseGrid .wd-course-card{min-height:0!important;height:auto!important}.whaledive-courses #courseGrid .wd-course-card .wd-equip-card-body{padding:14px!important;min-height:0!important;height:auto!important;display:flex!important;flex-direction:column!important;gap:6px!important;background:#fff!important}.whaledive-courses #courseGrid .wd-course-card h3{font-size:20px!important;line-height:1.08!important;letter-spacing:-.03em!important;margin:0 0 2px!important;color:#061a36!important;min-height:0!important}.whaledive-courses #courseGrid .wd-course-card .wd-equip-desc{display:none!important}.whaledive-courses #courseGrid .wd-course-card .wd-equip-tags{gap:6px!important;margin:0 0 4px!important}.whaledive-courses #courseGrid .wd-course-card .wd-equip-tags span{padding:5px 8px!important;border-radius:999px!important;background:#eef8fb!important;color:#0b617c!important;font-size:10px!important;font-weight:900!important;line-height:1!important}.whaledive-courses #courseGrid .wd-course-card .wd-equip-price{margin:0 0 6px!important;padding:0!important;background:transparent!important;border:0!important}.whaledive-courses #courseGrid .wd-course-card .wd-price-label{display:block!important;margin:0 0 4px!important;font-size:11px!important;line-height:1.2!important;color:#789!important}.whaledive-courses #courseGrid .wd-course-card .wd-price-amount{font-size:17px!important;line-height:1!important;color:#06384d!important;font-weight:900!important;white-space:nowrap!important}.whaledive-courses #courseGrid .wd-course-card .wd-course-meta{gap:6px!important;margin:0 0 8px!important}.whaledive-courses #courseGrid .wd-course-card .wd-course-meta span,.whaledive-courses #courseGrid .wd-course-card .wd-course-requirement span{padding:5px 8px!important;border-radius:999px!important;background:#f3fbff!important;color:#35586a!important;font-size:10px!important;font-weight:800!important;line-height:1!important}.whaledive-courses #courseGrid .wd-course-card .wd-course-requirement{margin:0 0 12px!important}.whaledive-courses #courseGrid .wd-course-card .wd-course-actions{margin-top:8px!important;padding-top:0!important;border-top:0!important}.whaledive-courses #courseGrid .wd-course-card .wd-course-actions .wd-btn{min-height:34px!important;width:max-content!important;padding:0 12px!important;border-radius:999px!important;font-size:12px!important;font-weight:900!important;background:#f3fbff!important;border:1px solid rgba(6,56,77,.12)!important;color:#06384d!important;box-shadow:none!important}.whaledive-courses #courseGrid .wd-course-card .wd-equip-badge{font-size:9px!important;padding:6px 8px!important;border-radius:999px!important}
 
 .whaledive-courses #courseGrid .wd-course-card .wd-equip-chips{gap:6px!important;margin:0 0 4px!important;display:flex!important;flex-wrap:wrap!important}.whaledive-courses #courseGrid .wd-course-card .wd-equip-chips span{padding:5px 8px!important;border-radius:999px!important;background:#f3fbff!important;color:#35586a!important;font-size:10px!important;font-weight:800!important;line-height:1!important}.whaledive-courses #courseGrid .wd-course-card .wd-equip-actions{margin-top:8px!important;padding-top:0!important;border-top:0!important}.whaledive-courses #courseGrid .wd-course-card .wd-equip-actions .wd-mini-link{min-height:38px!important;min-width:128px!important;justify-content:center!important;width:max-content!important;margin:0!important;padding:0 16px!important;border-radius:999px!important;font-size:12px!important;font-weight:900!important;background:#f3fbff!important;border:1px solid rgba(6,56,77,.14)!important;color:#06384d!important;box-shadow:none!important;display:inline-flex!important;align-items:center!important;text-decoration:none!important}.whaledive-courses #courseGrid .wd-course-card .wd-equip-actions .wd-mini-link:after{content:' →'}
@@ -106,9 +121,28 @@ function wdc_course_image_url($title, $theme_uri) {
 
   <section id="course-catalog" class="wd-section white wd-center">
     <div class="wd-shell">
+      <?php
+      // --- Group courses by agency (computed early for count) ---
+      $agency_groups = [];
+      foreach($all_courses as $course) {
+          $ag = wp_get_post_terms($course->ID, 'course_agency', ['fields' => 'names']);
+          $ag = is_wp_error($ag) ? [] : $ag;
+          $agency_key = !empty($ag) ? $ag[0] : 'Other';
+          $agency_groups[$agency_key][] = $course;
+      }
+      $agency_order = ['NAUI', 'TDI', 'DAN'];
+      $agency_groups = array_intersect_key($agency_groups, array_flip($agency_order));
+      uksort($agency_groups, function($a, $b) use ($agency_order) {
+          $ka = array_search($a, $agency_order); if($ka===false) $ka=99;
+          $kb = array_search($b, $agency_order); if($kb===false) $kb=99;
+          return $ka - $kb;
+      });
+      $displayed_count = 0; foreach($agency_groups as $g) $displayed_count += count($g);
+      ?>
+
       <span class="wd-kicker"><?php echo esc_html(contenly_tr('Katalog kursus', 'Course catalog')); ?></span>
       <h2 class="wd-title"><?php echo esc_html(contenly_tr('Kursus selam dari agensi terpercaya', 'Dive courses from trusted agencies')); ?></h2>
-      <p class="wd-sub"><?php echo count($all_courses); ?> <?php echo contenly_tr('kursus dari', 'courses across'); ?> <?php echo count($levels); ?> <?php echo contenly_tr('jalur.', 'pathways.'); ?></p>
+      <p class="wd-sub"><?php echo $displayed_count; ?> <?php echo contenly_tr('kursus dari NAUI, TDI, dan DAN', 'courses from NAUI, TDI, and DAN'); ?></p>
       <div id="courseFilters" class="wd-filter-bar" style="margin-bottom:8px!important;">
         <button class="wd-chip active" data-filter="all"><?php echo esc_html(contenly_tr('Semua Kursus', 'All Courses')); ?></button>
         <?php if(!empty($levels) && !is_wp_error($levels)): foreach($levels as $level): ?>
@@ -116,55 +150,77 @@ function wdc_course_image_url($title, $theme_uri) {
         <?php endforeach; endif; ?>
       </div>
 
-      <div id="courseGrid" class="wd-equipment-grid wd-page-grid" style="align-items:start!important;grid-auto-rows:auto!important;">
-        <?php foreach($all_courses as $course):
-          $price = get_post_meta($course->ID, '_wm_price', true);
-          $duration = get_post_meta($course->ID, '_wm_duration', true);
-          $max_students = get_post_meta($course->ID, '_wm_max_students', true);
-          $prereqs = get_post_meta($course->ID, '_wm_prerequisites', true);
-          $level_terms = wp_get_post_terms($course->ID, 'course_level', ['fields' => 'all']);
-          $level_terms = is_wp_error($level_terms) ? [] : $level_terms;
-          $agency_terms = wp_get_post_terms($course->ID, 'course_agency', ['fields' => 'names']);
-          $agency_terms = is_wp_error($agency_terms) ? [] : $agency_terms;
-          $level_slug = !empty($level_terms) ? $level_terms[0]->slug : '';
-          $level_name = !empty($level_terms) ? $level_terms[0]->name : '';
-          $agency_name = !empty($agency_terms) ? $agency_terms[0] : '';
-          $permalink = home_url('/courses/' . $course->post_name . '/');
-          $use_case = $level_name ? 'Crew-guided ' . strtolower($level_name) . ' training for safer skills, confidence, and certification progress.' : 'Crew-guided dive training for safer skills, confidence, and certification progress.';
-          $image_url = get_the_post_thumbnail_url($course->ID, 'large') ?: wdc_course_image_url($course->post_title, $theme_uri);
-        ?>
-        <article class="wd-equip-card wd-detail-card wd-shop-card wd-course-card" data-href="<?php echo esc_url($permalink); ?>" data-cat="cat-<?php echo esc_attr($level_slug); ?>" style="border-radius:18px!important;overflow:hidden!important;padding:0!important;background:#fff!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important;border:1px solid rgba(6,56,77,.08)!important;min-height:0!important;height:auto!important;display:flex!important;flex-direction:column!important;">
-          <div class="wd-equip-visual <?php echo $image_url ? 'has-photo' : ''; ?>" data-course-level="<?php echo esc_attr($level_slug ?: 'course'); ?>" style="height:138px!important;min-height:0!important;border-radius:0!important;margin:0!important;">
-            <?php if($image_url): ?><img class="wd-equip-photo" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($course->post_title); ?>" loading="lazy" onerror="this.closest('.wd-equip-visual').classList.remove('has-photo');this.remove();"><?php else: ?><span class="wd-equip-mark"><?php echo esc_html($level_name ? mb_substr($level_name, 0, 1) : 'C'); ?></span><?php endif; ?>
-            <?php if($level_name): ?><span class="wd-equip-type"><?php echo esc_html($level_name); ?></span><?php endif; ?>
-          </div>
-          <div class="wd-equip-card-body" style="padding:14px!important;min-height:0!important;height:auto!important;display:flex!important;flex-direction:column!important;gap:6px!important;background:#fff!important;">
-            <div class="wd-course-meta wd-shop-meta" style="gap:6px!important;margin:0 0 4px!important;">
-              <?php if($level_name): ?><span><?php echo esc_html($level_name); ?></span><?php endif; ?>
-              <?php if($agency_name): ?><span><?php echo esc_html($agency_name); ?></span><?php endif; ?>
+      <?php
+      // Agency descriptions
+      $agency_desc = [
+          'NAUI' => contenly_tr('Sertifikasi selam internasional dengan fokus keselamatan dan kemandirian diver.', 'International dive certification focused on diver safety and self-reliance.'),
+          'TDI' => contenly_tr('Pelatihan diving teknis dan prosedur dekompresi untuk diver berpengalaman.', 'Technical diving training and decompression procedures for experienced divers.'),
+          'DAN' => contenly_tr('Pelatihan tanggap darurat, CPR, dan oksigen pertolongan pertama untuk penyelam.', 'Emergency response, CPR, and oxygen first aid training for divers.'),
+      ];
+      $agency_colors = ['NAUI' => '#004A98', 'TDI' => '#1B5E20', 'DAN' => '#C31C4A'];
+      ?>
+
+      <?php foreach($agency_groups as $agency_name => $agency_courses):
+        $ac = $agency_colors[$agency_name] ?? '#06384d';
+        $ad = $agency_desc[$agency_name] ?? '';
+      ?>
+      <div style="margin-bottom:56px;">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+          <span style="display:inline-flex;align-items:center;gap:8px;padding:8px 20px;border-radius:999px;background:<?php echo $ac; ?>;color:#fff;font-size:15px;font-weight:900;letter-spacing:.04em;font-family:'Plus Jakarta Sans',sans-serif;"><?php echo esc_html($agency_name); ?></span>
+          <span style="flex:1;height:2px;background:linear-gradient(90deg,<?php echo $ac; ?>33,transparent);border-radius:1px;"></span>
+          <span style="font-size:13px;font-weight:700;color:#5b7180;"><?php echo count($agency_courses); ?> <?php echo contenly_tr('kursus', 'courses'); ?></span>
+        </div>
+        <?php if($ad): ?><p style="color:#5b7180;font-size:15px;line-height:1.6;margin:0 0 22px;max-width:640px;"><?php echo esc_html($ad); ?></p><?php endif; ?>
+
+        <div class="wd-equipment-grid wd-page-grid" style="align-items:start!important;grid-auto-rows:auto!important;">
+          <?php foreach($agency_courses as $course):
+            $price = get_post_meta($course->ID, '_wm_price', true);
+            $duration = get_post_meta($course->ID, '_wm_duration', true);
+            $max_students = get_post_meta($course->ID, '_wm_max_students', true);
+            $prereqs = get_post_meta($course->ID, '_wm_prerequisites', true);
+            $level_terms = wp_get_post_terms($course->ID, 'course_level', ['fields' => 'all']);
+            $level_terms = is_wp_error($level_terms) ? [] : $level_terms;
+            $agency_terms = wp_get_post_terms($course->ID, 'course_agency', ['fields' => 'names']);
+            $agency_terms = is_wp_error($agency_terms) ? [] : $agency_terms;
+            $level_slug = !empty($level_terms) ? $level_terms[0]->slug : '';
+            $level_name = !empty($level_terms) ? $level_terms[0]->name : '';
+            $permalink = home_url('/courses/' . $course->post_name . '/');
+            $image_url = get_the_post_thumbnail_url($course->ID, 'large') ?: wdc_course_image_url($course->post_title, $theme_uri);
+          ?>
+          <article class="wd-equip-card wd-detail-card wd-shop-card wd-course-card" data-href="<?php echo esc_url($permalink); ?>" data-cat="cat-<?php echo esc_attr($level_slug); ?>" style="border-radius:18px!important;overflow:hidden!important;padding:0!important;background:#fff!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important;border:1px solid rgba(6,56,77,.08)!important;min-height:0!important;height:auto!important;display:flex!important;flex-direction:column!important;">
+            <div class="wd-equip-visual <?php echo $image_url ? 'has-photo' : ''; ?>" data-course-level="<?php echo esc_attr($level_slug ?: 'course'); ?>" style="height:138px!important;min-height:0!important;border-radius:0!important;margin:0!important;">
+              <?php if($image_url): ?><img class="wd-equip-photo" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($course->post_title); ?>" loading="lazy" onerror="this.closest('.wd-equip-visual').classList.remove('has-photo');this.remove();"><?php else: ?><span class="wd-equip-mark"><?php echo esc_html($level_name ? mb_substr($level_name, 0, 1) : 'C'); ?></span><?php endif; ?>
+              <?php if($level_name): ?><span class="wd-equip-type"><?php echo esc_html($level_name); ?></span><?php endif; ?>
             </div>
-            <h3 style="font-size:20px!important;line-height:1.08!important;letter-spacing:-.03em!important;margin:0 0 2px!important;color:#061a36!important;min-height:0!important;"><?php echo esc_html($course->post_title); ?></h3>
-            <?php if($price): ?>
-            <div class="wd-equip-price" style="margin:0 0 6px!important;padding:0!important;background:transparent!important;border:0!important;">
-              <span class="wd-price-label" style="display:block!important;margin:0 0 4px!important;font-size:11px!important;line-height:1.2!important;color:#789!important;"><?php echo contenly_tr('Harga kursus · jadwal atas permintaan', 'Course price · schedule on request'); ?></span>
-              <span class="wd-price-amount" style="display:block!important;font-size:17px!important;line-height:1!important;color:#06384d!important;font-weight:900!important;white-space:nowrap!important;">Rp <?php echo number_format((float)$price,0,',','.'); ?></span>
-            </div>
-            <?php endif; ?>
-            <div class="wd-equip-chips" style="gap:6px!important;margin:0 0 4px!important;display:flex!important;flex-wrap:wrap!important;">
-              <?php if($duration): ?><span style="padding:5px 8px!important;border-radius:999px!important;background:#f3fbff!important;color:#35586a!important;font-size:10px!important;font-weight:800!important;line-height:1!important;"><?php echo esc_html($duration); ?></span><?php endif; ?>
-              <span style="padding:5px 8px!important;border-radius:999px!important;background:#f3fbff!important;color:#35586a!important;font-size:10px!important;font-weight:800!important;line-height:1!important;"><?php echo $max_students ? contenly_tr('Maks ', 'Max ') . esc_html($max_students) . contenly_tr(' diver', ' divers') : contenly_tr('Cek ketersediaan', 'Check availability'); ?></span>
-              <?php if($prereqs): ?><span style="padding:5px 8px!important;border-radius:999px!important;background:#f3fbff!important;color:#35586a!important;font-size:10px!important;font-weight:800!important;line-height:1!important;"><?php echo contenly_tr('Prasyarat: ', 'Prereq: '); ?><?php echo esc_html($prereqs); ?></span><?php endif; ?>
-            </div>
-            <div class="wd-equip-actions" style="margin-top:8px!important;padding-top:0!important;border-top:0!important;display:flex!important;gap:8px!important;flex-wrap:wrap!important;">
-              <a class="wd-mini-link" style="min-height:38px!important;min-width:100px!important;justify-content:center!important;width:max-content!important;margin:0!important;padding:0 16px!important;border-radius:999px!important;font-size:12px!important;font-weight:900!important;background:#f3fbff!important;border:1px solid rgba(6,56,77,.14)!important;color:#06384d!important;box-shadow:none!important;display:inline-flex!important;align-items:center!important;text-decoration:none!important;" href="<?php echo esc_url($permalink); ?>"><?php echo contenly_tr('Lihat Detail', 'View Details'); ?></a>
-              <?php if($price > 0): ?>
-              <a class="wd-mini-btn" onclick="event.stopPropagation();" style="min-height:38px!important;min-width:100px!important;justify-content:center!important;width:max-content!important;margin:0!important;padding:0 16px!important;border-radius:999px!important;font-size:12px!important;font-weight:900!important;background:#06384d!important;border:1px solid #06384d!important;color:#fff!important;box-shadow:none!important;display:inline-flex!important;align-items:center!important;text-decoration:none!important;" href="<?php echo esc_url(home_url('/direct-checkout/?type=course&item=' . rawurlencode($course->post_title) . '&item_id=' . $course->ID . '&price=' . $price)); ?>"><?php echo contenly_tr('Daftar', 'Enroll Now'); ?></a>
+            <div class="wd-equip-card-body" style="padding:14px!important;min-height:0!important;height:auto!important;display:flex!important;flex-direction:column!important;gap:6px!important;background:#fff!important;">
+              <div class="wd-course-meta wd-shop-meta" style="gap:6px!important;margin:0 0 4px!important;">
+                <?php if($level_name): ?><span><?php echo esc_html($level_name); ?></span><?php endif; ?>
+                <span><?php echo esc_html($agency_name); ?></span>
+              </div>
+              <h3 style="font-size:20px!important;line-height:1.08!important;letter-spacing:-.03em!important;margin:0 0 2px!important;color:#061a36!important;min-height:0!important;"><?php echo esc_html($course->post_title); ?></h3>
+              <?php if($price): ?>
+              <div class="wd-equip-price" style="margin:0 0 6px!important;padding:0!important;background:transparent!important;border:0!important;">
+                <span class="wd-price-label" style="display:block!important;margin:0 0 4px!important;font-size:11px!important;line-height:1.2!important;color:#789!important;"><?php echo contenly_tr('Harga kursus · jadwal atas permintaan', 'Course price · schedule on request'); ?></span>
+                <span class="wd-price-amount" style="display:block!important;font-size:17px!important;line-height:1!important;color:#06384d!important;font-weight:900!important;white-space:nowrap!important;">Rp <?php echo number_format((float)$price,0,',','.'); ?></span>
+              </div>
               <?php endif; ?>
+              <div class="wd-equip-chips" style="gap:6px!important;margin:0 0 4px!important;display:flex!important;flex-wrap:wrap!important;">
+                <?php if($duration): ?><span style="padding:5px 8px!important;border-radius:999px!important;background:#f3fbff!important;color:#35586a!important;font-size:10px!important;font-weight:800!important;line-height:1!important;"><?php echo esc_html($duration); ?></span><?php endif; ?>
+                <span style="padding:5px 8px!important;border-radius:999px!important;background:#f3fbff!important;color:#35586a!important;font-size:10px!important;font-weight:800!important;line-height:1!important;"><?php echo $max_students ? contenly_tr('Maks ', 'Max ') . esc_html($max_students) . contenly_tr(' diver', ' divers') : contenly_tr('Cek ketersediaan', 'Check availability'); ?></span>
+                <?php if($prereqs): ?><span style="padding:5px 8px!important;border-radius:999px!important;background:#f3fbff!important;color:#35586a!important;font-size:10px!important;font-weight:800!important;line-height:1!important;"><?php echo contenly_tr('Prasyarat: ', 'Prereq: '); ?><?php echo esc_html($prereqs); ?></span><?php endif; ?>
+              </div>
+              <div class="wd-equip-actions" style="margin-top:8px!important;padding-top:0!important;border-top:0!important;display:flex!important;gap:8px!important;flex-wrap:wrap!important;">
+                <a class="wd-mini-link" style="min-height:38px!important;min-width:100px!important;justify-content:center!important;width:max-content!important;margin:0!important;padding:0 16px!important;border-radius:999px!important;font-size:12px!important;font-weight:900!important;background:#f3fbff!important;border:1px solid rgba(6,56,77,.14)!important;color:#06384d!important;box-shadow:none!important;display:inline-flex!important;align-items:center!important;text-decoration:none!important;" href="<?php echo esc_url($permalink); ?>"><?php echo contenly_tr('Lihat Detail', 'View Details'); ?></a>
+                <?php if($price > 0): ?>
+                <a class="wd-mini-btn" onclick="event.stopPropagation();" style="min-height:38px!important;min-width:100px!important;justify-content:center!important;width:max-content!important;margin:0!important;padding:0 16px!important;border-radius:999px!important;font-size:12px!important;font-weight:900!important;background:#06384d!important;border:1px solid #06384d!important;color:#fff!important;box-shadow:none!important;display:inline-flex!important;align-items:center!important;text-decoration:none!important;" href="<?php echo esc_url(home_url('/direct-checkout/?type=course&item=' . rawurlencode($course->post_title) . '&item_id=' . $course->ID . '&price=' . $price)); ?>"><?php echo contenly_tr('Daftar', 'Enroll Now'); ?></a>
+                <?php endif; ?>
+              </div>
             </div>
-          </div>
-        </article>
-        <?php endforeach; ?>
+          </article>
+          <?php endforeach; ?>
+        </div>
       </div>
+      <?php endforeach; ?>
     </div>
   </section>
 
