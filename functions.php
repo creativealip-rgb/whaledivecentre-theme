@@ -2706,6 +2706,13 @@ function wdc_enqueue_brand_font_assets() {
 add_action('wp_enqueue_scripts', 'wdc_enqueue_brand_font_assets');
 add_action('admin_enqueue_scripts', 'wdc_enqueue_brand_font_assets');
 
+// Enqueue homepage section styles (inline CSS from live site)
+add_action('wp_enqueue_scripts', function () {
+    if (is_front_page()) {
+        wp_enqueue_style('wdc-home-sections', get_template_directory_uri() . '/assets/home-sections.css', [], '2.3.2');
+    }
+});
+
 function wdc_render_font_mode_css() {
     if (!wdc_is_brand_font_mode()) {
         return;
