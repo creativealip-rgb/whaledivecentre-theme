@@ -2680,8 +2680,7 @@ function wdc_ajax_save_direct_checkout() {
 add_action('wp_ajax_wdc_save_direct_checkout', 'wdc_ajax_save_direct_checkout');
 
 function wdc_font_mode() {
-    $mode = get_option('wdc_font_mode', 'current');
-    return in_array($mode, ['current', 'brand'], true) ? $mode : 'current';
+    return 'current'; // Force Plus Jakarta Sans (match live site)
 }
 
 function wdc_is_brand_font_mode() {
