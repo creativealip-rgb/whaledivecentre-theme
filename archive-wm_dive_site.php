@@ -12,12 +12,9 @@ $all_sites = get_posts([
 $regions = get_terms(['taxonomy' => 'dive_region', 'hide_empty' => true]);
 $difficulties = get_terms(['taxonomy' => 'dive_difficulty', 'hide_empty' => true]);
 $theme_uri = get_stylesheet_directory_uri();
-?><!doctype html>
-<html <?php language_attributes(); ?>>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_head(); ?></head>
-<body <?php body_class('whaledive-inner whaledive-divesites'); ?>><?php wp_body_open(); ?>
-<main class="wd-page">
-  <?php contenly_render_public_header(); ?>
+?>
+<?php get_header(); ?>
+<?php get_header(); ?>
 
   <section class="wd-inner-hero wd-divesite-hero"><div class="wd-shell wd-inner-grid"><div><span class="wd-kicker">Explore Bali</span><h1>Dive sites worth every breath.</h1><p>From legendary shipwrecks to manta ray encounters — discover Bali&rsquo;s best underwater worlds with the Whale Dive Centre crew.</p><div class="wd-actions"><a class="wd-btn" href="/contact/">Plan a Dive Trip</a><a class="wd-btn alt" href="#sites-list">Explore Sites</a></div></div><aside class="wd-inner-card"><b>Why dive with us</b><ul><li>Local crew, local knowledge</li><li>Small-group trips</li><li>Safety-first site briefings</li><li>All levels welcome</li></ul></aside></div></section>
 
@@ -83,23 +80,4 @@ $theme_uri = get_stylesheet_directory_uri();
   </section>
 
   <section class="wd-section wd-community wd-center"><div class="wd-shell"><span class="wd-kicker">Ready to explore?</span><h2 class="wd-title">Plan your next dive trip with the crew.</h2><p class="wd-sub">Tell us your dates, level, and preferred sites — we handle logistics, safety, and fun.</p><a class="wd-btn alt" href="/contact/">Plan a Trip</a></div></section>
-
-  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker">Ready to dive?</span><h2>Whale Dive Centre</h2><p>Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.</p><a class="wd-btn alt" href="/contact/">Start Inquiry</a></div><nav class="wd-footer-col"><h3>Explore</h3><a href="/courses/">Dive Courses</a><a href="/equipment/">Scuba Equipment</a><a href="/about/">About Us</a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3>Courses</h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water-diver/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course-idc/">Instructor</a></nav><div class="wd-footer-col"><h3>Contact</h3><p>Email: info@whaledivecentre.com</p><p>Phone: (021) 27939068</p><p>Jl. Tanah Kusir II No.3, Kebayoran Lama, Jakarta Selatan 12240</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a></div></div></div><div class="wd-footer-bottom"><span>&copy; <?php echo date('Y'); ?> Whale Dive Centre. All rights reserved.</span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
-</main>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  var chips = document.querySelectorAll('.wd-chip');
-  var cards = document.querySelectorAll('.wd-site-card');
-  chips.forEach(function(chip) {
-    chip.addEventListener('click', function() {
-      chips.forEach(function(c) { c.classList.remove('active'); });
-      chip.classList.add('active');
-      var filter = chip.getAttribute('data-filter');
-      cards.forEach(function(card) {
-        card.style.display = (filter === 'all' || card.getAttribute('data-region') === filter) ? '' : 'none';
-      });
-    });
-  });
-});
-</script>
-<script>document.addEventListener('DOMContentLoaded',function(){var path=location.pathname;document.querySelectorAll('.wd-menu a[data-nav]').forEach(function(a){var key=a.getAttribute('data-nav');var active=(key==='home'&&path==='/')||(key!=='home'&&path.indexOf('/'+key+'/')===0);if(active){a.classList.add('is-active');a.setAttribute('aria-current','page');}});});</script><?php wp_footer(); ?></body></html>
+<?php get_footer(); ?>

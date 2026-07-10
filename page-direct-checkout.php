@@ -68,12 +68,8 @@ if (get_current_user_id() !== $user_id) {
 */
 
 ?>
-<!doctype html>
-<html <?php language_attributes(); ?>>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_head(); ?></head>
-<body <?php body_class('whaledive-inner whaledive-checkout'); ?>><?php wp_body_open(); ?>
-<main class="wd-page">
-  <?php contenly_render_public_header(); ?>
+<?php get_header(); ?>
+<?php get_header(); ?>
 <section style="padding:120px 0 60px;background:#f8fafc;">
     <div class="wd-shell" style="max-width:640px;">
         

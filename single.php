@@ -4,12 +4,9 @@
  */
 $theme_uri = get_stylesheet_directory_uri();
 $wd_single_fallback_image = function($cat_name = '') use ($theme_uri) { $label = strtolower($cat_name . ' ' . get_the_title()); if (strpos($label,'gear')!==false || strpos($label,'mask')!==false) return $theme_uri.'/assets/wdc-equipment-mask-real.png'; if (strpos($label,'fin')!==false) return $theme_uri.'/assets/wdc-equipment-fins-real.png'; if (strpos($label,'bcd')!==false) return $theme_uri.'/assets/wdc-equipment-bcd-real.png'; if (strpos($label,'safety')!==false || strpos($label,'buddy')!==false || strpos($label,'rescue')!==false) return $theme_uri.'/assets/wdc-course-rescue-diver-real.png'; if (strpos($label,'advanced')!==false) return $theme_uri.'/assets/wdc-course-advanced-open-water-real.png'; if (strpos($label,'conservation')!==false || strpos($label,'reef')!==false) return $theme_uri.'/assets/wdc-home-hero-diving-clean3.webp'; return $theme_uri.'/assets/wdc-course-open-water-real.png'; };
-?><!doctype html>
-<html <?php language_attributes(); ?>>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_head(); ?></head>
-<body <?php body_class('whaledive-inner whaledive-single'); ?>><?php wp_body_open(); ?>
-<main class="wd-page">
-  <?php contenly_render_public_header(); ?>
+?>
+<?php get_header(); ?>
+<?php get_header(); ?>
 
   <?php while (have_posts()) : the_post();
     $cats = get_the_category();
@@ -55,8 +52,4 @@ $wd_single_fallback_image = function($cat_name = '') use ($theme_uri) { $label =
   </section>
 
   <?php endwhile; ?>
-
-  <footer id="contact" class="wd-footer"><div class="wd-shell"><div class="wd-footer-top"><div class="wd-footer-brand"><span class="wd-footer-kicker"><?php echo contenly_tr('Siap menyelam?', 'Ready to dive?'); ?></span><h2>Whale Dive Centre</h2><p><?php echo contenly_tr('Pelatihan menyelam, perjalanan komunitas, dukungan peralatan, dan pengalaman berwawasan laut.', 'Dive training, community trips, equipment support, and ocean-minded experiences.'); ?></p><a class="wd-btn alt" href="/about/"><?php echo contenly_tr('Mulai Konsultasi', 'Start Inquiry'); ?></a></div><nav class="wd-footer-col"><h3><?php echo contenly_tr('Jelajahi', 'Explore'); ?></h3><a href="/courses/"><?php echo contenly_tr('Kursus Menyelam', 'Dive Courses'); ?></a><a href="/equipment/"><?php echo contenly_tr('Peralatan Selam', 'Scuba Equipment'); ?></a><a href="/about/"><?php echo contenly_tr('Tentang Kami', 'About Us'); ?></a><a href="/blog/">Blog</a></nav><nav class="wd-footer-col"><h3><?php echo contenly_tr('Kursus', 'Courses'); ?></h3><a href="/course/open-water-diver/">Open Water</a><a href="/course/advanced-open-water/">Advanced Open Water</a><a href="/course/rescue-diver/">Rescue Diver</a><a href="/course/divemaster/">Divemaster</a><a href="/course/instructor-course/">Instructor</a></nav><div class="wd-footer-col"><h3><?php echo contenly_tr('Kontak', 'Contact'); ?></h3><p>Email: info@whaledivecentre.com</p><p>Telepon: (021) 27939068</p><p>Jl. Tanah Kusir II No.3, Kebayoran Lama, Jakarta Selatan 12240</p><div class="wd-social"><a href="https://www.instagram.com/whaledivecentre.id?igsh=YjE1Z3o4NjBmcjAy" target="_blank" rel="noopener" aria-label="Instagram"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a></div></div></div><div class="wd-footer-bottom"><span>&copy; <?php echo date('Y'); ?> Whale Dive Centre. <?php echo contenly_tr('Hak cipta dilindungi.', 'All rights reserved.'); ?></span><span>PADI / SSI / NAUI / TDI training pathways</span></div></div></footer>
-</main>
-
-<script>document.addEventListener('DOMContentLoaded',function(){var path=location.pathname;document.querySelectorAll('.wd-menu a[data-nav]').forEach(function(a){var key=a.getAttribute('data-nav');var active=(key==='home'&&path==='/')||(key==='blog'&&document.body.classList.contains('whaledive-single'))||(key!=='home'&&path.indexOf('/'+key+'/')===0);if(active){a.classList.add('is-active');a.setAttribute('aria-current','page');}});});</script><?php wp_footer(); ?></body></html>
+<?php get_footer(); ?>

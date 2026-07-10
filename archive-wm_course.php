@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 <main class="wd-page wd-inner">
-<?php contenly_render_public_header(); ?>
+<?php get_header(); ?>
 
 <section class="wd-hero wd-hero-inner" style="background:linear-gradient(135deg,#0c2d48 0%,#0a3d62 50%,#145374 100%)">
 <div class="wd-shell">
