@@ -2648,6 +2648,32 @@ article.wd-mini-article::before{content:none!important;display:none!important}
   .single-wm_course .wd-compact-hero{min-height:0!important;padding-top:104px!important;padding-bottom:42px!important}
   .single-wm_course .wd-inner-grid{grid-template-columns:1fr!important;gap:24px!important}
   .single-wm_course .wd-section.white{padding-top:42px!important;padding-bottom:48px!important}
+  .single-wm_course .wd-shell{padding:0 20px!important}
+  .single-wm_course .wd-compact-hero .wd-shell{padding:0 22px!important}
+  .single-wm_course .wd-course-hero-card{margin:0 4px!important}
+  .single-wm_course .wd-content-grid{gap:20px!important}
+  .single-wm_course .wd-course-outcomes{gap:12px!important}
+  .single-wm_course .wd-course-outcomes article{padding:16px!important}
+}
+@media(max-width:560px){
+  .single-wm_course .wd-compact-hero{padding-top:90px!important;padding-bottom:32px!important}
+  .single-wm_course .wd-compact-hero h1{font-size:32px!important}
+  .single-wm_course .wd-shell{padding:0 16px!important}
+  .single-wm_course .wd-section.white{padding-top:32px!important;padding-bottom:40px!important}
+  .single-wm_course .wd-course-outcomes article{padding:14px!important}
+  .single-wm_course .wd-sidebar-card{padding:18px!important}
+}
+@media(max-width:860px){
+  .single-wm_equipment .wd-shell{padding:0 20px!important}
+  .single-wm_equipment .wd-compact-hero .wd-shell{padding:0 22px!important}
+  .single-wm_equipment .wd-content-grid{gap:20px!important}
+  .single-wm_equipment .wd-course-outcomes{gap:12px!important}
+  .single-wm_equipment .wd-course-outcomes article{padding:16px!important}
+}
+@media(max-width:560px){
+  .single-wm_equipment .wd-shell{padding:0 16px!important}
+  .single-wm_equipment .wd-course-outcomes article{padding:14px!important}
+  .single-wm_equipment .wd-sidebar-card{padding:18px!important}
 }
 
 /* WDC single course hero image option 1 2026-05-16 */
