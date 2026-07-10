@@ -172,7 +172,7 @@ function wdc_course_image_url($title, $theme_uri) {
         </div>
         <?php if($ad): ?><p style="color:#5b7180;font-size:15px;line-height:1.6;margin:0 0 22px;max-width:640px;"><?php echo esc_html($ad); ?></p><?php endif; ?>
 
-        <div class="wd-equipment-grid wd-page-grid" style="align-items:start!important;grid-auto-rows:auto!important;">
+        <div id="courseGrid" class="wd-equipment-grid wd-page-grid" style="align-items:start!important;grid-auto-rows:auto!important;">
           <?php foreach($agency_courses as $course):
             $price = get_post_meta($course->ID, '_wm_price', true);
             $duration = get_post_meta($course->ID, '_wm_duration', true);
