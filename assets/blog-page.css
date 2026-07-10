@@ -209,3 +209,9 @@ body.whaledive-blog article.wd-blog-card-compact{border-radius:18px!important}
 .whaledive-blog .wd-featured-body p{display:block!important;margin:0 0 18px!important;color:#061a36!important;font-size:15px!important;line-height:1.6!important}
 .whaledive-blog .wd-featured-read{align-self:flex-start!important;margin-top:auto!important;padding:10px 14px!important;border-radius:999px!important;background:#06384d!important;color:#fff!important;font-size:14px!important;text-decoration:none!important}
 @media(max-width:760px){.whaledive-blog .wd-blog-featured-simple{grid-template-columns:1fr!important}}
+
+/* 4-column card grid (from live site) */
+.whaledive-blog .wd-blog-grid.wd-blog-grid-modern.wd-blog-grid-compact{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:18px!important}
+@media(max-width:1024px){.whaledive-blog .wd-blog-grid.wd-blog-grid-modern.wd-blog-grid-compact{grid-template-columns:repeat(3,1fr)!important}}
+@media(max-width:760px){.whaledive-blog .wd-blog-grid.wd-blog-grid-modern.wd-blog-grid-compact{grid-template-columns:repeat(2,1fr)!important}}
+@media(max-width:480px){.whaledive-blog .wd-blog-grid.wd-blog-grid-modern.wd-blog-grid-compact{grid-template-columns:1fr!important}}
