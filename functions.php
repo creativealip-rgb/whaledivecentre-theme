@@ -927,8 +927,10 @@ add_filter('template_include', function($template) {
 }, 1);
 
 add_filter('body_class', function($classes) {
-    if ('index.php' === contenly_current_en_template()) {
-        $classes[] = 'home';
+    if (is_front_page() || ('index.php' === contenly_current_en_template())) {
+        $classes[] = 'whaledive-home';
+    } else {
+        $classes[] = 'whaledive-inner';
     }
     return array_values(array_unique($classes));
 }, 20);
