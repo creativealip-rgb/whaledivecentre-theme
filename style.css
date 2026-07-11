@@ -2,7 +2,7 @@
 
 /*
 Theme Name: Whale Dive Centre Theme
-Version: 2.3.66
+Version: 2.3.67
 */
 :root{
   --black:#000;--violet:#3B44AC;--cyan:#4CC8ED;--pale:#96DAEA;--red:#C31C4A;--blue:#004A98;--white:#fff;--navy:#061a36;--ink:#0b1930;--muted:#63748a;
@@ -5343,8 +5343,6 @@ body.home .wd-hero .wd-actions .wd-btn.alt,
 .home .wd-hero-simple .wd-actions .wd-btn.alt,
 .home .wd-hero .wd-btn.alt,
 .wd-hero .wd-btn.alt,
-.wd-footer .wd-btn.alt,
-.wd-footer-brand .wd-btn.alt,
 body.whaledive-home .wd-hero-simple .wd-actions .wd-btn.alt{
   background:#06384d!important;
   background-image:none!important;
@@ -5359,8 +5357,6 @@ body.home .wd-hero .wd-actions .wd-btn.alt:hover,
 .home .wd-hero-simple .wd-actions .wd-btn.alt:hover,
 .home .wd-hero .wd-btn.alt:hover,
 .wd-hero .wd-btn.alt:hover,
-.wd-footer .wd-btn.alt:hover,
-.wd-footer-brand .wd-btn.alt:hover,
 body.whaledive-home .wd-hero-simple .wd-actions .wd-btn.alt:hover{
   background:#042f40!important;
   color:#ffffff!important;
@@ -6734,8 +6730,6 @@ body.whaledive-home .wd-hero-simple .wd-actions .wd-btn.alt,
 .wd-dark .wd-section-cta .wd-btn,
 body.whaledive-home .wd-dark .wd-section-cta .wd-btn,
 body.whaledive-home .wd-dark .wd-section-cta .wd-btn.alt,
-.wd-footer .wd-btn.alt,
-.wd-footer-brand .wd-btn.alt,
 body.whaledive-courses .wd-inner-hero .wd-btn.alt,
 body.whaledive-equipment .wd-inner-hero .wd-btn.alt,
 body.whaledive-inner .wd-inner-hero .wd-btn.alt{
@@ -6792,4 +6786,46 @@ body.whaledive-home .wd-dark .wd-section-cta .wd-btn.alt{
   -webkit-text-fill-color:#06384d!important;
   border:1px solid rgba(255,255,255,.98)!important;
   box-shadow:0 14px 30px rgba(0,0,0,.24)!important;
+}
+
+
+/* Footer CTA text-fill fix (2.3.67)
+   Bug: white button + -webkit-text-fill-color:#fff = invisible label */
+.wd-footer .wd-btn,
+.wd-footer .wd-btn.alt,
+.wd-footer-brand .wd-btn,
+.wd-footer-brand .wd-btn.alt,
+body.whaledive-home .wd-footer .wd-btn,
+body.whaledive-home .wd-footer .wd-btn.alt,
+body.whaledive-inner .wd-footer .wd-btn,
+body.whaledive-inner .wd-footer .wd-btn.alt{
+  background:#ffffff!important;
+  background-image:none!important;
+  color:#06384d!important;
+  -webkit-text-fill-color:#06384d!important;
+  border:1px solid rgba(255,255,255,.98)!important;
+  box-shadow:0 14px 30px rgba(0,0,0,.24)!important;
+  opacity:1!important;
+  font-weight:900!important;
+}
+.wd-footer .wd-btn:hover,
+.wd-footer .wd-btn.alt:hover,
+.wd-footer-brand .wd-btn:hover,
+.wd-footer-brand .wd-btn.alt:hover{
+  background:#eef8fb!important;
+  color:#042f40!important;
+  -webkit-text-fill-color:#042f40!important;
+}
+
+/* Community/membership CTA on light community section stays solid navy + white text */
+.wd-community .wd-btn,
+.wd-community .wd-btn.alt,
+body.whaledive-home .wd-community .wd-btn,
+body.whaledive-home .wd-community .wd-btn.alt{
+  background:#06384d!important;
+  background-image:none!important;
+  color:#ffffff!important;
+  -webkit-text-fill-color:#ffffff!important;
+  border:1px solid #06384d!important;
+  box-shadow:0 10px 22px rgba(6,56,77,.18)!important;
 }
