@@ -3318,6 +3318,7 @@ add_action('admin_post_wdc_update_font_mode', 'wdc_handle_font_mode_update');
 
 function wdc_register_member_admin_menu() {
     add_menu_page('WDC Members', 'WDC Members', 'manage_options', 'wdc-member-admin', 'wdc_render_member_admin_dashboard', 'dashicons-groups', 30);
+    add_submenu_page('wdc-member-admin', 'Member List', 'Member List', 'manage_options', 'wdc-member-list', 'wdc_render_member_list_admin');
     add_submenu_page('wdc-member-admin', 'Course Requests', 'Course Requests' . wdc_admin_menu_badge(wdc_member_admin_pending_count('course', 'requests')), 'manage_options', 'wdc-course-requests', 'wdc_render_course_admin_page');
     add_submenu_page('wdc-member-admin', 'Gear Requests', 'Gear Requests' . wdc_admin_menu_badge(wdc_member_admin_pending_count('equipment', 'requests')), 'manage_options', 'wdc-gear-requests', 'wdc_render_gear_admin_page');
     $direct_pending = wdc_member_admin_pending_count('course', 'orders') + wdc_member_admin_pending_count('equipment', 'orders');
@@ -3601,7 +3602,10 @@ function wdc_render_member_admin_dashboard() {
             <?php endforeach; ?>
         </div>
         <?php wdc_render_low_stock_notice(); ?>
-        <p>Use the submenu to verify payments, approve course access, update gear fulfilment, and leave notes visible to members.</p>
+        <p style="margin:0 0 12px;">Use the submenu to verify payments, approve course access, update gear fulfilment, and leave notes visible to members.</p>
+        <p style="margin:0;"><a class="button button-primary" href="<?php echo esc_url(admin_url('admin.php?page=wdc-member-list')); ?>">Buka Member List</a>
+        <a class="button" href="<?php echo esc_url(admin_url('admin.php?page=wdc-course-requests')); ?>">Course Requests</a>
+        <a class="button" href="<?php echo esc_url(admin_url('admin.php?page=wdc-gear-requests')); ?>">Gear Requests</a></p>
     </div>
     <?php
 }
@@ -4057,6 +4061,362 @@ function wdc_catalog_admin_column_content($column, $post_id) {
 }
 add_action('manage_wm_course_posts_custom_column', 'wdc_catalog_admin_column_content', 10, 2);
 add_action('manage_wm_equipment_posts_custom_column', 'wdc_catalog_admin_column_content', 10, 2);
+
+
+/**
+ * Collect members for admin list (subscribers/customers + anyone with WDC course data).
+ */
+function wdc_collect_members_for_admin($search = '', $limit = 200) {
+    $search = trim((string) $search);
+    $args = [
+        'number' => max(1, min(500, (int) $limit)),
+        'orderby' => 'registered',
+        'order' => 'DESC',
+        'fields' => ['ID', 'user_login', 'user_email', 'display_name', 'user_registered'],
+    ];
+    if ($search !== '') {
+        $args['search'] = '*' . $search . '*';
+        $args['search_columns'] = ['user_login', 'user_email', 'display_name'];
+    }
+    $users = get_users($args);
+    $rows = [];
+    foreach ($users as $user) {
+        $completed = get_user_meta($user->ID, '_wdc_completed_courses', true);
+        $completed = is_array($completed) ? $completed : [];
+        $course_orders = get_user_meta($user->ID, '_wdc_course_orders', true);
+        $course_orders = is_array($course_orders) ? $course_orders : [];
+        $course_requests = get_user_meta($user->ID, '_wdc_course_requests', true);
+        $course_requests = is_array($course_requests) ? $course_requests : [];
+        $rows[] = [
+            'user' => $user,
+            'completed_count' => count($completed),
+            'completed' => $completed,
+            'course_orders_count' => count($course_orders),
+            'course_requests_count' => count($course_requests),
+            'phone' => (string) get_user_meta($user->ID, 'billing_phone', true) ?: (string) get_user_meta($user->ID, 'phone', true),
+        ];
+    }
+    return $rows;
+}
+
+/**
+ * Normalize completed-course entry from admin form.
+ */
+function wdc_member_course_entry_from_post($prefix = 'wdc_mc') {
+    $course_id = absint($_POST[$prefix . '_course_id'] ?? 0);
+    $custom_title = sanitize_text_field(wp_unslash($_POST[$prefix . '_course_custom'] ?? ''));
+    $course_title = '';
+    $level = sanitize_text_field(wp_unslash($_POST[$prefix . '_level'] ?? ''));
+    if ($course_id) {
+        $cp = get_post($course_id);
+        if ($cp && $cp->post_type === 'wm_course') {
+            $course_title = $cp->post_title;
+            if ($level === '') {
+                $level_terms = wp_get_post_terms($course_id, 'course_level', ['fields' => 'names']);
+                $level = (!is_wp_error($level_terms) && $level_terms) ? $level_terms[0] : '';
+            }
+        }
+    }
+    if ($course_title === '' && $custom_title !== '') {
+        $course_title = $custom_title;
+    }
+    if ($course_title === '') {
+        return null;
+    }
+    return [
+        'course_id' => $course_id,
+        'course_title' => $course_title,
+        'level' => $level,
+        'date_completed' => sanitize_text_field(wp_unslash($_POST[$prefix . '_date'] ?? '')),
+        'cert_number' => sanitize_text_field(wp_unslash($_POST[$prefix . '_cert'] ?? '')),
+        'notes' => sanitize_textarea_field(wp_unslash($_POST[$prefix . '_notes'] ?? '')),
+        'status' => sanitize_text_field(wp_unslash($_POST[$prefix . '_status'] ?? 'Completed')),
+        'added_by' => 'admin',
+        'created_at' => current_time('mysql'),
+    ];
+}
+
+/**
+ * Handle member course add/edit/remove from Member List admin.
+ */
+function wdc_member_list_admin_handle_update() {
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+    if (empty($_POST['wdc_member_list_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_member_list_nonce'])), 'wdc_member_list_update')) {
+        return;
+    }
+    $user_id = absint($_POST['user_id'] ?? 0);
+    if (!$user_id || !get_userdata($user_id)) {
+        return;
+    }
+    $completed = get_user_meta($user_id, '_wdc_completed_courses', true);
+    $completed = is_array($completed) ? $completed : [];
+    $action = sanitize_key($_POST['wdc_member_course_action'] ?? '');
+    $msg = 'updated';
+
+    if ($action === 'add') {
+        $entry = wdc_member_course_entry_from_post('wdc_mc');
+        if ($entry) {
+            array_unshift($completed, $entry);
+            $completed = array_slice($completed, 0, 50);
+            update_user_meta($user_id, '_wdc_completed_courses', $completed);
+            $msg = 'added';
+        } else {
+            $msg = 'missing_course';
+        }
+    } elseif ($action === 'edit') {
+        $index = (int) ($_POST['course_index'] ?? -1);
+        if ($index >= 0 && $index < count($completed)) {
+            $entry = wdc_member_course_entry_from_post('wdc_mc');
+            if ($entry) {
+                // keep original created_at / added_by if present
+                $entry['created_at'] = $completed[$index]['created_at'] ?? $entry['created_at'];
+                $entry['added_by'] = $completed[$index]['added_by'] ?? 'admin';
+                $completed[$index] = $entry;
+                update_user_meta($user_id, '_wdc_completed_courses', $completed);
+                $msg = 'edited';
+            } else {
+                $msg = 'missing_course';
+            }
+        }
+    } elseif ($action === 'remove') {
+        $index = (int) ($_POST['course_index'] ?? -1);
+        if ($index >= 0 && $index < count($completed)) {
+            array_splice($completed, $index, 1);
+            update_user_meta($user_id, '_wdc_completed_courses', $completed);
+            $msg = 'removed';
+        }
+    }
+
+    $redirect = add_query_arg([
+        'page' => 'wdc-member-list',
+        'user_id' => $user_id,
+        'updated' => $msg,
+    ], admin_url('admin.php'));
+    wp_safe_redirect($redirect);
+    exit;
+}
+add_action('admin_init', 'wdc_member_list_admin_handle_update');
+
+/**
+ * Render Member List + per-member course editor.
+ */
+function wdc_render_member_list_admin() {
+    if (!current_user_can('manage_options')) {
+        wp_die('Forbidden');
+    }
+    $user_id = absint($_GET['user_id'] ?? 0);
+    $search = sanitize_text_field(wp_unslash($_GET['s'] ?? ''));
+    $updated = sanitize_key($_GET['updated'] ?? '');
+    $all_courses = get_posts([
+        'post_type' => 'wm_course',
+        'numberposts' => -1,
+        'post_status' => 'publish',
+        'orderby' => 'title',
+        'order' => 'ASC',
+    ]);
+
+    echo '<div class="wrap">';
+    if ($user_id) {
+        $user = get_userdata($user_id);
+        if (!$user) {
+            echo '<h1>Member List</h1><div class="notice notice-error"><p>Member tidak ditemukan.</p></div>';
+            echo '<p><a class="button" href="' . esc_url(admin_url('admin.php?page=wdc-member-list')) . '">Kembali ke list</a></p></div>';
+            return;
+        }
+        $completed = get_user_meta($user_id, '_wdc_completed_courses', true);
+        $completed = is_array($completed) ? $completed : [];
+        $course_orders = get_user_meta($user_id, '_wdc_course_orders', true);
+        $course_orders = is_array($course_orders) ? $course_orders : [];
+        $course_requests = get_user_meta($user_id, '_wdc_course_requests', true);
+        $course_requests = is_array($course_requests) ? $course_requests : [];
+        $edit_index = isset($_GET['edit_index']) ? (int) $_GET['edit_index'] : -1;
+        $edit_row = ($edit_index >= 0 && $edit_index < count($completed)) ? $completed[$edit_index] : null;
+
+        echo '<h1>Edit Kursus Member</h1>';
+        echo '<p><a href="' . esc_url(admin_url('admin.php?page=wdc-member-list' . ($search ? '&s=' . rawurlencode($search) : ''))) . '">&larr; Kembali ke Member List</a></p>';
+
+        if ($updated) {
+            $map = [
+                'added' => 'Kursus ditambahkan ke halaman member.',
+                'edited' => 'Kursus diupdate.',
+                'removed' => 'Kursus dihapus.',
+                'missing_course' => 'Pilih / isi nama kursus dulu.',
+                'updated' => 'Saved.',
+            ];
+            $cls = ($updated === 'missing_course') ? 'notice-error' : 'notice-success';
+            echo '<div class="notice ' . esc_attr($cls) . ' is-dismissible"><p>' . esc_html($map[$updated] ?? 'Saved.') . '</p></div>';
+        }
+
+        echo '<div style="background:#fff;border:1px solid #dcdcde;border-radius:12px;padding:16px;margin:12px 0 18px;max-width:920px;">';
+        echo '<strong style="font-size:16px;">' . esc_html($user->display_name ?: $user->user_login) . '</strong>';
+        echo '<div style="color:#64748b;margin-top:4px;">' . esc_html($user->user_email) . ' · @' . esc_html($user->user_login) . ' · user #' . intval($user_id) . '</div>';
+        echo '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;font-size:12px;">';
+        echo '<span style="padding:4px 10px;border-radius:999px;background:#e8f8fc;color:#0b617c;font-weight:700;">Completed: ' . count($completed) . '</span>';
+        echo '<span style="padding:4px 10px;border-radius:999px;background:#f1f5f9;color:#334155;font-weight:700;">Orders: ' . count($course_orders) . '</span>';
+        echo '<span style="padding:4px 10px;border-radius:999px;background:#f1f5f9;color:#334155;font-weight:700;">Requests: ' . count($course_requests) . '</span>';
+        echo '<a class="button button-small" href="' . esc_url(get_edit_user_link($user_id)) . '">Edit WP User</a>';
+        echo '<a class="button button-small" href="' . esc_url(home_url('/my-courses/')) . '" target="_blank" rel="noopener">Preview /my-courses/</a>';
+        echo '</div></div>';
+
+        // Course list
+        echo '<h2 style="margin-top:8px;">Kursus di halaman member</h2>';
+        echo '<p class="description">Ini yang muncul di <code>/my-courses/</code> member. Admin bisa tambah / edit / hapus.</p>';
+        if ($completed) {
+            echo '<table class="widefat striped" style="max-width:980px;margin:12px 0;"><thead><tr>';
+            echo '<th>Kursus</th><th>Level</th><th>Status</th><th>Tanggal</th><th>Sertifikat</th><th>Aksi</th>';
+            echo '</tr></thead><tbody>';
+            foreach ($completed as $i => $c) {
+                $status = $c['status'] ?? 'Completed';
+                echo '<tr>';
+                echo '<td><strong>' . esc_html($c['course_title'] ?? '-') . '</strong>';
+                if (!empty($c['notes'])) {
+                    echo '<br><small style="color:#64748b;">' . esc_html($c['notes']) . '</small>';
+                }
+                echo '</td>';
+                echo '<td>' . esc_html($c['level'] ?: '-') . '</td>';
+                echo '<td>' . esc_html($status) . '</td>';
+                echo '<td>' . esc_html($c['date_completed'] ?: '-') . '</td>';
+                echo '<td>' . esc_html($c['cert_number'] ?: '-') . '</td>';
+                echo '<td style="white-space:nowrap;">';
+                $edit_url = add_query_arg(['page' => 'wdc-member-list', 'user_id' => $user_id, 'edit_index' => $i], admin_url('admin.php'));
+                echo '<a class="button button-small" href="' . esc_url($edit_url) . '">Edit</a> ';
+                echo '<form method="post" style="display:inline;" onsubmit="return confirm(\'Hapus kursus ini dari halaman member?\');">';
+                wp_nonce_field('wdc_member_list_update', 'wdc_member_list_nonce');
+                echo '<input type="hidden" name="user_id" value="' . intval($user_id) . '">';
+                echo '<input type="hidden" name="course_index" value="' . intval($i) . '">';
+                echo '<input type="hidden" name="wdc_member_course_action" value="remove">';
+                echo '<button type="submit" class="button button-small">Hapus</button>';
+                echo '</form>';
+                echo '</td></tr>';
+            }
+            echo '</tbody></table>';
+        } else {
+            echo '<div class="notice notice-info inline"><p>Belum ada kursus di halaman member ini.</p></div>';
+        }
+
+        // Add / edit form
+        $is_edit = is_array($edit_row);
+        echo '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;max-width:980px;margin:18px 0;">';
+        echo '<h2 style="margin:0 0 10px;font-size:16px;">' . ($is_edit ? 'Edit Kursus #' . intval($edit_index + 1) : 'Tambah Kursus ke Member') . '</h2>';
+        echo '<form method="post">';
+        wp_nonce_field('wdc_member_list_update', 'wdc_member_list_nonce');
+        echo '<input type="hidden" name="user_id" value="' . intval($user_id) . '">';
+        echo '<input type="hidden" name="wdc_member_course_action" value="' . ($is_edit ? 'edit' : 'add') . '">';
+        if ($is_edit) {
+            echo '<input type="hidden" name="course_index" value="' . intval($edit_index) . '">';
+        }
+        $sel_id = $is_edit ? intval($edit_row['course_id'] ?? 0) : 0;
+        $sel_title = $is_edit ? (string) ($edit_row['course_title'] ?? '') : '';
+        $sel_level = $is_edit ? (string) ($edit_row['level'] ?? '') : '';
+        $sel_date = $is_edit ? (string) ($edit_row['date_completed'] ?? '') : '';
+        $sel_cert = $is_edit ? (string) ($edit_row['cert_number'] ?? '') : '';
+        $sel_notes = $is_edit ? (string) ($edit_row['notes'] ?? '') : '';
+        $sel_status = $is_edit ? (string) ($edit_row['status'] ?? 'Completed') : 'Completed';
+
+        echo '<table class="form-table" role="presentation"><tbody>';
+        echo '<tr><th><label>Kursus</label></th><td>';
+        echo '<select name="wdc_mc_course_id" style="min-width:320px;">';
+        echo '<option value="">— Pilih dari katalog —</option>';
+        foreach ($all_courses as $ac) {
+            $level_terms = wp_get_post_terms($ac->ID, 'course_level', ['fields' => 'names']);
+            $level = (!is_wp_error($level_terms) && $level_terms) ? $level_terms[0] : '';
+            echo '<option value="' . esc_attr($ac->ID) . '" ' . selected($sel_id, $ac->ID, false) . ' data-level="' . esc_attr($level) . '">' . esc_html($ac->post_title) . ($level ? ' (' . esc_html($level) . ')' : '') . '</option>';
+        }
+        echo '</select>';
+        echo '<p style="margin:8px 0 0;"><input type="text" name="wdc_mc_course_custom" value="' . esc_attr($sel_id ? '' : $sel_title) . '" placeholder="Atau ketik nama kursus manual" style="min-width:320px;"></p>';
+        echo '</td></tr>';
+        echo '<tr><th><label>Level</label></th><td><input type="text" name="wdc_mc_level" value="' . esc_attr($sel_level) . '" style="min-width:220px;" placeholder="Beginner / Advanced..."></td></tr>';
+        echo '<tr><th><label>Status tampil</label></th><td>';
+        echo '<select name="wdc_mc_status">';
+        foreach (['Completed', 'Active', 'In Progress', 'Verified'] as $st) {
+            echo '<option value="' . esc_attr($st) . '" ' . selected($sel_status, $st, false) . '>' . esc_html($st) . '</option>';
+        }
+        echo '</select>';
+        echo '<p class="description">Default Completed = kursus selesai di halaman member.</p>';
+        echo '</td></tr>';
+        echo '<tr><th><label>Tanggal selesai</label></th><td><input type="date" name="wdc_mc_date" value="' . esc_attr($sel_date) . '"></td></tr>';
+        echo '<tr><th><label>No. sertifikat</label></th><td><input type="text" name="wdc_mc_cert" value="' . esc_attr($sel_cert) . '" style="min-width:220px;"></td></tr>';
+        echo '<tr><th><label>Catatan</label></th><td><textarea name="wdc_mc_notes" rows="3" style="min-width:360px;">' . esc_textarea($sel_notes) . '</textarea></td></tr>';
+        echo '</tbody></table>';
+        submit_button($is_edit ? 'Simpan Perubahan Kursus' : 'Tambah Kursus ke Member');
+        if ($is_edit) {
+            echo ' <a class="button" href="' . esc_url(admin_url('admin.php?page=wdc-member-list&user_id=' . $user_id)) . '">Batal Edit</a>';
+        }
+        echo '</form></div>';
+
+        // Related requests/orders quick view
+        if ($course_requests || $course_orders) {
+            echo '<h2>Request / Order terkait</h2>';
+            echo '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:980px;">';
+            echo '<div style="background:#fff;border:1px solid #dcdcde;border-radius:10px;padding:12px;"><strong>Course Requests</strong>';
+            if ($course_requests) {
+                echo '<ul style="margin:8px 0 0;padding-left:18px;">';
+                foreach (array_slice($course_requests, 0, 5) as $r) {
+                    echo '<li style="margin-bottom:6px;">' . esc_html(($r['course'] ?? $r['item'] ?? 'Course') . ' · ' . ($r['status'] ?? 'Requested') . ' · ' . ($r['created_at'] ?? '')) . '</li>';
+                }
+                echo '</ul>';
+            } else {
+                echo '<p style="color:#64748b;">Kosong</p>';
+            }
+            echo '</div>';
+            echo '<div style="background:#fff;border:1px solid #dcdcde;border-radius:10px;padding:12px;"><strong>Course Orders / Activity</strong>';
+            if ($course_orders) {
+                echo '<ul style="margin:8px 0 0;padding-left:18px;">';
+                foreach (array_slice($course_orders, 0, 5) as $r) {
+                    echo '<li style="margin-bottom:6px;">' . esc_html(($r['course'] ?? $r['item'] ?? $r['order_id'] ?? 'Order') . ' · ' . ($r['status'] ?? '-') . ' · ' . ($r['created_at'] ?? '')) . '</li>';
+                }
+                echo '</ul>';
+            } else {
+                echo '<p style="color:#64748b;">Kosong</p>';
+            }
+            echo '</div></div>';
+        }
+
+        echo '</div>';
+        return;
+    }
+
+    // LIST VIEW
+    $rows = wdc_collect_members_for_admin($search, 250);
+    echo '<h1>Member List</h1>';
+    echo '<p>List member. Klik <strong>Kelola Kursus</strong> untuk edit kursus yang tampil di halaman <code>/my-courses/</code> member.</p>';
+    if ($updated) {
+        echo '<div class="notice notice-success is-dismissible"><p>Saved.</p></div>';
+    }
+    echo '<form method="get" style="display:flex;gap:10px;align-items:center;margin:16px 0;background:#fff;border:1px solid #dcdcde;border-radius:10px;padding:12px;max-width:760px;">';
+    echo '<input type="hidden" name="page" value="wdc-member-list">';
+    echo '<input type="search" name="s" value="' . esc_attr($search) . '" placeholder="Cari nama / email / username" style="min-width:280px;">';
+    echo '<button class="button button-primary">Cari</button>';
+    if ($search !== '') {
+        echo '<a class="button" href="' . esc_url(admin_url('admin.php?page=wdc-member-list')) . '">Reset</a>';
+    }
+    echo '</form>';
+
+    echo '<p style="color:#64748b;">Menampilkan ' . count($rows) . ' member terbaru' . ($search ? ' (filter: ' . esc_html($search) . ')' : '') . '.</p>';
+    echo '<table class="widefat striped" style="max-width:1100px;"><thead><tr>';
+    echo '<th>Member</th><th>Email</th><th>Kursus</th><th>Request</th><th>Order</th><th>Registered</th><th>Aksi</th>';
+    echo '</tr></thead><tbody>';
+    if (!$rows) {
+        echo '<tr><td colspan="7">Tidak ada member.</td></tr>';
+    }
+    foreach ($rows as $row) {
+        $u = $row['user'];
+        $manage_url = add_query_arg(['page' => 'wdc-member-list', 'user_id' => $u->ID], admin_url('admin.php'));
+        echo '<tr>';
+        echo '<td><strong>' . esc_html($u->display_name ?: $u->user_login) . '</strong><br><small style="color:#64748b;">@' . esc_html($u->user_login) . ' · #' . intval($u->ID) . '</small></td>';
+        echo '<td>' . esc_html($u->user_email) . '</td>';
+        echo '<td><strong>' . intval($row['completed_count']) . '</strong></td>';
+        echo '<td>' . intval($row['course_requests_count']) . '</td>';
+        echo '<td>' . intval($row['course_orders_count']) . '</td>';
+        echo '<td>' . esc_html(mysql2date('Y-m-d', $u->user_registered)) . '</td>';
+        echo '<td><a class="button button-primary button-small" href="' . esc_url($manage_url) . '">Kelola Kursus</a> ';
+        echo '<a class="button button-small" href="' . esc_url(get_edit_user_link($u->ID)) . '">WP User</a></td>';
+        echo '</tr>';
+    }
+    echo '</tbody></table></div>';
+}
 
 /**
  * Completed Courses — AJAX: Add
