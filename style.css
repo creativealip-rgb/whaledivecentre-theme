@@ -2,7 +2,7 @@
 
 /*
 Theme Name: Whale Dive Centre Theme
-Version: 2.3.82
+Version: 2.3.83
 */
 :root{
   --black:#000;--violet:#3B44AC;--cyan:#4CC8ED;--pale:#96DAEA;--red:#C31C4A;--blue:#004A98;--white:#fff;--navy:#061a36;--ink:#0b1930;--muted:#63748a;
@@ -8024,4 +8024,35 @@ body.wm-member-app .dashboard-main section[style*="background: #fff"]{
   max-width:none!important;
   box-sizing:border-box!important;
   border-radius:16px!important;
+}
+
+
+/* ==========================================================================
+   WDC MEMBER FORM COMPACT 2.3.83
+   ========================================================================== */
+body.wm-member-app .dashboard-main input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]),
+body.wm-member-app .dashboard-main select,
+body.wm-member-app .dashboard-main textarea{
+  font-size:13px!important;
+  line-height:1.35!important;
+  min-height:38px!important;
+  padding:8px 10px!important;
+  border-radius:10px!important;
+  box-sizing:border-box!important;
+}
+body.wm-member-app .dashboard-main textarea{min-height:72px!important}
+body.wm-member-app .dashboard-main .wdc-mc-side input,
+body.wm-member-app .dashboard-main .wdc-mc-side select,
+body.wm-member-app .dashboard-main .wdc-mc-side textarea{
+  font-size:13px!important;
+  min-height:38px!important;
+  padding:8px 10px!important;
+}
+@media(max-width:760px){
+  body.wm-member-app .dashboard-main input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]),
+  body.wm-member-app .dashboard-main select,
+  body.wm-member-app .dashboard-main textarea{
+    font-size:16px!important;
+    min-height:42px!important;
+  }
 }

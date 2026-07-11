@@ -104,10 +104,42 @@ $completed_count = count($completed_courses);
 .wdc-mc-actions button{border:0;border-radius:999px;background:#4cc8ed;color:#004A98;padding:9px 14px;font-weight:950;font-size:13px;cursor:pointer}
 .wdc-mc-side h2{font-size:17px;font-weight:900;color:#0f172a;margin:0 0 6px}
 .wdc-mc-side p{font-size:13px;color:#64748b;margin:0 0 14px;line-height:1.5}
-.wdc-mc-side form{display:grid;gap:10px}
-.wdc-mc-side label{display:grid;gap:5px;font-size:12px;font-weight:800;color:#334155}
-.wdc-mc-side input,.wdc-mc-side select,.wdc-mc-side textarea{border:1px solid #dbe4ea;border-radius:12px;padding:10px 12px;width:100%;font:inherit;background:#fff}
-.wdc-mc-side button[type="submit"]{border:0;border-radius:999px;background:#004A98;color:#fff;padding:12px 16px;font-weight:950;cursor:pointer;width:100%}
+.wdc-mc-side form{display:grid;gap:8px}
+.wdc-mc-side label{display:grid;gap:4px;font-size:12px;font-weight:800;color:#334155}
+.wdc-mc-side input,
+.wdc-mc-side select,
+.wdc-mc-side textarea{
+  border:1px solid #dbe4ea!important;
+  border-radius:10px!important;
+  padding:8px 10px!important;
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  background:#fff!important;
+  font-family:inherit!important;
+  font-size:13px!important;
+  font-weight:500!important;
+  line-height:1.35!important;
+  min-height:38px!important;
+  height:auto!important;
+  color:#0f172a!important;
+}
+.wdc-mc-side select{
+  min-height:38px!important;
+  padding-right:28px!important;
+}
+.wdc-mc-side textarea{
+  min-height:72px!important;
+  resize:vertical!important;
+}
+.wdc-mc-side button[type="submit"]{
+  border:0;border-radius:999px;background:#004A98;color:#fff;
+  padding:10px 14px;font-weight:950;font-size:13px;cursor:pointer;width:100%;min-height:40px
+}
+/* keep iOS no-zoom on phone only */
+@media(max-width:760px){
+  .wdc-mc-side input,.wdc-mc-side select,.wdc-mc-side textarea{font-size:16px!important;min-height:42px!important}
+}
 .wdc-mc-empty{text-align:center;padding:40px 16px;border:1px dashed #dbe4ea;border-radius:14px;background:#f8fafc}
 @media(max-width:980px){.wdc-mc-layout{grid-template-columns:1fr}}
 </style>

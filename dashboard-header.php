@@ -223,7 +223,18 @@ $wdc_member_icon = function ($path) {
         .dashboard-main [style*="color:#64748b"], .dashboard-main [style*="color: #64748b"], .dashboard-main [style*="color:#475569"], .dashboard-main [style*="color: #475569"], .dashboard-main [style*="color:#94a3b8"], .dashboard-main [style*="color: #94a3b8"] { color: #5f7180 !important; }
         .dashboard-main [style*="background:#f8fafc"], .dashboard-main [style*="background: #f8fafc"] { background: #f5fbff !important; }
         .dashboard-main [style*="border:1px solid #e2e8f0"], .dashboard-main [style*="border: 1px solid #e2e8f0"] { border-color: rgba(0,74,152,.12) !important; }
-        .dashboard-main input, .dashboard-main select, .dashboard-main textarea { font-size: 16px !important; }
+        .dashboard-main input, .dashboard-main select, .dashboard-main textarea {
+          font-size: 13px !important;
+          line-height: 1.35 !important;
+          min-height: 38px;
+          padding: 8px 10px !important;
+          border-radius: 10px !important;
+          box-sizing: border-box !important;
+        }
+        .dashboard-main textarea { min-height: 72px; }
+        @media (max-width: 760px) {
+          .dashboard-main input, .dashboard-main select, .dashboard-main textarea { font-size: 16px !important; min-height: 42px; }
+        }
         body.wdc-brand-font-mode, body.wdc-brand-font-mode input, body.wdc-brand-font-mode select, body.wdc-brand-font-mode textarea, body.wdc-brand-font-mode button { font-family:'Open Sans',Arial,sans-serif !important; }
         body.wdc-brand-font-mode h1, body.wdc-brand-font-mode h2, body.wdc-brand-font-mode h3, body.wdc-brand-font-mode .page-title { font-family:'iBrand','Open Sans',Arial,sans-serif !important; font-weight:400; }
 
