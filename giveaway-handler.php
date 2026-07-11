@@ -163,6 +163,77 @@ add_action('wp_ajax_wdc_check_shipping', function() {
 /**
  * AJAX: Submit giveaway order
  */
+/**
+ * Helper: store giveaway image upload (quote screenshot / payment proof)
+ */
+function wdc_giveaway_store_upload($file, $subdir = 'wdc-giveaway-proofs') {
+    if (empty($file) || empty($file['tmp_name'])) {
+        return new WP_Error('no_file', contenly_tr('File tidak ditemukan.', 'File not found.'));
+    }
+    if (!function_exists('wp_handle_upload')) {
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+    }
+
+    $allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    $type = $file['type'] ?? '';
+    if ($type && !in_array($type, $allowed, true)) {
+        return new WP_Error('bad_type', contenly_tr('Format file tidak didukung. Pakai JPG/PNG.', 'Unsupported file format. Use JPG/PNG.'));
+    }
+    if (($file['size'] ?? 0) > 5 * 1024 * 1024) {
+        return new WP_Error('too_big', contenly_tr('File terlalu besar. Maks 5MB.', 'File too large. Max 5MB.'));
+    }
+
+    // Route upload into dedicated subdir under uploads/
+    $subdir = trim((string) $subdir, '/');
+    $filter = function($dirs) use ($subdir) {
+        $dirs['subdir'] = '/' . $subdir;
+        $dirs['path'] = trailingslashit($dirs['basedir']) . $subdir;
+        $dirs['url'] = trailingslashit($dirs['baseurl']) . $subdir;
+        return $dirs;
+    };
+    add_filter('upload_dir', $filter);
+
+    $overrides = [
+        'test_form' => false,
+        'mimes' => [
+            'jpg|jpeg|jpe' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            'webp' => 'image/webp',
+        ],
+    ];
+    $result = wp_handle_upload($file, $overrides);
+    remove_filter('upload_dir', $filter);
+
+    if (!empty($result['error'])) {
+        return new WP_Error('upload_fail', $result['error']);
+    }
+    if (empty($result['url']) || empty($result['file'])) {
+        return new WP_Error('move_fail', contenly_tr('Gagal upload file.', 'File upload failed.'));
+    }
+    return [
+        'url'  => $result['url'],
+        'path' => $result['file'],
+    ];
+}
+
+/**
+ * Temporary external shipping checker URL (manual quote flow)
+ */
+function wdc_giveaway_external_ongkir_url() {
+    return apply_filters('wdc_giveaway_external_ongkir_url', get_option('wdc_giveaway_external_ongkir_url', 'https://cekongkir.com/'));
+}
+
+/**
+ * Origin label shown to members when checking external ongkir
+ */
+function wdc_giveaway_origin_label() {
+    return apply_filters(
+        'wdc_giveaway_origin_label',
+        get_option('wdc_giveaway_origin_label', 'Jakarta Selatan (12240)')
+    );
+}
+
 add_action('wp_ajax_wdc_submit_giveaway', function() {
     check_ajax_referer('wdc_giveaway_nonce', 'nonce');
 
@@ -176,21 +247,26 @@ add_action('wp_ajax_wdc_submit_giveaway', function() {
         wp_send_json_error(['message' => contenly_tr('Kamu sudah pernah claim giveaway.', 'You have already claimed your giveaway.')]);
     }
 
-    $item_ids     = array_map('sanitize_text_field', $_POST['item_ids'] ?? []);
-    $courier      = sanitize_text_field($_POST['courier'] ?? '');
-    $service      = sanitize_text_field($_POST['service'] ?? '');
-    $shipping_cost = intval($_POST['shipping_cost'] ?? 0);
-    $destination  = sanitize_text_field($_POST['destination'] ?? '');
-    $dest_area_id = sanitize_text_field($_POST['dest_area_id'] ?? '');
-    $address      = sanitize_textarea_field($_POST['address'] ?? '');
-    $phone        = sanitize_text_field($_POST['phone'] ?? '');
-    $name         = sanitize_text_field($_POST['recipient_name'] ?? '');
+    $item_ids      = array_map('sanitize_text_field', (array) ($_POST['item_ids'] ?? []));
+    $courier       = sanitize_text_field($_POST['courier'] ?? '');
+    $service       = sanitize_text_field($_POST['service'] ?? '');
+    $shipping_cost = intval(preg_replace('/\D+/', '', (string) ($_POST['shipping_cost'] ?? '0')));
+    $destination   = sanitize_text_field($_POST['destination'] ?? '');
+    $dest_area_id  = sanitize_text_field($_POST['dest_area_id'] ?? '');
+    $address       = sanitize_textarea_field($_POST['address'] ?? '');
+    $phone         = sanitize_text_field($_POST['phone'] ?? '');
+    $name          = sanitize_text_field($_POST['recipient_name'] ?? '');
+    $quote_source  = esc_url_raw($_POST['quote_source'] ?? '');
+    $quote_notes   = sanitize_textarea_field($_POST['quote_notes'] ?? '');
 
-    if (empty($item_ids) || empty($courier) || empty($service) || $shipping_cost <= 0) {
-        wp_send_json_error(['message' => contenly_tr('Data tidak lengkap.', 'Incomplete data.')]);
+    if (empty($item_ids) || empty($courier) || $shipping_cost < 1000) {
+        wp_send_json_error(['message' => contenly_tr('Pilih item, isi kurir, dan ongkir minimal Rp1.000 sesuai SS cek ongkir.', 'Select items, fill courier, and shipping cost min Rp1,000 matching your quote screenshot.')]);
     }
-    if (empty($address) || empty($phone) || empty($name)) {
-        wp_send_json_error(['message' => contenly_tr('Isi nama, alamat, dan nomor HP.', 'Fill in name, address, and phone number.')]);
+    if (empty($address) || empty($phone) || empty($name) || empty($destination)) {
+        wp_send_json_error(['message' => contenly_tr('Isi nama, HP, kota tujuan, dan alamat lengkap.', 'Fill name, phone, destination city, and full address.')]);
+    }
+    if (empty($_FILES['shipping_quote_ss'])) {
+        wp_send_json_error(['message' => contenly_tr('Upload screenshot cek ongkir dulu.', 'Upload shipping quote screenshot first.')]);
     }
 
     // Validate items
@@ -202,24 +278,34 @@ add_action('wp_ajax_wdc_submit_giveaway', function() {
         }
     }
 
+    $quote_upload = wdc_giveaway_store_upload($_FILES['shipping_quote_ss'], 'wdc-giveaway-quotes');
+    if (is_wp_error($quote_upload)) {
+        wp_send_json_error(['message' => $quote_upload->get_error_message()]);
+    }
+
     // Generate order ID
     $order_id = 'GW-' . strtoupper(substr(md5($user_id . time()), 0, 8));
 
-    // Save order
+    // Save order (manual external quote flow)
     $order = [
-        'order_id'      => $order_id,
-        'user_id'       => $user_id,
-        'items'         => $item_ids,
-        'courier'       => $courier,
-        'service'       => $service,
-        'shipping_cost' => $shipping_cost,
-        'destination'   => $destination,
-        'dest_area_id'  => $dest_area_id,
-        'address'       => $address,
-        'phone'         => $phone,
-        'recipient_name' => $name,
-        'status'        => 'awaiting_payment',
-        'created_at'    => current_time('mysql'),
+        'order_id'         => $order_id,
+        'user_id'          => $user_id,
+        'items'            => $item_ids,
+        'courier'          => $courier,
+        'service'          => $service ?: 'manual',
+        'shipping_cost'    => $shipping_cost,
+        'destination'      => $destination,
+        'dest_area_id'     => $dest_area_id,
+        'address'          => $address,
+        'phone'            => $phone,
+        'recipient_name'   => $name,
+        'quote_source'     => $quote_source,
+        'quote_notes'      => $quote_notes,
+        'quote_ss_url'     => $quote_upload['url'],
+        'quote_ss_path'    => $quote_upload['path'],
+        'shipping_mode'    => 'external_manual',
+        'status'           => 'awaiting_payment',
+        'created_at'       => current_time('mysql'),
     ];
 
     update_user_meta($user_id, '_wdc_giveaway_order', $order);
@@ -232,7 +318,7 @@ add_action('wp_ajax_wdc_submit_giveaway', function() {
         'id'         => $order_id,
         'item'       => contenly_tr('Giveaway: ', 'Giveaway: ') . implode(', ', $item_ids),
         'status'     => 'Awaiting Payment',
-        'admin_note' => contenly_tr('Menunggu pembayaran ongkir', 'Waiting for shipping payment'),
+        'admin_note' => contenly_tr('Menunggu TF ongkir sesuai SS quote', 'Waiting shipping TF matching quote screenshot'),
         'type'       => 'giveaway',
         'amount'     => $shipping_cost,
         'created_at' => current_time('mysql'),
@@ -241,7 +327,8 @@ add_action('wp_ajax_wdc_submit_giveaway', function() {
 
     wp_send_json_success([
         'order_id' => $order_id,
-        'message'  => contenly_tr('Giveaway berhasil diklaim! Silakan bayar ongkir.', 'Giveaway claimed! Please pay shipping cost.'),
+        'shipping_cost' => $shipping_cost,
+        'message'  => contenly_tr('Giveaway diklaim. Transfer ongkir sesuai nominal SS, lalu upload bukti.', 'Giveaway claimed. Transfer shipping exactly as quote, then upload proof.'),
         'checkout_url' => add_query_arg([
             'type'  => 'giveaway',
             'order' => $order_id,
@@ -513,34 +600,34 @@ add_action('wp_ajax_wdc_upload_giveaway_payment', function() {
         wp_send_json_error(['message' => contenly_tr('Order tidak ditemukan.', 'Order not found.')]);
     }
 
+    $expected = intval($order['shipping_cost'] ?? 0);
+    $paid_amount = intval(preg_replace('/\D+/', '', (string) ($_POST['paid_amount'] ?? '0')));
+    if ($expected <= 0) {
+        wp_send_json_error(['message' => contenly_tr('Nominal ongkir order tidak valid.', 'Order shipping amount invalid.')]);
+    }
+    if ($paid_amount !== $expected) {
+        wp_send_json_error([
+            'message' => sprintf(
+                contenly_tr('Nominal transfer harus sama dengan ongkir: Rp %s', 'Transfer amount must match shipping: Rp %s'),
+                number_format($expected, 0, ',', '.')
+            ),
+            'expected' => $expected,
+            'paid' => $paid_amount,
+        ]);
+    }
+
     // Handle file upload
     if (empty($_FILES['payment_proof'])) {
         wp_send_json_error(['message' => contenly_tr('Upload bukti transfer.', 'Upload transfer proof.')]);
     }
 
-    $file = $_FILES['payment_proof'];
-    $allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-    if (!in_array($file['type'], $allowed)) {
-        wp_send_json_error(['message' => contenly_tr('Format file tidak didukung.', 'Unsupported file format.')]);
-    }
-    if ($file['size'] > 5 * 1024 * 1024) {
-        wp_send_json_error(['message' => contenly_tr('File terlalu besar. Maks 5MB.', 'File too large. Max 5MB.')]);
+    $stored = wdc_giveaway_store_upload($_FILES['payment_proof'], 'wdc-giveaway-proofs');
+    if (is_wp_error($stored)) {
+        wp_send_json_error(['message' => $stored->get_error_message()]);
     }
 
-    $upload_dir = wp_upload_dir();
-    $proof_dir = $upload_dir['basedir'] . '/wdc-giveaway-proofs/';
-    if (!file_exists($proof_dir)) {
-        wp_mkdir_p($proof_dir);
-    }
-
-    $filename = time() . '-' . sanitize_file_name($file['name']);
-    $filepath = $proof_dir . $filename;
-
-    if (!move_uploaded_file($file['tmp_name'], $filepath)) {
-        wp_send_json_error(['message' => contenly_tr('Gagal upload file.', 'File upload failed.')]);
-    }
-
-    $proof_url = $upload_dir['baseurl'] . '/wdc-giveaway-proofs/' . $filename;
+    $proof_url = $stored['url'];
+    $filepath = $stored['path'];
     $notes = sanitize_textarea_field($_POST['notes'] ?? '');
 
     // Update order
@@ -548,6 +635,7 @@ add_action('wp_ajax_wdc_upload_giveaway_payment', function() {
     $order['proof_url'] = $proof_url;
     $order['proof_file'] = $filepath;
     $order['notes'] = $notes;
+    $order['paid_amount'] = $paid_amount;
     $order['payment_uploaded_at'] = current_time('mysql');
     update_user_meta($user_id, '_wdc_giveaway_order', $order);
 
@@ -599,6 +687,8 @@ function wdc_render_giveaway_settings() {
         update_option('wdc_biteship_origin_area_id', sanitize_text_field($_POST['wdc_biteship_origin_area_id'] ?? ''));
         update_option('wdc_biteship_origin_postal', sanitize_text_field($_POST['wdc_biteship_origin_postal'] ?? '10110'));
         update_option('wdc_giveaway_enabled', isset($_POST['wdc_giveaway_enabled']) ? '1' : '0');
+        update_option('wdc_giveaway_external_ongkir_url', esc_url_raw($_POST['wdc_giveaway_external_ongkir_url'] ?? 'https://cekongkir.com/'));
+        update_option('wdc_giveaway_origin_label', sanitize_text_field($_POST['wdc_giveaway_origin_label'] ?? 'Jakarta Selatan (12240)'));
         echo '<div class="updated"><p>Settings saved!</p></div>';
     }
 
@@ -606,6 +696,8 @@ function wdc_render_giveaway_settings() {
     $origin_id  = get_option('wdc_biteship_origin_area_id', '');
     $origin_zip = get_option('wdc_biteship_origin_postal', '10110');
     $enabled    = get_option('wdc_giveaway_enabled', '1');
+    $external_url = get_option('wdc_giveaway_external_ongkir_url', 'https://cekongkir.com/');
+    $origin_label = get_option('wdc_giveaway_origin_label', 'Jakarta Selatan (12240)');
     ?>
     <div class="wrap">
         <h1>🎁 <?php echo contenly_tr('Pengaturan Giveaway', 'Giveaway Settings'); ?></h1>
@@ -616,6 +708,20 @@ function wdc_render_giveaway_settings() {
                 <tr>
                     <th><?php echo contenly_tr('Aktifkan Giveaway', 'Enable Giveaway'); ?></th>
                     <td><label><input type="checkbox" name="wdc_giveaway_enabled" value="1" <?php checked($enabled, '1'); ?>> <?php echo contenly_tr('Tampilkan giveaway di dashboard member', 'Show giveaway on member dashboard'); ?></label></td>
+                </tr>
+                <tr>
+                    <th><?php echo contenly_tr('Link Cek Ongkir Eksternal', 'External Ongkir Checker URL'); ?></th>
+                    <td>
+                        <input type="url" name="wdc_giveaway_external_ongkir_url" value="<?php echo esc_attr($external_url); ?>" class="regular-text" placeholder="https://cekongkir.com/">
+                        <p class="description"><?php echo contenly_tr('Sementara: user dicek ongkir di web ini, lalu input nominal + upload SS.', 'Temporary: user checks shipping on this site, then inputs amount + uploads screenshot.'); ?></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th><?php echo contenly_tr('Label Asal Pengiriman', 'Shipping Origin Label'); ?></th>
+                    <td>
+                        <input type="text" name="wdc_giveaway_origin_label" value="<?php echo esc_attr($origin_label); ?>" class="regular-text" placeholder="Jakarta Selatan (12240)">
+                        <p class="description"><?php echo contenly_tr('Ditampilkan ke member saat cek ongkir di web luar.', 'Shown to members when checking shipping externally.'); ?></p>
+                    </td>
                 </tr>
                 <tr>
                     <th>Biteship API Key</th>

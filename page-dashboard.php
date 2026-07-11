@@ -101,9 +101,14 @@ foreach ($manual_orders as $mo) {
         <?php endforeach; ?>
     </div>
 
+    <?php
+    $gw_origin = function_exists('wdc_giveaway_origin_label') ? wdc_giveaway_origin_label() : 'Jakarta Selatan (12240)';
+    $gw_ongkir_url = function_exists('wdc_giveaway_external_ongkir_url') ? wdc_giveaway_external_ongkir_url() : 'https://cekongkir.com/';
+    ?>
     <!-- Shipping address form (hidden until items selected) -->
     <div id="wdc-giveaway-shipping" style="display:none;background:#fff;border-radius:16px;padding:24px;border:1px solid #e5e7eb;">
-        <h3 style="font-size:18px;font-weight:800;color:#0f172a;margin:0 0 16px;"><?php echo contenly_tr('Detail Pengiriman', 'Shipping Details'); ?></h3>
+        <h3 style="font-size:18px;font-weight:800;color:#0f172a;margin:0 0 8px;"><?php echo contenly_tr('Detail Pengiriman', 'Shipping Details'); ?></h3>
+        <p style="font-size:13px;color:#64748b;margin:0 0 16px;line-height:1.6;"><?php echo contenly_tr('Barang gratis. Ongkir dihitung di web cek ongkir luar, lalu isi nominal sesuai SS.', 'Items free. Check shipping on external site, then enter amount matching the screenshot.'); ?></p>
 
         <div style="display:grid;gap:14px;">
             <div>
@@ -116,11 +121,7 @@ foreach ($manual_orders as $mo) {
             </div>
             <div>
                 <label style="display:block;font-size:13px;font-weight:700;color:#374151;margin-bottom:4px;"><?php echo contenly_tr('Kota / Kodepos Tujuan', 'Destination City / Postal Code'); ?> *</label>
-                <div style="position:relative;">
-                    <input type="text" id="wdc-gw-city" style="width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:10px;font-size:14px;" placeholder="Ketik nama kota atau kodepos..." autocomplete="off">
-                    <div id="wdc-gw-city-dropdown" style="display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #d1d5db;border-radius:10px;max-height:200px;overflow-y:auto;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.12);"></div>
-                </div>
-                <input type="hidden" id="wdc-gw-area-id" value="">
+                <input type="text" id="wdc-gw-city" style="width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:10px;font-size:14px;" placeholder="Contoh: Bandung / 40111" autocomplete="off">
             </div>
             <div>
                 <label style="display:block;font-size:13px;font-weight:700;color:#374151;margin-bottom:4px;"><?php echo contenly_tr('Alamat Lengkap', 'Full Address'); ?> *</label>
@@ -128,19 +129,48 @@ foreach ($manual_orders as $mo) {
             </div>
         </div>
 
-        <button id="wdc-btn-check-shipping" style="margin-top:16px;width:100%;padding:14px;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;">
-            <?php echo contenly_tr('🔍 Cek Ongkir', '🔍 Check Shipping Cost'); ?>
-        </button>
-
-        <!-- Shipping rates result -->
-        <div id="wdc-shipping-rates" style="display:none;margin-top:18px;">
-            <h4 style="font-size:15px;font-weight:800;color:#0f172a;margin:0 0 10px;"><?php echo contenly_tr('Pilih Kurir', 'Choose Courier'); ?></h4>
-            <div id="wdc-rates-list" style="display:grid;gap:8px;"></div>
+        <div style="margin-top:18px;padding:16px;border-radius:14px;background:#eff6ff;border:1px solid #bfdbfe;">
+            <div style="font-size:14px;font-weight:900;color:#1e3a8a;margin-bottom:8px;"><?php echo contenly_tr('Cek Ongkir di Web Lain (sementara)', 'Check Shipping on External Site (temporary)'); ?></div>
+            <ol style="margin:0 0 12px 18px;padding:0;color:#1e40af;font-size:13px;line-height:1.7;">
+                <li><?php echo contenly_tr('Asal kirim:', 'Ship from:'); ?> <strong><?php echo esc_html($gw_origin); ?></strong></li>
+                <li><?php echo contenly_tr('Isi kota tujuan + berat item yang dipilih (gram).', 'Enter destination city + selected items weight (grams).'); ?></li>
+                <li><?php echo contenly_tr('Screenshot hasil cek ongkir, lalu isi kurir + nominal di bawah.', 'Screenshot the quote, then fill courier + amount below.'); ?></li>
+            </ol>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+                <span id="wdc-gw-weight-hint" style="display:inline-flex;align-items:center;padding:8px 12px;border-radius:999px;background:#fff;border:1px solid #93c5fd;color:#1d4ed8;font-size:12px;font-weight:800;">0g</span>
+                <a id="wdc-gw-open-ongkir" href="<?php echo esc_url($gw_ongkir_url); ?>" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;padding:10px 14px;border-radius:999px;background:#2563eb;color:#fff;text-decoration:none;font-size:13px;font-weight:900;"><?php echo contenly_tr('Buka Cek Ongkir', 'Open Shipping Checker'); ?> →</a>
+            </div>
+            <p style="margin:0;font-size:12px;color:#1e40af;"><?php echo contenly_tr('Link default: cekongkir.com — admin bisa ganti di Giveaway Settings.', 'Default link: cekongkir.com — admin can change in Giveaway Settings.'); ?></p>
         </div>
 
-        <!-- Submit button (hidden until courier selected) -->
-        <button id="wdc-btn-claim-giveaway" style="display:none;margin-top:16px;width:100%;padding:16px;background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:900;cursor:pointer;">
-            🎁 <?php echo contenly_tr('Klaim Giveaway & Bayar Ongkir', 'Claim Giveaway & Pay Shipping'); ?>
+        <div style="display:grid;gap:14px;margin-top:16px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div>
+                    <label style="display:block;font-size:13px;font-weight:700;color:#374151;margin-bottom:4px;"><?php echo contenly_tr('Kurir', 'Courier'); ?> *</label>
+                    <input type="text" id="wdc-gw-courier" style="width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:10px;font-size:14px;" placeholder="JNE / JNT / SiCepat">
+                </div>
+                <div>
+                    <label style="display:block;font-size:13px;font-weight:700;color:#374151;margin-bottom:4px;"><?php echo contenly_tr('Layanan', 'Service'); ?></label>
+                    <input type="text" id="wdc-gw-service" style="width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:10px;font-size:14px;" placeholder="REG / EZ / BEST">
+                </div>
+            </div>
+            <div>
+                <label style="display:block;font-size:13px;font-weight:700;color:#374151;margin-bottom:4px;"><?php echo contenly_tr('Ongkir (Rp) sesuai SS', 'Shipping (Rp) from screenshot'); ?> *</label>
+                <input type="text" id="wdc-gw-shipping-cost" inputmode="numeric" style="width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:10px;font-size:14px;" placeholder="Contoh: 18000">
+            </div>
+            <div>
+                <label style="display:block;font-size:13px;font-weight:700;color:#374151;margin-bottom:4px;"><?php echo contenly_tr('Screenshot Cek Ongkir', 'Shipping Quote Screenshot'); ?> *</label>
+                <input type="file" id="wdc-gw-quote-ss" accept="image/*" style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:10px;font-size:14px;background:#fff;">
+                <p style="margin:6px 0 0;font-size:12px;color:#64748b;"><?php echo contenly_tr('JPG/PNG, maks 5MB. Harus jelas nominal + kurir.', 'JPG/PNG, max 5MB. Must clearly show amount + courier.'); ?></p>
+            </div>
+            <div>
+                <label style="display:block;font-size:13px;font-weight:700;color:#374151;margin-bottom:4px;"><?php echo contenly_tr('Catatan Quote (opsional)', 'Quote Notes (optional)'); ?></label>
+                <input type="text" id="wdc-gw-quote-notes" style="width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:10px;font-size:14px;" placeholder="Contoh: JNE REG 2-3 hari">
+            </div>
+        </div>
+
+        <button id="wdc-btn-claim-giveaway" style="margin-top:16px;width:100%;padding:16px;background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:900;cursor:pointer;">
+            🎁 <?php echo contenly_tr('Klaim Giveaway & Lanjut Bayar Ongkir', 'Claim Giveaway & Continue Shipping Payment'); ?>
         </button>
     </div>
 
@@ -150,206 +180,114 @@ foreach ($manual_orders as $mo) {
 <style>
 .wdc-giveaway-card:hover { border-color:#10b981 !important; box-shadow:0 0 0 3px rgba(16,185,129,.15); }
 .wdc-giveaway-card.selected { border-color:#10b981 !important; background:#f0fdf4 !important; box-shadow:0 0 0 3px rgba(16,185,129,.2); }
-.wdc-rate-option { padding:12px 14px;border:2px solid #e5e7eb;border-radius:12px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:all .15s; }
-.wdc-rate-option:hover { border-color:#059669;background:#f0fdf4; }
-.wdc-rate-option.active { border-color:#059669;background:#ecfdf5; }
+@media(max-width:640px){
+  #wdc-giveaway-shipping div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important}
+}
 </style>
 
 <script>
 jQuery(document).ready(function($) {
     var selectedItems = [];
-    var selectedRate = null;
-    var searchTimer = null;
+    var itemWeights = {
+<?php
+$w_js = [];
+foreach (wdc_get_giveaway_items() as $item) {
+    $w_js[] = "        '" . esc_js($item['id']) . "': " . intval($item['weight']);
+}
+echo implode(",\n", $w_js) . "\n";
+?>
+    };
 
-    // Card selection
-    $('.wdc-giveaway-card input[type="checkbox"]').on('change', function() {
-        var card = $(this).closest('.wdc-giveaway-card');
-        if (this.checked) {
-            card.addClass('selected');
-        } else {
-            card.removeClass('selected');
-        }
-        selectedItems = [];
-        $('.wdc-giveaway-card input:checked').each(function() {
-            selectedItems.push($(this).val());
-        });
-        if (selectedItems.length > 0) {
-            $('#wdc-giveaway-shipping').slideDown(200);
-        } else {
-            $('#wdc-giveaway-shipping').slideUp(200);
-        }
-        $('#wdc-shipping-rates').hide();
-        $('#wdc-btn-claim-giveaway').hide();
-        selectedRate = null;
-    });
-
-    // City autocomplete (debounced)
-    $('#wdc-gw-city').on('input', function() {
-        var query = $(this).val();
-        clearTimeout(searchTimer);
-        if (query.length < 3) {
-            $('#wdc-gw-city-dropdown').hide();
-            return;
-        }
-        searchTimer = setTimeout(function() {
-            $.post(wdcGiveawayAjax.ajaxurl, {
-                action: 'wdc_search_area',
-                nonce: wdcGiveawayAjax.nonce,
-                query: query
-            }, function(res) {
-                if (!res.success || !res.data.areas.length) {
-                    $('#wdc-gw-city-dropdown').hide();
-                    return;
-                }
-                var html = '';
-                res.data.areas.forEach(function(a) {
-                    html += '<div class="wdc-city-option" data-id="' + a.id + '" data-name="' + a.name + '" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #f1f5f9;font-size:13px;">';
-                    html += '<strong>' + a.name + '</strong>';
-                    if (a.admin2_name) html += ' <span style="color:#64748b;">— ' + a.admin2_name + (a.admin1_name ? ', ' + a.admin1_name : '') + '</span>';
-                    if (a.postal_code) html += ' <span style="color:#9ca3af;">(' + a.postal_code + ')</span>';
-                    html += '</div>';
-                });
-                $('#wdc-gw-city-dropdown').html(html).show();
-            });
-        }, 400);
-    });
-
-    // Select city from dropdown
-    $(document).on('click', '.wdc-city-option', function() {
-        var name = $(this).data('name');
-        var id = $(this).data('id');
-        $('#wdc-gw-city').val(name);
-        $('#wdc-gw-area-id').val(id);
-        $('#wdc-gw-city-dropdown').hide();
-        // Reset rates
-        $('#wdc-shipping-rates').hide();
-        $('#wdc-btn-claim-giveaway').hide();
-        selectedRate = null;
-    });
-
-    // Close dropdown on outside click
-    $(document).on('click', function(e) {
-        if (!$(e.target).closest('#wdc-gw-city, #wdc-gw-city-dropdown').length) {
-            $('#wdc-gw-city-dropdown').hide();
-        }
-    });
-
-    // Check shipping
-    $('#wdc-btn-check-shipping').on('click', function() {
-        var btn = $(this);
-        var city = $('#wdc-gw-city').val();
-        var areaId = $('#wdc-gw-area-id').val();
-
-        if (!areaId) {
-            showGiveawayError('<?php echo contenly_tr('Pilih kota dari dropdown dulu ya.', 'Please select a city from the dropdown first.'); ?>');
-            return;
-        }
-        if (selectedItems.length === 0) {
-            showGiveawayError('<?php echo contenly_tr('Pilih minimal 1 item giveaway.', 'Select at least 1 giveaway item.'); ?>');
-            return;
-        }
-
-        btn.prop('disabled', true).html('⏳ <?php echo contenly_tr('Menghitung ongkir...', 'Calculating shipping...'); ?>');
-        hideGiveawayError();
-
-        $.post(wdcGiveawayAjax.ajaxurl, {
-            action: 'wdc_check_shipping',
-            nonce: wdcGiveawayAjax.nonce,
-            destination: city,
-            item_ids: selectedItems,
-            couriers: 'jne,jnt,sicepat'
-        }, function(res) {
-            btn.prop('disabled', false).html('🔍 <?php echo contenly_tr('Cek Ongkir', 'Check Shipping Cost'); ?>');
-            if (!res.success) {
-                showGiveawayError(res.data.message);
-                return;
-            }
-            renderRates(res.data.rates);
-        }).fail(function() {
-            btn.prop('disabled', false).html('🔍 <?php echo contenly_tr('Cek Ongkir', 'Check Shipping Cost'); ?>');
-            showGiveawayError('<?php echo contenly_tr('Gagal menghubungi server.', 'Failed to reach server.'); ?>');
-        });
-    });
-
-    function renderRates(rates) {
-        if (!rates || rates.length === 0) {
-            showGiveawayError('<?php echo contenly_tr('Tidak ada kurir tersedia untuk tujuan ini.', 'No couriers available for this destination.'); ?>');
-            $('#wdc-shipping-rates').hide();
-            return;
-        }
-        var html = '';
-        rates.forEach(function(r, i) {
-            var costFmt = 'Rp ' + r.cost.toLocaleString('id-ID');
-            html += '<div class="wdc-rate-option" data-index="' + i + '" data-courier="' + r.courier_code + '" data-service="' + r.service_code + '" data-cost="' + r.cost + '">';
-            html += '<div><strong style="text-transform:uppercase;">' + r.courier + '</strong> ' + r.service;
-            if (r.etd) html += ' <span style="color:#64748b;font-size:12px;">(' + r.etd + ')</span>';
-            html += '</div>';
-            html += '<strong style="color:#059669;">' + costFmt + '</strong>';
-            html += '</div>';
-        });
-        $('#wdc-rates-list').html(html);
-        $('#wdc-shipping-rates').slideDown(200);
-        $('#wdc-btn-claim-giveaway').hide();
-        selectedRate = null;
+    function updateWeightHint() {
+        var total = 0;
+        selectedItems.forEach(function(id){ total += (itemWeights[id] || 0); });
+        $('#wdc-gw-weight-hint').text(total + 'g · item terpilih: ' + selectedItems.length);
     }
 
-    // Select rate
-    $(document).on('click', '.wdc-rate-option', function() {
-        $('.wdc-rate-option').removeClass('active');
-        $(this).addClass('active');
-        selectedRate = {
-            courier: $(this).data('courier'),
-            service: $(this).data('service'),
-            cost: $(this).data('cost')
-        };
-        $('#wdc-btn-claim-giveaway').html('🎁 <?php echo contenly_tr('Klaim & Bayar Ongkir', 'Claim & Pay Shipping'); ?>: Rp ' + selectedRate.cost.toLocaleString('id-ID'));
-        $('#wdc-btn-claim-giveaway').slideDown(200);
+    $('.wdc-giveaway-card input[type="checkbox"]').on('change', function() {
+        var card = $(this).closest('.wdc-giveaway-card');
+        if (this.checked) card.addClass('selected'); else card.removeClass('selected');
+        selectedItems = [];
+        $('.wdc-giveaway-card input:checked').each(function(){ selectedItems.push($(this).val()); });
+        updateWeightHint();
+        if (selectedItems.length > 0) $('#wdc-giveaway-shipping').slideDown(200);
+        else $('#wdc-giveaway-shipping').slideUp(200);
+    });
+    updateWeightHint();
+
+    function onlyDigits(v){ return String(v || '').replace(/\D+/g, ''); }
+
+    $('#wdc-gw-shipping-cost').on('input', function(){
+        var d = onlyDigits(this.value);
+        this.value = d ? Number(d).toLocaleString('id-ID') : '';
     });
 
-    // Claim giveaway
     $('#wdc-btn-claim-giveaway').on('click', function() {
         var btn = $(this);
         var name = $('#wdc-gw-name').val().trim();
         var phone = $('#wdc-gw-phone').val().trim();
         var address = $('#wdc-gw-address').val().trim();
-        var city = $('#wdc-gw-city').val();
-        var areaId = $('#wdc-gw-area-id').val();
+        var city = $('#wdc-gw-city').val().trim();
+        var courier = $('#wdc-gw-courier').val().trim();
+        var service = $('#wdc-gw-service').val().trim();
+        var cost = parseInt(onlyDigits($('#wdc-gw-shipping-cost').val()), 10) || 0;
+        var quoteFile = $('#wdc-gw-quote-ss')[0].files[0];
+        var notes = $('#wdc-gw-quote-notes').val().trim();
 
-        if (!name || !phone || !address || !areaId) {
-            showGiveawayError('<?php echo contenly_tr('Lengkapi semua data pengiriman.', 'Complete all shipping details.'); ?>');
+        if (selectedItems.length === 0) {
+            showGiveawayError('<?php echo contenly_tr('Pilih minimal 1 item giveaway.', 'Select at least 1 giveaway item.'); ?>');
             return;
         }
-        if (!selectedRate) {
-            showGiveawayError('<?php echo contenly_tr('Pilih kurir dulu.', 'Select a courier first.'); ?>');
+        if (!name || !phone || !address || !city) {
+            showGiveawayError('<?php echo contenly_tr('Lengkapi nama, HP, kota, dan alamat.', 'Complete name, phone, city, and address.'); ?>');
+            return;
+        }
+        if (!courier || cost < 1000) {
+            showGiveawayError('<?php echo contenly_tr('Isi kurir + ongkir sesuai SS (min Rp1.000).', 'Fill courier + shipping from screenshot (min Rp1,000).'); ?>');
+            return;
+        }
+        if (!quoteFile) {
+            showGiveawayError('<?php echo contenly_tr('Upload screenshot cek ongkir dulu.', 'Upload shipping quote screenshot first.'); ?>');
             return;
         }
 
         btn.prop('disabled', true).html('⏳ Memproses...');
         hideGiveawayError();
 
-        $.post(wdcGiveawayAjax.ajaxurl, {
-            action: 'wdc_submit_giveaway',
-            nonce: wdcGiveawayAjax.nonce,
-            item_ids: selectedItems,
-            courier: selectedRate.courier,
-            service: selectedRate.service,
-            shipping_cost: selectedRate.cost,
-            destination: city,
-            dest_area_id: areaId,
-            address: address,
-            phone: phone,
-            recipient_name: name
-        }, function(res) {
-            if (!res.success) {
-                showGiveawayError(res.data.message);
-                btn.prop('disabled', false).html('🎁 <?php echo contenly_tr('Klaim & Bayar Ongkir', 'Claim & Pay Shipping'); ?>');
-                return;
+        var fd = new FormData();
+        fd.append('action', 'wdc_submit_giveaway');
+        fd.append('nonce', wdcGiveawayAjax.nonce);
+        selectedItems.forEach(function(id){ fd.append('item_ids[]', id); });
+        fd.append('courier', courier);
+        fd.append('service', service || 'manual');
+        fd.append('shipping_cost', cost);
+        fd.append('destination', city);
+        fd.append('dest_area_id', '');
+        fd.append('address', address);
+        fd.append('phone', phone);
+        fd.append('recipient_name', name);
+        fd.append('quote_source', '<?php echo esc_js($gw_ongkir_url); ?>');
+        fd.append('quote_notes', notes);
+        fd.append('shipping_quote_ss', quoteFile);
+
+        $.ajax({
+            url: wdcGiveawayAjax.ajaxurl,
+            type: 'POST',
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function(res) {
+                if (!res || !res.success) {
+                    showGiveawayError((res && res.data && res.data.message) ? res.data.message : '<?php echo contenly_tr('Gagal claim giveaway.', 'Failed to claim giveaway.'); ?>');
+                    btn.prop('disabled', false).html('🎁 <?php echo contenly_tr('Klaim Giveaway & Lanjut Bayar Ongkir', 'Claim Giveaway & Continue Shipping Payment'); ?>');
+                    return;
+                }
+                window.location.href = res.data.checkout_url;
+            },
+            error: function() {
+                showGiveawayError('<?php echo contenly_tr('Gagal menghubungi server.', 'Failed to reach server.'); ?>');
+                btn.prop('disabled', false).html('🎁 <?php echo contenly_tr('Klaim Giveaway & Lanjut Bayar Ongkir', 'Claim Giveaway & Continue Shipping Payment'); ?>');
             }
-            // Success — redirect to giveaway checkout
-            window.location.href = res.data.checkout_url;
-        }).fail(function() {
-            showGiveawayError('<?php echo contenly_tr('Gagal menghubungi server.', 'Failed to reach server.'); ?>');
-            btn.prop('disabled', false).html('🎁 <?php echo contenly_tr('Klaim & Bayar Ongkir', 'Claim & Pay Shipping'); ?>');
         });
     });
 

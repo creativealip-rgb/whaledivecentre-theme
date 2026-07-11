@@ -64,7 +64,7 @@ get_header();
         <div style="background:linear-gradient(135deg,#fef9c3,#fef08a);border:2px solid #facc15;border-radius:16px;padding:24px;margin-bottom:24px;text-align:center;">
             <div style="font-size:48px;margin-bottom:8px;">🎁</div>
             <h1 style="font-size:24px;font-weight:900;color:#0f172a;margin:0 0 6px;"><?php echo contenly_tr('Giveaway Diklaim!', 'Giveaway Claimed!'); ?></h1>
-            <p style="color:#713f12;font-size:14px;margin:0;"><?php echo contenly_tr('Barangnya gratis! Tinggal bayar ongkir aja ya.', 'Items are free! Just pay for shipping.'); ?></p>
+            <p style="color:#713f12;font-size:14px;margin:0;"><?php echo contenly_tr('Barangnya gratis! Transfer ongkir harus sama persis dengan nominal SS cek ongkir.', 'Items free! Shipping transfer must exactly match the quote screenshot amount.'); ?></p>
         </div>
 
         <!-- Order Summary Card -->
@@ -103,6 +103,18 @@ get_header();
                 </div>
             </div>
 
+            <?php if (!empty($giveaway_order['quote_ss_url'])) : ?>
+            <div style="border-top:1px solid #e5e7eb;padding-top:16px;margin-bottom:16px;">
+                <div style="font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-bottom:10px;"><?php echo contenly_tr('SS Cek Ongkir', 'Shipping Quote Screenshot'); ?></div>
+                <a href="<?php echo esc_url($giveaway_order['quote_ss_url']); ?>" target="_blank" rel="noopener">
+                    <img src="<?php echo esc_url($giveaway_order['quote_ss_url']); ?>" alt="Shipping quote" style="width:100%;max-height:320px;object-fit:contain;border-radius:12px;border:1px solid #e5e7eb;background:#f8fafc;">
+                </a>
+                <?php if (!empty($giveaway_order['quote_source'])) : ?>
+                <p style="margin:8px 0 0;font-size:12px;color:#64748b;">Source: <a href="<?php echo esc_url($giveaway_order['quote_source']); ?>" target="_blank" rel="noopener"><?php echo esc_html($giveaway_order['quote_source']); ?></a></p>
+                <?php endif; ?>
+            </div>
+            <?php endif; ?>
+
             <!-- Cost Breakdown -->
             <div style="border-top:1px solid #e5e7eb;padding-top:16px;">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
@@ -128,22 +140,53 @@ get_header();
         <div style="background:#fff;border-radius:16px;padding:32px;box-shadow:0 4px 20px rgba(0,0,0,.08);margin-bottom:24px;">
             <h2 style="font-size:18px;font-weight:800;color:#0f172a;margin:0 0 16px;"><?php echo contenly_tr('Instruksi Pembayaran', 'Payment Instructions'); ?></h2>
 
+            <?php
+            $bank_accounts = get_option('tmp_bank_accounts', [
+                [
+                    'bank' => 'BCA',
+                    'account_name' => 'Whale Dive Centre',
+                    'account_number' => '1234567890',
+                ],
+            ]);
+            if (!is_array($bank_accounts) || empty($bank_accounts)) {
+                $bank_accounts = [[
+                    'bank' => 'BCA',
+                    'account_name' => 'Whale Dive Centre',
+                    'account_number' => '1234567890',
+                ]];
+            }
+            ?>
             <div style="background:#fef3c7;border-left:4px solid #f59e0b;padding:16px;border-radius:8px;margin-bottom:20px;">
-                <p style="color:#92400e;margin:0;font-size:14px;line-height:1.7;">
-                    <strong><?php echo contenly_tr('Transfer Bank:', 'Bank Transfer:'); ?></strong><br>
-                    <?php echo contenly_tr('Bank', 'Bank'); ?>: BCA<br>
-                    <?php echo contenly_tr('Rekening', 'Account'); ?>: 1234567890<br>
-                    <?php echo contenly_tr('Nama Rekening', 'Account Name'); ?>: Whale Dive Centre<br>
-                    <br>
-                    <strong><?php echo contenly_tr('Jumlah:', 'Amount:'); ?> Rp <?php echo number_format($shipping_cost, 0, ',', '.'); ?></strong><br>
-                    <br>
-                    <?php echo contenly_tr('Transfer sesuai jumlah di atas, lalu upload bukti transfer.', 'Transfer the exact amount above, then upload your proof.'); ?>
+                <p style="color:#92400e;margin:0 0 12px;font-size:14px;line-height:1.7;">
+                    <strong><?php echo contenly_tr('Transfer Bank (harus sesuai ongkir SS):', 'Bank Transfer (must match quote shipping):'); ?></strong>
+                </p>
+                <?php foreach ($bank_accounts as $bank) : ?>
+                <div style="background:#fff7ed;border:1px solid #fdba74;border-radius:10px;padding:12px;margin-bottom:8px;color:#9a3412;font-size:14px;line-height:1.7;">
+                    <strong><?php echo esc_html($bank['bank'] ?? 'Bank'); ?></strong><br>
+                    <?php echo contenly_tr('Rekening', 'Account'); ?>: <?php echo esc_html($bank['account_number'] ?? '-'); ?><br>
+                    <?php echo contenly_tr('Nama Rekening', 'Account Name'); ?>: <?php echo esc_html($bank['account_name'] ?? '-'); ?>
+                </div>
+                <?php endforeach; ?>
+                <p style="color:#92400e;margin:12px 0 0;font-size:14px;line-height:1.7;">
+                    <strong><?php echo contenly_tr('Jumlah yang harus ditransfer:', 'Amount to transfer:'); ?> Rp <?php echo number_format($shipping_cost, 0, ',', '.'); ?></strong><br>
+                    <?php echo contenly_tr('Nominal transfer WAJIB sama persis dengan ongkir dari SS cek ongkir. Kalau beda, upload ditolak.', 'Transfer amount MUST exactly match the shipping quote screenshot. Mismatch will be rejected.'); ?>
                 </p>
             </div>
 
             <!-- Upload Form -->
             <form id="wdc-giveaway-payment-form" style="display:grid;gap:16px;">
                 <input type="hidden" name="order_id" value="<?php echo esc_attr($giveaway_order['order_id']); ?>">
+                <input type="hidden" id="wdc-gw-expected-amount" value="<?php echo esc_attr($shipping_cost); ?>">
+
+                <div>
+                    <label style="display:block;margin-bottom:8px;font-weight:700;color:#0f172a;font-size:14px;">
+                        <?php echo contenly_tr('Nominal Transfer (Rp) *', 'Transfer Amount (Rp) *'); ?>
+                    </label>
+                    <input type="text" name="paid_amount" id="wdc-gw-paid-amount" inputmode="numeric" required
+                           value="<?php echo esc_attr(number_format($shipping_cost, 0, ',', '.')); ?>"
+                           style="width:100%;padding:12px;border:2px solid #e2e8f0;border-radius:10px;font-size:14px;">
+                    <p style="font-size:12px;color:#64748b;margin-top:6px;"><?php echo contenly_tr('Isi sama dengan Total Ongkir di atas.', 'Must match Total Shipping above.'); ?></p>
+                </div>
 
                 <div>
                     <label style="display:block;margin-bottom:8px;font-weight:700;color:#0f172a;font-size:14px;">
@@ -162,6 +205,8 @@ get_header();
                               style="width:100%;padding:12px;border:2px solid #e2e8f0;border-radius:10px;font-size:14px;resize:vertical;"
                               placeholder="<?php echo esc_attr(contenly_tr('Jam transfer, dll...', 'Transfer time, etc...')); ?>"></textarea>
                 </div>
+
+                <div id="wdc-gw-pay-error" style="display:none;background:#fee2e2;color:#991b1b;border-radius:10px;padding:12px;font-size:14px;font-weight:600;"></div>
 
                 <button type="submit" id="wdc-gw-upload-btn"
                         style="width:100%;padding:16px;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:16px;cursor:pointer;">
@@ -193,16 +238,34 @@ get_header();
 
 <script>
 jQuery(document).ready(function($) {
+    function onlyDigits(v){ return String(v || '').replace(/\D+/g, ''); }
+    function showPayErr(msg){ $('#wdc-gw-pay-error').text(msg).show(); }
+    function hidePayErr(){ $('#wdc-gw-pay-error').hide(); }
+
+    $('#wdc-gw-paid-amount').on('input', function(){
+        var d = onlyDigits(this.value);
+        this.value = d ? Number(d).toLocaleString('id-ID') : '';
+    });
+
     $('#wdc-giveaway-payment-form').on('submit', function(e) {
         e.preventDefault();
 
         var form = this;
         var btn = $('#wdc-gw-upload-btn');
         var originalText = btn.html();
+        var expected = parseInt($('#wdc-gw-expected-amount').val(), 10) || 0;
+        var paid = parseInt(onlyDigits($('#wdc-gw-paid-amount').val()), 10) || 0;
+
+        hidePayErr();
+        if (!expected || paid !== expected) {
+            showPayErr('<?php echo contenly_tr('Nominal transfer harus sama persis dengan ongkir: Rp ', 'Transfer amount must exactly match shipping: Rp '); ?>' + expected.toLocaleString('id-ID'));
+            return;
+        }
 
         btn.prop('disabled', true).html('⏳ <?php echo contenly_tr('Mengupload...', 'Uploading...'); ?>');
 
         var formData = new FormData(form);
+        formData.set('paid_amount', String(paid));
         formData.append('action', 'wdc_upload_giveaway_payment');
         formData.append('nonce', wdcGiveawayAjax.nonce);
 
@@ -217,12 +280,12 @@ jQuery(document).ready(function($) {
                     $('#wdc-giveaway-payment-form').hide();
                     $('#wdc-gw-payment-success').show();
                 } else {
-                    alert((res && res.data && res.data.message) ? res.data.message : '<?php echo contenly_tr('Upload gagal.', 'Upload failed.'); ?>');
+                    showPayErr((res && res.data && res.data.message) ? res.data.message : '<?php echo contenly_tr('Upload gagal.', 'Upload failed.'); ?>');
                     btn.prop('disabled', false).html(originalText);
                 }
             },
             error: function() {
-                alert('<?php echo contenly_tr('Upload gagal. Coba lagi.', 'Upload failed. Try again.'); ?>');
+                showPayErr('<?php echo contenly_tr('Upload gagal. Coba lagi.', 'Upload failed. Try again.'); ?>');
                 btn.prop('disabled', false).html(originalText);
             }
         });
