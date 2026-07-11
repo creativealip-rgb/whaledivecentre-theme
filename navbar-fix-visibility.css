@@ -1,0 +1,70 @@
+/* ===================================
+   FIX NAVBAR VISIBILITY + WHITE BG
+   Override travel homepage template
+   =================================== */
+
+/* Force navbar VISIBLE on ALL pages */
+.site-header,
+.site-header.travel-overlay,
+body.page-template-page-home-travel .site-header,
+body.page-template-page-home-travel #masthead,
+body.page-template-page-home-travel header.site-header,
+#masthead,
+header.site-header {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    background-image: none !important;
+    position: relative !important;
+    top: 0 !important;
+    z-index: 9999 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Remove ANY transparency/overlay */
+.site-header::before,
+.site-header::after,
+.site-header.travel-overlay::before,
+.site-header.travel-overlay::after,
+body.page-template-page-home-travel .site-header::before,
+body.page-template-page-home-travel .site-header::after {
+    display: none !important;
+    content: none !important;
+    background: none !important;
+}
+
+/* Force ALL text BLACK */
+.site-header,
+.site-header *,
+.site-header a,
+.site-header .logo-text,
+.site-header .logo-name,
+.site-header .nav-menu a,
+body.page-template-page-home-travel .site-header,
+body.page-template-page-home-travel .site-header *,
+body.page-template-page-home-travel .site-header a {
+    color: #000000 !important;
+}
+
+/* Remove gradient from logo */
+.site-header .logo-text,
+.site-header .logo-name {
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    -webkit-text-fill-color: #000000 !important;
+}
+
+/* Hamburger BLACK */
+.hamburger-line,
+.mobile-menu-toggle .hamburger-line {
+    background: #000000 !important;
+}
+
+/* Login/Member button - BLUE with WHITE text */
+.site-header a[href*="/login/"],
+.site-header a[href*="/dashboard/"] {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #539294, #539294) !important;
+}

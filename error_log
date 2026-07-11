@@ -1,0 +1,48 @@
+[02-Jun-2026 09:16:57 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Call to undefined function get_template_directory() in /home/whalediv/public_html/wp-content/themes/theme-travel-master/page-dashboard.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/whalediv/public_html/wp-content/themes/theme-travel-master/page-dashboard.php on line 5
+[02-Jun-2026 09:16:58 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Call to undefined function get_template_directory() in /home/whalediv/public_html/wp-content/themes/theme-travel-master/page-my-courses.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/whalediv/public_html/wp-content/themes/theme-travel-master/page-my-courses.php on line 5
+[02-Jun-2026 09:16:59 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Call to undefined function get_template_directory() in /home/whalediv/public_html/wp-content/themes/theme-travel-master/page-my-gear.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/whalediv/public_html/wp-content/themes/theme-travel-master/page-my-gear.php on line 5
+[02-Jun-2026 09:21:17 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Call to undefined function get_template_directory() in /home/whalediv/public_html/wp-content/themes/theme-travel-master/page-dashboard.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/whalediv/public_html/wp-content/themes/theme-travel-master/page-dashboard.php on line 5
+[02-Jun-2026 09:21:18 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Call to undefined function get_template_directory() in /home/whalediv/public_html/wp-content/themes/theme-travel-master/page-dashboard.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/whalediv/public_html/wp-content/themes/theme-travel-master/page-dashboard.php on line 5
+[02-Jun-2026 09:21:29 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Call to undefined function get_template_directory() in /home/whalediv/public_html/wp-content/themes/theme-travel-master/page-dashboard.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/whalediv/public_html/wp-content/themes/theme-travel-master/page-dashboard.php on line 5
+[19-Jun-2026 23:28:31 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Call to undefined function language_attributes() in /home/whalediv/public_html/wp-content/themes/theme-travel-master/header.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/whalediv/public_html/wp-content/themes/theme-travel-master/header.php on line 6
+[19-Jun-2026 23:28:31 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Call to undefined function esc_html() in /home/whalediv/public_html/wp-content/themes/theme-travel-master/footer.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/whalediv/public_html/wp-content/themes/theme-travel-master/footer.php on line 7
+[19-Jun-2026 23:28:32 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Call to undefined function language_attributes() in /home/whalediv/public_html/wp-content/themes/theme-travel-master/index.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/whalediv/public_html/wp-content/themes/theme-travel-master/index.php on line 2
+[19-Jun-2026 23:28:35 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Call to undefined function get_stylesheet_directory_uri() in /home/whalediv/public_html/wp-content/themes/theme-travel-master/single.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/whalediv/public_html/wp-content/themes/theme-travel-master/single.php on line 5
+[10-Jul-2026 20:13:30 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Call to undefined function add_action() in /home/whalediv/public_html/wp-content/themes/theme-travel-master/admin-orders.php:43
+Stack trace:
+#0 {main}
+  thrown in /home/whalediv/public_html/wp-content/themes/theme-travel-master/admin-orders.php on line 43
+[10-Jul-2026 20:13:50 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Call to undefined function add_action() in /home/whalediv/public_html/wp-content/themes/theme-travel-master/admin-orders.php:43
+Stack trace:
+#0 {main}
+  thrown in /home/whalediv/public_html/wp-content/themes/theme-travel-master/admin-orders.php on line 43

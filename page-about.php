@@ -1,0 +1,163 @@
+<?php
+/**
+ * Template Name: About Page
+ */
+$theme_uri = get_stylesheet_directory_uri();
+
+$wd_contact_notice = '';
+$wd_contact_notice_type = '';
+if ('POST' === ($_SERVER['REQUEST_METHOD'] ?? '') && isset($_POST['wd_contact_submit'])) {
+    $nonce_ok = isset($_POST['wd_contact_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wd_contact_nonce'])), 'wd_contact_inquiry');
+    $honeypot = trim((string) ($_POST['website'] ?? ''));
+    $name = sanitize_text_field(wp_unslash($_POST['your-name'] ?? ''));
+    $email = sanitize_email(wp_unslash($_POST['email'] ?? ''));
+    $whatsapp = sanitize_text_field(wp_unslash($_POST['whatsapp'] ?? ''));
+    $category = sanitize_text_field(wp_unslash($_POST['category'] ?? ''));
+    $message = sanitize_textarea_field(wp_unslash($_POST['message'] ?? ''));
+
+    if ($nonce_ok && '' === $honeypot && $name && $whatsapp) {
+        $recipient = get_option('admin_email') ?: 'info@whaledivecentre.com';
+        $subject = 'New Whale Dive Centre inquiry - ' . ($category ?: 'General');
+        $body = "Name: {$name}\nEmail: " . ($email ?: '-') . "\nWhatsApp: {$whatsapp}\nCategory: " . ($category ?: '-') . "\n\nMessage:\n" . ($message ?: '-');
+        $headers = ['Content-Type: text/plain; charset=UTF-8'];
+        if ($email) {
+            $headers[] = 'Reply-To: ' . $name . ' <' . $email . '>';
+        }
+        $sent = wp_mail($recipient, $subject, $body, $headers);
+        $target = add_query_arg('wd_contact', $sent ? 'sent' : 'mail-error', get_permalink());
+        wp_safe_redirect($target . '#contact-form');
+        exit;
+    }
+
+    $wd_contact_notice = contenly_tr('Mohon isi nama dan nomor WhatsApp dengan benar.', 'Please fill in your name and WhatsApp number correctly.');
+    $wd_contact_notice_type = 'error';
+}
+
+if (isset($_GET['wd_contact'])) {
+    if ('sent' === $_GET['wd_contact']) {
+        $wd_contact_notice = contenly_tr('Terima kasih. Pesan Anda sudah terkirim dan crew akan membalas dalam 24 jam.', 'Thank you. Your inquiry has been sent and our crew will reply within 24 hours.');
+        $wd_contact_notice_type = 'success';
+    } elseif ('mail-error' === $_GET['wd_contact']) {
+        $wd_contact_notice = contenly_tr('Pesan belum berhasil dikirim oleh server email. Silakan hubungi kami via telepon jika urgent.', 'The mail server could not send your inquiry yet. Please call us if urgent.');
+        $wd_contact_notice_type = 'error';
+    }
+}
+?><!doctype html>
+<html <?php language_attributes(); ?>>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_head(); ?>
+<style id="wd-about-v2-extra">.whaledive-about .wd-sub{max-width:720px}.wd-contact-form small{display:block;margin-top:7px;color:#64748b;font-size:12px;line-height:1.45}.wd-form-privacy{margin:0;color:#64748b;font-size:13px;line-height:1.5}.wd-contact-notice{margin:18px 0 0;padding:14px 16px;border-radius:16px;font-weight:800;line-height:1.45}.wd-contact-notice.success{background:#e7f8ef;color:#05603a;border:1px solid rgba(5,96,58,.18)}.wd-contact-notice.error{background:#fff3e8;color:#9a3412;border:1px solid rgba(154,52,18,.18)}.wd-contact-hp{position:absolute;left:-9999px;opacity:0;pointer-events:none}.whaledive-about .wd-contact-grid{margin-top:30px!important}.wd-contact-card{display:flex;flex-direction:column;gap:8px}.wd-contact-card strong{color:#06384d;font-size:13px;letter-spacing:.08em;text-transform:uppercase}.wd-contact-card a{display:inline-flex;color:#0b617c;font-weight:800}.wdc-about-v2-hero .wd-inner-grid{min-height:520px}.wd-about-split{display:grid;grid-template-columns:1.2fr .8fr;gap:34px;align-items:start}.wd-about-split p{color:#587181;line-height:1.8;font-size:16px}.wd-about-stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.wd-about-stat-grid div{padding:22px;border-radius:26px;background:linear-gradient(180deg,#fff,#eef8fb);border:1px solid rgba(0,91,122,.1);box-shadow:0 16px 38px rgba(2,32,46,.07)}.wd-about-stat-grid strong{display:block;color:#06384d;font-size:30px;line-height:1;margin-bottom:10px}.wd-about-stat-grid span{color:#5b7180;line-height:1.5;font-weight:700}.wd-profile-grid{display:grid;grid-template-columns:1fr;gap:18px;margin-top:28px}.wd-profile-card{display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:center;padding:20px;border-radius:30px;background:linear-gradient(180deg,#fff,#eef8fb);border:1px solid rgba(0,91,122,.1);box-shadow:0 18px 44px rgba(2,32,46,.08)}.wd-profile-card img{width:220px;height:220px;aspect-ratio:1/1;object-fit:cover;border-radius:24px;background:#dff3f8}.wd-profile-card h3{margin:0 0 7px;color:#06384d;font-size:27px;line-height:1.15}.wd-profile-card b{display:block;margin-bottom:10px;color:#0b617c;line-height:1.4}.wd-profile-card p{margin:0;color:#587181;line-height:1.62}.wdc-about-values{background:#f5fbfd}@media(max-width:860px){.wd-about-split,.wd-profile-card{grid-template-columns:1fr}.wd-about-stat-grid{grid-template-columns:1fr}.wd-profile-card img{width:100%;height:auto;max-height:320px}}</style>
+
+<style id="wd-about-polish-values-contact">.wdc-about-values{position:relative;background:radial-gradient(circle at 12% 0,rgba(76,200,237,.18),transparent 30%),linear-gradient(180deg,#f4fbff 0%,#eaf7fb 100%)}.wdc-about-values .wd-about-crew-grid{gap:20px;text-align:left!important}.wdc-about-values .wd-crew-card{position:relative;overflow:hidden;text-align:left!important;padding:26px 24px 24px!important;background:linear-gradient(180deg,#ffffff 0%,#f7fcff 100%)!important;border:1px solid rgba(76,200,237,.28)!important;box-shadow:0 18px 42px rgba(3,36,58,.09)!important;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}.wdc-about-values .wd-crew-card:hover{transform:translateY(-4px);box-shadow:0 24px 54px rgba(3,36,58,.14)!important;border-color:rgba(76,200,237,.48)!important}.wdc-about-values .wd-crew-card:before{content:"";position:absolute;inset:0 0 auto;height:4px;background:linear-gradient(90deg,#4CC8ED,#96DAEA,#004A98)}.wdc-about-values .wd-crew-icon{width:56px!important;height:56px!important;border-radius:999px!important;display:flex!important;align-items:center!important;justify-content:center!important;margin:0 0 20px!important;background:linear-gradient(135deg,#03172d,#0b617c)!important;box-shadow:0 12px 28px rgba(0,74,152,.22)!important;font-size:15px!important;line-height:1!important;letter-spacing:.01em!important}.wdc-about-values .wd-crew-card h3{margin-bottom:10px!important;color:#06384d!important}.wdc-about-values .wd-crew-card span{color:#516b7a!important;line-height:1.62!important}.whaledive-about #contact-form{background:linear-gradient(180deg,#ffffff 0%,#f3fbff 100%)}.whaledive-about .wd-contact-grid{align-items:stretch;gap:26px!important}.whaledive-about .wd-contact-cards{display:flex;flex-direction:column;gap:0;padding:26px!important;border-radius:30px!important;background:linear-gradient(180deg,#ffffff,#f7fcff)!important;border:1px solid rgba(76,200,237,.24)!important;box-shadow:0 18px 44px rgba(3,36,58,.09)!important}.whaledive-about .wd-contact-card{position:relative;padding:0 0 18px 42px!important;border-radius:0!important;background:transparent!important;border:0!important;box-shadow:none!important;min-height:0}.whaledive-about .wd-contact-card:not(:last-child){margin-bottom:18px!important;border-bottom:1px solid rgba(6,56,77,.08)!important}.whaledive-about .wd-contact-card:before{content:"";position:absolute;left:0;top:2px;width:22px;height:22px;border-radius:999px;background:linear-gradient(135deg,#4CC8ED,#0b617c);box-shadow:0 8px 18px rgba(76,200,237,.22)}.whaledive-about .wd-contact-card strong{font-size:12px!important;color:#06384d!important}.whaledive-about .wd-contact-card span,.whaledive-about .wd-contact-card a{color:#526b7a!important;line-height:1.55!important}.whaledive-about .wd-contact-card a{font-weight:900!important;color:#0b617c!important}.whaledive-about .wd-map-link{display:inline-flex!important;align-items:center!important;justify-content:center!important;width:max-content!important;margin-top:8px!important;padding:10px 14px!important;border-radius:999px!important;background:#e9f8fc!important;color:#064a63!important;border:1px solid rgba(76,200,237,.32)!important}.whaledive-about .wd-contact-form{padding:28px!important;border-radius:30px!important;background:#fff!important;border:1px solid rgba(0,91,122,.12)!important;box-shadow:0 22px 56px rgba(3,36,58,.12)!important}.whaledive-about .wd-contact-form:before{content:"Kirim pesan ke crew";display:block;margin:0 0 18px;color:#06384d;font-size:20px;font-weight:900;letter-spacing:-.02em}.whaledive-about .wd-contact-form label{gap:7px!important}.whaledive-about .wd-contact-form input,.whaledive-about .wd-contact-form select,.whaledive-about .wd-contact-form textarea{border-radius:16px!important;border:1px solid rgba(0,91,122,.16)!important;background:#f8fcff!important}.whaledive-about .wd-contact-form input:focus,.whaledive-about .wd-contact-form select:focus,.whaledive-about .wd-contact-form textarea:focus{background:#fff!important;border-color:#4CC8ED!important;box-shadow:0 0 0 4px rgba(76,200,237,.14)!important;outline:none!important}@media(max-width:860px){.whaledive-about .wd-contact-card{padding-left:54px!important}.whaledive-about .wd-contact-form{padding:22px!important}}</style>
+</head>
+<body <?php body_class('whaledive-inner whaledive-about'); ?>><?php wp_body_open(); ?>
+<main class="wd-page">
+  <?php contenly_render_public_header(); ?>
+
+  <!-- HERO -->
+  <section class="wd-inner-hero wd-about-hero wdc-about-v2-hero">
+    <div class="wd-shell">
+      <div class="wd-inner-grid">
+        <div>
+          <span class="wd-kicker"><?php echo esc_html(contenly_tr('Tentang Whale Dive Centre', 'About Whale Dive Centre')); ?></span>
+          <h1><?php echo esc_html(contenly_tr('Kantor Pusat NAUI Indonesia untuk pelatihan selam yang aman, profesional, dan berkelas dunia.', 'NAUI Indonesia Headquarters for safe, professional, world-class dive training.')); ?></h1>
+          <p><?php echo esc_html(contenly_tr('Didirikan pada 2008 di Jakarta, WDC berfokus pada pendidikan penyelam, keselamatan, eksplorasi bawah laut, dan pengembangan profesional diving Indonesia.', 'Founded in 2008 in Jakarta, WDC focuses on diver education, safety, underwater exploration, and professional development for Indonesia’s diving community.')); ?></p>
+          <div class="wd-actions"><a class="wd-btn" href="#crew"><?php echo esc_html(contenly_tr('Kenali Tim', 'Meet the Team')); ?></a><a class="wd-btn alt" href="/courses/"><?php echo esc_html(contenly_tr('Lihat Kursus', 'View Courses')); ?></a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT WDC -->
+  <section class="wd-section white wdc-about-v2-intro">
+    <div class="wd-shell">
+      <div class="wd-about-split">
+        <div>
+          <span class="wd-kicker"><?php echo esc_html(contenly_tr('Sejak 2008', 'Since 2008')); ?></span>
+          <h2 class="wd-title"><?php echo esc_html(contenly_tr('Standar internasional. Kepemimpinan lokal. Budaya keselamatan.', 'International standards. Local leadership. Safety culture.')); ?></h2>
+          <p><?php echo esc_html(contenly_tr('Whale Dive Centre (WDC) adalah salah satu institusi penyelaman terkemuka di Indonesia yang berkantor pusat di Jakarta. WDC menghadirkan pelatihan rekreasional, profesional, dan teknis dengan standar internasional.', 'Whale Dive Centre (WDC) is one of Indonesia’s leading diving institutions headquartered in Jakarta. WDC delivers recreational, professional, and technical dive training with internationally recognized standards.')); ?></p>
+          <p><?php echo esc_html(contenly_tr('Sebagai Kantor Pusat NAUI Indonesia serta pusat yang berafiliasi dengan NAUI, TDI, dan DAN, WDC membangun kompetensi, kepercayaan diri, dan kepemimpinan bawah air melalui instruktur berpengalaman dan pembelajaran berkelanjutan.', 'As the official NAUI Indonesia Headquarters and an affiliated center of NAUI, TDI, and DAN, WDC builds competence, confidence, and leadership underwater through experienced professionals and continuous learning.')); ?></p>
+        </div>
+        <div class="wd-about-stat-grid">
+          <div><strong>2008</strong><span><?php echo esc_html(contenly_tr('Didirikan di Jakarta', 'Founded in Jakarta')); ?></span></div>
+          <div><strong>NAUI</strong><span><?php echo esc_html(contenly_tr('Kantor Pusat Indonesia', 'Indonesia Headquarters')); ?></span></div>
+          <div><strong>TDI</strong><span><?php echo esc_html(contenly_tr('Pengembangan technical diving', 'Technical diving development')); ?></span></div>
+          <div><strong>DAN</strong><span><?php echo esc_html(contenly_tr('Budaya keselamatan & emergency awareness', 'Safety culture & emergency awareness')); ?></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CREW -->
+  <section class="wd-section white wd-crew-proof" id="crew"><div class="wd-shell"><span class="wd-kicker"><?php echo esc_html(contenly_tr('Leadership Team', 'Leadership Team')); ?></span><h2 class="wd-title"><?php echo esc_html(contenly_tr('Profesional berpengalaman yang membangun ekosistem diving Indonesia.', 'Experienced professionals advancing Indonesia’s diving ecosystem.')); ?></h2><div class="wd-profile-grid">
+    <article class="wd-profile-card"><img src="<?php echo esc_url($theme_uri); ?>/assets/wdc-about-ebram-pool.jpg" alt="Ebram Harimurti scuba training"><div><h3>Ebram Harimurti</h3><b>NAUI Course Director, NAUI Rep. Indonesia, TDI Instructor, DAN Instructor Trainer</b><p><?php echo esc_html(contenly_tr('Penyelam profesional Indonesia sejak 1998 dengan pengalaman lebih dari dua dekade di diving, marine tourism, dan underwater operations. Ketua Umum IDCA serta Ketua Indonesia Divers Rescue Team (IDRT), berfokus pada profesionalisme, keselamatan, search and rescue, dan konservasi laut.', 'Indonesian professional diver active since 1998 with more than two decades of experience in diving, marine tourism, and underwater operations. President of IDCA and Chairman of Indonesia Divers Rescue Team (IDRT), focused on professionalism, safety, search and rescue, and marine conservation.')); ?></p></div></article>
+    <article class="wd-profile-card"><img src="<?php echo esc_url($theme_uri); ?>/assets/wdc-about-mimi-pool.jpg" alt="Mimi Amilia scuba training"><div><h3>Mimi Amilia</h3><b>NAUI Instructor, DAN Instructor, TDI Diver</b><p><?php echo esc_html(contenly_tr('Penyelam profesional sejak 2012 yang aktif dalam penyelaman rekreasi, edukasi, konservasi laut, dan pengembangan komunitas. Ketua Umum KP3I, mendorong partisipasi, kompetensi, dan kepemimpinan perempuan dalam industri penyelaman nasional.', 'Professional diver active since 2012 across recreational diving, education, marine conservation, and community development. President of KP3I, promoting women’s participation, competence, and leadership in Indonesia’s diving industry.')); ?></p></div></article>
+    <article class="wd-profile-card"><img src="<?php echo esc_url($theme_uri); ?>/assets/wdc-about-jovan.jpg" alt="Jovan Lesmana NAUI Instructor"><div><h3>Jovan Lesmana</h3><b>NAUI Instructor</b><p><?php echo esc_html(contenly_tr('Penyelam profesional Indonesia sejak 2010 dengan pengalaman penyelaman rekreasi, eksplorasi bawah laut, dan operasional diving. Aktif mempromosikan keselamatan, etika penyelaman, dan pelestarian ekosistem laut untuk generasi penyelam berikutnya.', 'Indonesian professional diver active since 2010 with experience in recreational diving, underwater exploration, and diving operations. Actively promotes safety, diving ethics, and marine ecosystem protection for future divers.')); ?></p></div></article>
+  </div></div></section>
+
+  <!-- HOW WE WORK -->
+  <section class="wd-section wdc-about-values">
+    <div class="wd-shell">
+      <span class="wd-kicker"><?php echo esc_html(contenly_tr('Nilai Kerja', 'Working Values')); ?></span>
+      <h2 class="wd-title"><?php echo esc_html(contenly_tr('Safety, integrity, continuous learning.', 'Safety, integrity, continuous learning.')); ?></h2>
+      <div class="wd-about-crew-grid">
+        <div class="wd-crew-card"><div class="wd-crew-icon">01</div><h3><?php echo esc_html(contenly_tr('Keselamatan', 'Safety')); ?></h3><span><?php echo esc_html(contenly_tr('Setiap training, trip, dan rekomendasi dipandu oleh kesiapan diver, kondisi, dan standar konservatif.', 'Every training, trip, and recommendation is guided by diver readiness, conditions, and conservative standards.')); ?></span></div>
+        <div class="wd-crew-card"><div class="wd-crew-icon">02</div><h3><?php echo esc_html(contenly_tr('Integritas', 'Integrity')); ?></h3><span><?php echo esc_html(contenly_tr('Progress diver dibangun dengan evaluasi jujur, bukan sertifikasi terburu-buru.', 'Diver progress is built through honest evaluation, not rushed certification.')); ?></span></div>
+        <div class="wd-crew-card"><div class="wd-crew-icon">03</div><h3><?php echo esc_html(contenly_tr('Pembelajaran berkelanjutan', 'Continuous learning')); ?></h3><span><?php echo esc_html(contenly_tr('WDC mendukung diver untuk terus naik level melalui edukasi, praktik, dan leadership.', 'WDC supports divers to keep improving through education, practice, and leadership.')); ?></span></div>
+        <div class="wd-crew-card"><div class="wd-crew-icon">04</div><h3><?php echo esc_html(contenly_tr('Konservasi laut', 'Marine conservation')); ?></h3><span><?php echo esc_html(contenly_tr('Kami mendorong perilaku bawah air yang bertanggung jawab dan menghormati ekosistem laut.', 'We promote responsible underwater behavior and respect for marine ecosystems.')); ?></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GET IN TOUCH -->
+  <section class="wd-section white" id="contact-form">
+    <div class="wd-shell">
+      <span class="wd-kicker"><?php echo esc_html(contenly_tr('Hubungi Kami', 'Get in Touch')); ?></span>
+      <h2 class="wd-title"><?php echo esc_html(contenly_tr('Mulai percakapan', 'Start the conversation')); ?></h2>
+      <?php if ($wd_contact_notice) : ?><div class="wd-contact-notice <?php echo esc_attr($wd_contact_notice_type); ?>" role="status"><?php echo esc_html($wd_contact_notice); ?></div><?php endif; ?>
+      <div class="wd-contact-grid">
+        <div class="wd-contact-cards">
+<div class="wd-contact-card"><strong>Email</strong><a href="mailto:info@whaledivecentre.com">info@whaledivecentre.com</a></div>
+          <div class="wd-contact-card"><strong>Phone</strong><a href="tel:+622****9068">(021) 27939068</a></div>
+          <div class="wd-contact-card"><strong><?php echo contenly_tr('Jam Operasional', 'Business Hours'); ?></strong><span><?php echo contenly_tr('Senin - Sabtu, 09:00 - 18:00 WIB. Jadwal kursus dan perjalanan dikonfirmasi berdasarkan perjanjian.', 'Monday - Saturday, 09:00 - 18:00 WIB. Course and trip schedules are confirmed by appointment.'); ?></span></div>
+          <div class="wd-contact-card"><strong><?php echo contenly_tr('Lokasi', 'Location'); ?></strong><span>Jl. Tanah Kusir II No.3, RT.10/RW.9, Kebayoran Lama Selatan, Jakarta Selatan 12240</span><a class="wd-map-link" href="https://www.google.com/maps/search/?api=1&query=Jl.%20Tanah%20Kusir%20II%20No.3%20Jakarta%20Selatan" target="_blank" rel="noopener"><?php echo contenly_tr('Buka di Google Maps', 'Open in Google Maps'); ?></a></div>
+        </div>
+        <form class="wd-contact-form" method="post">
+          <?php wp_nonce_field('wd_contact_inquiry', 'wd_contact_nonce'); ?>
+          <input type="hidden" name="wd_contact_submit" value="1">
+          <label class="wd-contact-hp" aria-hidden="true">Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+          <label><?php echo contenly_tr('Nama Anda', 'Your Name'); ?><input type="text" name="your-name" placeholder="<?php echo contenly_tr('Nama Anda', 'Your name'); ?>" required></label>
+          <label><?php echo contenly_tr('Email', 'Email'); ?><input type="email" name="email" placeholder="you@example.com"><small><?php echo contenly_tr('Gunakan email jika Anda lebih suka balasan tertulis.', 'Use email if you prefer a written reply.'); ?></small></label>
+          <label><?php echo contenly_tr('Nomor WhatsApp', 'WhatsApp Number'); ?><input type="tel" name="whatsapp" placeholder="+62..." required><small><?php echo contenly_tr('Wajib agar crew bisa membalas dalam 24 jam.', 'Required so our crew can reply within 24 hours.'); ?></small></label>
+          <label><?php echo contenly_tr('Apa yang Anda butuhkan?', 'What do you need?'); ?><select name="category"><option><?php echo contenly_tr('Pertanyaan kursus', 'Course inquiry'); ?></option><option><?php echo contenly_tr('Ketersediaan peralatan', 'Equipment availability'); ?></option><option><?php echo contenly_tr('Pertanyaan umum', 'General question'); ?></option></select></label>
+          <label><?php echo contenly_tr('Pesan', 'Message'); ?><textarea name="message" rows="4" placeholder="<?php echo contenly_tr('Ceritakan yang Anda butuhkan...', 'Tell us what you need...'); ?>"></textarea></label>
+          <p class="wd-form-privacy"><?php echo contenly_tr('Kami hanya menggunakan detail kontak Anda untuk membalas pertanyaan ini.', 'We only use your contact details to reply to this inquiry.'); ?></p><button type="submit" class="wd-btn"><?php echo esc_html(contenly_tr('Kirim Pesan', 'Send Inquiry')); ?></button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script>
+document.addEventListener('DOMContentLoaded', function(){
+  var p = new URLSearchParams(window.location.search);
+  var name = p.get('name');
+  if(name){
+    var nameInput = document.querySelector('input[name="your-name"]');
+    if(nameInput) nameInput.value = name;
+    var waInput = document.querySelector('input[name="whatsapp"]');
+    if(waInput && p.get('whatsapp')) waInput.value = p.get('whatsapp');
+    var emailInput = document.querySelector('input[name="email"]');
+    if(emailInput && p.get('email')) emailInput.value = p.get('email');
+    var msgInput = document.querySelector('textarea');
+    if(msgInput){
+      var msg = 'Course inquiry from homepage:\n';
+      if(p.get('cert')) msg += 'Certification: ' + p.get('cert') + '\n';
+      if(p.get('schedule')) msg += 'Schedule: ' + p.get('schedule') + '\n';
+      if(p.get('group')) msg += 'Group: ' + p.get('group');
+      msgInput.value = msg;
+    }
+    document.getElementById('contact-form')?.scrollIntoView({behavior:'smooth'});
+  }
+});
+</script>
+<script>document.addEventListener('DOMContentLoaded',function(){var path=location.pathname;document.querySelectorAll('.wd-menu a[data-nav]').forEach(function(a){var key=a.getAttribute('data-nav');var active=(key==='home'&&path==='/')||(key!=='home'&&path.indexOf('/'+key+'/')===0);if(active){a.classList.add('is-active');a.setAttribute('aria-current','page');}});});</script>
+  <?php get_footer(); ?>
