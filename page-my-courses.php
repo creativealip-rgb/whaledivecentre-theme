@@ -157,7 +157,7 @@ $completed_count = count($completed_courses);
   border:1px solid #e2e8f0;
   border-radius:12px;
 }
-.wdc-completed-item h3{margin:0;font-size:14px;font-weight:800;color:#0f172a;line-height:1.35}
+.wdc-completed-item h3{margin:0;font-size:13px;font-weight:600;color:#0f172a;line-height:1.35}
 .wdc-completed-item .cell{font-size:12px;color:#64748b}
 .wdc-completed-item .cell b{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;margin-bottom:2px;font-weight:800}
 .wdc-completed-item .cell span{color:#334155;font-weight:700}
