@@ -4387,8 +4387,9 @@ body.whaledive-home #courses .wd-course-body p {
     right: 0 !important;
     left: auto !important;
     bottom: 0 !important;
-    width: min(88vw, 320px) !important;
-    max-width: 320px !important;
+    width: calc(100vw - 56px) !important;
+    max-width: none !important;
+    min-width: 0 !important;
     height: 100dvh !important;
     max-height: 100dvh !important;
     margin: 0 !important;
@@ -4398,7 +4399,7 @@ body.whaledive-home #courses .wd-course-body p {
     justify-content: flex-start !important;
     gap: 0 !important;
     border: 0 !important;
-    border-radius: 20px 0 0 20px !important;
+    border-radius: 18px 0 0 18px !important;
     border-left: 1px solid rgba(150, 218, 234, .14) !important;
     background:
       radial-gradient(circle at 100% 0%, rgba(76,200,237,.14), transparent 40%),
@@ -4424,7 +4425,7 @@ body.whaledive-home #courses .wd-course-body p {
     align-items: center !important;
     justify-content: space-between !important;
     gap: 10px !important;
-    padding: calc(12px + env(safe-area-inset-top, 0px)) 14px 12px !important;
+    padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 12px !important;
     border-bottom: 1px solid rgba(255,255,255,.08) !important;
     background: rgba(255,255,255,.02) !important;
     flex: 0 0 auto !important;
@@ -4547,7 +4548,7 @@ body.whaledive-home #courses .wd-course-body p {
     display: grid !important;
     gap: 8px !important;
     margin-top: 4px !important;
-    padding: 12px 14px calc(14px + env(safe-area-inset-bottom, 0px)) !important;
+    padding: 12px 16px calc(14px + env(safe-area-inset-bottom, 0px)) !important;
     border-top: 1px solid rgba(255,255,255,.08) !important;
     background: rgba(0,0,0,.16) !important;
     flex: 0 0 auto !important;
@@ -4617,5 +4618,45 @@ body.whaledive-home #courses .wd-course-body p {
   .wd-menu:after {
     display: none !important;
     content: none !important;
+  }
+}
+
+
+/* WDC drawer width full FINAL 2026-07-11p */
+@media (max-width: 760px) {
+  body.home .wd-menu,
+  body.whaledive-home .wd-menu,
+  body.whaledive-inner .wd-menu,
+  .wd-nav .wd-menu,
+  #wd-mobile-menu {
+    width: calc(100vw - 52px) !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    right: 0 !important;
+    left: auto !important;
+    box-sizing: border-box !important;
+  }
+  #wd-mobile-menu .wd-menu-links a,
+  #wd-mobile-menu .wd-menu-panel-foot,
+  #wd-mobile-menu .wd-menu-panel-head {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  #wd-mobile-menu .wd-menu-panel-foot .wd-lang-switcher,
+  #wd-mobile-menu .wd-menu-panel-foot .gt-lang-switcher,
+  #wd-mobile-menu .wd-menu-panel-foot .wd-nav-member {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+@media (max-width: 420px) {
+  body.home .wd-menu,
+  body.whaledive-home .wd-menu,
+  body.whaledive-inner .wd-menu,
+  .wd-nav .wd-menu,
+  #wd-mobile-menu {
+    width: calc(100vw - 40px) !important;
   }
 }
