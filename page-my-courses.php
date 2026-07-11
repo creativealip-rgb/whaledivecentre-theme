@@ -161,16 +161,15 @@ $completed_count = count($completed_courses);
 .wdc-completed-item .cell-title h3{
   margin:0!important;
   font-size:14px!important;
-  font-weight:400!important;
+  font-weight:600!important;
   color:#0f172a!important;
   line-height:1.35!important;
   letter-spacing:0!important;
   font-family:inherit!important;
 }
 .wdc-completed-item .cell{font-size:12px;color:#64748b}
-.wdc-completed-item .cell b{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;margin-bottom:2px;font-weight:800}
-.wdc-completed-item .cell span{color:#334155;font-weight:700}
-.wdc-completed-item .notes{margin-top:4px;font-size:12px;color:#64748b;line-height:1.4}
+.wdc-completed-item .cell b{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;margin-bottom:2px;font-weight:700}
+.wdc-completed-item .cell span{color:#0f172a;font-weight:600}
 @media(max-width:980px){.wdc-mc-layout{grid-template-columns:1fr}}
 @media(max-width:700px){
   .wdc-completed-item{grid-template-columns:1fr 1fr;gap:8px}
@@ -241,19 +240,18 @@ $completed_count = count($completed_courses);
                     $level = (string) ($cc['level'] ?? '');
                     $date_raw = (string) ($cc['date_completed'] ?? '');
                     $cert = (string) ($cc['cert_number'] ?? '');
-                    $notes = (string) ($cc['notes'] ?? '');
                     $date_label = $date_raw;
                     if ($date_raw && preg_match('/^\d{4}-\d{2}-\d{2}$/', $date_raw)) {
                         $ts = strtotime($date_raw);
                         if ($ts) {
-                            $date_label = date_i18n('d M Y', $ts);
+                            // Prefer Indonesian month names when available.
+                            $date_label = date_i18n('j F Y', $ts);
                         }
                     }
                 ?>
                 <article class="wdc-completed-item" data-index="<?php echo (int) $idx; ?>">
                     <div class="cell-title">
                         <h3><?php echo esc_html($title); ?></h3>
-                        <?php if ($notes !== '') : ?><div class="notes"><?php echo esc_html($notes); ?></div><?php endif; ?>
                     </div>
                     <div class="cell"><b><?php echo contenly_tr('Level', 'Level'); ?></b><span><?php echo esc_html($level ?: '—'); ?></span></div>
                     <div class="cell"><b><?php echo contenly_tr('Tanggal', 'Date'); ?></b><span><?php echo esc_html($date_label ?: '—'); ?></span></div>

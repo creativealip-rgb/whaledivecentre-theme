@@ -2,7 +2,7 @@
 
 /*
 Theme Name: Whale Dive Centre Theme
-Version: 2.3.85
+Version: 2.3.86
 */
 :root{
   --black:#000;--violet:#3B44AC;--cyan:#4CC8ED;--pale:#96DAEA;--red:#C31C4A;--blue:#004A98;--white:#fff;--navy:#061a36;--ink:#0b1930;--muted:#63748a;
@@ -8059,15 +8059,21 @@ body.wm-member-app .dashboard-main .wdc-mc-side textarea{
 
 
 /* ==========================================================================
-   WDC COMPLETED COURSE TITLE 2.3.85
+   WDC COMPLETED COURSE TITLE 2.3.86
    ========================================================================== */
 body.wm-member-app .dashboard-main .wdc-completed-item h3,
 body.wm-member-app .dashboard-main .wdc-completed-item .cell-title h3{
   font-size:14px!important;
-  font-weight:400!important;
+  font-weight:600!important;
   line-height:1.35!important;
   letter-spacing:0!important;
   color:#0f172a!important;
   margin:0!important;
   font-family:var(--wdc-font)!important;
 }
+body.wm-member-app .dashboard-main .wdc-completed-item .cell span{
+  font-weight:600!important;
+  color:#0f172a!important;
+}
+body.wm-member-app .dashboard-main .wdc-completed-item .notes{display:none!important}
+
