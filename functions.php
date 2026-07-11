@@ -17,6 +17,7 @@ require_once get_template_directory() . '/admin-orders.php';
 // Load theme helper functions/tags
 require_once get_template_directory() . '/inc/template-tags.php';
 require_once get_template_directory() . '/inc/template-functions.php';
+require_once get_template_directory() . '/inc/wdc-site-content.php';
 
 /**
  * Enqueue theme styles and scripts
@@ -774,10 +775,10 @@ function contenly_render_public_footer() {
     <div class="wd-shell">
       <div class="wd-footer-top">
         <div class="wd-footer-brand">
-          <span class="wd-footer-kicker"><?php echo esc_html(contenly_tr('Siap dive?', 'Ready to dive?')); ?></span>
+          <span class="wd-footer-kicker"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('footer_kicker', contenly_tr('Siap dive?', 'Ready to dive?')) : contenly_tr('Siap dive?', 'Ready to dive?')); ?></span>
           <h2>Whale Dive Centre</h2>
-          <p><?php echo esc_html(contenly_tr('Pelatihan selam, trip komunitas, dukungan peralatan, dan pengalaman peduli laut untuk petualangan bawah air yang lebih aman.', 'Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.')); ?></p>
-          <a class="wd-btn alt" href="<?php echo $contact; ?>"><?php echo esc_html(contenly_tr('Mulai Konsultasi', 'Start Inquiry')); ?></a>
+          <p><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('footer_blurb', contenly_tr('Pelatihan selam, trip komunitas, dukungan peralatan, dan pengalaman peduli laut untuk petualangan bawah air yang lebih aman.', 'Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.')) : contenly_tr('Pelatihan selam, trip komunitas, dukungan peralatan, dan pengalaman peduli laut untuk petualangan bawah air yang lebih aman.', 'Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.')); ?></p>
+          <a class="wd-btn alt" href="<?php echo esc_url(function_exists('wdc_site_url') ? wdc_site_url(wdc_site_get('footer_cta_url', '/contact/')) : $contact); ?>"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('footer_cta_label', contenly_tr('Mulai Konsultasi', 'Start Inquiry')) : contenly_tr('Mulai Konsultasi', 'Start Inquiry')); ?></a>
         </div>
         <nav class="wd-footer-col" aria-label="<?php echo esc_attr(contenly_tr('Jelajahi', 'Explore')); ?>">
           <h3><?php echo esc_html(contenly_tr('Jelajahi', 'Explore')); ?></h3>
@@ -800,13 +801,24 @@ function contenly_render_public_footer() {
         </nav>
         <div class="wd-footer-col">
           <h3><?php echo esc_html(contenly_tr('Kontak', 'Contact')); ?></h3>
-          <p>Email: <a href="mailto:info@whaledivecentre.com">info@whaledivecentre.com</a></p>
-          <p><?php echo esc_html(contenly_tr('Telepon', 'Phone')); ?>: <a href="tel:+622127939068">(021) 27939068</a></p>
-          <p>Jl. Tanah Kusir II No.3, Kebayoran Lama, Jakarta Selatan 12240</p>
+          <?php
+          $wdc_email = function_exists('wdc_site_get') ? wdc_site_get('email') : 'info@whaledivecentre.com';
+          $wdc_phone = function_exists('wdc_site_get') ? wdc_site_get('phone') : '(021) 27939068';
+          $wdc_phone_tel = function_exists('wdc_site_get') ? wdc_site_get('phone_tel') : '+622127939068';
+          $wdc_address = function_exists('wdc_site_get') ? wdc_site_get('address') : 'Jl. Tanah Kusir II No.3, Kebayoran Lama, Jakarta Selatan 12240';
+          $wdc_hours = function_exists('wdc_site_get') ? wdc_site_get('hours') : '';
+          $wdc_ig = function_exists('wdc_site_get') ? wdc_site_get('instagram') : 'https://www.instagram.com/whaledivecentre.id/';
+          $wdc_fb = function_exists('wdc_site_get') ? wdc_site_get('facebook') : 'https://www.facebook.com/whaledive.id/';
+          $wdc_x = function_exists('wdc_site_get') ? wdc_site_get('x') : 'https://x.com/whaledivecentre';
+          ?>
+          <?php if ($wdc_email) : ?><p>Email: <a href="mailto:<?php echo esc_attr($wdc_email); ?>"><?php echo esc_html($wdc_email); ?></a></p><?php endif; ?>
+          <?php if ($wdc_phone) : ?><p><?php echo esc_html(contenly_tr('Telepon', 'Phone')); ?>: <a href="tel:<?php echo esc_attr($wdc_phone_tel ?: preg_replace('/\D+/', '', $wdc_phone)); ?>"><?php echo esc_html($wdc_phone); ?></a></p><?php endif; ?>
+          <?php if ($wdc_address) : ?><p><?php echo esc_html($wdc_address); ?></p><?php endif; ?>
+          <?php if ($wdc_hours) : ?><p><?php echo esc_html($wdc_hours); ?></p><?php endif; ?>
           <div class="wd-social">
-            <a href="https://www.instagram.com/whaledivecentre.id/" target="_blank" rel="noopener" aria-label="Instagram"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
-            <a href="https://www.facebook.com/whaledive.id/" target="_blank" rel="noopener" aria-label="Facebook"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
-            <a href="https://x.com/whaledivecentre" target="_blank" rel="noopener" aria-label="X (Twitter)"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+            <?php if ($wdc_ig) : ?><a href="<?php echo esc_url($wdc_ig); ?>" target="_blank" rel="noopener" aria-label="Instagram"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a><?php endif; ?>
+            <?php if ($wdc_fb) : ?><a href="<?php echo esc_url($wdc_fb); ?>" target="_blank" rel="noopener" aria-label="Facebook"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a><?php endif; ?>
+            <?php if ($wdc_x) : ?><a href="<?php echo esc_url($wdc_x); ?>" target="_blank" rel="noopener" aria-label="X (Twitter)"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a><?php endif; ?>
           </div>
         </div>
       </div>
