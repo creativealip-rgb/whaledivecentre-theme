@@ -4369,6 +4369,13 @@ body.whaledive-home #courses .wd-course-body p {
     visibility: visible !important;
     pointer-events: auto !important;
   }
+  /* hide header hamburger while drawer open — avoid double X */
+  body.wd-menu-open .wd-hamburger,
+  .wd-nav.wd-menu-open .wd-hamburger {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
   .wd-menu,
   .wd-nav .wd-menu,
   #wd-mobile-menu,
@@ -4442,17 +4449,32 @@ body.whaledive-home #courses .wd-course-body p {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
+    position: relative !important;
     width: 40px !important;
     height: 40px !important;
     border-radius: 12px !important;
     border: 1px solid rgba(255,255,255,.16) !important;
     background: rgba(255,255,255,.08) !important;
-    color: #fff !important;
-    font-size: 24px !important;
-    line-height: 1 !important;
+    color: transparent !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
     cursor: pointer !important;
     padding: 0 !important;
+    flex: 0 0 40px !important;
   }
+  .wd-menu-close:before,
+  .wd-menu-close:after {
+    content: "" !important;
+    position: absolute !important;
+    left: 11px !important;
+    right: 11px !important;
+    top: 50% !important;
+    height: 2px !important;
+    border-radius: 999px !important;
+    background: #fff !important;
+  }
+  .wd-menu-close:before { transform: rotate(45deg) !important; }
+  .wd-menu-close:after { transform: rotate(-45deg) !important; }
   .wd-menu-links {
     display: flex !important;
     flex-direction: column !important;
@@ -4537,7 +4559,6 @@ body.whaledive-home #courses .wd-course-body p {
     text-transform: uppercase !important;
     text-align: center !important;
   }
-  /* hide any old floating card rules that fight the drawer */
   .wd-menu:before,
   .wd-menu:after {
     display: none !important;
