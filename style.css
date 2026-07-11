@@ -4322,3 +4322,225 @@ body.whaledive-home #courses .wd-course-body p {
     font-size: 18px !important;
   }
 }
+
+
+/* WDC mobile drawer menu FINAL 2026-07-11m */
+.wd-menu-backdrop {
+  display: none;
+}
+.wd-menu-panel-head,
+.wd-menu-panel-foot,
+.wd-menu-links,
+.wd-menu-close {
+  display: contents;
+}
+@media (min-width: 761px) {
+  .wd-menu-backdrop,
+  .wd-menu-panel-head,
+  .wd-menu-close {
+    display: none !important;
+  }
+  .wd-menu-links,
+  .wd-menu-panel-foot {
+    display: contents !important;
+  }
+}
+@media (max-width: 760px) {
+  html.wd-menu-lock,
+  html.wd-menu-lock body,
+  body.wd-menu-open {
+    overflow: hidden !important;
+  }
+  .wd-menu-backdrop {
+    display: block !important;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 1090 !important;
+    background: rgba(1, 8, 19, .58) !important;
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .22s ease, visibility .22s ease;
+  }
+  body.wd-menu-open .wd-menu-backdrop,
+  .wd-nav.wd-menu-open .wd-menu-backdrop {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+  .wd-menu,
+  .wd-nav .wd-menu,
+  #wd-mobile-menu,
+  body.whaledive-home .wd-menu,
+  body.whaledive-inner .wd-menu {
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    left: auto !important;
+    bottom: 0 !important;
+    width: min(86vw, 340px) !important;
+    max-width: 340px !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    border-radius: 0 !important;
+    border: 0 !important;
+    border-left: 1px solid rgba(150, 218, 234, .18) !important;
+    background: linear-gradient(180deg, #04172d 0%, #02101f 100%) !important;
+    box-shadow: -24px 0 60px rgba(0, 0, 0, .35) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: translateX(104%) !important;
+    transition: transform .24s ease !important;
+    z-index: 1100 !important;
+    overflow: hidden !important;
+  }
+  body.wd-menu-open .wd-menu,
+  .wd-nav.wd-menu-open .wd-menu,
+  body.wd-menu-open #wd-mobile-menu,
+  .wd-menu.is-open {
+    transform: translateX(0) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+  .wd-menu-panel-head {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    padding: 16px 16px 14px !important;
+    border-bottom: 1px solid rgba(255,255,255,.08) !important;
+    flex: 0 0 auto !important;
+  }
+  .wd-menu-panel-brand {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    min-width: 0 !important;
+  }
+  .wd-menu-panel-brand img {
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 999px !important;
+    object-fit: cover !important;
+    border: 1px solid rgba(255,255,255,.16) !important;
+  }
+  .wd-menu-panel-brand span {
+    color: #fff !important;
+    font-size: 15px !important;
+    font-weight: 900 !important;
+    letter-spacing: .02em !important;
+  }
+  .wd-menu-close {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(255,255,255,.16) !important;
+    background: rgba(255,255,255,.08) !important;
+    color: #fff !important;
+    font-size: 24px !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+  }
+  .wd-menu-links {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    padding: 14px 14px 10px !important;
+    overflow-y: auto !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+  }
+  .wd-menu-links a,
+  .wd-menu .wd-menu-links a {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 14px 16px !important;
+    border-radius: 14px !important;
+    color: #fff !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    letter-spacing: .04em !important;
+    text-transform: uppercase !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    box-shadow: none !important;
+  }
+  .wd-menu-links a.is-active,
+  .wd-menu-links a[aria-current="page"] {
+    background: rgba(76,200,237,.16) !important;
+    border-color: rgba(76,200,237,.28) !important;
+    color: #96DAEA !important;
+  }
+  .wd-menu-panel-foot {
+    display: grid !important;
+    gap: 12px !important;
+    padding: 14px 16px calc(18px + env(safe-area-inset-bottom, 0px)) !important;
+    border-top: 1px solid rgba(255,255,255,.08) !important;
+    background: rgba(0,0,0,.18) !important;
+    flex: 0 0 auto !important;
+  }
+  .wd-menu-panel-foot .wd-lang-switcher,
+  .wd-menu-panel-foot .gt-lang-switcher {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 4px !important;
+    border-radius: 14px !important;
+    background: rgba(255,255,255,.06) !important;
+    border: 1px solid rgba(255,255,255,.08) !important;
+  }
+  .wd-menu-panel-foot .gt-lang-link,
+  .wd-menu-panel-foot .wd-lang-switcher a {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 40px !important;
+    border-radius: 11px !important;
+    font-weight: 900 !important;
+    color: rgba(255,255,255,.78) !important;
+    background: transparent !important;
+  }
+  .wd-menu-panel-foot .gt-lang-link.is-active,
+  .wd-menu-panel-foot .wd-lang-switcher a.is-active {
+    background: #4CC8ED !important;
+    color: #04172d !important;
+  }
+  .wd-menu-panel-foot .wd-nav-member {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    min-height: 48px !important;
+    margin: 0 !important;
+    border-radius: 14px !important;
+    background: #1abc9c !important;
+    color: #fff !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    letter-spacing: .06em !important;
+    text-transform: uppercase !important;
+    text-align: center !important;
+  }
+  /* hide any old floating card rules that fight the drawer */
+  .wd-menu:before,
+  .wd-menu:after {
+    display: none !important;
+    content: none !important;
+  }
+}

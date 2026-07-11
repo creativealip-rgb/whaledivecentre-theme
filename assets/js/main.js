@@ -27,6 +27,27 @@
     function initMobileMenu() {
         const wdcToggle = document.querySelector('.wd-hamburger');
         const wdcMenu = document.querySelector('.wd-menu');
+        const wdcNav = document.querySelector('.wd-nav');
+        const wdcBackdrop = document.querySelector('.wd-menu-backdrop');
+
+        function setWdcMenuOpen(open) {
+            if (!wdcToggle || !wdcMenu) return;
+            document.body.classList.toggle('wd-menu-open', open);
+            document.documentElement.classList.toggle('wd-menu-lock', open);
+            if (wdcNav) wdcNav.classList.toggle('wd-menu-open', open);
+            wdcMenu.classList.toggle('is-open', open);
+            wdcToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+            document.body.style.overflow = open ? 'hidden' : '';
+            if (wdcBackdrop) {
+                if (open) wdcBackdrop.removeAttribute('hidden');
+                else wdcBackdrop.setAttribute('hidden', 'hidden');
+            }
+            // clear old inline transform hacks from previous popup menu
+            wdcMenu.style.removeProperty('opacity');
+            wdcMenu.style.removeProperty('visibility');
+            wdcMenu.style.removeProperty('pointer-events');
+            wdcMenu.style.removeProperty('transform');
+        }
 
         if (wdcToggle && wdcMenu) {
             document.addEventListener('click', function(event) {
@@ -36,35 +57,22 @@
                 event.preventDefault();
                 event.stopPropagation();
                 event.stopImmediatePropagation();
-
-                const open = !document.body.classList.contains('wd-menu-open');
-                document.body.classList.toggle('wd-menu-open', open);
-                wdcMenu.classList.toggle('is-open', open);
-                if (open) {
-                    wdcMenu.style.setProperty('opacity', '1', 'important');
-                    wdcMenu.style.setProperty('visibility', 'visible', 'important');
-                    wdcMenu.style.setProperty('pointer-events', 'auto', 'important');
-                    wdcMenu.style.setProperty('transform', 'translateY(0)', 'important');
-                } else {
-                    wdcMenu.removeAttribute('style');
-                }
-                toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+                setWdcMenuOpen(!document.body.classList.contains('wd-menu-open'));
             }, true);
 
             document.addEventListener('click', function(event) {
                 if (!document.body.classList.contains('wd-menu-open')) return;
+                if (event.target.closest('[data-wd-menu-close]')) {
+                    setWdcMenuOpen(false);
+                    return;
+                }
                 if (wdcMenu.contains(event.target) || wdcToggle.contains(event.target)) return;
-                document.body.classList.remove('wd-menu-open');
-                wdcMenu.classList.remove('is-open');
-                wdcMenu.removeAttribute('style');
-                wdcToggle.setAttribute('aria-expanded', 'false');
+                setWdcMenuOpen(false);
             });
 
             wdcMenu.querySelectorAll('a').forEach(function(link) {
                 link.addEventListener('click', function() {
-                    document.body.classList.remove('wd-menu-open');
-                    wdcMenu.classList.remove('is-open');
-                    wdcToggle.setAttribute('aria-expanded', 'false');
+                    setWdcMenuOpen(false);
                 });
             });
         }
@@ -95,8 +103,12 @@
                 closeMobileMenu();
                 if (wdcToggle) {
                     document.body.classList.remove('wd-menu-open');
+                    document.documentElement.classList.remove('wd-menu-lock');
+                    document.querySelector('.wd-nav')?.classList.remove('wd-menu-open');
                     wdcMenu?.classList.remove('is-open');
                     wdcMenu?.removeAttribute('style');
+                    document.body.style.overflow = '';
+                    document.querySelector('.wd-menu-backdrop')?.setAttribute('hidden', 'hidden');
                     wdcToggle.setAttribute('aria-expanded', 'false');
                 }
             }

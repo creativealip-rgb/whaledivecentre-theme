@@ -23,7 +23,7 @@ require_once get_template_directory() . '/inc/template-functions.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.28');
+    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.29');
     wp_add_inline_style('contenly-style', '.wd-header .gt-lang-switcher{margin-right:10px!important}.wd-header .wd-nav-member{margin-left:8px!important}');
     
     // Google Fonts
@@ -45,7 +45,7 @@ function contenly_enqueue_scripts() {
     wp_add_inline_script('jquery', 'var wdcMemberAjax = ' . wp_json_encode($member_ajax_config) . ';', 'before');
     
     // Main theme JavaScript
-    wp_enqueue_script('contenly-main', get_template_directory_uri() . '/assets/js/main.js', ['jquery'], '1.0.4', true);
+    wp_enqueue_script('contenly-main', get_template_directory_uri() . '/assets/js/main.js', ['jquery'], '1.0.5', true);
     
     // Media uploader for story pages (wp_editor + image upload)
     if (is_page_template('page-cerita-kamu.php') && is_user_logged_in()) {
@@ -851,17 +851,30 @@ function contenly_render_public_header() {
         return $key === $active_key ? ' class="is-active" aria-current="page"' : '';
     };
 
-    echo '<header class="wd-header"><meta charset="utf-8"><div class="wd-shell"><div class="wd-nav">'
+    $close_label = esc_attr(contenly_tr('Tutup menu', 'Close menu'));
+    $open_label = esc_attr(contenly_tr('Buka menu', 'Open menu'));
+    $menu_label = esc_html(contenly_tr('Menu', 'Menu'));
+
+    echo '<header class="wd-header"><div class="wd-shell"><div class="wd-nav">'
         . '<a class="wd-brand" href="' . $home_url . '"><img class="wd-brand-logo" src="' . $brand_logo . '" alt="Whale Dive Centre"><span>Whale Dive Centre</span></a>'
-        . '<button class="wd-hamburger" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>'
-        . '<nav class="wd-menu" id="wd-mobile-menu">'
+        . '<button class="wd-hamburger" type="button" aria-label="' . $open_label . '" aria-expanded="false" aria-controls="wd-mobile-menu"><span></span><span></span><span></span></button>'
+        . '<div class="wd-menu-backdrop" data-wd-menu-close hidden></div>'
+        . '<nav class="wd-menu" id="wd-mobile-menu" aria-label="' . esc_attr(contenly_tr('Navigasi utama', 'Primary navigation')) . '">'
+        . '<div class="wd-menu-panel-head">'
+        . '<div class="wd-menu-panel-brand"><img src="' . $brand_logo . '" alt=""><span>' . $menu_label . '</span></div>'
+        . '<button type="button" class="wd-menu-close" data-wd-menu-close aria-label="' . $close_label . '">×</button>'
+        . '</div>'
+        . '<div class="wd-menu-links">'
         . '<a href="' . $home_url . '" data-nav="home"' . $active_class('home') . '>' . esc_html(contenly_tr('Beranda', 'Home')) . '</a>'
         . '<a href="' . $courses_url . '" data-nav="courses"' . $active_class('courses') . '>' . esc_html(contenly_tr('Kursus', 'Courses')) . '</a>'
         . '<a href="' . $equipment_url . '" data-nav="equipment"' . $active_class('equipment') . '>' . esc_html(contenly_tr('Peralatan', 'Equipment')) . '</a>'
         . '<a href="' . $about_url . '" data-nav="about"' . $active_class('about') . '>' . esc_html(contenly_tr('Tentang', 'About')) . '</a>'
         . '<a href="' . $blog_url . '" data-nav="blog"' . $active_class('blog') . '>' . esc_html(contenly_tr('Blog', 'Blog')) . '</a>'
+        . '</div>'
+        . '<div class="wd-menu-panel-foot">'
         . contenly_render_language_switcher('wd-lang-switcher')
         . '<a href="' . $member_url . '" class="wd-nav-member">' . esc_html($member_label) . '</a>'
+        . '</div>'
         . '</nav></div></div></header>';
 }
 
@@ -875,16 +888,34 @@ function wdc_public_mobile_and_call_cleanup() {
       var nav = document.querySelector('.wd-nav');
       var toggle = document.querySelector('.wd-hamburger');
       var menu = document.querySelector('.wd-menu');
+      var backdrop = document.querySelector('.wd-menu-backdrop');
+      function setMenuOpen(open){
+        if(!nav || !toggle || !menu) return;
+        document.body.classList.toggle('wd-menu-open', open);
+        nav.classList.toggle('wd-menu-open', open);
+        menu.classList.toggle('is-open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if(backdrop){
+          if(open){ backdrop.removeAttribute('hidden'); }
+          else { backdrop.setAttribute('hidden', 'hidden'); }
+        }
+        document.documentElement.classList.toggle('wd-menu-lock', open);
+        document.body.style.overflow = open ? 'hidden' : '';
+      }
       if(nav && toggle && menu){
-        toggle.addEventListener('click', function(){
-          var open = nav.classList.toggle('wd-menu-open');
-          toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        toggle.addEventListener('click', function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          setMenuOpen(!document.body.classList.contains('wd-menu-open'));
+        });
+        document.querySelectorAll('[data-wd-menu-close]').forEach(function(el){
+          el.addEventListener('click', function(){ setMenuOpen(false); });
         });
         menu.querySelectorAll('a').forEach(function(link){
-          link.addEventListener('click', function(){
-            nav.classList.remove('wd-menu-open');
-            toggle.setAttribute('aria-expanded', 'false');
-          });
+          link.addEventListener('click', function(){ setMenuOpen(false); });
+        });
+        document.addEventListener('keydown', function(e){
+          if(e.key === 'Escape') setMenuOpen(false);
         });
       }
       var callLinks = Array.prototype.slice.call(document.querySelectorAll('a[aria-label="Call Whale Dive Centre"], a[aria-label*="Call Whale Dive"]'));
