@@ -3810,3 +3810,123 @@ body.whaledive-single-course .wd-footer,
     padding-top:40px!important;
   }
 }
+
+
+/* WDC P1 CTA contrast + button system 2026-07-11 */
+/* Dark surfaces: ghost alt is hard to read. Force solid readable alts. */
+.wd-hero .wd-btn.alt,
+.home .wd-hero .wd-btn.alt,
+.whaledive-home .wd-hero .wd-btn.alt,
+.whaledive-home .wd-hero-simple .wd-btn.alt,
+.wd-footer .wd-btn.alt,
+body.whaledive-home .wd-footer .wd-btn.alt {
+  background: #ffffff !important;
+  color: #06384d !important;
+  border: 1px solid rgba(255,255,255,.92) !important;
+  box-shadow: 0 14px 30px rgba(0,0,0,.22) !important;
+  font-weight: 900 !important;
+}
+.wd-hero .wd-btn.alt:hover,
+.home .wd-hero .wd-btn.alt:hover,
+.whaledive-home .wd-hero .wd-btn.alt:hover,
+.wd-footer .wd-btn.alt:hover,
+body.whaledive-home .wd-footer .wd-btn.alt:hover {
+  background: #96DAEA !important;
+  color: #03172d !important;
+  border-color: #96DAEA !important;
+}
+
+/* Dark section end CTAs ("Lihat Semua Kursus", membership, etc.) */
+.whaledive-home .wd-dark .wd-section-cta .wd-btn,
+.whaledive-home .wd-dark .wd-section-cta .wd-btn.alt,
+.whaledive-home .wd-dark .wd-btn.alt,
+.wd-dark .wd-section-cta .wd-btn.alt {
+  background: linear-gradient(135deg, #4CC8ED, #96DAEA) !important;
+  color: #03172d !important;
+  border: 0 !important;
+  box-shadow: 0 16px 34px rgba(0,0,0,.28) !important;
+  font-weight: 900 !important;
+}
+.whaledive-home .wd-dark .wd-section-cta .wd-btn:hover,
+.whaledive-home .wd-dark .wd-section-cta .wd-btn.alt:hover,
+.wd-dark .wd-section-cta .wd-btn.alt:hover {
+  background: linear-gradient(135deg, #96DAEA, #4CC8ED) !important;
+  color: #03172d !important;
+}
+
+/* Primary stays navy solid everywhere */
+.wd-btn:not(.alt),
+.wd-mini-btn {
+  background: linear-gradient(135deg, #004A98, #3B44AC) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+
+/* Light-surface secondary: soft cyan chip, not washed ghost */
+.wd-btn.alt,
+.wd-mini-link {
+  background: #f3fbff !important;
+  color: #06384d !important;
+  border: 1px solid rgba(6,56,77,.14) !important;
+  box-shadow: none !important;
+  font-weight: 900 !important;
+}
+.wd-btn.alt:hover,
+.wd-mini-link:hover {
+  background: #e7f7fc !important;
+  color: #03172d !important;
+  border-color: rgba(11,97,124,.28) !important;
+}
+
+/* Re-assert dark exceptions after general .alt rule */
+.wd-hero .wd-btn.alt,
+.home .wd-hero .wd-btn.alt,
+.whaledive-home .wd-hero .wd-btn.alt,
+.whaledive-home .wd-hero-simple .wd-btn.alt,
+.wd-footer .wd-btn.alt,
+body.whaledive-home .wd-footer .wd-btn.alt {
+  background: #ffffff !important;
+  color: #06384d !important;
+  border: 1px solid rgba(255,255,255,.92) !important;
+  box-shadow: 0 14px 30px rgba(0,0,0,.22) !important;
+}
+.whaledive-home .wd-dark .wd-section-cta .wd-btn,
+.whaledive-home .wd-dark .wd-section-cta .wd-btn.alt,
+.whaledive-home .wd-dark .wd-btn.alt,
+.wd-dark .wd-section-cta .wd-btn.alt {
+  background: linear-gradient(135deg, #4CC8ED, #96DAEA) !important;
+  color: #03172d !important;
+  border: 0 !important;
+  box-shadow: 0 16px 34px rgba(0,0,0,.28) !important;
+}
+
+/* Avoid double arrows on card links that already include → */
+.wd-mini-link:after,
+.whaledive-equipment #equipGrid .wd-mini-link:after,
+.whaledive-home #articles .wd-mini-article .wd-article-link:after {
+  content: none !important;
+}
+
+/* Partner logo pills: no harsh white boxes */
+.whaledive-home .wd-logo-pill,
+.whaledive-home .wd-logos .wd-logo-pill {
+  background: rgba(255,255,255,.08) !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  box-shadow: none !important;
+}
+.whaledive-home .wd-logo-pill img {
+  mix-blend-mode: normal !important;
+  opacity: .95 !important;
+  filter: none !important;
+}
+
+/* Card link pills consistent */
+.whaledive-home #courses .wd-course-body a,
+.whaledive-home .wd-course-grid .wd-course-body a,
+.whaledive-home #equipment .wd-home-equip-body a,
+.whaledive-home #equipment .wd-equip-home-body a,
+.whaledive-home #articles .wd-mini-article .wd-article-link {
+  background: #f3fbff !important;
+  border: 1px solid rgba(6,56,77,.12) !important;
+  color: #06384d !important;
+}
