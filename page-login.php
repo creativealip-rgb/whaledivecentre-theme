@@ -5,14 +5,6 @@
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_head(); ?>
-<style>
-.wdc-auth-back{display:block!important;margin-bottom:18px}
-.wd-kicker{display:block!important;margin-bottom:18px}
-@media(max-width:700px){
-  .wdc-auth-back{display:block!important;color:#9ee8ff;font-size:14px;margin-bottom:14px}
-  .wd-kicker{display:none!important}
-}
-</style>
 </head>
 <body <?php body_class('whaledive-inner whaledive-login wdc-auth-page'); ?>><?php wp_body_open(); ?>
 <main class="wd-page">
@@ -30,7 +22,7 @@ if (!empty($_GET['redirect_to'])) {
     $login_redirect = home_url('/' . sanitize_title(wp_unslash($_GET['next'])) . '/');
 }
 ?>
-<input type="hidden" name="redirect_to" value="<?php echo esc_attr($login_redirect); ?>"><div class="wdc-auth-field"><label><?php echo esc_html(contenly_tr('Email atau username', 'Email or username')); ?></label><input type="text" name="log" autocomplete="username" required></div><div class="wdc-auth-field"><label><?php echo esc_html(contenly_tr('Kata Sandi', 'Password')); ?></label><div class="wd-password-wrap"><input id="wd-login-password" type="password" name="pwd" autocomplete="current-password" required><button class="wd-password-toggle" type="button" data-target="wd-login-password"><?php echo contenly_tr('Tampilkan', 'Show'); ?></button></div></div><div class="wdc-auth-row"><label><input type="checkbox" name="rememberme" value="forever"> <?php echo esc_html(contenly_tr('Ingat saya', 'Remember me')); ?></label><a href="<?php echo esc_url(wp_lostpassword_url()); ?>"><?php echo contenly_tr('Lupa?', 'Forgot?'); ?></a></div><button class="wdc-auth-submit" type="submit"><?php echo esc_html(contenly_tr('Masuk', 'Log In')); ?></button></form><p class="wdc-auth-switch"><?php echo contenly_tr('Belum punya akun?', 'Don\'t have an account?'); ?> <a href="/member-register/"><?php echo esc_html(contenly_tr('Buat akun', 'Create one')); ?></a></p></aside></div></section>
+<input type="hidden" name="redirect_to" value="<?php echo esc_attr($login_redirect); ?>"><div class="wdc-auth-field"><label><?php echo esc_html(contenly_tr('Email atau username', 'Email or username')); ?></label><input type="text" name="log" autocomplete="username" required></div><div class="wdc-auth-field"><label><?php echo esc_html(contenly_tr('Kata Sandi', 'Password')); ?></label><div class="wd-password-wrap"><input id="wd-login-password" type="password" name="pwd" autocomplete="current-password" required><button class="wd-password-toggle" type="button" data-target="wd-login-password"><?php echo contenly_tr('Tampilkan', 'Show'); ?></button></div></div><div class="wdc-auth-row"><label><input type="checkbox" name="rememberme" value="forever"> <?php echo esc_html(contenly_tr('Ingat saya', 'Remember me')); ?></label><a href="<?php echo esc_url(wp_lostpassword_url()); ?>"><?php echo contenly_tr('Lupa?', 'Forgot?'); ?></a></div><button class="wdc-auth-submit" type="submit"><?php echo esc_html(contenly_tr('Masuk', 'Log In')); ?></button></form><p class="wdc-auth-switch"><?php echo contenly_tr('Belum punya akun?', 'Don\'t have an account?'); ?> <a href="/register/"><?php echo esc_html(contenly_tr('Buat akun', 'Create one')); ?></a></p></aside></div></section>
     <?php contenly_render_public_footer(); ?>
 <script>document.addEventListener("click",function(e){var b=e.target.closest(".wd-password-toggle");if(!b)return;var i=document.getElementById(b.dataset.target);if(!i)return;var show=i.type==="password";i.type=show?"text":"password";b.textContent=show?"Hide":"Show";});</script>
 </main>
