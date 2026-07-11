@@ -23,7 +23,7 @@ require_once get_template_directory() . '/inc/template-functions.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.42');
+    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.43');
     wp_add_inline_style('contenly-style', '.wd-header .gt-lang-switcher{margin-right:10px!important}.wd-header .wd-nav-member{margin-left:8px!important}');
     
     // Google Fonts
@@ -45,7 +45,7 @@ function contenly_enqueue_scripts() {
     wp_add_inline_script('jquery', 'var wdcMemberAjax = ' . wp_json_encode($member_ajax_config) . ';', 'before');
     
     // Main theme JavaScript
-    wp_enqueue_script('contenly-main', get_template_directory_uri() . '/assets/js/main.js', ['jquery'], '1.0.5', true);
+    wp_enqueue_script('contenly-main', get_template_directory_uri() . '/assets/js/main.js', ['jquery'], '1.0.6', true);
     
     // Media uploader for story pages (wp_editor + image upload)
     if (is_page_template('page-cerita-kamu.php') && is_user_logged_in()) {
@@ -898,8 +898,14 @@ function wdc_public_mobile_and_call_cleanup() {
         menu.classList.toggle('is-open', open);
         toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
         if(backdrop){
-          if(open){ backdrop.removeAttribute('hidden'); }
-          else { backdrop.setAttribute('hidden', 'hidden'); }
+          if(open){
+            if(backdrop.parentElement !== document.body){ document.body.appendChild(backdrop); }
+            backdrop.removeAttribute('hidden');
+          } else {
+            backdrop.setAttribute('hidden', 'hidden');
+            if(menu && menu.parentElement === nav){ nav.insertBefore(backdrop, menu); }
+            else if(nav){ nav.appendChild(backdrop); }
+          }
         }
         document.documentElement.classList.toggle('wd-menu-lock', open);
         document.body.style.overflow = open ? 'hidden' : '';

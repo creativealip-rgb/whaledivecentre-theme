@@ -39,8 +39,23 @@
             wdcToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
             document.body.style.overflow = open ? 'hidden' : '';
             if (wdcBackdrop) {
-                if (open) wdcBackdrop.removeAttribute('hidden');
-                else wdcBackdrop.setAttribute('hidden', 'hidden');
+                // Reparent to <body> so full-page fixed blur is not trapped by header stacking/filter context
+                if (open) {
+                    if (wdcBackdrop.parentElement !== document.body) {
+                        wdcBackdrop.dataset.wdOrigParent = 'nav';
+                        document.body.appendChild(wdcBackdrop);
+                    }
+                    wdcBackdrop.removeAttribute('hidden');
+                } else {
+                    wdcBackdrop.setAttribute('hidden', 'hidden');
+                    var nav = document.querySelector('.wd-nav');
+                    if (nav && wdcBackdrop.parentElement === document.body) {
+                        // put back before menu for clean DOM
+                        var menu = document.querySelector('#wd-mobile-menu, .wd-menu');
+                        if (menu && menu.parentElement === nav) nav.insertBefore(wdcBackdrop, menu);
+                        else nav.appendChild(wdcBackdrop);
+                    }
+                }
             }
             // clear old inline transform hacks from previous popup menu
             wdcMenu.style.removeProperty('opacity');

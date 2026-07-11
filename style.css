@@ -4943,3 +4943,90 @@ body.whaledive-home #courses .wd-course-body p {
     flex: 0 0 38px !important;
   }
 }
+
+
+/* WDC menu open even fullpage blur FINAL 2026-07-11z
+   Root cause: .wd-header { backdrop-filter } creates a containing/stacking
+   context, so fixed .wd-menu-backdrop only "felt" over the navbar glass.
+   Fix: on menu-open, disable header glass and paint one full-viewport
+   backdrop so blur/dim is even across the whole page under the drawer.
+*/
+@media (max-width: 760px) {
+  /* Header must NOT use backdrop-filter while open (breaks fixed overlay) */
+  html body.wd-menu-open .wd-header,
+  html body.wd-menu-open.whaledive-home .wd-header,
+  html body.wd-menu-open.whaledive-inner .wd-header {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: #010c1b !important;
+    z-index: 1080 !important; /* under full-page backdrop+drawer stack managed below */
+  }
+  html body.wd-menu-open .wd-header .wd-shell,
+  html body.wd-menu-open .wd-nav,
+  html body.wd-menu-open .wd-header .wd-nav {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: #010c1b !important;
+  }
+
+  /* One even overlay for entire viewport (including under header area) */
+  html body.wd-menu-open .wd-menu-backdrop,
+  html body .wd-nav.wd-menu-open .wd-menu-backdrop {
+    display: block !important;
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    min-height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    z-index: 1090 !important;
+    background: rgba(2, 10, 22, .55) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  /* Navbar stays readable ABOVE the even overlay */
+  html body.wd-menu-open .wd-header {
+    z-index: 1105 !important;
+  }
+  html body.wd-menu-open .wd-nav,
+  html body.wd-menu-open .wd-header .wd-nav {
+    position: relative !important;
+    z-index: 1106 !important;
+    background: #010c1b !important;
+  }
+  html body.wd-menu-open .wd-brand,
+  html body.wd-menu-open .wd-brand span,
+  html body.wd-menu-open .wd-brand img,
+  html body.wd-menu-open .wd-hamburger {
+    position: relative !important;
+    z-index: 1107 !important;
+    filter: none !important;
+    opacity: 1 !important;
+  }
+  /* keep hamburger hidden while open (drawer has its own close) */
+  html body.wd-menu-open .wd-hamburger {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  /* Drawer above everything */
+  html body.wd-menu-open #wd-mobile-menu,
+  html body.wd-menu-open .wd-menu,
+  html body.wd-menu-open .wd-nav .wd-menu {
+    z-index: 1110 !important;
+  }
+}
