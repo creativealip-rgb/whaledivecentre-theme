@@ -2728,7 +2728,14 @@ function wdc_send_member_commerce_email($user_id, $subject, $message) {
 
 function wdc_send_admin_commerce_email($subject, $message) {
     $headers = ['Content-Type: text/html; charset=UTF-8'];
-    return wp_mail(get_option('admin_email'), $subject, wpautop($message), $headers);
+    $to = get_option('admin_email');
+    if (function_exists('wdc_request_notify_recipients')) {
+        $recipients = wdc_request_notify_recipients();
+        if ($recipients) {
+            $to = $recipients;
+        }
+    }
+    return wp_mail($to, $subject, wpautop($message), $headers);
 }
 
 function wdc_find_equipment_post_by_title($title) {

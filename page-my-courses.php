@@ -30,6 +30,9 @@ if ((($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') && isset($_POST['wdc_course_
             'created_at' => current_time('mysql'),
         ]);
         update_user_meta($user_id, '_wdc_course_requests', array_slice($course_requests, 0, 20));
+        if (function_exists('wdc_notify_request')) {
+            wdc_notify_request('course', $user_id, $course_requests[0]);
+        }
         $notice = contenly_tr('Permintaan kursus tersimpan. Crew akan follow-up konfirmasi jadwal.', 'Course request saved. Crew will follow up to confirm schedule.');
     } else {
         $notice = contenly_tr('Pilih kursus terlebih dahulu.', 'Please choose a course first.');

@@ -41,6 +41,11 @@ function wdc_site_defaults() {
         'hero_card_cta_url' => '/courses/',
         'reviews_kicker' => 'Dipercaya Diver',
         'reviews_title' => 'Kata Komunitas Kami',
+        'notify_emails' => '',
+        'notify_crew' => '1',
+        'notify_member' => '1',
+        'member_reply_course' => 'Terima kasih. Permintaan kursus kamu sudah kami terima. Crew Whale Dive Centre akan follow-up untuk konfirmasi jadwal.',
+        'member_reply_gear' => 'Terima kasih. Permintaan peralatan kamu sudah kami terima. Crew Whale Dive Centre akan bantu konfirmasi fitting / ketersediaan.',
     ];
 }
 
@@ -110,6 +115,7 @@ function wdc_site_admin_menu() {
     );
     add_submenu_page('wdc-site', 'Contact & Footer', 'Contact & Footer', 'manage_options', 'wdc-site', 'wdc_render_site_settings_page');
     add_submenu_page('wdc-site', 'Home Hero', 'Home Hero', 'manage_options', 'wdc-site-hero', 'wdc_render_home_hero_page');
+    add_submenu_page('wdc-site', 'Notifications', 'Notifications', 'manage_options', 'wdc-site-notify', 'wdc_render_notifications_page');
     add_submenu_page(
         'wdc-site',
         'Testimonials',
@@ -162,7 +168,23 @@ function wdc_site_save_posted_keys($keys) {
         $current = [];
     }
     foreach ($keys as $key) {
+        if (in_array($key, ['notify_crew', 'notify_member'], true)) {
+            $current[$key] = isset($_POST[$key]) ? '1' : '0';
+            continue;
+        }
         $raw = wp_unslash($_POST[$key] ?? '');
+        if ($key === 'notify_emails') {
+            $parts = preg_split('/[\s,;]+/', (string) $raw);
+            $emails = [];
+            foreach ($parts as $part) {
+                $email = sanitize_email($part);
+                if ($email && is_email($email)) {
+                    $emails[] = $email;
+                }
+            }
+            $current[$key] = implode(', ', array_values(array_unique($emails)));
+            continue;
+        }
         if (strpos($key, 'url') !== false || in_array($key, ['instagram', 'facebook', 'x', 'email'], true)) {
             $current[$key] = esc_url_raw($raw);
             if ($key === 'email') {
@@ -172,7 +194,7 @@ function wdc_site_save_posted_keys($keys) {
                 // allow relative paths
                 $current[$key] = sanitize_text_field($raw);
             }
-        } elseif (in_array($key, ['hero_title', 'hero_text', 'footer_blurb', 'hero_card_text'], true)) {
+        } elseif (in_array($key, ['hero_title', 'hero_text', 'footer_blurb', 'hero_card_text', 'member_reply_course', 'member_reply_gear'], true)) {
             $current[$key] = sanitize_textarea_field($raw);
         } else {
             $current[$key] = sanitize_text_field($raw);
@@ -404,3 +426,144 @@ function wdc_testimonial_column_content($column, $post_id) {
     }
 }
 add_action('manage_wdc_testimonial_posts_custom_column', 'wdc_testimonial_column_content', 10, 2);
+
+
+function wdc_render_notifications_page() {
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+    $keys = [
+        'notify_emails',
+        'notify_crew',
+        'notify_member',
+        'member_reply_course',
+        'member_reply_gear',
+    ];
+    $saved = false;
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $saved = wdc_site_save_posted_keys($keys);
+    }
+    echo '<div class="wrap"><h1>WDC Site — Notifications</h1>';
+    if ($saved) {
+        echo '<div class="notice notice-success is-dismissible"><p>Saved.</p></div>';
+    }
+    echo '<p>Email otomatis saat member ajukan kursus / peralatan. Kosongkan notify emails = pakai WP Admin Email + contact email.</p>';
+    echo '<form method="post">';
+    wp_nonce_field('wdc_site_save', 'wdc_site_nonce');
+    echo '<table class="form-table" role="presentation"><tbody>';
+    wdc_site_field('notify_emails', 'Crew notify emails', 'text', 'Pisah koma. Contoh: crew@whaledivecentre.com, ops@whaledivecentre.com');
+    $crew_on = wdc_site_get('notify_crew', '1') === '1';
+    $member_on = wdc_site_get('notify_member', '1') === '1';
+    echo '<tr><th scope="row">Kirim ke crew</th><td><label><input type="checkbox" name="notify_crew" value="1"' . checked($crew_on, true, false) . '> Aktifkan email ke crew saat request masuk</label></td></tr>';
+    echo '<tr><th scope="row">Auto-reply member</th><td><label><input type="checkbox" name="notify_member" value="1"' . checked($member_on, true, false) . '> Aktifkan email konfirmasi ke member</label></td></tr>';
+    wdc_site_field('member_reply_course', 'Auto-reply teks (kursus)', 'textarea');
+    wdc_site_field('member_reply_gear', 'Auto-reply teks (peralatan)', 'textarea');
+    echo '</tbody></table>';
+    submit_button('Save Notifications');
+    echo '</form></div>';
+}
+
+function wdc_request_notify_recipients() {
+    $raw = (string) wdc_site_get('notify_emails', '');
+    $emails = [];
+    if ($raw !== '') {
+        foreach (preg_split('/[\s,;]+/', $raw) as $part) {
+            $email = sanitize_email($part);
+            if ($email && is_email($email)) {
+                $emails[] = $email;
+            }
+        }
+    }
+    if (!$emails) {
+        $admin = sanitize_email((string) get_option('admin_email'));
+        if ($admin && is_email($admin)) {
+            $emails[] = $admin;
+        }
+        $contact = sanitize_email((string) wdc_site_get('email'));
+        if ($contact && is_email($contact)) {
+            $emails[] = $contact;
+        }
+    }
+    return array_values(array_unique($emails));
+}
+
+/**
+ * Notify crew + member after course/gear request is saved.
+ *
+ * @param string $type 'course'|'gear'
+ * @param int    $user_id
+ * @param array  $payload request fields
+ * @return array{crew:bool,member:bool}
+ */
+function wdc_notify_request($type, $user_id, array $payload) {
+    $type = $type === 'gear' ? 'gear' : 'course';
+    $user = get_userdata($user_id);
+    $result = ['crew' => false, 'member' => false];
+    if (!$user) {
+        return $result;
+    }
+
+    $item = $type === 'course'
+        ? (string) ($payload['course'] ?? 'Course')
+        : (string) ($payload['gear'] ?? 'Gear');
+    $display = $user->display_name ?: $user->user_login;
+    $member_email = $user->user_email ?: '-';
+    $created = (string) ($payload['created_at'] ?? current_time('mysql'));
+    $message = trim((string) ($payload['message'] ?? ''));
+
+    $lines = [
+        '<strong>New WDC ' . ($type === 'course' ? 'course' : 'equipment') . ' request</strong>',
+        'Item: <strong>' . esc_html($item) . '</strong>',
+        'Member: ' . esc_html($display) . ' (#' . (int) $user_id . ')',
+        'Email: ' . esc_html($member_email),
+        'Submitted: ' . esc_html($created),
+    ];
+    if ($type === 'course') {
+        $lines[] = 'Preferred date: ' . esc_html((string) ($payload['preferred_date'] ?: 'Flexible'));
+        $lines[] = 'Experience: ' . esc_html((string) ($payload['experience'] ?? 'Not specified'));
+        if (!empty($payload['item_id'])) {
+            $lines[] = 'Item ID: ' . (int) $payload['item_id'];
+        }
+    } else {
+        $lines[] = 'Request type: ' . esc_html((string) ($payload['request_type'] ?? 'Buy advice'));
+        $lines[] = 'Size notes: ' . esc_html((string) ($payload['size_notes'] ?: '-'));
+    }
+    $lines[] = 'Message: ' . esc_html($message !== '' ? $message : '-');
+    $lines[] = 'Open WP Admin → Users / member meta to follow up.';
+    $body = implode('<br>', $lines);
+
+    $headers = ['Content-Type: text/html; charset=UTF-8'];
+    if ($member_email && is_email($member_email)) {
+        $headers[] = 'Reply-To: ' . $display . ' <' . $member_email . '>';
+    }
+
+    if (wdc_site_get('notify_crew', '1') === '1') {
+        $recipients = wdc_request_notify_recipients();
+        if ($recipients) {
+            $subject = '[WDC] ' . ($type === 'course' ? 'Course request' : 'Gear request') . ': ' . $item;
+            $result['crew'] = (bool) wp_mail($recipients, $subject, wpautop($body), $headers);
+        }
+    }
+
+    if (wdc_site_get('notify_member', '1') === '1' && $member_email && is_email($member_email)) {
+        $reply = $type === 'course'
+            ? (string) wdc_site_get('member_reply_course')
+            : (string) wdc_site_get('member_reply_gear');
+        if ($reply === '') {
+            $reply = $type === 'course'
+                ? 'Terima kasih. Permintaan kursus kamu sudah kami terima.'
+                : 'Terima kasih. Permintaan peralatan kamu sudah kami terima.';
+        }
+        $member_body = esc_html($reply)
+            . '<br><br>Detail:<br>'
+            . 'Item: <strong>' . esc_html($item) . '</strong><br>'
+            . 'Waktu: ' . esc_html($created);
+        $subject = $type === 'course'
+            ? 'Permintaan kursus diterima — Whale Dive Centre'
+            : 'Permintaan peralatan diterima — Whale Dive Centre';
+        $result['member'] = (bool) wp_mail($member_email, $subject, wpautop($member_body), ['Content-Type: text/html; charset=UTF-8']);
+    }
+
+    return $result;
+}
+

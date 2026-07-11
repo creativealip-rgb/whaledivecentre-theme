@@ -30,6 +30,9 @@ if ((($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') && isset($_POST['wdc_gear_no
             'created_at' => current_time('mysql'),
         ]);
         update_user_meta($user_id, '_wdc_gear_requests', array_slice($gear_requests, 0, 10));
+        if (function_exists('wdc_notify_request')) {
+            wdc_notify_request('gear', $user_id, $gear_requests[0]);
+        }
         $notice = contenly_tr('Permintaan peralatan tersimpan. Kru akan membantu konfirmasi fitting dan langkah selanjutnya.', 'Gear request saved. The crew can help confirm fit and next steps.');
     } else {
         $notice = contenly_tr('Pilih peralatan terlebih dahulu.', 'Please choose gear first.');
