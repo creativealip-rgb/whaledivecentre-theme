@@ -2,7 +2,7 @@
 
 /*
 Theme Name: Whale Dive Centre Theme
-Version: 2.3.74
+Version: 2.3.75
 */
 :root{
   --black:#000;--violet:#3B44AC;--cyan:#4CC8ED;--pale:#96DAEA;--red:#C31C4A;--blue:#004A98;--white:#fff;--navy:#061a36;--ink:#0b1930;--muted:#63748a;
@@ -4415,7 +4415,7 @@ body.whaledive-home #courses .wd-course-body p {
 .wd-menu-panel-copy,
 .wd-menu-foot-label { display: contents; }
 
-@media (min-width: 761px) {
+@media (min-width: 1100px) {
   .wd-menu-backdrop,
   .wd-menu-panel-head,
   .wd-menu-close,
@@ -4426,7 +4426,7 @@ body.whaledive-home #courses .wd-course-body p {
   .wd-menu-panel-copy { display: contents !important; }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 1099.98px) {
   html.wd-menu-lock,
   html.wd-menu-lock body,
   body.wd-menu-open { overflow: hidden !important; }
@@ -7865,128 +7865,162 @@ html body.whaledive-equipment .wdc-card-cta .wd-btn.alt{
 }
 
 
-/* WDC NAV TABLET HAMBURGER (2.3.74)
-   Old hamburger only at max-width:760px.
-   Tablet 768-1100 still showed full inline menu → logo cut + crowded nav.
-   Force mobile drawer for all <=1099.98px. Desktop full menu from 1100+. */
-@media(max-width:1099.98px){
+/* WDC NAV TABLET = MOBILE DRAWER STYLE (2.3.75)
+   Reuse polished mobile drawer for all <=1099.98px.
+   This block only ensures hamburger appears and desktop inline menu dies.
+   Full panel look comes from expanded mobile drawer rules above. */
+@media (max-width: 1099.98px) {
   .wd-header .wd-nav,
-  .wd-nav{
-    padding:12px 16px!important;
-    min-height:64px!important;
-    height:auto!important;
-    gap:10px!important;
-    align-items:center!important;
+  .wd-nav {
+    padding: 12px 16px !important;
+    min-height: 64px !important;
+    height: auto !important;
+    gap: 10px !important;
+    align-items: center !important;
   }
-  .wd-brand{
-    min-width:0!important;
-    max-width:calc(100% - 64px)!important;
-    flex:1 1 auto!important;
-    overflow:hidden!important;
+  .wd-brand {
+    min-width: 0 !important;
+    max-width: calc(100% - 64px) !important;
+    flex: 1 1 auto !important;
+    overflow: hidden !important;
   }
   .wd-brand img,
-  .wd-brand-logo{
-    width:34px!important;
-    height:34px!important;
-    flex:0 0 34px!important;
+  .wd-brand-logo {
+    width: 34px !important;
+    height: 34px !important;
+    flex: 0 0 34px !important;
   }
-  .wd-brand span{
-    font-size:16px!important;
-    white-space:nowrap!important;
-    overflow:hidden!important;
-    text-overflow:ellipsis!important;
-    max-width:100%!important;
+  .wd-brand span {
+    font-size: 16px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
   }
-  .wd-hamburger{
-    display:inline-flex!important;
-    align-items:center!important;
-    justify-content:center!important;
-    flex:0 0 46px!important;
-    width:46px!important;
-    height:46px!important;
-    margin-left:auto!important;
-    position:relative!important;
-    z-index:1002!important;
-    border-radius:15px!important;
-    background:rgba(255,255,255,.12)!important;
-    border:1px solid rgba(255,255,255,.24)!important;
+  .wd-hamburger {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 44px !important;
+    width: 44px !important;
+    height: 44px !important;
+    margin-left: auto !important;
+    position: relative !important;
+    z-index: 1002 !important;
   }
-  /* Hide inline menu; open as right drawer when .wd-menu-open */
-  .wd-menu,
-  .wd-header .wd-menu{
-    position:fixed!important;
-    top:0!important;
-    right:0!important;
-    left:auto!important;
-    bottom:0!important;
-    width:min(340px,86vw)!important;
-    max-width:86vw!important;
-    height:100dvh!important;
-    margin:0!important;
-    padding:84px 18px 24px!important;
-    display:flex!important;
-    flex-direction:column!important;
-    align-items:stretch!important;
-    gap:8px!important;
-    background:rgba(1,12,27,.98)!important;
-    border:0!important;
-    border-left:1px solid rgba(255,255,255,.12)!important;
-    border-radius:0!important;
-    box-shadow:-18px 0 50px rgba(0,0,0,.35)!important;
-    opacity:0!important;
-    visibility:hidden!important;
-    transform:translateX(110%)!important;
-    transition:opacity .2s ease, transform .2s ease, visibility .2s ease!important;
-    overflow:auto!important;
-    z-index:1001!important;
-  }
-  .wd-menu-open .wd-menu,
-  .wd-header.wd-menu-open .wd-menu,
-  body.wd-menu-open .wd-menu{
-    opacity:1!important;
-    visibility:visible!important;
-    transform:translateX(0)!important;
-  }
+
+  /* Force white menu text + panel chrome on tablet (desktop link colors were leaking) */
   .wd-menu a,
-  .wd-header .wd-menu a{
-    display:flex!important;
-    width:100%!important;
-    box-sizing:border-box!important;
-    padding:14px 16px!important;
-    text-align:left!important;
-    border-radius:14px!important;
-    font-size:14px!important;
-    letter-spacing:.08em!important;
+  .wd-header .wd-menu a,
+  .wd-menu .wd-menu-links a,
+  #wd-mobile-menu .wd-menu-links a {
+    color: rgba(255,255,255,.92) !important;
+    -webkit-text-fill-color: rgba(255,255,255,.92) !important;
+    background: transparent !important;
+    text-transform: none !important;
+    letter-spacing: -.01em !important;
+    font-size: 15px !important;
+    font-weight: 750 !important;
   }
-  /* language + dashboard stay inside drawer, not cramped header */
-  .wd-menu .wd-lang,
-  .wd-menu .wd-nav-member,
-  .wd-menu .wd-btn,
-  .wd-menu > *{
-    width:100%!important;
-    max-width:100%!important;
-    margin-left:0!important;
+  .wd-menu a.is-active,
+  .wd-header .wd-menu a.is-active,
+  .wd-menu a[aria-current="page"],
+  .wd-header .wd-menu a[aria-current="page"],
+  .wd-menu-links a.is-active,
+  .wd-menu-links a[aria-current="page"] {
+    background: rgba(76,200,237,.18) !important;
+    border-color: rgba(76,200,237,.28) !important;
+    color: #e8fbff !important;
+    -webkit-text-fill-color: #e8fbff !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+  }
+  .wd-menu-panel-head,
+  .wd-menu-close,
+  .wd-menu-kicker,
+  .wd-menu-foot-label {
+    display: flex !important;
+  }
+  .wd-menu-kicker { display: block !important; }
+  .wd-menu-foot-label { display: block !important; }
+  .wd-menu-links,
+  .wd-menu-panel-foot,
+  .wd-menu-panel-copy {
+    display: flex !important;
+  }
+  .wd-menu-panel-copy { flex-direction: column !important; }
+  .wd-menu-panel-foot { display: grid !important; }
+  .wd-menu-links { flex-direction: column !important; }
+
+  /* Kill earlier crude full-height plain drawer overrides that skip panel chrome */
+  .wd-menu,
+  .wd-header .wd-menu,
+  .wd-nav .wd-menu,
+  #wd-mobile-menu {
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    left: auto !important;
+    bottom: 0 !important;
+    width: min(78vw, 300px) !important;
+    max-width: 300px !important;
+    height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    border-radius: 18px 0 0 18px !important;
+    border-left: 1px solid rgba(150,218,234,.14) !important;
+    background:
+      radial-gradient(circle at 100% 0%, rgba(76,200,237,.14), transparent 40%),
+      linear-gradient(180deg, #071b33 0%, #03111f 100%) !important;
+    box-shadow: -18px 0 50px rgba(0,0,0,.38) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateX(104%) !important;
+    overflow: hidden !important;
+    z-index: 1100 !important;
+  }
+  body.wd-menu-open .wd-menu,
+  .wd-nav.wd-menu-open .wd-menu,
+  .wd-menu-open .wd-menu,
+  body.wd-menu-open #wd-mobile-menu,
+  .wd-menu.is-open {
+    transform: translateX(0) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  .wd-menu-backdrop {
+    display: block !important;
+  }
+  body.wd-menu-open .wd-menu-backdrop,
+  .wd-nav.wd-menu-open .wd-menu-backdrop {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
   }
 }
-@media(min-width:1100px){
-  .wd-hamburger{display:none!important}
+@media (min-width: 1100px) {
+  .wd-hamburger { display: none !important; }
+  .wd-menu-backdrop { display: none !important; }
   .wd-menu,
-  .wd-header .wd-menu{
-    position:static!important;
-    width:auto!important;
-    height:auto!important;
-    max-width:none!important;
-    padding:0!important;
-    display:flex!important;
-    flex-direction:row!important;
-    align-items:center!important;
-    gap:6px!important;
-    background:transparent!important;
-    border:0!important;
-    box-shadow:none!important;
-    opacity:1!important;
-    visibility:visible!important;
-    transform:none!important;
-    overflow:visible!important;
+  .wd-header .wd-menu {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    max-width: none !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    overflow: visible !important;
   }
 }
