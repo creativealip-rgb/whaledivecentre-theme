@@ -23,7 +23,7 @@ require_once get_template_directory() . '/inc/template-functions.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.2');
+    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.3');
     wp_add_inline_style('contenly-style', '.wd-header .gt-lang-switcher{margin-right:10px!important}.wd-header .wd-nav-member{margin-left:8px!important}');
     
     // Google Fonts
@@ -2238,7 +2238,10 @@ add_action('template_redirect', function () {
         setup_postdata($post);
         $wp_query->is_404 = false;
         $wp_query->is_single = true;
+        $wp_query->is_singular = true;
+        $wp_query->is_page = false;
         $wp_query->is_home = false;
+        $wp_query->is_archive = false;
         $wp_query->posts = array($course_post);
         $wp_query->post = $course_post;
         $wp_query->post_count = 1;
@@ -2247,6 +2250,7 @@ add_action('template_redirect', function () {
         $wp_query->queried_object = $course_post;
         $wp_query->queried_object_id = $course_post->ID;
         status_header(200);
+        nocache_headers();
         include get_stylesheet_directory() . '/single-wm_course.php';
         exit;
     }
@@ -2274,6 +2278,7 @@ add_action('template_redirect', function () {
 
 /**
  * Whale Dive equipment detail pretty routes.
+ * Prefer real product singles (wm_equipment) over legacy category pages.
  */
 add_action('template_redirect', function () {
     $path = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
@@ -2284,11 +2289,50 @@ add_action('template_redirect', function () {
     }
 
     $slug = trim(substr($path, strlen('equipment/')), '/');
+    if ($slug === '' || false !== strpos($slug, '/')) {
+        return;
+    }
+
+    // Product single first: /equipment/{post_name}/
+    $equipment_post = get_page_by_path($slug, OBJECT, 'wm_equipment');
+    if ($equipment_post instanceof WP_Post) {
+        global $post, $wp_query;
+        $post = $equipment_post;
+        setup_postdata($post);
+        $wp_query->is_404 = false;
+        $wp_query->is_single = true;
+        $wp_query->is_singular = true;
+        $wp_query->is_page = false;
+        $wp_query->is_home = false;
+        $wp_query->is_archive = false;
+        $wp_query->posts = array($equipment_post);
+        $wp_query->post = $equipment_post;
+        $wp_query->post_count = 1;
+        $wp_query->found_posts = 1;
+        $wp_query->current_post = -1;
+        $wp_query->queried_object = $equipment_post;
+        $wp_query->queried_object_id = $equipment_post->ID;
+        status_header(200);
+        nocache_headers();
+        include get_stylesheet_directory() . '/single-wm_equipment.php';
+        exit;
+    }
+
+    // Legacy category detail pages only.
     if (!in_array($slug, $gear_slugs, true)) {
         return;
     }
 
     $GLOBALS['wd_equipment_slug'] = $slug;
+    global $wp_query;
+    if ($wp_query instanceof WP_Query) {
+        $wp_query->is_404 = false;
+        $wp_query->is_page = true;
+        $wp_query->is_singular = true;
+        $wp_query->is_single = false;
+        $wp_query->is_home = false;
+        $wp_query->is_archive = false;
+    }
     add_filter('pre_get_document_title', function () use ($slug) {
         $titles = array(
             'masks' => 'Masks',

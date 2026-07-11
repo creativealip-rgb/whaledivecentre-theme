@@ -1499,10 +1499,10 @@ body.whaledive-home .wd-footer{padding:78px 0 46px!important}body.whaledive-home
 
 /* --- GENERAL: shell padding mobile --- */
 @media(max-width:760px){
-  .wd-shell{padding:0 20px!important}
+  .wd-shell{padding:0 24px!important}
 }
 @media(max-width:400px){
-  .wd-shell{padding:0 16px!important}
+  .wd-shell{padding:0 20px!important}
 }
 
 
@@ -2645,35 +2645,68 @@ article.wd-mini-article::before{content:none!important;display:none!important}
 }
 .single-wm_course .wd-community .wd-sub{margin-top:10px!important;margin-bottom:18px!important}
 @media(max-width:860px){
-  .single-wm_course .wd-compact-hero{min-height:0!important;padding-top:104px!important;padding-bottom:42px!important}
-  .single-wm_course .wd-inner-grid{grid-template-columns:1fr!important;gap:24px!important}
-  .single-wm_course .wd-section.white{padding-top:42px!important;padding-bottom:48px!important}
-  .single-wm_course .wd-shell{padding:0 20px!important}
-  .single-wm_course .wd-compact-hero .wd-shell{padding:0 22px!important}
-  .single-wm_course .wd-course-hero-card{margin:0 4px!important}
-  .single-wm_course .wd-content-grid{gap:20px!important}
-  .single-wm_course .wd-course-outcomes{gap:12px!important}
-  .single-wm_course .wd-course-outcomes article{padding:16px!important}
+  .single-wm_course .wd-compact-hero,
+  body.whaledive-single-course .wd-compact-hero{min-height:0!important;padding-top:104px!important;padding-bottom:42px!important}
+  .single-wm_course .wd-inner-grid,
+  body.whaledive-single-course .wd-inner-grid{grid-template-columns:1fr!important;gap:24px!important}
+  .single-wm_course .wd-section.white,
+  body.whaledive-single-course .wd-section.white{padding-top:42px!important;padding-bottom:48px!important}
+  .single-wm_course .wd-shell,
+  body.whaledive-single-course .wd-shell,
+  .single-wm_equipment .wd-shell,
+  body.whaledive-single-equip .wd-shell{padding:0 24px!important}
+  .single-wm_course .wd-compact-hero .wd-shell,
+  body.whaledive-single-course .wd-compact-hero .wd-shell,
+  .single-wm_equipment .wd-compact-hero .wd-shell,
+  body.whaledive-single-equip .wd-compact-hero .wd-shell{padding:0 26px!important}
+  .single-wm_course .wd-course-hero-card,
+  body.whaledive-single-course .wd-course-hero-card{margin:0 4px!important}
+  .single-wm_course .wd-content-grid,
+  body.whaledive-single-course .wd-content-grid,
+  .single-wm_equipment .wd-content-grid,
+  body.whaledive-single-equip .wd-content-grid{gap:20px!important}
+  .single-wm_course .wd-course-outcomes,
+  body.whaledive-single-course .wd-course-outcomes{gap:14px!important}
+  .single-wm_course .wd-course-outcomes article,
+  body.whaledive-single-course .wd-course-outcomes article{padding:16px!important}
 }
 @media(max-width:560px){
-  .single-wm_course .wd-compact-hero{padding-top:90px!important;padding-bottom:32px!important}
-  .single-wm_course .wd-compact-hero h1{font-size:32px!important}
-  .single-wm_course .wd-shell{padding:0 16px!important}
-  .single-wm_course .wd-section.white{padding-top:32px!important;padding-bottom:40px!important}
-  .single-wm_course .wd-course-outcomes article{padding:14px!important}
-  .single-wm_course .wd-sidebar-card{padding:18px!important}
+  .single-wm_course .wd-compact-hero,
+  body.whaledive-single-course .wd-compact-hero{padding-top:90px!important;padding-bottom:32px!important}
+  .single-wm_course .wd-compact-hero h1,
+  body.whaledive-single-course .wd-compact-hero h1{font-size:32px!important}
+  .single-wm_course .wd-shell,
+  body.whaledive-single-course .wd-shell,
+  .single-wm_equipment .wd-shell,
+  body.whaledive-single-equip .wd-shell{padding:0 20px!important}
+  .single-wm_course .wd-section.white,
+  body.whaledive-single-course .wd-section.white{padding-top:32px!important;padding-bottom:40px!important}
+  .single-wm_course .wd-course-outcomes article,
+  body.whaledive-single-course .wd-course-outcomes article{padding:14px!important}
+  .single-wm_course .wd-sidebar-card,
+  body.whaledive-single-course .wd-sidebar-card,
+  .single-wm_equipment .wd-sidebar-card,
+  body.whaledive-single-equip .wd-sidebar-card{padding:18px!important}
 }
 @media(max-width:860px){
-  .single-wm_equipment .wd-shell{padding:0 20px!important}
-  .single-wm_equipment .wd-compact-hero .wd-shell{padding:0 22px!important}
-  .single-wm_equipment .wd-content-grid{gap:20px!important}
-  .single-wm_equipment .wd-course-outcomes{gap:12px!important}
-  .single-wm_equipment .wd-course-outcomes article{padding:16px!important}
+  .single-wm_equipment .wd-shell,
+  body.whaledive-single-equip .wd-shell{padding:0 24px!important}
+  .single-wm_equipment .wd-compact-hero .wd-shell,
+  body.whaledive-single-equip .wd-compact-hero .wd-shell{padding:0 26px!important}
+  .single-wm_equipment .wd-content-grid,
+  body.whaledive-single-equip .wd-content-grid{gap:20px!important}
+  .single-wm_equipment .wd-course-outcomes,
+  body.whaledive-single-equip .wd-gear-service-grid{gap:14px!important}
+  .single-wm_equipment .wd-course-outcomes article,
+  body.whaledive-single-equip .wd-gear-service-grid article{padding:16px!important}
 }
 @media(max-width:560px){
-  .single-wm_equipment .wd-shell{padding:0 16px!important}
-  .single-wm_equipment .wd-course-outcomes article{padding:14px!important}
-  .single-wm_equipment .wd-sidebar-card{padding:18px!important}
+  .single-wm_equipment .wd-shell,
+  body.whaledive-single-equip .wd-shell{padding:0 20px!important}
+  .single-wm_equipment .wd-course-outcomes article,
+  body.whaledive-single-equip .wd-gear-service-grid article{padding:14px!important}
+  .single-wm_equipment .wd-sidebar-card,
+  body.whaledive-single-equip .wd-sidebar-card{padding:18px!important}
 }
 
 /* WDC single course hero image option 1 2026-05-16 */
@@ -3102,7 +3135,7 @@ body.whaledive-single-course .wd-sidebar-note,
   .wd-menu-open .wd-hamburger:after{top:21px!important;transform:rotate(-45deg)!important}
   .wd-menu{z-index:1001!important;left:14px!important;right:14px!important;max-width:calc(100vw - 28px)!important;box-sizing:border-box!important;pointer-events:none!important}
   .wd-menu-open .wd-menu{pointer-events:auto!important}
-  .wd-shell{width:100%!important;max-width:100vw!important;box-sizing:border-box!important;padding-left:18px!important;padding-right:18px!important}
+  .wd-shell{width:100%!important;max-width:100vw!important;box-sizing:border-box!important;padding-left:24px!important;padding-right:24px!important}
   img,video,canvas,svg{max-width:100%;height:auto}
   .home #courses .wd-course-slider{width:100%!important;max-width:100vw!important;margin-left:0!important;margin-right:0!important;padding-left:0!important;padding-right:0!important;box-sizing:border-box!important}
   .home #courses .wd-course-grid{min-width:0!important;width:max-content!important;max-width:none!important}
@@ -3113,7 +3146,7 @@ body.whaledive-single-course .wd-sidebar-note,
 }
 @media(max-width:420px){
   .wd-brand span{font-size:17px!important;max-width:calc(100vw - 124px)!important}
-  .wd-shell{padding-left:16px!important;padding-right:16px!important}
+  .wd-shell{padding-left:20px!important;padding-right:20px!important}
 }
 
 /* WDC homepage mobile equipment crop guard 2026-05-16 */
@@ -3488,4 +3521,41 @@ body.whaledive-single-course .wd-sidebar-card{border-radius:24px!important}
   .wd-proof .wd-kicker{
     text-align:center!important;
   }
+}
+
+
+/* WDC local single page polish 2026-07-11 */
+body.whaledive-single-course .wd-detail-meta,
+body.whaledive-single-equip .wd-detail-meta,
+.single-wm_course .wd-detail-meta,
+.single-wm_equipment .wd-detail-meta{display:flex!important;flex-wrap:wrap!important;gap:10px!important;align-items:center!important}
+body.whaledive-single-course .wd-detail-meta span,
+body.whaledive-single-equip .wd-detail-meta span,
+.single-wm_course .wd-detail-meta span,
+.single-wm_equipment .wd-detail-meta span{display:inline-flex!important;align-items:center!important;padding:8px 12px!important;border-radius:999px!important;background:rgba(255,255,255,.14)!important;border:1px solid rgba(255,255,255,.16)!important}
+body.whaledive-single-course .wd-btn.alt,
+body.whaledive-single-equip .wd-btn.alt,
+.single-wm_course .wd-btn.alt,
+.single-wm_equipment .wd-btn.alt{background:rgba(255,255,255,.16)!important;color:#fff!important;border:1px solid rgba(255,255,255,.28)!important;box-shadow:none!important}
+body.whaledive-single-course .wd-course-hero-card,
+.single-wm_course .wd-course-hero-card{overflow:hidden!important}
+body.whaledive-single-equip .wd-compact-hero,
+.single-wm_equipment .wd-compact-hero{min-height:0!important}
+body.whaledive-single-equip .wd-inner-grid,
+.single-wm_equipment .wd-inner-grid{align-items:start!important}
+body.whaledive-single-equip .wd-single-gear-visual,
+.single-wm_equipment .wd-single-gear-visual{max-height:420px!important}
+@media(max-width:900px){
+  body.whaledive-single-course .wd-inner-grid,
+  body.whaledive-single-equip .wd-inner-grid,
+  .single-wm_course .wd-inner-grid,
+  .single-wm_equipment .wd-inner-grid,
+  body.whaledive-single-course .wd-content-grid,
+  body.whaledive-single-equip .wd-content-grid,
+  .single-wm_course .wd-content-grid,
+  .single-wm_equipment .wd-content-grid{grid-template-columns:1fr!important}
+  body.whaledive-single-course .wd-sidebar-card,
+  body.whaledive-single-equip .wd-sidebar-card,
+  .single-wm_course .wd-sidebar-card,
+  .single-wm_equipment .wd-sidebar-card{position:static!important}
 }

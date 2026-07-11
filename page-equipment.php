@@ -26,22 +26,11 @@ $categories = is_wp_error($categories) ? [] : $categories;
 $brands = get_terms(['taxonomy' => 'equipment_brand', 'hide_empty' => true]);
 $brands = is_wp_error($brands) ? [] : $brands;
 $theme_uri = get_stylesheet_directory_uri();
-function wdc_equipment_detail_slug($title, $cat_slug) {
-    $key = strtolower($title . ' ' . $cat_slug);
-    $map = [
-        'mask' => 'masks',
-        'wetsuit' => 'wetsuits',
-        'bcd' => 'bcd',
-        'regulator' => 'regulators',
-        'fin' => 'fins',
-        'computer' => 'dive-computers',
-    ];
-    foreach ($map as $needle => $slug) {
-        if (strpos($key, $needle) !== false) {
-            return $slug;
-        }
+function wdc_equipment_detail_slug($title, $cat_slug, $post_name = '') {
+    if (!empty($post_name)) {
+        return sanitize_title($post_name);
     }
-    return sanitize_title($cat_slug ?: $title);
+    return sanitize_title($title ?: $cat_slug);
 }
 function wdc_equipment_image_url($title, $cat_slug, $theme_uri) {
     $key = strtolower($title . ' ' . $cat_slug);
@@ -101,7 +90,7 @@ function wdc_equipment_image_url($title, $cat_slug, $theme_uri) {
           $cat_slug = !empty($cat_terms) ? $cat_terms[0]->slug : '';
           $cat_name = !empty($cat_terms) ? $cat_terms[0]->name : '';
           $brand_name = !empty($brand_terms) ? $brand_terms[0] : '';
-          $permalink = home_url('/equipment/' . wdc_equipment_detail_slug($item->post_title, $cat_slug) . '/');
+          $permalink = home_url('/equipment/' . wdc_equipment_detail_slug($item->post_title, $cat_slug, $item->post_name) . '/');
           $use_case = $cat_name ? 'Crew-selected ' . strtolower($cat_name) . ' for training, comfort, and safer dive habits.' : 'Crew-selected dive gear for training, comfort, and safer dive habits.';
           $image_url = get_the_post_thumbnail_url($item->ID, 'large') ?: wdc_equipment_image_url($item->post_title, $cat_slug, $theme_uri);
         ?>
