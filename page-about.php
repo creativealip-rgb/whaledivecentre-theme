@@ -16,7 +16,7 @@ if ('POST' === ($_SERVER['REQUEST_METHOD'] ?? '') && isset($_POST['wd_contact_su
     $message = sanitize_textarea_field(wp_unslash($_POST['message'] ?? ''));
 
     if ($nonce_ok && '' === $honeypot && $name && $whatsapp) {
-        $recipient = get_option('admin_email') ?: 'info@whaledivecentre.com';
+        $recipient = function_exists('wdc_contact_inquiry_recipient') ? wdc_contact_inquiry_recipient() : (get_option('admin_email') ?: 'info@whaledivecentre.com');
         $subject = 'New Whale Dive Centre inquiry - ' . ($category ?: 'General');
         $body = "Name: {$name}\nEmail: " . ($email ?: '-') . "\nWhatsApp: {$whatsapp}\nCategory: " . ($category ?: '-') . "\n\nMessage:\n" . ($message ?: '-');
         $headers = ['Content-Type: text/plain; charset=UTF-8'];
@@ -35,7 +35,7 @@ if ('POST' === ($_SERVER['REQUEST_METHOD'] ?? '') && isset($_POST['wd_contact_su
 
 if (isset($_GET['wd_contact'])) {
     if ('sent' === $_GET['wd_contact']) {
-        $wd_contact_notice = contenly_tr('Terima kasih. Pesan Anda sudah terkirim dan crew akan membalas dalam 24 jam.', 'Thank you. Your inquiry has been sent and our crew will reply within 24 hours.');
+        $wd_contact_notice = function_exists('wdc_site_get') ? wdc_site_get('contact_success', contenly_tr('Terima kasih. Pesan Anda sudah terkirim dan crew akan membalas dalam 24 jam.', 'Thank you. Your inquiry has been sent and our crew will reply within 24 hours.')) : contenly_tr('Terima kasih. Pesan Anda sudah terkirim dan crew akan membalas dalam 24 jam.', 'Thank you. Your inquiry has been sent and our crew will reply within 24 hours.');
         $wd_contact_notice_type = 'success';
     } elseif ('mail-error' === $_GET['wd_contact']) {
         $wd_contact_notice = contenly_tr('Pesan belum berhasil dikirim oleh server email. Silakan hubungi kami via telepon jika urgent.', 'The mail server could not send your inquiry yet. Please call us if urgent.');
@@ -58,10 +58,10 @@ if (isset($_GET['wd_contact'])) {
     <div class="wd-shell">
       <div class="wd-inner-grid">
         <div>
-          <span class="wd-kicker"><?php echo esc_html(contenly_tr('Tentang Whale Dive Centre', 'About Whale Dive Centre')); ?></span>
-          <h1><?php echo esc_html(contenly_tr('Kantor Pusat NAUI Indonesia untuk pelatihan selam yang aman, profesional, dan berkelas dunia.', 'NAUI Indonesia Headquarters for safe, professional, world-class dive training.')); ?></h1>
-          <p><?php echo esc_html(contenly_tr('Didirikan pada 2008 di Jakarta, WDC berfokus pada pendidikan penyelam, keselamatan, eksplorasi bawah laut, dan pengembangan profesional diving Indonesia.', 'Founded in 2008 in Jakarta, WDC focuses on diver education, safety, underwater exploration, and professional development for Indonesia’s diving community.')); ?></p>
-          <div class="wd-actions"><a class="wd-btn" href="#crew"><?php echo esc_html(contenly_tr('Kenali Tim', 'Meet the Team')); ?></a><a class="wd-btn alt" href="/courses/"><?php echo esc_html(contenly_tr('Lihat Kursus', 'View Courses')); ?></a></div>
+          <span class="wd-kicker"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('about_kicker', contenly_tr('Tentang Whale Dive Centre', 'About Whale Dive Centre')) : contenly_tr('Tentang Whale Dive Centre', 'About Whale Dive Centre')); ?></span>
+          <h1><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('about_title', contenly_tr('Kantor Pusat NAUI Indonesia untuk pelatihan selam yang aman, profesional, dan berkelas dunia.', 'NAUI Indonesia Headquarters for safe, professional, world-class dive training.')) : contenly_tr('Kantor Pusat NAUI Indonesia untuk pelatihan selam yang aman, profesional, dan berkelas dunia.', 'NAUI Indonesia Headquarters for safe, professional, world-class dive training.')); ?></h1>
+          <p><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('about_text', contenly_tr('Didirikan pada 2008 di Jakarta, WDC berfokus pada pendidikan penyelam, keselamatan, eksplorasi bawah laut, dan pengembangan profesional diving Indonesia.', 'Founded in 2008 in Jakarta, WDC focuses on diver education, safety, underwater exploration, and professional development for Indonesia’s diving community.')) : contenly_tr('Didirikan pada 2008 di Jakarta, WDC berfokus pada pendidikan penyelam, keselamatan, eksplorasi bawah laut, dan pengembangan profesional diving Indonesia.', 'Founded in 2008 in Jakarta, WDC focuses on diver education, safety, underwater exploration, and professional development for Indonesia’s diving community.')); ?></p>
+          <div class="wd-actions"><a class="wd-btn" href="<?php echo esc_url(function_exists('wdc_site_url') ? wdc_site_url(wdc_site_get('about_cta1_url', '#crew')) : '#crew'); ?>"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('about_cta1_label', contenly_tr('Kenali Tim', 'Meet the Team')) : contenly_tr('Kenali Tim', 'Meet the Team')); ?></a><a class="wd-btn alt" href="<?php echo esc_url(function_exists('wdc_site_url') ? wdc_site_url(wdc_site_get('about_cta2_url', '/courses/')) : home_url('/courses/')); ?>"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('about_cta2_label', contenly_tr('Lihat Kursus', 'View Courses')) : contenly_tr('Lihat Kursus', 'View Courses')); ?></a></div>
         </div>
       </div>
     </div>
@@ -72,11 +72,12 @@ if (isset($_GET['wd_contact'])) {
     <div class="wd-shell">
       <div class="wd-about-split">
         <div>
-          <span class="wd-kicker"><?php echo esc_html(contenly_tr('Sejak 2008', 'Since 2008')); ?></span>
-          <h2 class="wd-title"><?php echo esc_html(contenly_tr('Standar internasional. Kepemimpinan lokal. Budaya keselamatan.', 'International standards. Local leadership. Safety culture.')); ?></h2>
-          <p><?php echo esc_html(contenly_tr('Whale Dive Centre (WDC) adalah salah satu institusi penyelaman terkemuka di Indonesia yang berkantor pusat di Jakarta. WDC menghadirkan pelatihan rekreasional, profesional, dan teknis dengan standar internasional.', 'Whale Dive Centre (WDC) is one of Indonesia’s leading diving institutions headquartered in Jakarta. WDC delivers recreational, professional, and technical dive training with internationally recognized standards.')); ?></p>
-          <p><?php echo esc_html(contenly_tr('Sebagai Kantor Pusat NAUI Indonesia serta pusat yang berafiliasi dengan NAUI, TDI, dan DAN, WDC membangun kompetensi, kepercayaan diri, dan kepemimpinan bawah air melalui instruktur berpengalaman dan pembelajaran berkelanjutan.', 'As the official NAUI Indonesia Headquarters and an affiliated center of NAUI, TDI, and DAN, WDC builds competence, confidence, and leadership underwater through experienced professionals and continuous learning.')); ?></p>
+                    <span class="wd-kicker"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('about_intro_kicker', contenly_tr('Sejak 2008', 'Since 2008')) : contenly_tr('Sejak 2008', 'Since 2008')); ?></span>
+          <h2 class="wd-title"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('about_intro_title', contenly_tr('Standar internasional. Kepemimpinan lokal. Budaya keselamatan.', 'International standards. Local leadership. Safety culture.')) : contenly_tr('Standar internasional. Kepemimpinan lokal. Budaya keselamatan.', 'International standards. Local leadership. Safety culture.')); ?></h2>
+          <p><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('about_intro_p1', contenly_tr('Whale Dive Centre (WDC) adalah salah satu institusi penyelaman terkemuka di Indonesia yang berkantor pusat di Jakarta. WDC menghadirkan pelatihan rekreasional, profesional, dan teknis dengan standar internasional.', 'Whale Dive Centre (WDC) is one of Indonesia’s leading diving institutions headquartered in Jakarta. WDC delivers recreational, professional, and technical dive training with internationally recognized standards.')) : contenly_tr('Whale Dive Centre (WDC) adalah salah satu institusi penyelaman terkemuka di Indonesia yang berkantor pusat di Jakarta. WDC menghadirkan pelatihan rekreasional, profesional, dan teknis dengan standar internasional.', 'Whale Dive Centre (WDC) is one of Indonesia’s leading diving institutions headquartered in Jakarta. WDC delivers recreational, professional, and technical dive training with internationally recognized standards.')); ?></p>
+          <p><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('about_intro_p2', contenly_tr('Sebagai Kantor Pusat NAUI Indonesia serta pusat yang berafiliasi dengan NAUI, TDI, dan DAN, WDC membangun kompetensi, kepercayaan diri, dan kepemimpinan bawah air melalui instruktur berpengalaman dan pembelajaran berkelanjutan.', 'As the official NAUI Indonesia Headquarters and an affiliated center of NAUI, TDI, and DAN, WDC builds competence, confidence, and leadership underwater through experienced professionals and continuous learning.')) : contenly_tr('Sebagai Kantor Pusat NAUI Indonesia serta pusat yang berafiliasi dengan NAUI, TDI, dan DAN, WDC membangun kompetensi, kepercayaan diri, dan kepemimpinan bawah air melalui instruktur berpengalaman dan pembelajaran berkelanjutan.', 'As the official NAUI Indonesia Headquarters and an affiliated center of NAUI, TDI, and DAN, WDC builds competence, confidence, and leadership underwater through experienced professionals and continuous learning.')); ?></p>
         </div>
+
         <div class="wd-about-stat-grid">
           <div><strong>2008</strong><span><?php echo esc_html(contenly_tr('Didirikan di Jakarta', 'Founded in Jakarta')); ?></span></div>
           <div><strong>NAUI</strong><span><?php echo esc_html(contenly_tr('Kantor Pusat Indonesia', 'Indonesia Headquarters')); ?></span></div>
@@ -115,11 +116,22 @@ if (isset($_GET['wd_contact'])) {
       <h2 class="wd-title"><?php echo esc_html(contenly_tr('Mulai percakapan', 'Start the conversation')); ?></h2>
       <?php if ($wd_contact_notice) : ?><div class="wd-contact-notice <?php echo esc_attr($wd_contact_notice_type); ?>" role="status"><?php echo esc_html($wd_contact_notice); ?></div><?php endif; ?>
       <div class="wd-contact-grid">
+        <?php
+        $wdc_email = function_exists('wdc_site_get') ? wdc_site_get('email') : 'info@whaledivecentre.com';
+        $wdc_phone = function_exists('wdc_site_get') ? wdc_site_get('phone') : '(021) 27939068';
+        $wdc_phone_tel = function_exists('wdc_site_get') ? wdc_site_get('phone_tel') : '+622127939068';
+        $wdc_address = function_exists('wdc_site_get') ? wdc_site_get('address') : 'Jl. Tanah Kusir II No.3, Kebayoran Lama, Jakarta Selatan 12240';
+        $wdc_hours_note = function_exists('wdc_site_get') ? wdc_site_get('contact_hours_note') : '';
+        $wdc_map = function_exists('wdc_site_get') ? wdc_site_get('contact_map_url') : '';
+        if ($wdc_map === '') {
+          $wdc_map = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($wdc_address);
+        }
+        ?>
         <div class="wd-contact-cards">
-<div class="wd-contact-card"><strong>Email</strong><a href="mailto:info@whaledivecentre.com">info@whaledivecentre.com</a></div>
-          <div class="wd-contact-card"><strong>Phone</strong><a href="tel:+622****9068">(021) 27939068</a></div>
-          <div class="wd-contact-card"><strong><?php echo contenly_tr('Jam Operasional', 'Business Hours'); ?></strong><span><?php echo contenly_tr('Senin - Sabtu, 09:00 - 18:00 WIB. Jadwal kursus dan perjalanan dikonfirmasi berdasarkan perjanjian.', 'Monday - Saturday, 09:00 - 18:00 WIB. Course and trip schedules are confirmed by appointment.'); ?></span></div>
-          <div class="wd-contact-card"><strong><?php echo contenly_tr('Lokasi', 'Location'); ?></strong><span>Jl. Tanah Kusir II No.3, RT.10/RW.9, Kebayoran Lama Selatan, Jakarta Selatan 12240</span><a class="wd-map-link" href="https://www.google.com/maps/search/?api=1&query=Jl.%20Tanah%20Kusir%20II%20No.3%20Jakarta%20Selatan" target="_blank" rel="noopener"><?php echo contenly_tr('Buka di Google Maps', 'Open in Google Maps'); ?></a></div>
+<div class="wd-contact-card"><strong>Email</strong><a href="mailto:<?php echo esc_attr($wdc_email); ?>"><?php echo esc_html($wdc_email); ?></a></div>
+          <div class="wd-contact-card"><strong>Phone</strong><a href="tel:<?php echo esc_attr($wdc_phone_tel ?: preg_replace('/\D+/', '', $wdc_phone)); ?>"><?php echo esc_html($wdc_phone); ?></a></div>
+          <div class="wd-contact-card"><strong><?php echo contenly_tr('Jam Operasional', 'Business Hours'); ?></strong><span><?php echo esc_html($wdc_hours_note ?: contenly_tr('Senin - Sabtu, 09:00 - 18:00 WIB. Jadwal kursus dan perjalanan dikonfirmasi berdasarkan perjanjian.', 'Monday - Saturday, 09:00 - 18:00 WIB. Course and trip schedules are confirmed by appointment.')); ?></span></div>
+          <div class="wd-contact-card"><strong><?php echo contenly_tr('Lokasi', 'Location'); ?></strong><span><?php echo esc_html($wdc_address); ?></span><a class="wd-map-link" href="<?php echo esc_url($wdc_map); ?>" target="_blank" rel="noopener"><?php echo contenly_tr('Buka di Google Maps', 'Open in Google Maps'); ?></a></div>
         </div>
         <form class="wd-contact-form" method="post">
           <?php wp_nonce_field('wd_contact_inquiry', 'wd_contact_nonce'); ?>

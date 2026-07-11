@@ -16,7 +16,7 @@ if ('POST' === ($_SERVER['REQUEST_METHOD'] ?? '') && isset($_POST['wd_contact_su
     $message = sanitize_textarea_field(wp_unslash($_POST['message'] ?? ''));
 
     if ($nonce_ok && '' === $honeypot && $name && $whatsapp) {
-        $recipient = get_option('admin_email') ?: 'info@whaledivecentre.com';
+        $recipient = function_exists('wdc_contact_inquiry_recipient') ? wdc_contact_inquiry_recipient() : (get_option('admin_email') ?: 'info@whaledivecentre.com');
         $subject = 'New Whale Dive Centre inquiry - ' . ($category ?: 'General');
         $body = "Name: {$name}\nEmail: " . ($email ?: '-') . "\nWhatsApp: {$whatsapp}\nCategory: " . ($category ?: '-') . "\n\nMessage:\n" . ($message ?: '-');
         $headers = ['Content-Type: text/plain; charset=UTF-8'];
@@ -35,7 +35,7 @@ if ('POST' === ($_SERVER['REQUEST_METHOD'] ?? '') && isset($_POST['wd_contact_su
 
 if (isset($_GET['wd_contact'])) {
     if ('sent' === $_GET['wd_contact']) {
-        $wd_contact_notice = contenly_tr('Terima kasih. Pesan Anda sudah terkirim dan crew akan membalas dalam 24 jam.', 'Thank you. Your inquiry has been sent and our crew will reply within 24 hours.');
+        $wd_contact_notice = function_exists('wdc_site_get') ? wdc_site_get('contact_success', contenly_tr('Terima kasih. Pesan Anda sudah terkirim dan crew akan membalas dalam 24 jam.', 'Thank you. Your inquiry has been sent and our crew will reply within 24 hours.')) : contenly_tr('Terima kasih. Pesan Anda sudah terkirim dan crew akan membalas dalam 24 jam.', 'Thank you. Your inquiry has been sent and our crew will reply within 24 hours.');
         $wd_contact_notice_type = 'success';
     } elseif ('mail-error' === $_GET['wd_contact']) {
         $wd_contact_notice = contenly_tr('Pesan belum berhasil dikirim oleh server email. Silakan hubungi kami via telepon jika urgent.', 'The mail server could not send your inquiry yet. Please call us if urgent.');
@@ -96,30 +96,43 @@ body.whaledive-contact .wd-contact-form .wd-btn{min-height:48px;justify-content:
   <section class="wd-inner-hero">
     <div class="wd-shell wd-inner-grid">
       <div>
-        <span class="wd-kicker"><?php echo esc_html(contenly_tr('Hubungi Kami', 'Get in Touch')); ?></span>
-        <h1><?php echo esc_html(contenly_tr('Mulai percakapan dengan crew.', 'Start a conversation with the crew.')); ?></h1>
-        <p><?php echo esc_html(contenly_tr('Tanya jadwal kursus, ketersediaan peralatan, atau jalur sertifikasi. Kami balas dalam 24 jam.', 'Ask about course schedules, equipment availability, or certification pathways. We reply within 24 hours.')); ?></p>
+        <span class="wd-kicker"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('contact_kicker', contenly_tr('Hubungi Kami', 'Get in Touch')) : contenly_tr('Hubungi Kami', 'Get in Touch')); ?></span>
+        <h1><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('contact_title', contenly_tr('Mulai percakapan dengan crew.', 'Start a conversation with the crew.')) : contenly_tr('Mulai percakapan dengan crew.', 'Start a conversation with the crew.')); ?></h1>
+        <p><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('contact_text', contenly_tr('Tanya jadwal kursus, ketersediaan peralatan, atau jalur sertifikasi. Kami balas dalam 24 jam.', 'Ask about course schedules, equipment availability, or certification pathways. We reply within 24 hours.')) : contenly_tr('Tanya jadwal kursus, ketersediaan peralatan, atau jalur sertifikasi. Kami balas dalam 24 jam.', 'Ask about course schedules, equipment availability, or certification pathways. We reply within 24 hours.')); ?></p>
       </div>
     </div>
   </section>
 
   <section class="wd-section white" id="contact-form">
     <div class="wd-shell">
-      <span class="wd-kicker"><?php echo esc_html(contenly_tr('Hubungi Kami', 'Get in Touch')); ?></span>
-      <h2 class="wd-title"><?php echo esc_html(contenly_tr('Mulai percakapan', 'Start the conversation')); ?></h2>
+      <span class="wd-kicker"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('contact_form_kicker', contenly_tr('Hubungi Kami', 'Get in Touch')) : contenly_tr('Hubungi Kami', 'Get in Touch')); ?></span>
+      <h2 class="wd-title"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('contact_form_title', contenly_tr('Mulai percakapan', 'Start the conversation')) : contenly_tr('Mulai percakapan', 'Start the conversation')); ?></h2>
       <?php if ($wd_contact_notice) : ?>
         <div class="wd-contact-notice <?php echo esc_attr($wd_contact_notice_type); ?>" role="status"><?php echo esc_html($wd_contact_notice); ?></div>
       <?php endif; ?>
       <div class="wd-contact-grid">
+        <?php
+        $wdc_email = function_exists('wdc_site_get') ? wdc_site_get('email') : 'info@whaledivecentre.com';
+        $wdc_phone = function_exists('wdc_site_get') ? wdc_site_get('phone') : '(021) 27939068';
+        $wdc_phone_tel = function_exists('wdc_site_get') ? wdc_site_get('phone_tel') : '+622127939068';
+        $wdc_address = function_exists('wdc_site_get') ? wdc_site_get('address') : 'Jl. Tanah Kusir II No.3, Kebayoran Lama, Jakarta Selatan 12240';
+        $wdc_hours_note = function_exists('wdc_site_get') ? wdc_site_get('contact_hours_note') : '';
+        $wdc_map = function_exists('wdc_site_get') ? wdc_site_get('contact_map_url') : '';
+        if ($wdc_map === '') {
+          $wdc_map = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($wdc_address);
+        }
+        ?>
         <div class="wd-contact-cards">
-          <div class="wd-contact-card"><strong>Email</strong><a href="mailto:info@whaledivecentre.com">info@whaledivecentre.com</a></div>
-          <div class="wd-contact-card"><strong><?php echo esc_html(contenly_tr('Telepon', 'Phone')); ?></strong><a href="tel:+622127939068">(021) 27939068</a></div>
-          <div class="wd-contact-card"><strong><?php echo esc_html(contenly_tr('Jam Operasional', 'Business Hours')); ?></strong><span><?php echo esc_html(contenly_tr('Senin - Sabtu, 09:00 - 18:00 WIB. Jadwal kursus dan perjalanan dikonfirmasi berdasarkan perjanjian.', 'Monday - Saturday, 09:00 - 18:00 WIB. Course and trip schedules are confirmed by appointment.')); ?></span></div>
+          <?php if ($wdc_email) : ?><div class="wd-contact-card"><strong>Email</strong><a href="mailto:<?php echo esc_attr($wdc_email); ?>"><?php echo esc_html($wdc_email); ?></a></div><?php endif; ?>
+          <?php if ($wdc_phone) : ?><div class="wd-contact-card"><strong><?php echo esc_html(contenly_tr('Telepon', 'Phone')); ?></strong><a href="tel:<?php echo esc_attr($wdc_phone_tel ?: preg_replace('/\D+/', '', $wdc_phone)); ?>"><?php echo esc_html($wdc_phone); ?></a></div><?php endif; ?>
+          <?php if ($wdc_hours_note) : ?><div class="wd-contact-card"><strong><?php echo esc_html(contenly_tr('Jam Operasional', 'Business Hours')); ?></strong><span><?php echo esc_html($wdc_hours_note); ?></span></div><?php endif; ?>
+          <?php if ($wdc_address) : ?>
           <div class="wd-contact-card">
             <strong><?php echo esc_html(contenly_tr('Lokasi', 'Location')); ?></strong>
-            <span>Jl. Tanah Kusir II No.3, RT.10/RW.9, Kebayoran Lama Selatan, Jakarta Selatan 12240</span>
-            <a class="wd-map-link" href="https://www.google.com/maps/search/?api=1&query=Jl.%20Tanah%20Kusir%20II%20No.3%20Jakarta%20Selatan" target="_blank" rel="noopener"><?php echo esc_html(contenly_tr('Buka di Google Maps', 'Open in Google Maps')); ?></a>
+            <span><?php echo esc_html($wdc_address); ?></span>
+            <a class="wd-map-link" href="<?php echo esc_url($wdc_map); ?>" target="_blank" rel="noopener"><?php echo esc_html(contenly_tr('Buka di Google Maps', 'Open in Google Maps')); ?></a>
           </div>
+          <?php endif; ?>
         </div>
 
         <form class="wd-contact-form" method="post">

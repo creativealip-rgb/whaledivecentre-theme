@@ -46,6 +46,28 @@ function wdc_site_defaults() {
         'notify_member' => '1',
         'member_reply_course' => 'Terima kasih. Permintaan kursus kamu sudah kami terima. Crew Whale Dive Centre akan follow-up untuk konfirmasi jadwal.',
         'member_reply_gear' => 'Terima kasih. Permintaan peralatan kamu sudah kami terima. Crew Whale Dive Centre akan bantu konfirmasi fitting / ketersediaan.',
+        'trust_text' => 'Gerbang kamu ke dunia bawah laut. Kami menggabungkan pelatihan selam profesional, peralatan berkualitas, bimbingan grup kecil, dan semangat konservasi laut.',
+        'trust_label' => 'Dipercaya oleh',
+        'partners' => "NAUI|naui.webp\nTDI|tdi.webp\nDAN|dan.webp\n---\nSherwood Scuba|sherwood.webp\nZeagle|zeagle.webp\nWaterproof|waterproof.webp\nShearwater Research|shearwater.webp\nBARE|bare.webp",
+        'about_kicker' => 'Tentang Whale Dive Centre',
+        'about_title' => 'Kantor Pusat NAUI Indonesia untuk pelatihan selam yang aman, profesional, dan berkelas dunia.',
+        'about_text' => 'Didirikan pada 2008 di Jakarta, WDC berfokus pada pendidikan penyelam, keselamatan, eksplorasi bawah laut, dan pengembangan profesional diving Indonesia.',
+        'about_cta1_label' => 'Kenali Tim',
+        'about_cta1_url' => '#crew',
+        'about_cta2_label' => 'Lihat Kursus',
+        'about_cta2_url' => '/courses/',
+        'about_intro_kicker' => 'Sejak 2008',
+        'about_intro_title' => 'Standar internasional. Kepemimpinan lokal. Budaya keselamatan.',
+        'about_intro_p1' => 'Whale Dive Centre (WDC) adalah salah satu institusi penyelaman terkemuka di Indonesia yang berkantor pusat di Jakarta. WDC menghadirkan pelatihan rekreasional, profesional, dan teknis dengan standar internasional.',
+        'about_intro_p2' => 'Sebagai Kantor Pusat NAUI Indonesia serta pusat yang berafiliasi dengan NAUI, TDI, dan DAN, WDC membangun kompetensi, kepercayaan diri, dan kepemimpinan bawah air melalui instruktur berpengalaman dan pembelajaran berkelanjutan.',
+        'contact_kicker' => 'Hubungi Kami',
+        'contact_title' => 'Mulai percakapan dengan crew.',
+        'contact_text' => 'Tanya jadwal kursus, ketersediaan peralatan, atau jalur sertifikasi. Kami balas dalam 24 jam.',
+        'contact_form_kicker' => 'Hubungi Kami',
+        'contact_form_title' => 'Mulai percakapan',
+        'contact_success' => 'Terima kasih. Pesan Anda sudah terkirim dan crew akan membalas dalam 24 jam.',
+        'contact_map_url' => 'https://www.google.com/maps/search/?api=1&query=Jl.%20Tanah%20Kusir%20II%20No.3%20Jakarta%20Selatan',
+        'contact_hours_note' => 'Senin - Sabtu, 09:00 - 18:00 WIB. Jadwal kursus dan perjalanan dikonfirmasi berdasarkan perjanjian.',
     ];
 }
 
@@ -73,7 +95,11 @@ function wdc_site_url($path) {
     if ($path === '') {
         return home_url('/');
     }
-    if (preg_match('#^https?://#i', $path)) {
+    if (preg_match('#^https?://#i', $path) || str_starts_with($path, 'mailto:') || str_starts_with($path, 'tel:')) {
+        return $path;
+    }
+    // In-page anchors stay as-is.
+    if (str_starts_with($path, '#')) {
         return $path;
     }
     return home_url('/' . ltrim($path, '/'));
@@ -116,6 +142,9 @@ function wdc_site_admin_menu() {
     add_submenu_page('wdc-site', 'Contact & Footer', 'Contact & Footer', 'manage_options', 'wdc-site', 'wdc_render_site_settings_page');
     add_submenu_page('wdc-site', 'Home Hero', 'Home Hero', 'manage_options', 'wdc-site-hero', 'wdc_render_home_hero_page');
     add_submenu_page('wdc-site', 'Notifications', 'Notifications', 'manage_options', 'wdc-site-notify', 'wdc_render_notifications_page');
+    add_submenu_page('wdc-site', 'About Page', 'About Page', 'manage_options', 'wdc-site-about', 'wdc_render_about_page');
+    add_submenu_page('wdc-site', 'Contact Page', 'Contact Page', 'manage_options', 'wdc-site-contact', 'wdc_render_contact_page');
+    add_submenu_page('wdc-site', 'Partners / Trust', 'Partners / Trust', 'manage_options', 'wdc-site-partners', 'wdc_render_partners_page');
     add_submenu_page(
         'wdc-site',
         'Testimonials',
@@ -190,12 +219,20 @@ function wdc_site_save_posted_keys($keys) {
             if ($key === 'email') {
                 $current[$key] = sanitize_email($raw);
             }
-            if (in_array($key, ['hero_cta1_url', 'hero_cta2_url', 'hero_card_cta_url', 'footer_cta_url'], true)) {
+            if (in_array($key, ['hero_cta1_url', 'hero_cta2_url', 'hero_card_cta_url', 'footer_cta_url', 'about_cta1_url', 'about_cta2_url'], true)) {
                 // allow relative paths
                 $current[$key] = sanitize_text_field($raw);
             }
-        } elseif (in_array($key, ['hero_title', 'hero_text', 'footer_blurb', 'hero_card_text', 'member_reply_course', 'member_reply_gear'], true)) {
+        } elseif (in_array($key, [
+            'hero_title', 'hero_text', 'footer_blurb', 'hero_card_text',
+            'member_reply_course', 'member_reply_gear',
+            'trust_text', 'partners',
+            'about_title', 'about_text', 'about_intro_title', 'about_intro_p1', 'about_intro_p2',
+            'contact_title', 'contact_text', 'contact_success', 'contact_hours_note',
+        ], true)) {
             $current[$key] = sanitize_textarea_field($raw);
+        } elseif ($key === 'contact_map_url') {
+            $current[$key] = esc_url_raw($raw) ?: sanitize_text_field($raw);
         } else {
             $current[$key] = sanitize_text_field($raw);
         }
@@ -565,5 +602,185 @@ function wdc_notify_request($type, $user_id, array $payload) {
     }
 
     return $result;
+}
+
+
+function wdc_render_about_page() {
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+    $keys = [
+        'about_kicker', 'about_title', 'about_text',
+        'about_cta1_label', 'about_cta1_url', 'about_cta2_label', 'about_cta2_url',
+        'about_intro_kicker', 'about_intro_title', 'about_intro_p1', 'about_intro_p2',
+    ];
+    $saved = false;
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $saved = wdc_site_save_posted_keys($keys);
+    }
+    echo '<div class="wrap"><h1>WDC Site — About Page</h1>';
+    if ($saved) {
+        echo '<div class="notice notice-success is-dismissible"><p>Saved.</p></div>';
+    }
+    echo '<p>Edit hero + intro About. Crew profiles tetap di template (foto/nama fixed dulu).</p>';
+    echo '<form method="post">';
+    wp_nonce_field('wdc_site_save', 'wdc_site_nonce');
+    echo '<table class="form-table" role="presentation"><tbody>';
+    wdc_site_field('about_kicker', 'Hero kicker');
+    wdc_site_field('about_title', 'Hero title', 'textarea');
+    wdc_site_field('about_text', 'Hero text', 'textarea');
+    wdc_site_field('about_cta1_label', 'CTA 1 label');
+    wdc_site_field('about_cta1_url', 'CTA 1 URL', 'text', 'Boleh #crew atau /courses/');
+    wdc_site_field('about_cta2_label', 'CTA 2 label');
+    wdc_site_field('about_cta2_url', 'CTA 2 URL');
+    wdc_site_field('about_intro_kicker', 'Intro kicker');
+    wdc_site_field('about_intro_title', 'Intro title', 'textarea');
+    wdc_site_field('about_intro_p1', 'Intro paragraph 1', 'textarea');
+    wdc_site_field('about_intro_p2', 'Intro paragraph 2', 'textarea');
+    echo '</tbody></table>';
+    submit_button('Save About Page');
+    echo '</form>';
+    echo '<p><a class="button" href="' . esc_url(home_url('/about/')) . '" target="_blank" rel="noopener">Preview About</a></p>';
+    echo '</div>';
+}
+
+function wdc_render_contact_page() {
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+    $keys = [
+        'contact_kicker', 'contact_title', 'contact_text',
+        'contact_form_kicker', 'contact_form_title',
+        'contact_success', 'contact_map_url', 'contact_hours_note',
+    ];
+    $saved = false;
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $saved = wdc_site_save_posted_keys($keys);
+    }
+    echo '<div class="wrap"><h1>WDC Site — Contact Page</h1>';
+    if ($saved) {
+        echo '<div class="notice notice-success is-dismissible"><p>Saved.</p></div>';
+    }
+    echo '<p>Copy halaman Contact. Email/phone/alamat ambil dari Contact & Footer.</p>';
+    echo '<form method="post">';
+    wp_nonce_field('wdc_site_save', 'wdc_site_nonce');
+    echo '<table class="form-table" role="presentation"><tbody>';
+    wdc_site_field('contact_kicker', 'Hero kicker');
+    wdc_site_field('contact_title', 'Hero title', 'textarea');
+    wdc_site_field('contact_text', 'Hero text', 'textarea');
+    wdc_site_field('contact_form_kicker', 'Form section kicker');
+    wdc_site_field('contact_form_title', 'Form section title');
+    wdc_site_field('contact_success', 'Success message', 'textarea');
+    wdc_site_field('contact_hours_note', 'Business hours note', 'textarea', 'Tampil di kartu jam operasional Contact');
+    wdc_site_field('contact_map_url', 'Google Maps URL', 'url');
+    echo '</tbody></table>';
+    submit_button('Save Contact Page');
+    echo '</form>';
+    echo '<p><a class="button" href="' . esc_url(home_url('/contact/')) . '" target="_blank" rel="noopener">Preview Contact</a></p>';
+    echo '</div>';
+}
+
+function wdc_render_partners_page() {
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+    $keys = ['trust_text', 'trust_label', 'partners'];
+    $saved = false;
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $saved = wdc_site_save_posted_keys($keys);
+    }
+    echo '<div class="wrap"><h1>WDC Site — Partners / Trust</h1>';
+    if ($saved) {
+        echo '<div class="notice notice-success is-dismissible"><p>Saved.</p></div>';
+    }
+    echo '<p>Teks trust bar homepage + daftar partner logo. Format partners: <code>Nama|filename.webp</code> per baris. Baris <code>---</code> = baris logo baru. File harus ada di <code>assets/partners/</code>.</p>';
+    echo '<form method="post">';
+    wp_nonce_field('wdc_site_save', 'wdc_site_nonce');
+    echo '<table class="form-table" role="presentation"><tbody>';
+    wdc_site_field('trust_text', 'Trust bar text', 'textarea');
+    wdc_site_field('trust_label', 'Trust label');
+    wdc_site_field('partners', 'Partner logos', 'textarea', 'Contoh: NAUI|naui.webp');
+    echo '</tbody></table>';
+    submit_button('Save Partners / Trust');
+    echo '</form>';
+    $files = [];
+    $dir = get_template_directory() . '/assets/partners';
+    if (is_dir($dir)) {
+        foreach (scandir($dir) as $f) {
+            if ($f === '.' || $f === '..') continue;
+            if (preg_match('/\.(webp|png|jpg|jpeg|svg)$/i', $f)) {
+                $files[] = $f;
+            }
+        }
+    }
+    if ($files) {
+        echo '<h2>Files di assets/partners</h2><p style="max-width:720px">' . esc_html(implode(', ', $files)) . '</p>';
+    }
+    echo '</div>';
+}
+
+/**
+ * Parse partner list into rows of items.
+ * @return array<int, array<int, array{name:string,file:string}>>
+ */
+function wdc_get_partner_rows() {
+    $raw = (string) wdc_site_get('partners', '');
+    $rows = [[]];
+    $ri = 0;
+    foreach (preg_split('/\r\n|\r|\n/', $raw) as $line) {
+        $line = trim($line);
+        if ($line === '') {
+            continue;
+        }
+        if ($line === '---') {
+            if (!empty($rows[$ri])) {
+                $ri++;
+                $rows[$ri] = [];
+            }
+            continue;
+        }
+        $parts = array_map('trim', explode('|', $line, 2));
+        $name = $parts[0] ?? '';
+        $file = $parts[1] ?? '';
+        if ($name === '' || $file === '') {
+            continue;
+        }
+        // prevent path traversal
+        $file = basename(str_replace(['\\', '..'], '', $file));
+        if ($file === '') {
+            continue;
+        }
+        $rows[$ri][] = ['name' => $name, 'file' => $file];
+    }
+    // drop empty trailing
+    $rows = array_values(array_filter($rows, function ($r) { return !empty($r); }));
+    if (!$rows) {
+        $rows = [[
+            ['name' => 'NAUI', 'file' => 'naui.webp'],
+            ['name' => 'TDI', 'file' => 'tdi.webp'],
+            ['name' => 'DAN', 'file' => 'dan.webp'],
+        ], [
+            ['name' => 'Sherwood Scuba', 'file' => 'sherwood.webp'],
+            ['name' => 'Zeagle', 'file' => 'zeagle.webp'],
+            ['name' => 'Waterproof', 'file' => 'waterproof.webp'],
+            ['name' => 'Shearwater Research', 'file' => 'shearwater.webp'],
+            ['name' => 'BARE', 'file' => 'bare.webp'],
+        ]];
+    }
+    return $rows;
+}
+
+function wdc_contact_inquiry_recipient() {
+    if (function_exists('wdc_request_notify_recipients')) {
+        $list = wdc_request_notify_recipients();
+        if ($list) {
+            return $list;
+        }
+    }
+    $email = function_exists('wdc_site_get') ? sanitize_email((string) wdc_site_get('email')) : '';
+    if ($email && is_email($email)) {
+        return $email;
+    }
+    return get_option('admin_email') ?: 'info@whaledivecentre.com';
 }
 
