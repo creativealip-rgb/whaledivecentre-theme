@@ -519,6 +519,52 @@ if (is_array($gw_order) && !empty($gw_order['order_id']) && function_exists('wdc
     </article>
 </div>
 
+<?php
+// Latest Informasi (same feed as /informasi/)
+$wdc_dash_infos = get_posts([
+    'post_type' => 'wdc_info',
+    'posts_per_page' => 5,
+    'post_status' => 'publish',
+    'orderby' => 'date',
+    'order' => 'DESC',
+]);
+$wdc_info_colors = [
+    '1st Giveaway' => ['#ecfdf5', '#166534'],
+    'Event' => ['#eff6ff', '#1e40af'],
+    'Trip' => ['#fff7ed', '#9a3412'],
+    'Update NAUI/WDC/TDI/DAN' => ['#f5f3ff', '#6d28d9'],
+];
+if ($wdc_dash_infos) :
+?>
+<section style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:18px;margin-bottom:24px;box-shadow:0 8px 24px rgba(15,23,42,.04);">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+        <h2 style="font-size:18px;font-weight:900;color:#0f172a;margin:0;"><?php echo contenly_tr('Informasi Terbaru', 'Latest Information'); ?></h2>
+        <a href="<?php echo esc_url(contenly_localized_url('/informasi/')); ?>" style="font-size:13px;font-weight:800;color:#004A98;text-decoration:none;"><?php echo contenly_tr('Lihat semua', 'View all'); ?> →</a>
+    </div>
+    <div style="display:grid;gap:0;border:1px solid #eef2f6;border-radius:12px;overflow:hidden;">
+        <?php foreach ($wdc_dash_infos as $idx => $info_post) :
+            $types = wp_get_post_terms($info_post->ID, 'info_type', ['fields' => 'names']);
+            $type_name = !is_wp_error($types) && $types ? $types[0] : 'Info';
+            $colors = $wdc_info_colors[$type_name] ?? ['#f8fafc', '#475569'];
+            $border = $idx > 0 ? 'border-top:1px solid #eef2f6;' : '';
+            $excerpt = $info_post->post_excerpt ?: wp_trim_words(wp_strip_all_tags($info_post->post_content), 14, '…');
+            $excerpt = wp_trim_words(wp_strip_all_tags($excerpt), 14, '…');
+        ?>
+        <a href="<?php echo esc_url(get_permalink($info_post)); ?>" style="display:flex;gap:12px;align-items:flex-start;padding:12px 14px;text-decoration:none;color:inherit;background:#fff;<?php echo $border; ?>">
+            <div style="flex:1;min-width:0;">
+                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:3px;">
+                    <span style="display:inline-block;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:<?php echo esc_attr($colors[1]); ?>;background:<?php echo esc_attr($colors[0]); ?>;border-radius:999px;padding:3px 8px;"><?php echo esc_html($type_name); ?></span>
+                    <span style="font-size:12px;color:#94a3b8;"><?php echo esc_html(get_the_date('', $info_post)); ?></span>
+                </div>
+                <div style="font-size:14px;font-weight:800;color:#0f172a;line-height:1.35;"><?php echo esc_html(get_the_title($info_post)); ?></div>
+                <?php if ($excerpt) : ?><div style="font-size:12px;color:#64748b;line-height:1.45;margin-top:3px;"><?php echo esc_html($excerpt); ?></div><?php endif; ?>
+            </div>
+            <span style="flex-shrink:0;font-size:12px;font-weight:800;color:#004A98;">→</span>
+        </a>
+        <?php endforeach; ?>
+    </div>
+</section>
+<?php endif; ?>
 
 <?php
 $recent_activity = array_slice(array_merge($course_orders, $gear_orders, $course_requests, $gear_requests), 0, 5);
