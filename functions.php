@@ -25,7 +25,7 @@ require_once get_template_directory() . '/inc/wdc-catalog-helpers.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.63');
+    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.64');
     wp_add_inline_style('contenly-style', '.wd-header .gt-lang-switcher{margin-right:10px!important}.wd-header .wd-nav-member{margin-left:8px!important}');
     
     // Google Fonts
@@ -1017,6 +1017,9 @@ function contenly_render_language_switcher($class = '') {
 
 
 function contenly_render_public_footer() {
+    if (is_page(['login', 'member-login', 'register', 'member-register']) || is_page_template(['page-login.php', 'page-register.php'])) {
+        return;
+    }
     $home = esc_url(home_url('/'));
     $courses = esc_url(home_url('/courses/'));
     $equipment = esc_url(home_url('/equipment/'));
@@ -1089,6 +1092,10 @@ function contenly_render_public_footer() {
 }
 
 function contenly_render_public_header() {
+    // Auth pages stay chrome-free (clean login/register).
+    if (is_page(['login', 'member-login', 'register', 'member-register']) || is_page_template(['page-login.php', 'page-register.php'])) {
+        return;
+    }
     if (is_user_logged_in() && !headers_sent()) {
         nocache_headers();
     }
