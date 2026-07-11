@@ -127,70 +127,62 @@ $wa_url = 'https://wa.me/' . $wa_digits . '?text=' . rawurlencode($wa_text);
 @media(max-width:760px){.wdc-gear-cta-grid{grid-template-columns:1fr}}
 </style>
 
-<section style="margin-bottom:8px;">
-    <h2 class="wdc-section-title" style="margin:0 0 12px;"><?php echo contenly_tr('Peralatan', 'Gear'); ?></h2>
-    <div class="wdc-gear-cta-grid">
-        <a class="wdc-gear-cta" href="<?php echo esc_url($equipment_url); ?>">
-            <div class="wdc-gear-cta-kicker"><?php echo contenly_tr('Katalog', 'Catalog'); ?></div>
-            <h2><?php echo contenly_tr('Lihat Peralatan', 'Browse Equipment'); ?></h2>
-            <p><?php echo contenly_tr('Buka halaman equipment untuk cek masker, fin, BCD, regulator, dan lainnya.', 'Open the equipment page to browse masks, fins, BCDs, regulators, and more.'); ?></p>
-            <span class="wdc-gear-cta-btn"><?php echo contenly_tr('Ke Halaman Equipment', 'Go to Equipment'); ?> →</span>
-        </a>
-        <a class="wdc-gear-cta is-wa" href="<?php echo esc_url($wa_url); ?>" target="_blank" rel="noopener noreferrer">
-            <div class="wdc-gear-cta-kicker"><?php echo contenly_tr('Crew', 'Crew'); ?></div>
-            <h2><?php echo contenly_tr('Tanya Langsung ke Crew', 'Ask Crew Directly'); ?></h2>
-            <p><?php echo contenly_tr('Chat WhatsApp crew untuk fitting, stok, dan saran setup peralatan.', 'WhatsApp the crew for fit help, stock checks, and gear setup advice.'); ?></p>
-            <span class="wdc-gear-cta-btn"><?php echo contenly_tr('Chat WhatsApp', 'Chat on WhatsApp'); ?> →</span>
-        </a>
-    </div>
-</section>
-
-<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,.9fr);gap:20px;align-items:start;margin-bottom:28px;">
-    <section style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:18px;box-shadow:0 8px 24px rgba(15,23,42,.04);">
-        <h2 class="wdc-section-title" style="margin:0 0 8px;"><?php echo contenly_tr('Butuh form request?', 'Need a request form?'); ?></h2>
-        <p style="margin:0 0 12px;font-size:13px;color:#64748b;line-height:1.5;"><?php echo contenly_tr('Isi form di kanan untuk simpan request fitting/ketersediaan di akun kamu. Atau chat crew lewat WhatsApp di atas.', 'Use the form on the right to save a fit/availability request to your account. Or chat the crew via WhatsApp above.'); ?></p>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <a href="<?php echo esc_url($equipment_url); ?>" style="display:inline-flex;align-items:center;min-height:36px;padding:0 14px;border-radius:999px;background:#004A98;color:#fff;text-decoration:none;font-size:13px;font-weight:800;"><?php echo contenly_tr('Lihat Equipment', 'View Equipment'); ?></a>
-            <a href="<?php echo esc_url($wa_url); ?>" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;min-height:36px;padding:0 14px;border-radius:999px;background:#16a34a;color:#fff;text-decoration:none;font-size:13px;font-weight:800;"><?php echo contenly_tr('WhatsApp Crew', 'WhatsApp Crew'); ?></a>
-        </div>
-    </section>
-
-    <aside id="wdc-gear-request" style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:18px;box-shadow:0 8px 24px rgba(15,23,42,.04);">
-        <h2 class="wdc-section-title" style="margin:0 0 12px;"><?php echo contenly_tr('Request Fitting / Ketersediaan', 'Fit / Availability Request'); ?></h2>
-        <form method="post" style="display:grid;gap:12px;">
-            <?php wp_nonce_field('wdc_gear_request', 'wdc_gear_nonce'); ?>
-            <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;"><?php echo contenly_tr('Peralatan', 'Gear'); ?>
-                <select name="selected_gear" required style="border:1px solid #dbe4ea;border-radius:12px;padding:11px 12px;">
-                    <option value=""><?php echo contenly_tr('Pilih peralatan', 'Choose gear'); ?></option>
-                    <?php foreach ($gear as $item) :
-                        $selected = ($prefill_item_id && (int)($item['id'] ?? 0) === $prefill_item_id) || ($prefill_item && strcasecmp($prefill_item, $item['title']) === 0);
-                    ?>
-                    <option value="<?php echo esc_attr($item['title']); ?>" <?php selected($selected); ?>><?php echo esc_html($item['title']); ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </label>
-            <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;"><?php echo contenly_tr('Jenis permintaan', 'Request type'); ?>
-                <select name="request_type" style="border:1px solid #dbe4ea;border-radius:12px;padding:11px 12px;">
-                    <option value="Buy advice" selected><?php echo contenly_tr('Saran pembelian', 'Buy advice'); ?></option>
-                    <option value="Fit check"><?php echo contenly_tr('Cek fitting', 'Fit check'); ?></option>
-                    <option value="Availability check"><?php echo contenly_tr('Cek ketersediaan', 'Availability check'); ?></option>
-                    <option value="Setup recommendation"><?php echo contenly_tr('Rekomendasi setup', 'Setup recommendation'); ?></option>
-                </select>
-            </label>
-            <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;"><?php echo contenly_tr('Catatan ukuran / fitting', 'Size / fit notes'); ?>
-                <input name="size_notes" placeholder="<?php echo contenly_tr('Tinggi badan, berat badan, ukuran sepatu, masalah fitting masker...', 'Height, weight, shoe size, mask fit issue...'); ?>" style="border:1px solid #dbe4ea;border-radius:12px;padding:11px 12px;">
-            </label>
-            <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;"><?php echo contenly_tr('Catatan', 'Notes'); ?>
-                <textarea name="message" rows="4" placeholder="<?php echo contenly_tr('Anggaran, frekuensi menyelam, rencana kursus...', 'Budget, diving frequency, course plan...'); ?>" style="border:1px solid #dbe4ea;border-radius:12px;padding:11px 12px;resize:vertical;"></textarea>
-            </label>
-            <button type="submit" style="border:0;border-radius:999px;background:#004A98;color:#fff;padding:10px 16px;font-weight:800;font-size:13px;cursor:pointer;"><?php echo contenly_tr('Minta Bantuan', 'Request Help'); ?></button>
-        </form>
-    </aside>
+<div class="wdc-gear-cta-grid">
+    <a class="wdc-gear-cta" href="<?php echo esc_url($equipment_url); ?>">
+        <div class="wdc-gear-cta-kicker"><?php echo contenly_tr('Katalog', 'Catalog'); ?></div>
+        <h2><?php echo contenly_tr('Lihat Peralatan', 'Browse Equipment'); ?></h2>
+        <p><?php echo contenly_tr('Buka halaman equipment untuk cek masker, fin, BCD, regulator, dan lainnya.', 'Open the equipment page to browse masks, fins, BCDs, regulators, and more.'); ?></p>
+        <span class="wdc-gear-cta-btn"><?php echo contenly_tr('Ke Halaman Equipment', 'Go to Equipment'); ?> →</span>
+    </a>
+    <a class="wdc-gear-cta is-wa" href="<?php echo esc_url($wa_url); ?>" target="_blank" rel="noopener noreferrer">
+        <div class="wdc-gear-cta-kicker"><?php echo contenly_tr('Crew', 'Crew'); ?></div>
+        <h2><?php echo contenly_tr('Tanya Langsung ke Crew', 'Ask Crew Directly'); ?></h2>
+        <p><?php echo contenly_tr('Chat WhatsApp crew untuk fitting, stok, dan saran setup peralatan.', 'WhatsApp the crew for fit help, stock checks, and gear setup advice.'); ?></p>
+        <span class="wdc-gear-cta-btn"><?php echo contenly_tr('Chat WhatsApp', 'Chat on WhatsApp'); ?> →</span>
+    </a>
 </div>
+
+<aside id="wdc-gear-request" style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:18px;margin-bottom:22px;box-shadow:0 8px 24px rgba(15,23,42,.04);">
+    <h2 class="wdc-section-title" style="margin:0 0 6px;"><?php echo contenly_tr('Request Fitting / Ketersediaan', 'Fit / Availability Request'); ?></h2>
+    <p style="margin:0 0 14px;font-size:13px;color:#64748b;line-height:1.5;"><?php echo contenly_tr('Simpan request di akun biar crew bisa follow-up. Butuh jawaban cepat? Chat WhatsApp di atas.', 'Save a request to your account so crew can follow up. Need a fast reply? Use WhatsApp above.'); ?></p>
+    <form method="post" class="wdc-gear-request-form" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;">
+        <?php wp_nonce_field('wdc_gear_request', 'wdc_gear_nonce'); ?>
+        <label style="display:grid;gap:5px;font-size:12px;font-weight:700;color:#475569;"><?php echo contenly_tr('Peralatan', 'Gear'); ?>
+            <select name="selected_gear" required style="border:1px solid #dbe4ea;border-radius:10px;padding:9px 10px;min-height:38px;background:#fff;">
+                <option value=""><?php echo contenly_tr('Pilih peralatan', 'Choose gear'); ?></option>
+                <?php foreach ($gear as $item) :
+                    $selected = ($prefill_item_id && (int)($item['id'] ?? 0) === $prefill_item_id) || ($prefill_item && strcasecmp($prefill_item, $item['title']) === 0);
+                ?>
+                <option value="<?php echo esc_attr($item['title']); ?>" <?php selected($selected); ?>><?php echo esc_html($item['title']); ?></option>
+                <?php endforeach; ?>
+            </select>
+        </label>
+        <label style="display:grid;gap:5px;font-size:12px;font-weight:700;color:#475569;"><?php echo contenly_tr('Jenis permintaan', 'Request type'); ?>
+            <select name="request_type" style="border:1px solid #dbe4ea;border-radius:10px;padding:9px 10px;min-height:38px;background:#fff;">
+                <option value="Buy advice" selected><?php echo contenly_tr('Saran pembelian', 'Buy advice'); ?></option>
+                <option value="Fit check"><?php echo contenly_tr('Cek fitting', 'Fit check'); ?></option>
+                <option value="Availability check"><?php echo contenly_tr('Cek ketersediaan', 'Availability check'); ?></option>
+                <option value="Setup recommendation"><?php echo contenly_tr('Rekomendasi setup', 'Setup recommendation'); ?></option>
+            </select>
+        </label>
+        <label style="display:grid;gap:5px;font-size:12px;font-weight:700;color:#475569;grid-column:1 / -1;"><?php echo contenly_tr('Catatan ukuran / fitting', 'Size / fit notes'); ?>
+            <input name="size_notes" placeholder="<?php echo contenly_tr('Tinggi badan, berat badan, ukuran sepatu, masalah fitting masker...', 'Height, weight, shoe size, mask fit issue...'); ?>" style="border:1px solid #dbe4ea;border-radius:10px;padding:9px 10px;min-height:38px;background:#fff;">
+        </label>
+        <label style="display:grid;gap:5px;font-size:12px;font-weight:700;color:#475569;grid-column:1 / -1;"><?php echo contenly_tr('Catatan', 'Notes'); ?>
+            <textarea name="message" rows="3" placeholder="<?php echo contenly_tr('Anggaran, frekuensi menyelam, rencana kursus...', 'Budget, diving frequency, course plan...'); ?>" style="border:1px solid #dbe4ea;border-radius:10px;padding:9px 10px;resize:vertical;background:#fff;"></textarea>
+        </label>
+        <div style="grid-column:1 / -1;">
+            <button type="submit" style="border:0;border-radius:999px;background:#004A98;color:#fff;padding:10px 16px;font-weight:800;font-size:13px;cursor:pointer;"><?php echo contenly_tr('Kirim Request', 'Submit Request'); ?></button>
+        </div>
+    </form>
+</aside>
+<style>
+@media(max-width:700px){.wdc-gear-request-form{grid-template-columns:1fr!important}}
+</style>
 
 <?php if (!empty($gear_orders)) : ?>
 <section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;margin-bottom:28px;">
-    <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;letter-spacing:.03em;"><?php echo contenly_tr('Pesanan Peralatan', 'Gear Orders'); ?></h2>
+    <h2 class="wdc-section-title" style="margin:0 0 12px;"><?php echo contenly_tr('Pesanan Peralatan', 'Gear Orders'); ?></h2>
     <div style="display:grid;gap:10px;">
         <?php foreach (array_slice($gear_orders, 0, 5) as $order) : $order_link = !empty($order['item_id']) ? get_permalink((int) $order['item_id']) : ''; ?>
         <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc;flex-wrap:wrap;">
@@ -207,7 +199,7 @@ $wa_url = 'https://wa.me/' . $wa_digits . '?text=' . rawurlencode($wa_text);
 
 <?php if (!empty($gear_requests)) : ?>
 <section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;margin-bottom:28px;">
-    <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;"><?php echo contenly_tr('Aktivitas Peralatan Terbaru', 'Recent Gear Activity'); ?></h2>
+    <h2 class="wdc-section-title" style="margin:0 0 12px;"><?php echo contenly_tr('Request Terbaru', 'Recent Requests'); ?></h2>
     <div style="display:grid;gap:10px;">
         <?php foreach (array_slice($gear_requests, 0, 5) as $request) : ?>
         <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc;flex-wrap:wrap;">
