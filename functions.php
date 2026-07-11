@@ -23,7 +23,7 @@ require_once get_template_directory() . '/inc/template-functions.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.21');
+    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.22');
     wp_add_inline_style('contenly-style', '.wd-header .gt-lang-switcher{margin-right:10px!important}.wd-header .wd-nav-member{margin-left:8px!important}');
     
     // Google Fonts
@@ -2622,6 +2622,42 @@ function wdc_member_direct_order_meta_key($type) {
 function wdc_member_request_meta_key($type) {
     return $type === 'equipment' ? '_wdc_gear_requests' : '_wdc_course_requests';
 }
+
+
+/**
+ * Member-gated action URLs for course/equipment CTAs.
+ * Public catalog shows price; Daftar/Beli requires login then request form.
+ */
+function wdc_member_action_url($type, $item_id = 0, $item_title = '', $extra = []) {
+    $type = $type === 'equipment' ? 'equipment' : 'course';
+    $item_id = absint($item_id);
+    $item_title = is_string($item_title) ? $item_title : '';
+
+    $base = $type === 'equipment'
+        ? (function_exists('contenly_localized_url') ? contenly_localized_url('/my-gear/') : home_url('/my-gear/'))
+        : (function_exists('contenly_localized_url') ? contenly_localized_url('/my-courses/') : home_url('/my-courses/'));
+
+    $args = ['request' => '1'];
+    if ($item_id) {
+        $args['item_id'] = $item_id;
+    }
+    if ($item_title !== '') {
+        $args['item'] = $item_title;
+    }
+    if (is_array($extra) && $extra) {
+        $args = array_merge($args, $extra);
+    }
+    $target = add_query_arg($args, $base);
+
+    if (is_user_logged_in()) {
+        return $target;
+    }
+
+    $login = function_exists('contenly_localized_url') ? contenly_localized_url('/member-login/') : home_url('/member-login/');
+    // Encode full target so nested query args survive HTML + login redirect.
+    return $login . (strpos($login, '?') === false ? '?' : '&') . 'redirect_to=' . rawurlencode($target);
+}
+
 
 function wdc_member_status_options() {
     return ['Requested', 'Awaiting Payment', 'Payment Uploaded', 'Verified', 'Active', 'Completed', 'Cancelled'];

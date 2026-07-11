@@ -39,15 +39,7 @@ if (!$course_image) {
   $course_image = $theme_uri . '/assets/' . $course_image_file;
 }
 $course_excerpt = trim(wp_strip_all_tags(get_the_excerpt()));
-$checkout_url = add_query_arg(
-  array(
-    'type' => 'course',
-    'item_id' => get_the_ID(),
-    'item' => get_the_title(),
-    'price' => $price,
-  ),
-  home_url('/direct-checkout/')
-);
+$action_url = wdc_member_action_url('course', get_the_ID(), get_the_title());
 endwhile;
 rewind_posts();
 ?><!doctype html>
@@ -78,7 +70,7 @@ rewind_posts();
           <?php if ($price) : ?><span class="wd-agency-badge">Rp <?php echo number_format((float) $price, 0, ',', '.'); ?></span><?php endif; ?>
         </div>
         <div class="wd-actions">
-          <a class="wd-btn" href="<?php echo esc_url($checkout_url); ?>"><?php echo esc_html(contenly_tr('Daftar Sekarang', 'Enroll Now')); ?></a>
+          <a class="wd-btn" href="<?php echo esc_url($action_url); ?>"><?php echo esc_html(contenly_tr('Daftar Kursus', 'Enroll Course')); ?></a>
           <a class="wd-btn alt" href="<?php echo esc_url(home_url('/courses/')); ?>"><?php echo esc_html(contenly_tr('Semua Kursus', 'All Courses')); ?></a>
         </div>
       </div>
@@ -138,14 +130,14 @@ rewind_posts();
           <h4><?php echo esc_html(contenly_tr('Sudah termasuk', "What's Included")); ?></h4>
           <p class="wd-sidebar-includes"><?php echo esc_html($includes_text); ?></p>
           <?php endif; ?>
-          <a class="wd-btn" href="<?php echo esc_url($checkout_url); ?>" style="width:100%;text-align:center;margin-top:16px"><?php echo esc_html(contenly_tr('Daftar Sekarang', 'Enroll Now')); ?></a>
-          <p class="wd-sidebar-note"><?php echo esc_html(contenly_tr('Atau', 'Or')); ?> <a href="<?php echo esc_url(home_url('/member-register/')); ?>"><?php echo esc_html(contenly_tr('buat akun', 'create an account')); ?></a> <?php echo esc_html(contenly_tr('untuk daftar dari dashboard.', 'to enroll from your dashboard.')); ?></p>
+          <a class="wd-btn" href="<?php echo esc_url($action_url); ?>" style="width:100%;text-align:center;margin-top:16px"><?php echo esc_html(contenly_tr('Daftar Kursus', 'Enroll Course')); ?></a>
+          <p class="wd-sidebar-note"><?php echo esc_html(contenly_tr('Login member dulu untuk mengajukan daftar. Crew konfirmasi jadwal setelah request masuk.', 'Member login required to request enrollment. Crew confirms schedule after the request lands.')); ?></p>
         </div>
       </aside>
     </div>
   </section>
 
-  <section class="wdc-card-cta"><div class="wd-shell"><span class="wd-kicker"><?php echo esc_html(contenly_tr('Siap saat kamu siap', 'Ready when you are')); ?></span><h2><?php echo esc_html(contenly_tr('Tanya crew untuk jadwal kursus.', 'Ask the crew for course availability.')); ?></h2><p><?php echo esc_html(contenly_tr('Kirim sertifikasi target, tanggal, dan ukuran grup.', 'Send your target certification, dates, and group size.')); ?></p><a class="wd-btn alt" href="<?php echo esc_url(home_url('/contact/')); ?>"><?php echo esc_html(contenly_tr('Cek Ketersediaan', 'Check Availability')); ?></a></div></section>
+  <section class="wdc-card-cta"><div class="wd-shell"><span class="wd-kicker"><?php echo esc_html(contenly_tr('Siap saat kamu siap', 'Ready when you are')); ?></span><h2><?php echo esc_html(contenly_tr('Daftar lewat akun member.', 'Enroll through your member account.')); ?></h2><p><?php echo esc_html(contenly_tr('Ajukan kursus dari dashboard. Crew follow-up setelah request masuk — tanpa chat WA di halaman publik.', 'Request the course from your dashboard. Crew follows up after the request lands — no public WhatsApp CTA.')); ?></p><a class="wd-btn alt" href="<?php echo esc_url($action_url); ?>"><?php echo esc_html(contenly_tr('Daftar Kursus', 'Enroll Course')); ?></a></div></section>
   <?php contenly_render_public_footer(); ?>
 </main>
 

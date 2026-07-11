@@ -12,6 +12,35 @@ $course_requests = is_array($course_requests) ? $course_requests : [];
 $course_orders = get_user_meta($user_id, '_wdc_course_orders', true);
 $course_orders = is_array($course_orders) ? $course_orders : [];
 
+if ((($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') && isset($_POST['wdc_course_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_course_nonce'])), 'wdc_course_request')) {
+    $selected_course = sanitize_text_field(wp_unslash($_POST['selected_course'] ?? ''));
+    $preferred_date = sanitize_text_field(wp_unslash($_POST['preferred_date'] ?? ''));
+    $experience = sanitize_text_field(wp_unslash($_POST['experience'] ?? ''));
+    $message = sanitize_textarea_field(wp_unslash($_POST['message'] ?? ''));
+    $item_id = absint($_POST['item_id'] ?? 0);
+
+    if ($selected_course) {
+        array_unshift($course_requests, [
+            'course' => $selected_course,
+            'item_id' => $item_id,
+            'preferred_date' => $preferred_date,
+            'experience' => $experience ?: 'Not specified',
+            'message' => $message,
+            'status' => 'Requested',
+            'created_at' => current_time('mysql'),
+        ]);
+        update_user_meta($user_id, '_wdc_course_requests', array_slice($course_requests, 0, 20));
+        $notice = contenly_tr('Permintaan kursus tersimpan. Crew akan follow-up konfirmasi jadwal.', 'Course request saved. Crew will follow up to confirm schedule.');
+    } else {
+        $notice = contenly_tr('Pilih kursus terlebih dahulu.', 'Please choose a course first.');
+        $notice_type = 'error';
+    }
+}
+
+$prefill_item = sanitize_text_field(wp_unslash($_GET['item'] ?? ''));
+$prefill_item_id = absint($_GET['item_id'] ?? 0);
+$show_request = isset($_GET['request']) || $prefill_item || $prefill_item_id;
+
 // Load courses for the add-form dropdown
 $courses = [];
 if (post_type_exists('wm_course')) {
@@ -51,6 +80,37 @@ $completed_count = count($completed_courses);
     <?php echo esc_html($notice); ?>
 </div>
 <?php endif; ?>
+
+<section id="wdc-course-request" style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;margin-bottom:24px;box-shadow:0 12px 34px rgba(15,23,42,.05);<?php echo $show_request ? '' : ''; ?>">
+    <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 8px;"><?php echo contenly_tr('Ajukan Pendaftaran Kursus', 'Request Course Enrollment'); ?></h2>
+    <p style="font-size:14px;color:#64748b;margin:0 0 16px;"><?php echo contenly_tr('Isi form ini untuk daftar. Crew follow-up setelah request masuk.', 'Fill this form to enroll. Crew follows up after the request lands.'); ?></p>
+    <form method="post" style="display:grid;gap:12px;">
+        <?php wp_nonce_field('wdc_course_request', 'wdc_course_nonce'); ?>
+        <input type="hidden" name="item_id" value="<?php echo esc_attr($prefill_item_id); ?>">
+        <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;"><?php echo contenly_tr('Kursus', 'Course'); ?>
+            <select name="selected_course" required style="border:1px solid #dbe4ea;border-radius:12px;padding:11px 12px;">
+                <option value=""><?php echo contenly_tr('Pilih kursus', 'Choose course'); ?></option>
+                <?php foreach ($courses as $c) :
+                    $selected = ($prefill_item_id && (int)$c['id'] === $prefill_item_id) || ($prefill_item && strcasecmp($prefill_item, $c['title']) === 0);
+                ?>
+                <option value="<?php echo esc_attr($c['title']); ?>" <?php selected($selected); ?>><?php echo esc_html($c['title']); ?><?php echo !empty($c['price']) ? ' · Rp ' . number_format((float)$c['price'], 0, ',', '.') : ''; ?></option>
+                <?php endforeach; ?>
+            </select>
+        </label>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
+            <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;"><?php echo contenly_tr('Tanggal preferensi', 'Preferred date'); ?>
+                <input type="date" name="preferred_date" style="border:1px solid #dbe4ea;border-radius:12px;padding:11px 12px;">
+            </label>
+            <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;"><?php echo contenly_tr('Level / pengalaman', 'Level / experience'); ?>
+                <input type="text" name="experience" placeholder="<?php echo contenly_tr('Misal: Open Water, 20 dive', 'e.g. Open Water, 20 dives'); ?>" style="border:1px solid #dbe4ea;border-radius:12px;padding:11px 12px;">
+            </label>
+        </div>
+        <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;"><?php echo contenly_tr('Catatan', 'Notes'); ?>
+            <textarea name="message" rows="3" placeholder="<?php echo contenly_tr('Jadwal longgar, private/group, tujuan sertifikasi...', 'Flexible schedule, private/group, certification goal...'); ?>" style="border:1px solid #dbe4ea;border-radius:12px;padding:11px 12px;resize:vertical;"></textarea>
+        </label>
+        <button type="submit" style="border:0;border-radius:999px;background:#004A98;color:#fff;padding:12px 18px;font-weight:950;cursor:pointer;width:fit-content;"><?php echo contenly_tr('Kirim Permintaan Daftar', 'Submit Enrollment Request'); ?></button>
+    </form>
+</section>
 
 <!-- Action bar -->
 <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:20px;">

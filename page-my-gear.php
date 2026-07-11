@@ -11,8 +11,10 @@ $gear_requests = get_user_meta($user_id, '_wdc_gear_requests', true);
 $gear_requests = is_array($gear_requests) ? $gear_requests : [];
 $gear_orders = get_user_meta($user_id, '_wdc_gear_orders', true);
 $gear_orders = is_array($gear_orders) ? $gear_orders : [];
+$prefill_item = sanitize_text_field(wp_unslash($_GET['item'] ?? ''));
+$prefill_item_id = absint($_GET['item_id'] ?? 0);
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wdc_gear_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_gear_nonce'])), 'wdc_gear_request')) {
+if ((($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') && isset($_POST['wdc_gear_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_gear_nonce'])), 'wdc_gear_request')) {
     $selected_gear = sanitize_text_field(wp_unslash($_POST['selected_gear'] ?? ''));
     $request_type = sanitize_text_field(wp_unslash($_POST['request_type'] ?? ''));
     $size_notes = sanitize_text_field(wp_unslash($_POST['size_notes'] ?? ''));
@@ -97,11 +99,7 @@ if (!$gear) {
                 <p style="font-size:15px;color:#06384d;font-weight:900;margin:0 0 6px;"><?php echo esc_html($item['price']); ?></p>
                 <p style="font-size:12px;color:<?php echo (!empty($item['stock_raw']) && is_numeric($item['stock_raw']) && (int) $item['stock_raw'] <= 0) ? '#991b1b' : '#64748b'; ?>;font-weight:800;margin:0 0 16px;"><?php echo esc_html($item['stock'] ?? contenly_tr('Ketersediaan atas permintaan', 'Availability on request')); ?></p>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-                    <?php if (!empty($item['checkout'])) : ?>
-                    <a href="<?php echo esc_url(add_query_arg(['type' => 'equipment', 'item_id' => $item['id'] ?? 0, 'item' => $item['title'], 'price' => preg_replace('/[^0-9]/', '', $item['price'])], '/direct-checkout/')); ?>" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#4cc8ed;color:#06384d;text-decoration:none;font-weight:950;font-size:13px;"><?php echo contenly_tr('Beli Sekarang', 'Buy Now'); ?></a>
-                    <?php else : ?>
-                    <a href="#" onclick="event.preventDefault();document.querySelector('select[name=selected_gear]').value='<?php echo esc_js($item['title']); ?>';document.querySelector('select[name=request_type]').value='Availability check';document.querySelector('aside form').scrollIntoView({behavior:'smooth'});" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#4cc8ed;color:#06384d;text-decoration:none;font-weight:950;font-size:13px;"><?php echo contenly_tr('Cek Ketersediaan', 'Check Availability'); ?></a>
-                    <?php endif; ?>
+                    <a href="#" onclick="event.preventDefault();document.querySelector('select[name=selected_gear]').value='<?php echo esc_js($item['title']); ?>';document.querySelector('select[name=request_type]').value='Buy advice';document.querySelector('aside form').scrollIntoView({behavior:'smooth'});" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#4cc8ed;color:#06384d;text-decoration:none;font-weight:950;font-size:13px;"><?php echo contenly_tr('Ajukan Beli', 'Request Buy'); ?></a>
                     <a href="<?php echo esc_url($item['href']); ?>" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:#f3fbff;color:#06384d;text-decoration:none;font-weight:900;font-size:13px;border:1px solid rgba(6,56,77,.12);"><?php echo contenly_tr('Detail', 'Details'); ?></a>
                 </div>
             </article>
@@ -109,21 +107,23 @@ if (!$gear) {
         </div>
     </section>
 
-    <aside style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;box-shadow:0 12px 34px rgba(15,23,42,.06);">
+    <aside id="wdc-gear-request" style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;box-shadow:0 12px 34px rgba(15,23,42,.06);">
         <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;letter-spacing:.03em;"><?php echo contenly_tr('Butuh Bantuan Fitting / Ketersediaan?', 'Need Fit / Availability Help?'); ?></h2>
         <form method="post" style="display:grid;gap:12px;">
             <?php wp_nonce_field('wdc_gear_request', 'wdc_gear_nonce'); ?>
             <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;"><?php echo contenly_tr('Peralatan', 'Gear'); ?>
                 <select name="selected_gear" required style="border:1px solid #dbe4ea;border-radius:12px;padding:11px 12px;">
                     <option value=""><?php echo contenly_tr('Pilih peralatan', 'Choose gear'); ?></option>
-                    <?php foreach ($gear as $item) : ?>
-                    <option value="<?php echo esc_attr($item['title']); ?>"><?php echo esc_html($item['title']); ?></option>
+                    <?php foreach ($gear as $item) :
+                        $selected = ($prefill_item_id && (int)($item['id'] ?? 0) === $prefill_item_id) || ($prefill_item && strcasecmp($prefill_item, $item['title']) === 0);
+                    ?>
+                    <option value="<?php echo esc_attr($item['title']); ?>" <?php selected($selected); ?>><?php echo esc_html($item['title']); ?></option>
                     <?php endforeach; ?>
                 </select>
             </label>
             <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;"><?php echo contenly_tr('Jenis permintaan', 'Request type'); ?>
                 <select name="request_type" style="border:1px solid #dbe4ea;border-radius:12px;padding:11px 12px;">
-                    <option value="Buy advice"><?php echo contenly_tr('Saran pembelian', 'Buy advice'); ?></option>
+                    <option value="Buy advice" selected><?php echo contenly_tr('Saran pembelian', 'Buy advice'); ?></option>
                     <option value="Fit check"><?php echo contenly_tr('Cek fitting', 'Fit check'); ?></option>
                     <option value="Availability check"><?php echo contenly_tr('Cek ketersediaan', 'Availability check'); ?></option>
                     <option value="Setup recommendation"><?php echo contenly_tr('Rekomendasi setup', 'Setup recommendation'); ?></option>
@@ -172,5 +172,8 @@ if (!$gear) {
         <?php endforeach; ?>
     </div>
 </section>
+<?php endif; ?>
+<?php if ($prefill_item || $prefill_item_id) : ?>
+<script>document.addEventListener('DOMContentLoaded',function(){var el=document.getElementById('wdc-gear-request'); if(el){el.scrollIntoView({behavior:'smooth',block:'start'});}});</script>
 <?php endif; ?>
 <?php require_once get_template_directory() . '/dashboard-footer.php'; ?>

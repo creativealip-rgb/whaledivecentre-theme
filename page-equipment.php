@@ -128,9 +128,7 @@ function wdc_equipment_image_url($title, $cat_slug, $theme_uri) {
             </div>
             <div class="wd-equip-actions" style="margin-top:8px!important;padding-top:0!important;border-top:0!important;display:flex!important;gap:8px!important;flex-wrap:wrap!important;">
               <a class="wd-mini-link" style="min-height:38px!important;min-width:100px!important;justify-content:center!important;width:max-content!important;margin:0!important;padding:0 16px!important;border-radius:999px!important;font-size:13px!important;font-weight:900!important;background:#f3fbff!important;border:1px solid rgba(6,56,77,.14)!important;color:#06384d!important;box-shadow:none!important;display:inline-flex!important;align-items:center!important;text-decoration:none!important;" href="<?php echo esc_url($permalink); ?>"><?php echo contenly_tr('Lihat Detail', 'View Details'); ?></a>
-              <?php if($price && (!$stock || (int)$stock > 0)): ?>
-              <a class="wd-mini-btn" onclick="event.stopPropagation();" style="min-height:38px!important;min-width:100px!important;justify-content:center!important;width:max-content!important;margin:0!important;padding:0 16px!important;border-radius:999px!important;font-size:13px!important;font-weight:900!important;background:#06384d!important;border:1px solid #06384d!important;color:#fff!important;box-shadow:none!important;display:inline-flex!important;align-items:center!important;text-decoration:none!important;" href="<?php echo esc_url(home_url('/direct-checkout/?type=equipment&item=' . rawurlencode($item->post_title) . '&item_id=' . $item->ID . '&price=' . $price)); ?>"><?php echo contenly_tr('Beli', 'Buy Now'); ?></a>
-              <?php endif; ?>
+              <a class="wd-mini-btn" onclick="event.stopPropagation();" style="min-height:38px!important;min-width:100px!important;justify-content:center!important;width:max-content!important;margin:0!important;padding:0 16px!important;border-radius:999px!important;font-size:13px!important;font-weight:900!important;background:#06384d!important;border:1px solid #06384d!important;color:#fff!important;box-shadow:none!important;display:inline-flex!important;align-items:center!important;text-decoration:none!important;" href="<?php echo esc_url(wdc_member_action_url('equipment', $item->ID, $item->post_title)); ?>"><?php echo contenly_tr('Beli', 'Buy'); ?></a>
             </div>
           </div>
         </article>
@@ -139,7 +137,7 @@ function wdc_equipment_image_url($title, $cat_slug, $theme_uri) {
     </div>
   </section>
 
-  <section class="wdc-card-cta"><div class="wd-shell"><span class="wd-kicker"><?php echo contenly_tr('Butuh saran gear?', 'Need gear advice?'); ?></span><h2><?php echo esc_html(contenly_tr('Crew bantu cari yang pas.', 'The crew helps you find the right fit.')); ?></h2><p><?php echo contenly_tr('Ceritakan level sertifikasi, rencana dive, dan budget — kami rekomendasikan gear yang cocok.', 'Tell us your certification level, dive plans, and budget — we recommend gear that works.'); ?></p><a class="wd-btn alt" href="/contact/"><?php echo esc_html(contenly_tr('Tanya Ukuran Gear', 'Ask About Gear Fit')); ?></a></div></section>
+  <section class="wdc-card-cta"><div class="wd-shell"><span class="wd-kicker"><?php echo contenly_tr('Butuh saran gear?', 'Need gear advice?'); ?></span><h2><?php echo esc_html(contenly_tr('Crew bantu cari yang pas.', 'The crew helps you find the right fit.')); ?></h2><p><?php echo contenly_tr('Ceritakan level sertifikasi, rencana dive, dan budget — kami rekomendasikan gear yang cocok.', 'Tell us your certification level, dive plans, and budget — we recommend gear that works.'); ?></p><a class="wd-btn alt" href="<?php echo esc_url(wdc_member_action_url('equipment')); ?>"><?php echo esc_html(contenly_tr('Ajukan via Member', 'Request as Member')); ?></a></div></section>
 
   <?php get_footer(); ?>
 </main>

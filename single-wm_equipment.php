@@ -75,11 +75,7 @@ rewind_posts();
           <?php if ($price) : ?><span class="wd-agency-badge">Rp <?php echo number_format((float) $price, 0, ',', '.'); ?></span><?php endif; ?>
         </div>
         <div class="wd-actions">
-          <?php if (is_user_logged_in()) : ?>
-            <button type="button" class="wd-btn wd-equipment-add-cart" data-item-id="<?php echo get_the_ID(); ?>"><?php echo contenly_tr('Tambah ke Keranjang', 'Add to Cart'); ?></button>
-          <?php else : ?>
-            <a class="wd-btn" href="<?php echo esc_url(home_url('/contact/')); ?>"><?php echo contenly_tr('Cek Ketersediaan', 'Check Availability'); ?></a>
-          <?php endif; ?>
+          <a class="wd-btn" href="<?php echo esc_url(wdc_member_action_url('equipment', get_the_ID(), get_the_title())); ?>"><?php echo contenly_tr('Ajukan Beli', 'Request Purchase'); ?></a>
           <a class="wd-btn alt" href="<?php echo esc_url(home_url('/equipment/')); ?>"><?php echo contenly_tr('Semua Peralatan', 'All Equipment'); ?></a>
         </div>
       </div>
@@ -130,11 +126,8 @@ rewind_posts();
           </div>
           <?php endif; ?>
           <?php if ($sizes) : ?><h4><?php echo contenly_tr('Ukuran Tersedia', 'Available Sizes'); ?></h4><p><?php echo esc_html($sizes); ?></p><?php endif; ?>
-          <?php if (is_user_logged_in()) : ?>
-            <button type="button" class="wd-btn wd-equipment-add-cart" data-item-id="<?php echo get_the_ID(); ?>" style="width:100%;text-align:center;margin-top:16px"><?php echo contenly_tr('Tambah ke Keranjang', 'Add to Cart'); ?></button>
-          <?php else : ?>
-            <a class="wd-btn" href="<?php echo esc_url(home_url('/contact/')); ?>" style="width:100%;text-align:center;margin-top:16px"><?php echo contenly_tr('Cek Ketersediaan', 'Check Availability'); ?></a>
-          <?php endif; ?>
+          <a class="wd-btn" href="<?php echo esc_url(wdc_member_action_url('equipment', get_the_ID(), get_the_title())); ?>" style="width:100%;text-align:center;margin-top:16px"><?php echo contenly_tr('Ajukan Beli', 'Request Purchase'); ?></a>
+          <p class="wd-sidebar-note" style="margin-top:12px;font-size:13px;color:#5f7180;"><?php echo contenly_tr('Login member dulu. Crew konfirmasi size/stok setelah request masuk.', 'Member login required. Crew confirms size/stock after the request lands.'); ?></p>
         </div>
       </aside>
     </div>
