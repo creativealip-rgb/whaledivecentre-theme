@@ -2,7 +2,7 @@
 
 /*
 Theme Name: Whale Dive Centre Theme
-Version: 2.3.80
+Version: 2.3.81
 */
 :root{
   --black:#000;--violet:#3B44AC;--cyan:#4CC8ED;--pale:#96DAEA;--red:#C31C4A;--blue:#004A98;--white:#fff;--navy:#061a36;--ink:#0b1930;--muted:#63748a;
@@ -4506,9 +4506,9 @@ body.whaledive-home #courses .wd-course-body p {
     align-items: center !important;
     justify-content: space-between !important;
     gap: 10px !important;
-    padding: calc(14px + env(safe-area-inset-top, 0px)) 14px 14px !important;
-    border-bottom: 1px solid rgba(150,218,234,.18) !important;
-    background: linear-gradient(180deg, rgba(76,200,237,.12), rgba(255,255,255,.03)) !important;
+    padding: calc(12px + env(safe-area-inset-top, 0px)) 14px 12px !important;
+    border-bottom: 1px solid rgba(255,255,255,.08) !important;
+    background: rgba(255,255,255,.02) !important;
     flex: 0 0 auto !important;
   }
   .wd-menu-panel-brand {
@@ -4580,12 +4580,12 @@ body.whaledive-home #courses .wd-course-body p {
   .wd-menu-close:before { transform: translateY(-50%) rotate(45deg) !important; }
   .wd-menu-close:after { transform: translateY(-50%) rotate(-45deg) !important; }
 
-  /* Links fill middle; footer pins bottom */
+  /* Links fill middle; footer pins bottom — same as mobile */
   .wd-menu-links {
     display: flex !important;
     flex-direction: column !important;
     gap: 4px !important;
-    padding: 12px 14px 10px !important;
+    padding: 8px 14px 6px !important;
     overflow-y: auto !important;
     flex: 1 1 auto !important;
     min-height: 0 !important;
@@ -4596,9 +4596,9 @@ body.whaledive-home #courses .wd-course-body p {
     display: flex !important;
     align-items: center !important;
     width: 100% !important;
-    min-height: 44px !important;
+    min-height: 42px !important;
     margin: 0 !important;
-    padding: 0 14px !important;
+    padding: 9px 12px !important;
     border-radius: 12px !important;
     color: rgba(255,255,255,.92) !important;
     font-size: 15px !important;
@@ -4620,18 +4620,18 @@ body.whaledive-home #courses .wd-course-body p {
   .wd-menu-links a.is-active,
   .wd-menu-links a[aria-current="page"] {
     background: rgba(76, 200, 237, .18) !important;
-    border-color: rgba(76, 200, 237, .34) !important;
+    border-color: rgba(76, 200, 237, .28) !important;
     color: #e8fbff !important;
-    box-shadow: inset 3px 0 0 #4CC8ED !important;
+    box-shadow: none !important;
   }
 
   .wd-menu-panel-foot {
     display: grid !important;
-    gap: 10px !important;
+    gap: 8px !important;
     margin-top: auto !important;
-    padding: 14px 14px calc(18px + env(safe-area-inset-bottom, 0px)) !important;
-    border-top: 1px solid rgba(255,255,255,.10) !important;
-    background: rgba(0,0,0,.22) !important;
+    padding: 12px 14px calc(14px + env(safe-area-inset-bottom, 0px)) !important;
+    border-top: 1px solid rgba(255,255,255,.08) !important;
+    background: rgba(0,0,0,.16) !important;
     flex: 0 0 auto !important;
   }
   .wd-menu-foot-label {
@@ -4704,7 +4704,7 @@ body.whaledive-home #courses .wd-course-body p {
 
 
 /* WDC drawer narrow clean active FINAL 2026-07-11r */
-@media (max-width: 760px) {
+@media (max-width: 1099.98px) {
   body.home .wd-menu,
   body.whaledive-home .wd-menu,
   body.whaledive-inner .wd-menu,
@@ -4842,7 +4842,7 @@ body.whaledive-home #courses .wd-course-body p {
 
 
 /* WDC drawer menu padding restore FINAL 2026-07-11v */
-@media (max-width: 760px) {
+@media (max-width: 1099.98px) {
   #wd-mobile-menu .wd-menu-links,
   body.wd-menu-open #wd-mobile-menu .wd-menu-links {
     gap: 4px !important;
@@ -4891,7 +4891,7 @@ body.whaledive-home #courses .wd-course-body p {
 
 
 /* WDC nav height match panel-head FINAL 2026-07-11y font fullwidth */
-@media (max-width: 760px) {
+@media (max-width: 1099.98px) {
   /* Header bar full-bleed */
   html body .wd-header,
   html body.whaledive-home .wd-header,
@@ -5030,7 +5030,7 @@ body.whaledive-home #courses .wd-course-body p {
    Full page + top navbar go under dim/blur.
    Only the right drawer stays sharp above the overlay.
 */
-@media (max-width: 760px) {
+@media (max-width: 1099.98px) {
   /* kill header glass so blur overlay works evenly */
   html body.wd-menu-open .wd-header,
   html body.wd-menu-open.whaledive-home .wd-header,
@@ -7865,26 +7865,10 @@ html body.whaledive-equipment .wdc-card-cta .wd-btn.alt{
 }
 
 
-/* WDC DRAWER POLISH FINAL (2.3.79)
-   Pin footer bottom, stronger head, hamburger icon, full panel width.
-   Applies mobile + tablet <=1099.98. Desktop >=1100 full menu. */
+/* WDC DRAWER SAME AS <=760 (2.3.81)
+   No new style. Clone mobile drawer look for all <=1099.98. */
 @media (max-width: 1099.98px) {
-  .wd-hamburger {
-    position: relative !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 44px !important;
-    height: 44px !important;
-    min-width: 44px !important;
-    margin-left: auto !important;
-    padding: 0 !important;
-    border-radius: 14px !important;
-    background: rgba(255,255,255,.12) !important;
-    border: 1px solid rgba(255,255,255,.22) !important;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 8px 20px rgba(0,0,0,.18) !important;
-    z-index: 10002 !important;
-  }
+  /* hamburger icon bars (same mobile) */
   .wd-hamburger span { display: none !important; }
   .wd-hamburger:before,
   .wd-hamburger:after {
@@ -7895,284 +7879,83 @@ html body.whaledive-equipment .wdc-card-cta .wd-btn.alt{
     height: 2px !important;
     border-radius: 999px !important;
     background: #fff !important;
-    transition: transform .2s ease, top .2s ease, box-shadow .2s ease !important;
   }
-  .wd-hamburger:before { top: 15px !important; box-shadow: 0 6px 0 #fff !important; }
-  .wd-hamburger:after { top: 27px !important; }
+  .wd-hamburger:before { top: 13px !important; box-shadow: 0 6px 0 #fff !important; }
+  .wd-hamburger:after { top: 25px !important; }
   body.wd-menu-open .wd-hamburger:before,
-  .wd-menu-open .wd-hamburger:before {
-    top: 21px !important; transform: rotate(45deg) !important; box-shadow: none !important;
-  }
+  .wd-menu-open .wd-hamburger:before { top: 19px !important; transform: rotate(45deg) !important; box-shadow: none !important; }
   body.wd-menu-open .wd-hamburger:after,
-  .wd-menu-open .wd-hamburger:after {
-    top: 21px !important; transform: rotate(-45deg) !important;
-  }
+  .wd-menu-open .wd-hamburger:after { top: 19px !important; transform: rotate(-45deg) !important; }
 
-  .wd-menu,
-  .wd-header .wd-menu,
-  .wd-nav .wd-menu,
-  #wd-mobile-menu {
-    position: fixed !important;
-    top: 0 !important;
-    right: 0 !important;
-    left: auto !important;
-    bottom: 0 !important;
-    width: min(82vw, 320px) !important;
-    max-width: 320px !important;
-    height: 100dvh !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: flex-start !important;
-    align-items: stretch !important;
-    gap: 0 !important;
-    border-radius: 18px 0 0 18px !important;
-    border-left: 1px solid rgba(150,218,234,.18) !important;
-    background:
-      radial-gradient(circle at 100% 0%, rgba(76,200,237,.16), transparent 42%),
-      linear-gradient(180deg, #0a2340 0%, #041221 100%) !important;
-    box-shadow: -22px 0 60px rgba(0,0,0,.45) !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: translateX(104%) !important;
-    overflow: hidden !important;
-    z-index: 1100 !important;
-  }
-  body.wd-menu-open .wd-menu,
-  .wd-menu-open .wd-menu,
-  .wd-nav.wd-menu-open .wd-menu,
-  body.wd-menu-open #wd-mobile-menu,
-  .wd-menu.is-open {
-    transform: translateX(0) !important;
-  }
-
-  .wd-menu-backdrop { display: block !important; }
-  body.wd-menu-open .wd-menu-backdrop,
-  .wd-nav.wd-menu-open .wd-menu-backdrop {
-    opacity: 1 !important;
-    visibility: visible !important;
-    pointer-events: auto !important;
-    background: rgba(2,10,22,.66) !important;
-  }
-
-  .wd-menu-panel-head,
-  .wd-menu-links,
-  .wd-menu-panel-foot {
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-  }
-  .wd-menu-panel-head {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    gap: 10px !important;
-    padding: calc(14px + env(safe-area-inset-top, 0px)) 14px 14px !important;
-    border-bottom: 1px solid rgba(150,218,234,.18) !important;
-    background: linear-gradient(180deg, rgba(76,200,237,.14), rgba(255,255,255,.03)) !important;
-    flex: 0 0 auto !important;
-  }
-  .wd-menu-close {
-    display: inline-flex !important;
-    width: 38px !important;
-    height: 38px !important;
+  /* exact mobile item metrics */
+  .wd-menu .wd-menu-links > a,
+  #wd-mobile-menu .wd-menu-links > a,
+  body.wd-menu-open .wd-menu .wd-menu-links > a {
+    padding: 9px 12px !important;
+    min-height: 42px !important;
     border-radius: 12px !important;
-    border: 1px solid rgba(255,255,255,.16) !important;
-    background: rgba(255,255,255,.08) !important;
-  }
-  .wd-menu-kicker {
-    display: block !important;
-    color: #96DAEA !important;
-  }
-  .wd-menu-panel-copy strong {
-    color: #fff !important;
-  }
-  .wd-menu-links {
-    display: flex !important;
-    flex-direction: column !important;
-    flex: 1 1 auto !important;
-    gap: 4px !important;
-    padding: 12px 14px !important;
-    overflow-y: auto !important;
-    min-height: 0 !important;
-  }
-  .wd-menu-links a,
-  .wd-menu .wd-menu-links a {
-    display: flex !important;
-    width: 100% !important;
-    min-height: 44px !important;
-    padding: 0 14px !important;
-    border-radius: 12px !important;
-    color: rgba(255,255,255,.94) !important;
-    -webkit-text-fill-color: rgba(255,255,255,.94) !important;
+    color: rgba(255,255,255,.92) !important;
+    -webkit-text-fill-color: rgba(255,255,255,.92) !important;
     font-size: 15px !important;
     font-weight: 750 !important;
     text-transform: none !important;
     letter-spacing: -.01em !important;
     background: transparent !important;
     border: 1px solid transparent !important;
-  }
-  .wd-menu-links a.is-active,
-  .wd-menu-links a[aria-current="page"] {
-    background: rgba(76,200,237,.18) !important;
-    border-color: rgba(76,200,237,.34) !important;
-    color: #e8fbff !important;
-    -webkit-text-fill-color: #e8fbff !important;
-    box-shadow: inset 3px 0 0 #4CC8ED !important;
-  }
-  .wd-menu-panel-foot {
-    display: grid !important;
-    gap: 10px !important;
-    margin-top: auto !important;
-    padding: 14px 14px calc(18px + env(safe-area-inset-bottom, 0px)) !important;
-    border-top: 1px solid rgba(255,255,255,.10) !important;
-    background: rgba(0,0,0,.24) !important;
-    flex: 0 0 auto !important;
-  }
-  .wd-menu-foot-label {
-    display: block !important;
-    color: rgba(255,255,255,.55) !important;
-  }
-  .wd-menu-panel-foot .wd-lang-switcher,
-  .wd-menu-panel-foot .gt-lang-switcher {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    width: 100% !important;
-    gap: 6px !important;
-    margin: 0 !important;
-    padding: 4px !important;
-    border-radius: 12px !important;
-    background: rgba(255,255,255,.06) !important;
-    border: 1px solid rgba(255,255,255,.10) !important;
-  }
-  .wd-menu-panel-foot .gt-lang-link.is-active {
-    background: #4CC8ED !important;
-    color: #03111f !important;
-  }
-  .wd-menu-panel-foot .wd-nav-member {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 100% !important;
-    min-height: 48px !important;
-    border-radius: 12px !important;
-    background: linear-gradient(135deg, #4CC8ED, #2aa8d0) !important;
-    color: #03111f !important;
-    font-weight: 900 !important;
-    text-transform: none !important;
-    box-shadow: 0 10px 22px rgba(76,200,237,.22) !important;
-  }
-}
-@media (min-width: 1100px) {
-  .wd-hamburger { display: none !important; }
-  .wd-menu-backdrop { display: none !important; }
-  .wd-menu-panel-head,
-  .wd-menu-close,
-  .wd-menu-kicker,
-  .wd-menu-foot-label { display: none !important; }
-  .wd-menu-links,
-  .wd-menu-panel-foot,
-  .wd-menu-panel-copy { display: contents !important; }
-  .wd-menu,
-  .wd-header .wd-menu {
-    position: static !important;
-    width: auto !important;
-    height: auto !important;
-    max-width: none !important;
-    padding: 0 !important;
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    gap: 6px !important;
-    background: transparent !important;
-    border: 0 !important;
     box-shadow: none !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: none !important;
-    overflow: visible !important;
   }
-}
-
-
-/* WDC DRAWER HEAD FORCE (2.3.80) */
-@media (max-width: 1099.98px) {
-  .wd-menu .wd-menu-panel-head,
-  #wd-mobile-menu .wd-menu-panel-head {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    min-height: 68px !important;
-    padding: 14px !important;
-    background: #0d2a4a !important;
-    background-image: linear-gradient(180deg, #13406b 0%, #0a2340 100%) !important;
-    border-bottom: 1px solid rgba(150,218,234,.28) !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    z-index: 2 !important;
-  }
-  .wd-menu .wd-menu-panel-brand,
-  .wd-menu .wd-menu-panel-copy,
-  .wd-menu .wd-menu-kicker,
-  .wd-menu .wd-menu-panel-copy strong {
-    display: flex !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-  }
-  .wd-menu .wd-menu-panel-copy {
-    flex-direction: column !important;
-    gap: 2px !important;
-  }
-  .wd-menu .wd-menu-kicker {
-    display: block !important;
-    color: #96DAEA !important;
-    font-size: 10px !important;
-    font-weight: 800 !important;
-    letter-spacing: .12em !important;
-    text-transform: uppercase !important;
-  }
-  .wd-menu .wd-menu-panel-copy strong {
-    display: block !important;
-    color: #ffffff !important;
-    -webkit-text-fill-color: #ffffff !important;
-    font-size: 16px !important;
-    font-weight: 900 !important;
-  }
-  .wd-menu .wd-menu-close,
-  #wd-mobile-menu .wd-menu-close {
-    display: inline-flex !important;
-    position: relative !important;
-    width: 40px !important;
-    height: 40px !important;
-    border-radius: 12px !important;
-    border: 1px solid rgba(255,255,255,.22) !important;
-    background: rgba(255,255,255,.12) !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    flex: 0 0 40px !important;
-  }
-  .wd-menu .wd-menu-close:before,
-  .wd-menu .wd-menu-close:after {
-    content: "" !important;
-    position: absolute !important;
-    left: 11px !important;
-    right: 11px !important;
-    top: 50% !important;
-    height: 2px !important;
-    background: #fff !important;
-    border-radius: 999px !important;
-  }
-  .wd-menu .wd-menu-close:before { transform: translateY(-50%) rotate(45deg) !important; }
-  .wd-menu .wd-menu-close:after { transform: translateY(-50%) rotate(-45deg) !important; }
-
-  .wd-menu .wd-menu-links a.is-active,
-  .wd-menu .wd-menu-links a[aria-current="page"] {
-    background: rgba(76,200,237,.20) !important;
-    border: 1px solid rgba(76,200,237,.40) !important;
+  .wd-menu .wd-menu-links > a.is-active,
+  .wd-menu .wd-menu-links > a[aria-current="page"],
+  #wd-mobile-menu .wd-menu-links > a.is-active,
+  #wd-mobile-menu .wd-menu-links > a[aria-current="page"] {
+    background: rgba(76, 200, 237, .18) !important;
+    border: 1px solid rgba(76, 200, 237, .28) !important;
     color: #e8fbff !important;
     -webkit-text-fill-color: #e8fbff !important;
-    box-shadow: inset 3px 0 0 #4CC8ED !important;
-    padding-left: 14px !important;
+    box-shadow: none !important;
+    padding: 9px 12px !important;
+  }
+
+  /* exact mobile head metrics */
+  .wd-menu-panel-head,
+  #wd-mobile-menu .wd-menu-panel-head {
+    min-height: 62px !important;
+    height: 62px !important;
+    padding: 12px 14px !important;
+    background: rgba(255,255,255,.02) !important;
+    border-bottom: 1px solid rgba(255,255,255,.08) !important;
+  }
+  .wd-menu-close,
+  #wd-mobile-menu .wd-menu-close {
+    width: 38px !important;
+    height: 38px !important;
+    flex: 0 0 38px !important;
+  }
+
+  /* exact mobile shell */
+  body.wd-menu-open .wd-menu,
+  body.wd-menu-open #wd-mobile-menu,
+  .wd-menu.is-open {
+    width: min(78vw, 300px) !important;
+    max-width: 300px !important;
+    background: #071b33 !important;
+    background-image:
+      radial-gradient(circle at 100% 0%, rgba(76,200,237,.14), transparent 40%),
+      linear-gradient(180deg, #071b33 0%, #03111f 100%) !important;
+  }
+
+  /* links/foot padding same mobile */
+  .wd-menu-links,
+  #wd-mobile-menu .wd-menu-links {
+    padding: 8px 14px 6px !important;
+    gap: 4px !important;
+  }
+  .wd-menu-panel-foot,
+  #wd-mobile-menu .wd-menu-panel-foot {
+    padding: 12px 14px calc(14px + env(safe-area-inset-bottom, 0px)) !important;
+    gap: 8px !important;
+    background: rgba(0,0,0,.16) !important;
+    border-top: 1px solid rgba(255,255,255,.08) !important;
+    margin-top: auto !important;
   }
 }
