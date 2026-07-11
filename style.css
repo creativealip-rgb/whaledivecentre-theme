@@ -5246,3 +5246,115 @@ body.whaledive-home #courses .wd-course-body p {
     text-overflow: ellipsis !important;
   }
 }
+
+
+/* WDC QA contrast pass 2.3.49 */
+/* Hero primary CTA: solid white + deep navy = max contrast on dark photo */
+body.whaledive-home .wd-hero .wd-actions .wd-btn:not(.alt),
+body.home .wd-hero .wd-actions .wd-btn:not(.alt),
+.home .wd-hero-simple .wd-actions .wd-btn:not(.alt),
+.home .wd-hero .wd-btn:not(.alt),
+.wd-hero .wd-actions > .wd-btn:not(.alt){
+  background:#ffffff!important;
+  background-image:none!important;
+  color:#021126!important;
+  border:1px solid rgba(255,255,255,.98)!important;
+  box-shadow:0 16px 34px rgba(0,0,0,.28)!important;
+  font-weight:900!important;
+}
+body.whaledive-home .wd-hero .wd-actions .wd-btn:not(.alt):hover,
+body.home .wd-hero .wd-actions .wd-btn:not(.alt):hover,
+.home .wd-hero-simple .wd-actions .wd-btn:not(.alt):hover,
+.home .wd-hero .wd-btn:not(.alt):hover,
+.wd-hero .wd-actions > .wd-btn:not(.alt):hover{
+  background:#eef8fb!important;
+  color:#021126!important;
+}
+/* Hero/footer secondary CTA: solid cyan + deep ink */
+body.whaledive-home .wd-hero .wd-actions .wd-btn.alt,
+body.home .wd-hero .wd-actions .wd-btn.alt,
+.home .wd-hero-simple .wd-actions .wd-btn.alt,
+.home .wd-hero .wd-btn.alt,
+.wd-hero .wd-btn.alt,
+.wd-footer .wd-btn.alt,
+.wd-footer-brand .wd-btn.alt{
+  background:#4CC8ED!important;
+  background-image:none!important;
+  color:#021126!important;
+  border:1px solid rgba(255,255,255,.55)!important;
+  box-shadow:0 14px 30px rgba(0,0,0,.22)!important;
+  font-weight:900!important;
+}
+body.whaledive-home .wd-hero .wd-actions .wd-btn.alt:hover,
+body.home .wd-hero .wd-actions .wd-btn.alt:hover,
+.home .wd-hero-simple .wd-actions .wd-btn.alt:hover,
+.home .wd-hero .wd-btn.alt:hover,
+.wd-hero .wd-btn.alt:hover,
+.wd-footer .wd-btn.alt:hover,
+.wd-footer-brand .wd-btn.alt:hover{
+  background:#79d7f2!important;
+  color:#021126!important;
+}
+/* Footer bottom copyright contrast */
+.wd-footer-bottom,
+.wd-footer-bottom span,
+.wd-footer-bottom p,
+body.whaledive-home .wd-footer-bottom,
+body.whaledive-inner .wd-footer-bottom{
+  color:rgba(255,255,255,.88)!important;
+}
+.wd-footer-bottom a{
+  color:#ffffff!important;
+}
+/* Review role chips on dark cards */
+.home .wd-review-card .wd-review-author span,
+.home .wd-proof .wd-review-author span,
+.wd-review-card span{
+  color:rgba(255,255,255,.9)!important;
+}
+.home .wd-review-card p,
+.home .wd-proof .wd-review-card p{
+  color:rgba(255,255,255,.92)!important;
+}
+/* Membership CTA on light section: brand blue */
+.home #membership .wd-btn.alt,
+.home .wd-member-cta .wd-btn.alt{
+  background:linear-gradient(135deg,#004A98,#3B44AC)!important;
+  color:#fff!important;
+  border-color:transparent!important;
+}
+/* Home equipment product photos: soft aqua plate instead of grey box */
+.home .wd-home-equip-photo,
+.home .wd-equipment-grid .wd-course-photo{
+  background:
+    radial-gradient(circle at 50% 42%,rgba(76,200,237,.22),rgba(255,255,255,.75) 52%,#eef8fb 100%)!important;
+}
+.home .wd-home-equip-photo img,
+.home .wd-equipment-grid .wd-course-photo img{
+  object-fit:contain!important;
+  padding:14px!important;
+  background:transparent!important;
+}
+/* Catalog equipment visual already soft; keep product images contain */
+.whaledive-equipment #equipGrid .wd-equip-visual{
+  background:radial-gradient(circle at 50% 42%,rgba(76,200,237,.22),rgba(255,255,255,.72) 52%,#eef8fb 100%)!important;
+}
+
+
+/* WDC QA nav member contrast 2.3.50 */
+.wd-header .wd-nav-member,
+.wd-menu .wd-nav-member,
+#wd-mobile-menu .wd-nav-member{
+  background:#004A98!important;
+  color:#ffffff!important;
+  border:1px solid rgba(255,255,255,.28)!important;
+  box-shadow:0 10px 22px rgba(0,0,0,.18)!important;
+  font-weight:900!important;
+}
+.wd-header .wd-nav-member:hover,
+.wd-menu .wd-nav-member:hover,
+#wd-mobile-menu .wd-nav-member:hover{
+  background:#3B44AC!important;
+  color:#ffffff!important;
+}
+
