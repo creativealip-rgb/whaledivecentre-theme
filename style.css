@@ -3725,11 +3725,13 @@ body.whaledive-single-course .wdc-card-cta,
   background:transparent!important;
 }
 body.whaledive-single-course .wdc-card-cta .wd-shell,
-.single-wm_course .wdc-card-cta .wd-shell{
-  width:auto!important;
+.single-wm_course .wdc-card-cta .wd-shell,
+body.whaledive-single-equip .wdc-card-cta .wd-shell,
+.single-wm_equipment .wdc-card-cta .wd-shell{
+  width:min(920px, calc(100% - 56px))!important;
   max-width:920px!important;
-  margin-left:28px!important;
-  margin-right:28px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
   margin-top:0!important;
   margin-bottom:0!important;
   padding:32px 24px 28px!important;
@@ -3739,6 +3741,7 @@ body.whaledive-single-course .wdc-card-cta .wd-shell,
   border:1px solid rgba(6,56,77,.14)!important;
   box-shadow:0 16px 40px rgba(2,32,46,.08)!important;
   color:#06384d!important;
+  text-align:center!important;
 }
 body.whaledive-single-course .wdc-card-cta .wd-kicker,
 .single-wm_course .wdc-card-cta .wd-kicker{
@@ -3756,12 +3759,16 @@ body.whaledive-single-course .wdc-card-cta h2,
   margin:14px 0 12px!important;
 }
 body.whaledive-single-course .wdc-card-cta p,
-.single-wm_course .wdc-card-cta p{
+.single-wm_course .wdc-card-cta p,
+body.whaledive-single-equip .wdc-card-cta p,
+.single-wm_equipment .wdc-card-cta p{
   color:#334155!important;
   font-size:15px!important;
   line-height:1.65!important;
-  margin:0 0 20px!important;
+  margin:0 auto 20px!important;
+  max-width:620px!important;
   opacity:1!important;
+  text-align:center!important;
 }
 body.whaledive-single-course .wdc-card-cta .wd-btn,
 body.whaledive-single-course .wdc-card-cta .wd-btn.alt,
@@ -3834,9 +3841,12 @@ body.whaledive-single-course .wd-footer,
     padding:16px 0 64px!important;
   }
   body.whaledive-single-course .wdc-card-cta .wd-shell,
-  .single-wm_course .wdc-card-cta .wd-shell{
-    margin-left:24px!important;
-    margin-right:24px!important;
+  .single-wm_course .wdc-card-cta .wd-shell,
+  body.whaledive-single-equip .wdc-card-cta .wd-shell,
+  .single-wm_equipment .wdc-card-cta .wd-shell{
+    width:min(920px, calc(100% - 48px))!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
     padding:28px 20px 26px!important;
   }
   body.whaledive-single-course .wdc-card-cta h2,
@@ -5527,3 +5537,49 @@ body.whaledive-single-course .wd-course-full-image-hero .wd-kicker{
   border:1px solid rgba(255,255,255,.28)!important;
 }
 
+/* WDC card CTA center harden 2.3.54 */
+.wdc-card-cta{
+  text-align:center!important;
+}
+.wdc-card-cta .wd-shell{
+  margin-left:auto!important;
+  margin-right:auto!important;
+  width:min(920px, calc(100% - 44px))!important;
+  max-width:920px!important;
+  box-sizing:border-box!important;
+  text-align:center!important;
+}
+.wdc-card-cta .wd-kicker{
+  display:inline-flex!important;
+  justify-content:center!important;
+}
+.wdc-card-cta h2{
+  text-align:center!important;
+}
+.wdc-card-cta p{
+  margin-left:auto!important;
+  margin-right:auto!important;
+  text-align:center!important;
+}
+.wdc-card-cta .wd-btn,
+.wdc-card-cta .wd-btn.alt{
+  display:inline-flex!important;
+  justify-content:center!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+@media (max-width:900px){
+  body.whaledive-single-course .wdc-card-cta .wd-shell,
+  body.whaledive-single-equip .wdc-card-cta .wd-shell,
+  body.single-wm_course .wdc-card-cta .wd-shell,
+  body.single-wm_equipment .wdc-card-cta .wd-shell,
+  .single-wm_course .wdc-card-cta .wd-shell,
+  .single-wm_equipment .wdc-card-cta .wd-shell{
+    width:min(920px, calc(100% - 48px))!important;
+    max-width:920px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+    padding-left:20px!important;
+    padding-right:20px!important;
+  }
+}
