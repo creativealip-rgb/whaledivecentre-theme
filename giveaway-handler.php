@@ -268,6 +268,80 @@ add_action('wp_ajax_wdc_search_area', function() {
     wp_send_json_success(['areas' => $results]);
 });
 
+
+/**
+ * Fallback city search when Biteship API key missing.
+ */
+function wdc_giveaway_fallback_search_area($query) {
+    $q = strtolower(trim((string) $query));
+    $catalog = [
+        ['id' => 'FB-JKT-PUSAT', 'name' => 'Jakarta Pusat', 'postal_code' => '10110', 'admin1_name' => 'DKI Jakarta', 'admin2_name' => 'Jakarta Pusat', 'country_name' => 'Indonesia'],
+        ['id' => 'FB-JKT-SEL', 'name' => 'Jakarta Selatan', 'postal_code' => '12120', 'admin1_name' => 'DKI Jakarta', 'admin2_name' => 'Jakarta Selatan', 'country_name' => 'Indonesia'],
+        ['id' => 'FB-BDG', 'name' => 'Bandung', 'postal_code' => '40111', 'admin1_name' => 'Jawa Barat', 'admin2_name' => 'Kota Bandung', 'country_name' => 'Indonesia'],
+        ['id' => 'FB-SBY', 'name' => 'Surabaya', 'postal_code' => '60111', 'admin1_name' => 'Jawa Timur', 'admin2_name' => 'Kota Surabaya', 'country_name' => 'Indonesia'],
+        ['id' => 'FB-YGY', 'name' => 'Yogyakarta', 'postal_code' => '55111', 'admin1_name' => 'DI Yogyakarta', 'admin2_name' => 'Kota Yogyakarta', 'country_name' => 'Indonesia'],
+        ['id' => 'FB-SMG', 'name' => 'Semarang', 'postal_code' => '50111', 'admin1_name' => 'Jawa Tengah', 'admin2_name' => 'Kota Semarang', 'country_name' => 'Indonesia'],
+        ['id' => 'FB-MDN', 'name' => 'Medan', 'postal_code' => '20111', 'admin1_name' => 'Sumatera Utara', 'admin2_name' => 'Kota Medan', 'country_name' => 'Indonesia'],
+        ['id' => 'FB-DPS', 'name' => 'Denpasar', 'postal_code' => '80111', 'admin1_name' => 'Bali', 'admin2_name' => 'Kota Denpasar', 'country_name' => 'Indonesia'],
+        ['id' => 'FB-MKS', 'name' => 'Makassar', 'postal_code' => '90111', 'admin1_name' => 'Sulawesi Selatan', 'admin2_name' => 'Kota Makassar', 'country_name' => 'Indonesia'],
+        ['id' => 'FB-BPN', 'name' => 'Balikpapan', 'postal_code' => '76111', 'admin1_name' => 'Kalimantan Timur', 'admin2_name' => 'Kota Balikpapan', 'country_name' => 'Indonesia'],
+    ];
+    $out = [];
+    foreach ($catalog as $area) {
+        $hay = strtolower($area['name'] . ' ' . $area['admin2_name'] . ' ' . $area['admin1_name'] . ' ' . $area['postal_code']);
+        if ($q === '' || strpos($hay, $q) !== false) {
+            $out[] = $area;
+        }
+    }
+    return $out ?: array_slice($catalog, 0, 5);
+}
+
+/**
+ * Fallback flat shipping rates when Biteship API key missing.
+ */
+function wdc_giveaway_fallback_rates($weight_grams, $dest_area_id = '') {
+    $weight = max(1, intval($weight_grams));
+    $zone = 1;
+    $id = strtoupper((string) $dest_area_id);
+    if (strpos($id, 'FB-DPS') !== false || strpos($id, 'FB-MKS') !== false || strpos($id, 'FB-BPN') !== false || strpos($id, 'FB-MDN') !== false) {
+        $zone = 3;
+    } elseif (strpos($id, 'FB-JKT') === false && $id !== '') {
+        $zone = 2;
+    }
+    $base = [1 => 12000, 2 => 18000, 3 => 28000][$zone];
+    $extra = (int) ceil(max(0, $weight - 250) / 250) * 3000;
+    $reg = $base + $extra;
+    return [
+        [
+            'courier' => 'JNE',
+            'courier_code' => 'jne',
+            'service' => 'REG',
+            'service_code' => 'reg',
+            'cost' => $reg,
+            'etd' => '2-4 hari',
+            'description' => 'Estimasi ongkir fallback',
+        ],
+        [
+            'courier' => 'J&T',
+            'courier_code' => 'jnt',
+            'service' => 'EZ',
+            'service_code' => 'ez',
+            'cost' => max(10000, $reg - 2000),
+            'etd' => '2-3 hari',
+            'description' => 'Estimasi ongkir fallback',
+        ],
+        [
+            'courier' => 'SiCepat',
+            'courier_code' => 'sicepat',
+            'service' => 'REG',
+            'service_code' => 'reg',
+            'cost' => $reg + 1500,
+            'etd' => '2-4 hari',
+            'description' => 'Estimasi ongkir fallback',
+        ],
+    ];
+}
+
 /* =========================================================================
    BITESHIP API HELPERS
    ========================================================================= */
@@ -303,7 +377,8 @@ function wdc_biteship_get_origin() {
 function wdc_biteship_search_area($query) {
     $api_key = wdc_biteship_api_key();
     if (!$api_key) {
-        return new WP_Error('no_api_key', contenly_tr('Ongkir belum dikonfigurasi.', 'Shipping not configured.'));
+        // Demo/fallback areas so giveaway still works without Biteship key.
+        return wdc_giveaway_fallback_search_area($query);
     }
 
     $response = wp_remote_get(
@@ -363,7 +438,7 @@ function wdc_biteship_resolve_area($query) {
 function wdc_biteship_get_rates($origin_area_id, $dest_area_id, $weight_grams, $couriers = 'jne,jnt,sicepat') {
     $api_key = wdc_biteship_api_key();
     if (!$api_key) {
-        return new WP_Error('no_api_key', contenly_tr('Ongkir belum dikonfigurasi.', 'Shipping not configured.'));
+        return wdc_giveaway_fallback_rates($weight_grams, $dest_area_id);
     }
 
     $body = [
@@ -592,6 +667,7 @@ add_action('wp_enqueue_scripts', function() {
     if (!is_user_logged_in()) {
         return;
     }
+    wp_enqueue_script('jquery');
     wp_localize_script('jquery', 'wdcGiveawayAjax', [
         'nonce'  => wp_create_nonce('wdc_giveaway_nonce'),
         'ajaxurl' => admin_url('admin-ajax.php'),
