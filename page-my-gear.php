@@ -69,10 +69,11 @@ if (!$gear) {
     ];
 }
 ?>
-<div style="margin-bottom:24px;">
-    <h1 style="font-size:28px;font-weight:800;color:#0f172a;margin-bottom:8px;"><?php echo contenly_tr('Peralatan Saya', 'My Gear'); ?></h1>
-    <p style="font-size:15px;color:#64748b;"><?php echo contenly_tr('Beli peralatan standar langsung, atau minta bantuan fitting/ketersediaan saat ukuran dan setup butuh panduan kru.', 'Buy standard gear directly, or request fit/availability help when sizing and setup need crew guidance.'); ?></p>
+<div class="wdc-page-head">
+    <h1><?php echo contenly_tr('Peralatan Saya', 'My Gear'); ?></h1>
+    <p class="wdc-page-sub"><?php echo contenly_tr('Beli peralatan standar langsung, atau minta bantuan fitting/ketersediaan saat ukuran dan setup butuh panduan kru.', 'Buy standard gear directly, or request fit/availability help when sizing and setup need crew guidance.'); ?></p>
 </div>
+
 
 <?php if ($notice) : ?>
 <div style="margin-bottom:18px;padding:12px 14px;border-radius:12px;background:<?php echo $notice_type === 'success' ? '#dcfce7' : '#fee2e2'; ?>;color:<?php echo $notice_type === 'success' ? '#166534' : '#991b1b'; ?>;font-weight:800;font-size:14px;">

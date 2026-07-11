@@ -38,10 +38,11 @@ $certification = get_user_meta($user_id, '_wdc_certification', true);
 $gear_sizes = get_user_meta($user_id, '_wdc_gear_sizes', true);
 $emergency_contact = get_user_meta($user_id, '_wdc_emergency_contact', true);
 ?>
-<div style="margin-bottom:24px;">
-    <h1 style="font-size:28px;font-weight:800;color:#0f172a;margin-bottom:8px;"><?php echo esc_html(contenly_tr('Pengaturan Akun', 'Account Settings')); ?></h1>
-    <p style="font-size:15px;color:#64748b;"><?php echo esc_html(contenly_tr('Pastikan profil Whale Dive Centre Anda siap untuk pendaftaran kursus dan bantuan pembelian gear.', 'Keep your Whale Dive Centre profile ready for course registration and gear purchase support.')); ?></p>
+<div class="wdc-page-head">
+    <h1><?php echo esc_html(contenly_tr('Pengaturan Akun', 'Account Settings')); ?></h1>
+    <p class="wdc-page-sub"><?php echo esc_html(contenly_tr('Pastikan profil Whale Dive Centre Anda siap untuk pendaftaran kursus dan bantuan pembelian gear.', 'Keep your Whale Dive Centre profile ready for course registration and gear purchase support.')); ?></p>
 </div>
+
 
 <?php if ($notice) : ?>
 <div style="margin-bottom:18px;padding:12px 14px;border-radius:12px;background:<?php echo $notice_type === 'success' ? '#dcfce7' : '#fee2e2'; ?>;color:<?php echo $notice_type === 'success' ? '#166534' : '#991b1b'; ?>;font-weight:800;font-size:14px;">
@@ -51,7 +52,7 @@ $emergency_contact = get_user_meta($user_id, '_wdc_emergency_contact', true);
 
 <div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(260px,.7fr);gap:20px;align-items:start;">
     <section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:24px;box-shadow:0 12px 34px rgba(15,23,42,.06);">
-        <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 18px;"><?php echo esc_html(contenly_tr('Detail Profil', 'Profile Details')); ?></h2>
+        <h2 class="wdc-section-title" style="margin:0 0 16px;"><?php echo esc_html(contenly_tr('Detail Profil', 'Profile Details')); ?></h2>
         <form method="post" style="display:grid;gap:14px;">
             <?php wp_nonce_field('wdc_account_settings', 'wdc_settings_nonce'); ?>
             <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;"><?php echo esc_html(contenly_tr('Nama tampilan', 'Display name')); ?>

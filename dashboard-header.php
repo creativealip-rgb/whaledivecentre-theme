@@ -83,46 +83,67 @@ $wdc_member_icon = function ($path) {
         .page-title { font-size: 24px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
         .page-subtitle { color: #64748b; margin-bottom: 32px; font-size: 14px; }
 
-        /* Unified member page heading strip */
-        .dashboard-main > div:has(> h1),
-        .dashboard-main > section:has(> h1) {
-            background: linear-gradient(135deg, #EEF5F4, #f8fbff) !important;
-            border: 1px solid #DCE9E6 !important;
-            border-radius: 14px !important;
-            padding: 16px 18px !important;
-            margin-bottom: 20px !important;
-        }
-        .dashboard-main > div:has(> h1) h1,
-        .dashboard-main > section:has(> h1) h1 {
-            margin: 0 0 6px !important;
-            color: var(--wdc-deep) !important;
-            line-height: 1.2 !important;
-        }
-        .dashboard-main > div:has(> h1) p,
-        .dashboard-main > section:has(> h1) p {
-            margin: 0 !important;
-            color: #5f7180 !important;
-        }
-
-        /* Fallback for pages that render heading directly (h1 + subtitle) */
-        .dashboard-main > h1.page-title {
-            margin: 0 !important;
-            padding: 16px 18px 6px !important;
-            background: linear-gradient(135deg, #EEF5F4, #f8fbff) !important;
-            border: 1px solid #DCE9E6 !important;
-            border-bottom: 0 !important;
-            border-radius: 14px 14px 0 0 !important;
-            color: var(--wdc-deep) !important;
-            line-height: 1.2 !important;
-        }
-        .dashboard-main > p.page-subtitle {
+        /* Unified member page heading + type scale */
+        .wdc-page-head {
+            width: 100% !important;
+            max-width: none !important;
+            box-sizing: border-box !important;
+            background: #fff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 16px !important;
+            padding: 18px 20px !important;
             margin: 0 0 20px !important;
-            padding: 0 18px 14px !important;
-            background: linear-gradient(135deg, #EEF5F4, #f8fbff) !important;
-            border: 1px solid #DCE9E6 !important;
-            border-top: 0 !important;
-            border-radius: 0 0 14px 14px !important;
-            color: #475569 !important;
+            box-shadow: 0 8px 24px rgba(15,23,42,.04) !important;
+        }
+        .wdc-page-head h1,
+        .dashboard-main .wdc-page-head h1,
+        .dashboard-main h1.wdc-page-title {
+            font-size: 26px !important;
+            font-weight: 800 !important;
+            color: #0f172a !important;
+            margin: 0 0 6px !important;
+            line-height: 1.2 !important;
+            letter-spacing: -0.02em !important;
+            display: block !important;
+        }
+        .wdc-page-head p,
+        .wdc-page-head .wdc-page-sub,
+        .dashboard-main .wdc-page-head p {
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            color: #64748b !important;
+            margin: 0 !important;
+            line-height: 1.5 !important;
+        }
+        .dashboard-main .wdc-section-title,
+        .dashboard-main section > h2:first-child,
+        .dashboard-main .wdc-mc-side > h2,
+        .dashboard-main .wdc-mc-head h2 {
+            font-size: 18px !important;
+            font-weight: 900 !important;
+            color: #0f172a !important;
+            margin: 0 0 10px !important;
+            line-height: 1.25 !important;
+            letter-spacing: -0.02em !important;
+        }
+        .dashboard-main .wdc-section-sub {
+            font-size: 13px !important;
+            color: #64748b !important;
+            margin: 0 0 14px !important;
+            line-height: 1.5 !important;
+        }
+        .dashboard-main .wdc-card,
+        .dashboard-main section.wdc-card,
+        .dashboard-main .wdc-mc-panel,
+        .dashboard-main .wdc-gw,
+        .dashboard-main .wdc-gw-progress {
+            width: 100% !important;
+            max-width: none !important;
+            box-sizing: border-box !important;
+            background: #fff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 16px !important;
+            box-shadow: 0 8px 24px rgba(15,23,42,.04) !important;
         }
         
         /* Welcome Banner - Contenly Style */

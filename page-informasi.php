@@ -14,10 +14,11 @@ $color_map = [
     'Update NAUI/WDC/TDI/DAN' => ['#f5f3ff', '#6d28d9'],
 ];
 ?>
-<div style="margin-bottom:18px;">
-    <h1 style="font-size:26px;font-weight:800;color:#0f172a;margin:0 0 6px;"><?php echo contenly_tr('Informasi', 'Information'); ?></h1>
-    <p style="font-size:14px;color:#64748b;margin:0;"><?php echo contenly_tr('Giveaway, event, trip, dan update terbaru dari Whale Dive Centre.', 'Giveaways, events, trips, and latest updates from Whale Dive Centre.'); ?></p>
+<div class="wdc-page-head">
+    <h1><?php echo contenly_tr('Informasi', 'Information'); ?></h1>
+    <p class="wdc-page-sub"><?php echo contenly_tr('Giveaway, event, trip, dan update terbaru dari Whale Dive Centre.', 'Giveaways, events, trips, and latest updates from Whale Dive Centre.'); ?></p>
 </div>
+
 
 <?php if (!is_wp_error($info_types) && $info_types) : ?>
 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">

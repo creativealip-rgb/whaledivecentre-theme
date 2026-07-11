@@ -2,7 +2,7 @@
 
 /*
 Theme Name: Whale Dive Centre Theme
-Version: 2.3.81
+Version: 2.3.82
 */
 :root{
   --black:#000;--violet:#3B44AC;--cyan:#4CC8ED;--pale:#96DAEA;--red:#C31C4A;--blue:#004A98;--white:#fff;--navy:#061a36;--ink:#0b1930;--muted:#63748a;
@@ -7958,4 +7958,70 @@ html body.whaledive-equipment .wdc-card-cta .wd-btn.alt{
     border-top: 1px solid rgba(255,255,255,.08) !important;
     margin-top: auto !important;
   }
+}
+
+
+/* ==========================================================================
+   WDC MEMBER HEADING LOCK 2.3.82
+   ========================================================================== */
+body.wm-member-app .dashboard-main .wdc-page-head{
+  width:100%!important;
+  max-width:none!important;
+  box-sizing:border-box!important;
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  padding:18px 20px!important;
+  margin:0 0 20px!important;
+  box-shadow:0 8px 24px rgba(15,23,42,.04)!important;
+}
+body.wm-member-app .dashboard-main .wdc-page-head h1,
+body.wm-member-app .dashboard-main h1.wdc-page-title{
+  font-size:26px!important;
+  font-weight:800!important;
+  line-height:1.2!important;
+  letter-spacing:-.02em!important;
+  color:#0f172a!important;
+  margin:0 0 6px!important;
+}
+body.wm-member-app .dashboard-main .wdc-page-head p,
+body.wm-member-app .dashboard-main .wdc-page-head .wdc-page-sub{
+  font-size:14px!important;
+  font-weight:500!important;
+  line-height:1.5!important;
+  color:#64748b!important;
+  margin:0!important;
+}
+body.wm-member-app .dashboard-main .wdc-section-title,
+body.wm-member-app .dashboard-main section > h2:first-child,
+body.wm-member-app .dashboard-main .wdc-mc-side > h2,
+body.wm-member-app .dashboard-main .wdc-mc-head h2{
+  font-size:18px!important;
+  font-weight:900!important;
+  line-height:1.25!important;
+  letter-spacing:-.02em!important;
+  color:#0f172a!important;
+}
+body.wm-member-app .dashboard-main .wdc-section-sub{
+  font-size:13px!important;
+  color:#64748b!important;
+  line-height:1.5!important;
+}
+body.wm-member-app .dashboard-main .wdc-gw-progress-title{
+  font-size:22px!important;
+  font-weight:900!important;
+  line-height:1.2!important;
+  color:#0f172a!important;
+  margin:0!important;
+}
+body.wm-member-app .dashboard-main .wdc-card,
+body.wm-member-app .dashboard-main .wdc-mc-panel,
+body.wm-member-app .dashboard-main .wdc-gw,
+body.wm-member-app .dashboard-main .wdc-gw-progress,
+body.wm-member-app .dashboard-main section[style*="background:#fff"],
+body.wm-member-app .dashboard-main section[style*="background: #fff"]{
+  width:100%!important;
+  max-width:none!important;
+  box-sizing:border-box!important;
+  border-radius:16px!important;
 }

@@ -36,10 +36,11 @@ foreach ($manual_orders as $mo) {
     }
 }
 ?>
-<div style="margin-bottom:24px;">
-    <h1 style="font-size:28px;font-weight:800;color:#0f172a;margin-bottom:8px;"><?php echo contenly_tr('Dashboard Member', 'Member Dashboard'); ?></h1>
-    <p style="font-size:15px;color:#64748b;"><?php echo contenly_tr('Pusat Whale Dive Centre untuk perencanaan kursus, permintaan alat selam, dan dukungan kru.', 'Your Whale Dive Centre hub for course planning, scuba gear requests, and crew support.'); ?></p>
+<div class="wdc-page-head">
+    <h1><?php echo contenly_tr('Dashboard Member', 'Member Dashboard'); ?></h1>
+    <p class="wdc-page-sub"><?php echo contenly_tr('Pusat Whale Dive Centre untuk perencanaan kursus, permintaan alat selam, dan dukungan kru.', 'Your Whale Dive Centre hub for course planning, scuba gear requests, and crew support.'); ?></p>
 </div>
+
 
 
 <!-- Giveaway Section (only for users who haven't claimed) — pulls from Informasi post -->
@@ -372,7 +373,7 @@ if (is_array($gw_order) && !empty($gw_order['order_id']) && function_exists('wdc
 <section id="wdc-giveaway-progress" class="wdc-card wdc-gw-progress">
     <div class="wdc-gw-progress-head">
         <div class="wdc-gw-progress-copy">
-            <div class="wdc-gw-progress-kicker"><?php echo contenly_tr('Progres Giveaway', 'Giveaway Progress'); ?></div>
+            <div class="wdc-gw-progress-kicker wdc-section-sub" style="margin:0 0 4px;text-transform:uppercase;letter-spacing:.08em;font-size:11px;font-weight:900;color:#0b617c;"><?php echo contenly_tr('Progres Giveaway', 'Giveaway Progress'); ?></div>
             <h2 class="wdc-gw-progress-title"><?php echo esc_html($gw_order['order_id']); ?></h2>
             <div class="wdc-gw-progress-meta"><?php echo esc_html(implode(', ', $gw_item_names) ?: 'Giveaway items'); ?> · Ongkir Rp <?php echo number_format(intval($gw_order['shipping_cost'] ?? 0), 0, ',', '.'); ?></div>
         </div>
@@ -516,7 +517,7 @@ if ($wdc_dash_infos) :
 ?>
 <section style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:18px;margin-bottom:24px;box-shadow:0 8px 24px rgba(15,23,42,.04);">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
-        <h2 style="font-size:18px;font-weight:900;color:#0f172a;margin:0;"><?php echo contenly_tr('Informasi Terbaru', 'Latest Information'); ?></h2>
+        <h2 class="wdc-section-title" style="margin:0;"><?php echo contenly_tr('Informasi Terbaru', 'Latest Information'); ?></h2>
         <a href="<?php echo esc_url(contenly_localized_url('/informasi/')); ?>" style="font-size:13px;font-weight:800;color:#004A98;text-decoration:none;"><?php echo contenly_tr('Lihat semua', 'View all'); ?> →</a>
     </div>
     <div style="display:grid;gap:0;border:1px solid #eef2f6;border-radius:12px;overflow:hidden;">

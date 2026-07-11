@@ -10,10 +10,11 @@ $user = wp_get_current_user();
 $submitted = isset($_GET['submitted']) && $_GET['submitted'] === '1';
 $active_filter = sanitize_text_field($_GET['type'] ?? '');
 ?>
-<div style="margin-bottom:24px;">
-    <h1 style="font-size:28px;font-weight:800;color:#0f172a;margin-bottom:8px;"><?php echo contenly_tr('Cerita Kamu', 'Your Stories'); ?></h1>
-    <p style="font-size:15px;color:#64748b;"><?php echo contenly_tr('Bagikan pengalaman kursus atau trip diving kamu bersama Whale Dive Centre.', 'Share your course or dive trip experience with Whale Dive Centre.'); ?></p>
+<div class="wdc-page-head">
+    <h1><?php echo contenly_tr('Cerita Kamu', 'Your Stories'); ?></h1>
+    <p class="wdc-page-sub"><?php echo contenly_tr('Bagikan pengalaman kursus atau trip diving kamu bersama Whale Dive Centre.', 'Share your course or dive trip experience with Whale Dive Centre.'); ?></p>
 </div>
+
 
 <?php if ($submitted) : ?>
 <div style="margin-bottom:18px;padding:14px 16px;border-radius:12px;background:#dcfce7;color:#166534;font-weight:800;font-size:14px;">
@@ -23,7 +24,7 @@ $active_filter = sanitize_text_field($_GET['type'] ?? '');
 
 <!-- Submit form -->
 <section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:24px;margin-bottom:28px;box-shadow:0 12px 34px rgba(15,23,42,.05);">
-    <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 16px;letter-spacing:.03em;"><?php echo contenly_tr('Tulis Cerita', 'Write a Story'); ?></h2>
+    <h2 class="wdc-section-title" style="margin:0 0 16px;"><?php echo contenly_tr('Tulis Cerita', 'Write a Story'); ?></h2>
     <form method="post" enctype="multipart/form-data" id="wdc-story-form" style="display:grid;gap:14px;">
         <?php wp_nonce_field('wdc_story_submit', 'wdc_story_nonce'); ?>
         <label style="display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;"><?php echo contenly_tr('Judul Cerita', 'Story Title'); ?>
