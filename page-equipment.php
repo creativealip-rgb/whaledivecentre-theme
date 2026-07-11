@@ -35,12 +35,12 @@ function wdc_equipment_detail_slug($title, $cat_slug, $post_name = '') {
 function wdc_equipment_image_url($title, $cat_slug, $theme_uri) {
     $key = strtolower($title . ' ' . $cat_slug);
     $map = [
-        'mask' => 'wdc-equipment-mask-real.png',
-        'fin' => 'wdc-equipment-fins-real.png',
-        'bcd' => 'wdc-equipment-bcd-real.png',
-        'regulator' => 'wdc-equipment-regulator-real.png',
-        'computer' => 'wdc-equipment-dive-computer-real.png',
-        'wetsuit' => 'wdc-equipment-wetsuit-real.png',
+        'mask' => 'wdc-equipment-mask-real.webp',
+        'fin' => 'wdc-equipment-fins-real.webp',
+        'bcd' => 'wdc-equipment-bcd-real.webp',
+        'regulator' => 'wdc-equipment-regulator-real.webp',
+        'computer' => 'wdc-equipment-dive-computer-real.webp',
+        'wetsuit' => 'wdc-equipment-wetsuit-real.webp',
     ];
     foreach ($map as $needle => $file) {
         if (strpos($key, $needle) !== false) {
@@ -78,7 +78,7 @@ function wdc_equipment_image_url($title, $cat_slug, $theme_uri) {
         <?php endforeach; endif; ?>
       </div>
 
-      <div id="equipGrid" class="wd-equipment-grid wd-page-grid" style="align-items:start!important;grid-auto-rows:auto!important;">
+      <div id="equipGrid" class="wd-equipment-grid wd-page-grid wd-catalog-grid">
         <?php foreach($all_items as $item):
           $price = get_post_meta($item->ID, '_wm_price', true);
           $stock = get_post_meta($item->ID, '_wm_stock', true);
@@ -94,31 +94,31 @@ function wdc_equipment_image_url($title, $cat_slug, $theme_uri) {
           $use_case = $cat_name ? 'Crew-selected ' . strtolower($cat_name) . ' for training, comfort, and safer dive habits.' : 'Crew-selected dive gear for training, comfort, and safer dive habits.';
           $image_url = get_the_post_thumbnail_url($item->ID, 'large') ?: wdc_equipment_image_url($item->post_title, $cat_slug, $theme_uri);
         ?>
-        <article class="wd-equip-card wd-detail-card wd-shop-card" data-href="<?php echo esc_url($permalink); ?>" onclick="if(!event.target.closest('a,button')){window.location.href=this.dataset.href;}" data-cat="cat-<?php echo esc_attr($cat_slug); ?>" style="border-radius:18px!important;overflow:hidden!important;padding:0!important;background:#fff!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important;border:1px solid rgba(6,56,77,.08)!important;min-height:0!important;height:auto!important;display:flex!important;flex-direction:column!important;">
-          <div class="wd-equip-visual <?php echo $image_url ? 'has-photo' : ''; ?>" data-cat="<?php echo esc_attr($cat_slug ?: 'gear'); ?>" style="height:190px!important;min-height:0!important;border-radius:0!important;margin:0!important;overflow:hidden!important;background:radial-gradient(circle at 50% 42%,rgba(76,200,237,.24),rgba(255,255,255,.68) 50%,#eef8fb 100%)!important;border-bottom:1px solid rgba(6,56,77,.08)!important;">
-            <?php if($image_url): ?><img class="wd-equip-photo" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($item->post_title); ?>" loading="lazy" style="width:100%!important;height:100%!important;object-fit:contain!important;padding:14px 14px 8px!important;display:block!important;position:relative!important;z-index:2!important;transform:none!important;transform-origin:center!important;" onerror="this.closest('.wd-equip-visual').classList.remove('has-photo');this.remove();"><?php else: ?><span class="wd-equip-mark"><?php echo esc_html($cat_name ? mb_substr($cat_name, 0, 1) : 'G'); ?></span><?php endif; ?>
+        <article class="wd-equip-card wd-detail-card wd-shop-card wd-catalog-card" data-href="<?php echo esc_url($permalink); ?>" onclick="if(!event.target.closest('a,button')){window.location.href=this.dataset.href;}" data-cat="cat-<?php echo esc_attr($cat_slug); ?>">
+          <div class="wd-equip-visual <?php echo $image_url ? 'has-photo' : ''; ?>" data-cat="<?php echo esc_attr($cat_slug ?: 'gear'); ?>">
+            <?php if($image_url): ?><img class="wd-equip-photo" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($item->post_title); ?>" loading="lazy" onerror="this.closest('.wd-equip-visual').classList.remove('has-photo');this.remove();"><?php else: ?><span class="wd-equip-mark"><?php echo esc_html($cat_name ? mb_substr($cat_name, 0, 1) : 'G'); ?></span><?php endif; ?>
             <?php if($cat_name): ?><span class="wd-equip-type"><?php echo esc_html($cat_name); ?></span><?php endif; ?>
           </div>
-          <div class="wd-equip-card-body" style="padding:16px!important;min-height:0!important;height:auto!important;display:flex!important;flex-direction:column!important;gap:6px!important;background:#fff!important;">
-            <div class="wd-course-meta wd-shop-meta" style="gap:6px!important;margin:0 0 4px!important;display:flex!important;flex-wrap:wrap!important;">
+          <div class="wd-equip-card-body">
+            <div class="wd-course-meta wd-shop-meta">
               <?php if($cat_name): ?><span><?php echo esc_html($cat_name); ?></span><?php endif; ?>
               <?php if($brand_name): ?><span><?php echo esc_html($brand_name); ?></span><?php endif; ?>
             </div>
-            <h3 style="font-size:20px!important;line-height:1.28!important;letter-spacing:-.03em!important;margin:0 0 2px!important;color:#061a36!important;min-height:0!important;"><?php echo esc_html($item->post_title); ?></h3>
+            <h3><?php echo esc_html($item->post_title); ?></h3>
             <?php if($price): ?>
-            <div class="wd-equip-price" style="margin:0 0 6px!important;padding:0!important;background:transparent!important;border:0!important;">
-              <span class="wd-price-label" style="display:block!important;width:100%!important;flex-basis:100%!important;margin:0 0 4px!important;color:#5f7180!important;font-size:10px!important;font-weight:800!important;letter-spacing:.02em!important;"><?php echo contenly_tr('Harga beli · sewa atas permintaan', 'Buy price · rental on request'); ?></span>
-              <span class="wd-price-amount" style="display:block!important;width:100%!important;flex-basis:100%!important;color:#06384d!important;font-size:17px!important;line-height:1.1!important;font-weight:950!important;letter-spacing:-.02em!important;">Rp <?php echo number_format((float)$price,0,',','.'); ?></span>
+            <div class="wd-equip-price">
+              <span class="wd-price-label"><?php echo contenly_tr('Harga beli · sewa atas permintaan', 'Buy price · rental on request'); ?></span>
+              <span class="wd-price-amount">Rp <?php echo number_format((float)$price,0,',','.'); ?></span>
             </div>
             <?php endif; ?>
-            <div class="wd-equip-chips" style="gap:6px!important;margin:0 0 4px!important;display:flex!important;flex-wrap:wrap!important;">
-              <?php if($sizes): ?><span style="padding:5px 8px!important;border-radius:999px!important;background:#f3fbff!important;color:#35586a!important;font-size:10px!important;font-weight:800!important;line-height:1!important;"><?php echo contenly_tr('Ukuran: ', 'Sizes: '); ?><?php echo esc_html($sizes); ?></span><?php endif; ?>
-              <span style="padding:5px 8px!important;border-radius:999px!important;background:#f3fbff!important;color:#35586a!important;font-size:10px!important;font-weight:800!important;line-height:1!important;"><?php echo $stock ? esc_html($stock) . ' ' . contenly_tr('stok', 'in stock') : contenly_tr('Cek ketersediaan', 'Check availability'); ?></span>
+            <div class="wd-equip-chips">
+              <?php if($sizes): ?><span><?php echo contenly_tr('Ukuran: ', 'Sizes: '); ?><?php echo esc_html($sizes); ?></span><?php endif; ?>
+              <span><?php echo $stock ? esc_html($stock) . ' ' . contenly_tr('stok', 'in stock') : contenly_tr('Cek ketersediaan', 'Check availability'); ?></span>
             </div>
-            <div class="wd-equip-actions" style="margin-top:8px!important;padding-top:0!important;border-top:0!important;display:flex!important;gap:8px!important;flex-wrap:wrap!important;">
-              <a class="wd-mini-link" style="min-height:38px!important;min-width:100px!important;justify-content:center!important;width:max-content!important;margin:0!important;padding:0 16px!important;border-radius:999px!important;font-size:13px!important;font-weight:900!important;background:#f3fbff!important;border:1px solid rgba(6,56,77,.14)!important;color:#06384d!important;box-shadow:none!important;display:inline-flex!important;align-items:center!important;text-decoration:none!important;" href="<?php echo esc_url($permalink); ?>"><?php echo contenly_tr('Lihat Detail', 'View Details'); ?></a>
+            <div class="wd-equip-actions">
+              <a class="wd-mini-link" href="<?php echo esc_url($permalink); ?>"><?php echo contenly_tr('Lihat Detail', 'View Details'); ?></a>
               <?php if($price && (!$stock || (int)$stock > 0)): ?>
-              <a class="wd-mini-btn" onclick="event.stopPropagation();" style="min-height:38px!important;min-width:100px!important;justify-content:center!important;width:max-content!important;margin:0!important;padding:0 16px!important;border-radius:999px!important;font-size:13px!important;font-weight:900!important;background:#06384d!important;border:1px solid #06384d!important;color:#fff!important;box-shadow:none!important;display:inline-flex!important;align-items:center!important;text-decoration:none!important;" href="<?php echo esc_url(home_url('/direct-checkout/?type=equipment&item=' . rawurlencode($item->post_title) . '&item_id=' . $item->ID . '&price=' . $price)); ?>"><?php echo contenly_tr('Beli', 'Buy Now'); ?></a>
+              <a class="wd-mini-btn" onclick="event.stopPropagation();" href="<?php echo esc_url(home_url('/direct-checkout/?type=equipment&item=' . rawurlencode($item->post_title) . '&item_id=' . $item->ID . '&price=' . $price)); ?>"><?php echo contenly_tr('Beli', 'Buy Now'); ?></a>
               <?php endif; ?>
             </div>
           </div>
@@ -130,7 +130,7 @@ function wdc_equipment_image_url($title, $cat_slug, $theme_uri) {
 
   <section class="wdc-card-cta"><div class="wd-shell"><span class="wd-kicker"><?php echo contenly_tr('Butuh saran gear?', 'Need gear advice?'); ?></span><h2><?php echo esc_html(contenly_tr('Crew bantu cari yang pas.', 'The crew helps you find the right fit.')); ?></h2><p><?php echo contenly_tr('Ceritakan level sertifikasi, rencana dive, dan budget — kami rekomendasikan gear yang cocok.', 'Tell us your certification level, dive plans, and budget — we recommend gear that works.'); ?></p><a class="wd-btn alt" href="/contact/"><?php echo esc_html(contenly_tr('Tanya Ukuran Gear', 'Ask About Gear Fit')); ?></a></div></section>
 
-  <?php get_footer(); ?>
+  <?php contenly_render_public_footer(); ?>
 </main>
 <script>/* catalog add cart */document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('.wd-equipment-add-cart').forEach(function(btn){btn.addEventListener('click',function(){if(!window.wmCart||!wmCart.addToCart){window.location.href='/direct-checkout/';return;}var original=btn.textContent;btn.disabled=true;btn.textContent='Adding...';wmCart.addToCart('equipment',btn.getAttribute('data-item-id'),1,{}).then(function(data){if(data&&data.success){window.location.href='/direct-checkout/';return;}btn.disabled=false;btn.textContent=original;}).catch(function(){btn.disabled=false;btn.textContent=original;});});});});</script><script>document.addEventListener('DOMContentLoaded',function(){var path=location.pathname;document.querySelectorAll('.wd-menu a[data-nav]').forEach(function(a){var key=a.getAttribute('data-nav');var active=(key==='home'&&path==='/')||(key!=='home'&&path.indexOf('/'+key+'/')===0);if(active){a.classList.add('is-active');a.setAttribute('aria-current','page');}});document.querySelectorAll('[data-href]').forEach(function(card){card.style.cursor='pointer';card.addEventListener('click',function(e){if(e.target.closest('a,button'))return;window.location.href=card.getAttribute('data-href');});});});</script><?php wp_footer(); ?>
 </body></html>

@@ -143,7 +143,7 @@ function wdc_course_image_url($title, $theme_uri) {
       <span class="wd-kicker"><?php echo esc_html(contenly_tr('Katalog kursus', 'Course catalog')); ?></span>
       <h2 class="wd-title"><?php echo esc_html(contenly_tr('Kursus selam dari agensi terpercaya', 'Dive courses from trusted agencies')); ?></h2>
       <p class="wd-sub"><?php echo $displayed_count; ?> <?php echo contenly_tr('kursus dari NAUI, TDI, dan DAN', 'courses from NAUI, TDI, and DAN'); ?></p>
-      <div id="courseFilters" class="wd-filter-bar" style="margin-bottom:8px!important;">
+      <div id="courseFilters" class="wd-filter-bar">
         <button class="wd-chip active" data-filter="all"><?php echo esc_html(contenly_tr('Semua Kursus', 'All Courses')); ?></button>
         <?php if(!empty($levels) && !is_wp_error($levels)): foreach($levels as $level): ?>
           <button class="wd-chip" data-filter="cat-<?php echo esc_attr($level->slug); ?>"><?php echo esc_html($level->name); ?></button>
@@ -166,13 +166,13 @@ function wdc_course_image_url($title, $theme_uri) {
       ?>
       <div style="margin-bottom:56px;">
         <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
-          <span style="display:inline-flex;align-items:center;gap:8px;padding:8px 20px;border-radius:999px;background:<?php echo $ac; ?>;color:#fff;font-size:15px;font-weight:900;letter-spacing:.04em;font-family:'Plus Jakarta Sans',sans-serif;"><?php echo esc_html($agency_name); ?></span>
-          <span style="flex:1;height:2px;background:linear-gradient(90deg,<?php echo $ac; ?>33,transparent);border-radius:1px;"></span>
-          <span style="font-size:13px;font-weight:700;color:#5b7180;"><?php echo count($agency_courses); ?> <?php echo contenly_tr('kursus', 'courses'); ?></span>
+          <span class="wd-chiplet"><?php echo esc_html($agency_name); ?></span>
+          <span class="wd-chiplet"></span>
+          <span class="wd-chiplet"><?php echo count($agency_courses); ?> <?php echo contenly_tr('kursus', 'courses'); ?></span>
         </div>
         <?php if($ad): ?><p style="color:#5b7180;font-size:15px;line-height:1.6;margin:0 0 22px;max-width:640px;"><?php echo esc_html($ad); ?></p><?php endif; ?>
 
-        <div id="courseGrid" class="wd-equipment-grid wd-page-grid" style="align-items:start!important;grid-auto-rows:auto!important;">
+        <div id="courseGrid" class="wd-equipment-grid wd-page-grid wd-catalog-grid">
           <?php foreach($agency_courses as $course):
             $price = get_post_meta($course->ID, '_wm_price', true);
             $duration = get_post_meta($course->ID, '_wm_duration', true);
@@ -187,32 +187,32 @@ function wdc_course_image_url($title, $theme_uri) {
             $permalink = home_url('/courses/' . $course->post_name . '/');
             $image_url = get_the_post_thumbnail_url($course->ID, 'large') ?: wdc_course_image_url($course->post_title, $theme_uri);
           ?>
-          <article class="wd-equip-card wd-detail-card wd-shop-card wd-course-card" data-href="<?php echo esc_url($permalink); ?>" data-cat="cat-<?php echo esc_attr($level_slug); ?>" style="border-radius:18px!important;overflow:hidden!important;padding:0!important;background:#fff!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important;border:1px solid rgba(6,56,77,.08)!important;min-height:0!important;height:auto!important;display:flex!important;flex-direction:column!important;">
-            <div class="wd-equip-visual <?php echo $image_url ? 'has-photo' : ''; ?>" data-course-level="<?php echo esc_attr($level_slug ?: 'course'); ?>" style="height:138px!important;min-height:0!important;border-radius:0!important;margin:0!important;">
+          <article class="wd-equip-card wd-detail-card wd-shop-card wd-course-card wd-catalog-card" data-href="<?php echo esc_url($permalink); ?>" data-cat="cat-<?php echo esc_attr($level_slug); ?>">
+            <div class="wd-equip-visual <?php echo $image_url ? 'has-photo' : ''; ?>" data-course-level="<?php echo esc_attr($level_slug ?: 'course'); ?>">
               <?php if($image_url): ?><img class="wd-equip-photo" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($course->post_title); ?>" loading="lazy" onerror="this.closest('.wd-equip-visual').classList.remove('has-photo');this.remove();"><?php else: ?><span class="wd-equip-mark"><?php echo esc_html($level_name ? mb_substr($level_name, 0, 1) : 'C'); ?></span><?php endif; ?>
               <?php if($level_name): ?><span class="wd-equip-type"><?php echo esc_html($level_name); ?></span><?php endif; ?>
             </div>
-            <div class="wd-equip-card-body" style="padding:14px!important;min-height:0!important;height:auto!important;display:flex!important;flex-direction:column!important;gap:6px!important;background:#fff!important;">
-              <div class="wd-course-meta wd-shop-meta" style="gap:6px!important;margin:0 0 4px!important;">
+            <div class="wd-equip-card-body">
+              <div class="wd-course-meta wd-shop-meta">
                 <?php if($level_name): ?><span><?php echo esc_html($level_name); ?></span><?php endif; ?>
                 <span><?php echo esc_html($agency_name); ?></span>
               </div>
-              <h3 style="font-size:20px!important;line-height:1.08!important;letter-spacing:-.03em!important;margin:0 0 2px!important;color:#061a36!important;min-height:0!important;"><?php echo esc_html($course->post_title); ?></h3>
+              <h3><?php echo esc_html($course->post_title); ?></h3>
               <?php if($price): ?>
-              <div class="wd-equip-price" style="margin:0 0 6px!important;padding:0!important;background:transparent!important;border:0!important;">
-                <span class="wd-price-label" style="display:block!important;margin:0 0 4px!important;font-size:11px!important;line-height:1.2!important;color:#789!important;"><?php echo contenly_tr('Harga kursus · jadwal atas permintaan', 'Course price · schedule on request'); ?></span>
-                <span class="wd-price-amount" style="display:block!important;font-size:17px!important;line-height:1!important;color:#06384d!important;font-weight:900!important;white-space:nowrap!important;">Rp <?php echo number_format((float)$price,0,',','.'); ?></span>
+              <div class="wd-equip-price">
+                <span class="wd-price-label"><?php echo contenly_tr('Harga kursus · jadwal atas permintaan', 'Course price · schedule on request'); ?></span>
+                <span class="wd-price-amount">Rp <?php echo number_format((float)$price,0,',','.'); ?></span>
               </div>
               <?php endif; ?>
-              <div class="wd-equip-chips" style="gap:6px!important;margin:0 0 4px!important;display:flex!important;flex-wrap:wrap!important;">
-                <?php if($duration): ?><span style="padding:5px 8px!important;border-radius:999px!important;background:#f3fbff!important;color:#35586a!important;font-size:10px!important;font-weight:800!important;line-height:1!important;"><?php echo esc_html($duration); ?></span><?php endif; ?>
-                <span style="padding:5px 8px!important;border-radius:999px!important;background:#f3fbff!important;color:#35586a!important;font-size:10px!important;font-weight:800!important;line-height:1!important;"><?php echo $max_students ? contenly_tr('Maks ', 'Max ') . esc_html($max_students) . contenly_tr(' diver', ' divers') : contenly_tr('Cek ketersediaan', 'Check availability'); ?></span>
-                <?php if($prereqs): ?><span style="padding:5px 8px!important;border-radius:999px!important;background:#f3fbff!important;color:#35586a!important;font-size:10px!important;font-weight:800!important;line-height:1!important;"><?php echo contenly_tr('Prasyarat: ', 'Prereq: '); ?><?php echo esc_html($prereqs); ?></span><?php endif; ?>
+              <div class="wd-equip-chips">
+                <?php if($duration): ?><span><?php echo esc_html($duration); ?></span><?php endif; ?>
+                <span><?php echo $max_students ? contenly_tr('Maks ', 'Max ') . esc_html($max_students) . contenly_tr(' diver', ' divers') : contenly_tr('Cek ketersediaan', 'Check availability'); ?></span>
+                <?php if($prereqs): ?><span><?php echo contenly_tr('Prasyarat: ', 'Prereq: '); ?><?php echo esc_html($prereqs); ?></span><?php endif; ?>
               </div>
-              <div class="wd-equip-actions" style="margin-top:8px!important;padding-top:0!important;border-top:0!important;display:flex!important;gap:8px!important;flex-wrap:wrap!important;">
-                <a class="wd-mini-link" style="min-height:38px!important;min-width:100px!important;justify-content:center!important;width:max-content!important;margin:0!important;padding:0 16px!important;border-radius:999px!important;font-size:12px!important;font-weight:900!important;background:#f3fbff!important;border:1px solid rgba(6,56,77,.14)!important;color:#06384d!important;box-shadow:none!important;display:inline-flex!important;align-items:center!important;text-decoration:none!important;" href="<?php echo esc_url($permalink); ?>"><?php echo contenly_tr('Lihat Detail', 'View Details'); ?></a>
+              <div class="wd-equip-actions">
+                <a class="wd-mini-link" href="<?php echo esc_url($permalink); ?>"><?php echo contenly_tr('Lihat Detail', 'View Details'); ?></a>
                 <?php if($price > 0): ?>
-                <a class="wd-mini-btn" onclick="event.stopPropagation();" style="min-height:38px!important;min-width:100px!important;justify-content:center!important;width:max-content!important;margin:0!important;padding:0 16px!important;border-radius:999px!important;font-size:12px!important;font-weight:900!important;background:#06384d!important;border:1px solid #06384d!important;color:#fff!important;box-shadow:none!important;display:inline-flex!important;align-items:center!important;text-decoration:none!important;" href="<?php echo esc_url(home_url('/direct-checkout/?type=course&item=' . rawurlencode($course->post_title) . '&item_id=' . $course->ID . '&price=' . $price)); ?>"><?php echo contenly_tr('Daftar', 'Enroll Now'); ?></a>
+                <a class="wd-mini-btn" onclick="event.stopPropagation();" href="<?php echo esc_url(home_url('/direct-checkout/?type=course&item=' . rawurlencode($course->post_title) . '&item_id=' . $course->ID . '&price=' . $price)); ?>"><?php echo contenly_tr('Daftar', 'Enroll Now'); ?></a>
                 <?php endif; ?>
               </div>
             </div>
@@ -226,7 +226,7 @@ function wdc_course_image_url($title, $theme_uri) {
 
   <section class="wdc-card-cta"><div class="wd-shell"><span class="wd-kicker"><?php echo contenly_tr('Butuh saran kursus?', 'Need course advice?'); ?></span><h2><?php echo esc_html(contenly_tr('Crew bantu pilih jalur yang tepat.', 'The crew helps you choose the right path.')); ?></h2><p><?php echo contenly_tr('Ceritakan level sertifikasi, target tanggal, dan tujuan kenyamanan — kami rekomendasikan kursus yang cocok.', 'Tell us your certification level, target dates, and comfort goals — we recommend the course that fits.'); ?></p><a class="wd-btn alt" href="/contact/"><?php echo esc_html(contenly_tr('Tanya Rencana Kursus', 'Ask About Course Plan')); ?></a></div></section>
 
-  <?php get_footer(); ?>
+  <?php contenly_render_public_footer(); ?>
 </main>
 <script>document.addEventListener('DOMContentLoaded',function(){var path=location.pathname;document.querySelectorAll('.wd-menu a[data-nav]').forEach(function(a){var key=a.getAttribute('data-nav');var active=(key==='home'&&path==='/')||(key!=='home'&&path.indexOf('/'+key+'/')===0);if(active){a.classList.add('is-active');a.setAttribute('aria-current','page');}});var chips=Array.prototype.slice.call(document.querySelectorAll('#courseFilters .wd-chip'));var cards=Array.prototype.slice.call(document.querySelectorAll('#courseGrid > article.wd-course-card[data-cat]'));function applyCourseFilter(filter){chips.forEach(function(c){c.classList.toggle('active',c.getAttribute('data-filter')===filter);});cards.forEach(function(card){var show=filter==='all'||card.getAttribute('data-cat')===filter;card.setAttribute('data-visible',show?'1':'0');card.setAttribute('aria-hidden',show?'false':'true');});}chips.forEach(function(chip){chip.addEventListener('click',function(e){e.preventDefault();applyCourseFilter(chip.getAttribute('data-filter')||'all');});});applyCourseFilter('all');document.querySelectorAll('[data-href]').forEach(function(card){card.style.cursor='pointer';card.addEventListener('click',function(e){if(e.target.closest('a,button'))return;window.location.href=card.getAttribute('data-href');});});});</script><?php wp_footer(); ?>
 </body></html>

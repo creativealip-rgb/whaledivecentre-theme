@@ -3930,3 +3930,141 @@ body.whaledive-home .wd-footer .wd-btn.alt {
   border: 1px solid rgba(6,56,77,.12) !important;
   color: #06384d !important;
 }
+
+
+/* WDC catalog card system 2026-07-11 */
+.wd-catalog-grid{
+  align-items:start!important;
+  grid-auto-rows:auto!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:18px!important;
+}
+.wd-catalog-card,
+.whaledive-courses .wd-catalog-card,
+.whaledive-equipment .wd-catalog-card{
+  border-radius:18px!important;
+  overflow:hidden!important;
+  padding:0!important;
+  background:#fff!important;
+  box-shadow:0 14px 34px rgba(2,21,43,.07)!important;
+  border:1px solid rgba(6,56,77,.08)!important;
+  min-height:0!important;
+  height:auto!important;
+  display:flex!important;
+  flex-direction:column!important;
+  cursor:pointer;
+}
+.wd-catalog-card .wd-equip-visual{
+  height:170px!important;
+  min-height:0!important;
+  border-radius:0!important;
+  margin:0!important;
+  overflow:hidden!important;
+  background:radial-gradient(circle at 50% 42%,rgba(76,200,237,.24),rgba(255,255,255,.68) 50%,#eef8fb 100%)!important;
+  border-bottom:1px solid rgba(6,56,77,.08)!important;
+  position:relative!important;
+}
+.whaledive-courses .wd-catalog-card .wd-equip-visual{height:148px!important}
+.wd-catalog-card .wd-equip-photo{
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  padding:14px 14px 10px!important;
+  display:block!important;
+  position:relative!important;
+  z-index:2!important;
+  transform:none!important;
+  background:transparent!important;
+}
+.whaledive-courses .wd-catalog-card .wd-equip-photo{object-fit:cover!important;padding:0!important}
+.wd-catalog-card .wd-equip-visual:before,
+.wd-catalog-card .wd-equip-visual:after{display:none!important;content:none!important}
+.wd-catalog-card .wd-equip-type{display:none!important}
+.wd-catalog-card .wd-equip-card-body{
+  padding:16px!important;
+  min-height:0!important;
+  height:auto!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:6px!important;
+  background:#fff!important;
+}
+.wd-catalog-card h3{
+  font-size:20px!important;
+  line-height:1.2!important;
+  letter-spacing:-.03em!important;
+  margin:0 0 2px!important;
+  color:#061a36!important;
+  min-height:0!important;
+}
+.wd-catalog-card .wd-course-meta,
+.wd-catalog-card .wd-equip-chips{
+  gap:6px!important;
+  margin:0 0 4px!important;
+  display:flex!important;
+  flex-wrap:wrap!important;
+}
+.wd-catalog-card .wd-course-meta span,
+.wd-catalog-card .wd-equip-chips span,
+.wd-catalog-card .wd-chiplet{
+  padding:5px 8px!important;
+  border-radius:999px!important;
+  background:#f3fbff!important;
+  color:#35586a!important;
+  font-size:10px!important;
+  font-weight:800!important;
+  line-height:1.15!important;
+}
+.wd-catalog-card .wd-equip-price{margin:0 0 6px!important;padding:0!important;background:transparent!important;border:0!important}
+.wd-catalog-card .wd-price-label{display:block!important;margin:0 0 4px!important;color:#5f7180!important;font-size:10px!important;font-weight:800!important}
+.wd-catalog-card .wd-price-amount{display:block!important;color:#06384d!important;font-size:17px!important;line-height:1.1!important;font-weight:950!important}
+.wd-catalog-card .wd-equip-actions{
+  margin-top:8px!important;
+  padding-top:0!important;
+  border-top:0!important;
+  display:flex!important;
+  gap:8px!important;
+  flex-wrap:wrap!important;
+}
+.wd-catalog-card .wd-mini-link,
+.wd-catalog-card .wd-mini-btn{
+  min-height:38px!important;
+  min-width:100px!important;
+  justify-content:center!important;
+  width:max-content!important;
+  margin:0!important;
+  padding:0 16px!important;
+  border-radius:999px!important;
+  font-size:13px!important;
+  font-weight:900!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  text-decoration:none!important;
+  box-shadow:none!important;
+}
+.wd-catalog-card .wd-mini-link{
+  background:#f3fbff!important;
+  border:1px solid rgba(6,56,77,.14)!important;
+  color:#06384d!important;
+}
+.wd-catalog-card .wd-mini-btn{
+  background:#06384d!important;
+  border:1px solid #06384d!important;
+  color:#fff!important;
+}
+.wd-catalog-card .wd-mini-link:after{content:none!important}
+@media(max-width:980px){
+  .wd-catalog-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:620px){
+  .wd-catalog-grid{grid-template-columns:1fr!important}
+  .wd-catalog-card .wd-mini-link,
+  .wd-catalog-card .wd-mini-btn{width:100%!important}
+}
+
+/* Blog chrome: keep content titles as-is, strengthen ID chrome */
+.whaledive-blog .wd-blog-section-head .wd-kicker,
+.whaledive-blog .wd-blog-category-filter .wd-chip{
+  font-weight:900!important;
+}
