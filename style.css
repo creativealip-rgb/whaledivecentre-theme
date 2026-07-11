@@ -3663,9 +3663,18 @@ body.whaledive-single-course .wd-content-sidebar,
 .single-wm_course .wd-content-sidebar{
   color:#06384d!important;
 }
+body.whaledive-single-course .wd-section.white,
+.single-wm_course .wd-section.white{
+  padding-bottom:28px!important;
+}
+body.whaledive-single-course .wd-content-sidebar,
+.single-wm_course .wd-content-sidebar{
+  margin-bottom:8px!important;
+}
 body.whaledive-single-course .wdc-card-cta,
 .single-wm_course .wdc-card-cta{
-  padding:0 0 40px!important;
+  padding:20px 0 56px!important;
+  margin:0!important;
   background:transparent!important;
 }
 body.whaledive-single-course .wdc-card-cta .wd-shell,
@@ -3674,7 +3683,9 @@ body.whaledive-single-course .wdc-card-cta .wd-shell,
   max-width:920px!important;
   margin-left:28px!important;
   margin-right:28px!important;
-  padding:28px 22px!important;
+  margin-top:0!important;
+  margin-bottom:0!important;
+  padding:32px 24px 28px!important;
   border-radius:24px!important;
   box-sizing:border-box!important;
   background:linear-gradient(145deg,#f7fcff 0%,#e8f7fb 100%)!important;
@@ -3702,7 +3713,7 @@ body.whaledive-single-course .wdc-card-cta p,
   color:#334155!important;
   font-size:15px!important;
   line-height:1.65!important;
-  margin:0 0 18px!important;
+  margin:0 0 20px!important;
   opacity:1!important;
 }
 body.whaledive-single-course .wdc-card-cta .wd-btn,
@@ -3714,6 +3725,7 @@ body.whaledive-single-course .wdc-card-cta .wd-btn.alt,
   border:0!important;
   min-height:48px!important;
   padding:0 22px!important;
+  margin-top:4px!important;
   font-weight:900!important;
   font-size:15px!important;
   box-shadow:0 14px 28px rgba(0,74,152,.28)!important;
@@ -3763,12 +3775,22 @@ body.whaledive-single-course .wd-sidebar-note a,
   font-weight:800!important;
   text-decoration:underline!important;
 }
+/* keep footer from colliding with CTA card */
+body.whaledive-single-course .wd-footer,
+.single-wm_course .wd-footer{
+  margin-top:0!important;
+  padding-top:48px!important;
+}
 @media (max-width:560px){
+  body.whaledive-single-course .wdc-card-cta,
+  .single-wm_course .wdc-card-cta{
+    padding:16px 0 64px!important;
+  }
   body.whaledive-single-course .wdc-card-cta .wd-shell,
   .single-wm_course .wdc-card-cta .wd-shell{
     margin-left:24px!important;
     margin-right:24px!important;
-    padding:24px 18px!important;
+    padding:28px 20px 26px!important;
   }
   body.whaledive-single-course .wdc-card-cta h2,
   .single-wm_course .wdc-card-cta h2{
@@ -3782,5 +3804,9 @@ body.whaledive-single-course .wd-sidebar-note a,
   .single-wm_course .wd-sidebar-card .wd-btn{
     width:100%!important;
     justify-content:center!important;
+  }
+  body.whaledive-single-course .wd-footer,
+  .single-wm_course .wd-footer{
+    padding-top:40px!important;
   }
 }
