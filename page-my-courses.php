@@ -170,11 +170,64 @@ $completed_count = count($completed_courses);
 .wdc-completed-item .cell{font-size:12px;color:#64748b}
 .wdc-completed-item .cell b{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;margin-bottom:2px;font-weight:700}
 .wdc-completed-item .cell span{color:#0f172a;font-weight:600}
+.wdc-add-form{
+  display:none;
+  margin:0 0 12px;
+  padding:12px;
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  border-radius:12px;
+}
+.wdc-add-form-head{
+  display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 10px
+}
+.wdc-add-form-head h3{
+  margin:0!important;font-size:13px!important;font-weight:700!important;color:#0f172a!important;line-height:1.3!important
+}
+.wdc-add-form-close{
+  border:0;background:transparent;color:#94a3b8;cursor:pointer;font-size:16px;line-height:1;padding:2px 6px;border-radius:8px
+}
+.wdc-add-form-close:hover{color:#C31C4A;background:#fff5f7}
+.wdc-add-form-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.4fr) minmax(120px,.8fr) minmax(120px,.9fr) auto;
+  gap:8px;
+  align-items:end;
+}
+.wdc-add-form label{display:grid;gap:4px;font-size:11px;font-weight:700;color:#475569;min-width:0}
+.wdc-add-form label span.opt{font-weight:400;color:#94a3b8}
+.wdc-add-form input,
+.wdc-add-form select{
+  border:1px solid #dbe4ea!important;
+  border-radius:10px!important;
+  padding:8px 10px!important;
+  width:100%!important;
+  min-height:36px!important;
+  box-sizing:border-box!important;
+  background:#fff!important;
+  font-size:13px!important;
+  font-weight:500!important;
+  line-height:1.3!important;
+  color:#0f172a!important;
+  font-family:inherit!important;
+}
+.wdc-add-form-actions{display:flex;align-items:center;gap:8px}
+.wdc-add-form-actions button{
+  border:0;border-radius:999px;background:#004A98;color:#fff;
+  padding:0 14px;min-height:36px;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap
+}
+.wdc-add-form-actions button:hover{background:#3B44AC}
+#wdc-completed-feedback{font-size:12px;font-weight:700}
 @media(max-width:980px){.wdc-mc-layout{grid-template-columns:1fr}}
 @media(max-width:700px){
   .wdc-completed-item{grid-template-columns:1fr 1fr;gap:8px}
   .wdc-completed-item .cell-title{grid-column:1 / -1}
   .wdc-completed-item .cell-action{grid-column:1 / -1;justify-self:end}
+  .wdc-add-form-grid{grid-template-columns:1fr}
+  .wdc-add-form-actions{justify-content:flex-start}
+}
+@media(max-width:760px){
+  .wdc-add-form input,.wdc-add-form select{font-size:16px!important;min-height:42px!important}
 }
 </style>
 
@@ -203,32 +256,30 @@ $completed_count = count($completed_courses);
         </div>
 
         <!-- Add completed course form (hidden by default) -->
-        <div id="wdc-add-completed-form" style="display:none;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:16px;margin-bottom:14px;">
-            <h3 style="font-size:15px;font-weight:800;color:#0f172a;margin:0 0 12px;"><?php echo contenly_tr('Tambah Kursus Selesai', 'Add Completed Course'); ?></h3>
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;align-items:end;">
-                <label style="display:grid;gap:5px;font-size:12px;font-weight:800;color:#334155;"><?php echo contenly_tr('Kursus', 'Course'); ?>
-                    <select id="wdc-completed-course-select" style="border:1px solid #dbe4ea;border-radius:12px;padding:10px 12px;">
+        <div id="wdc-add-completed-form" class="wdc-add-form">
+            <div class="wdc-add-form-head">
+                <h3><?php echo contenly_tr('Tambah Kursus Selesai', 'Add Completed Course'); ?></h3>
+                <button type="button" class="wdc-add-form-close" id="wdc-close-add-completed" aria-label="<?php echo contenly_tr('Tutup', 'Close'); ?>">✕</button>
+            </div>
+            <div class="wdc-add-form-grid">
+                <label><?php echo contenly_tr('Kursus', 'Course'); ?>
+                    <select id="wdc-completed-course-select">
                         <option value=""><?php echo contenly_tr('Pilih kursus', 'Choose course'); ?></option>
                         <?php foreach ($courses as $c) : ?>
                         <option value="<?php echo esc_attr($c['id']); ?>" data-title="<?php echo esc_attr($c['title']); ?>" data-level="<?php echo esc_attr($c['level']); ?>"><?php echo esc_html($c['title']); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </label>
-                <label style="display:grid;gap:5px;font-size:12px;font-weight:800;color:#334155;"><?php echo contenly_tr('Tanggal Selesai', 'Date Completed'); ?>
-                    <input type="date" id="wdc-completed-date" style="border:1px solid #dbe4ea;border-radius:12px;padding:10px 12px;">
+                <label><?php echo contenly_tr('Tanggal', 'Date'); ?>
+                    <input type="date" id="wdc-completed-date">
                 </label>
-                <label style="display:grid;gap:5px;font-size:12px;font-weight:800;color:#334155;"><?php echo contenly_tr('No. Sertifikat', 'Cert Number'); ?> <span style="font-weight:400;color:#94a3b8;">(<?php echo contenly_tr('opsional', 'optional'); ?>)</span>
-                    <input type="text" id="wdc-completed-cert" placeholder="<?php echo contenly_tr('No. sertifikat', 'Cert number'); ?>" style="border:1px solid #dbe4ea;border-radius:12px;padding:10px 12px;">
+                <label><?php echo contenly_tr('Sertifikat', 'Cert'); ?> <span class="opt">(<?php echo contenly_tr('opsional', 'optional'); ?>)</span>
+                    <input type="text" id="wdc-completed-cert" placeholder="<?php echo contenly_tr('No. sertifikat', 'Cert number'); ?>">
                 </label>
-            </div>
-            <div style="margin-top:10px;">
-                <label style="display:grid;gap:5px;font-size:12px;font-weight:800;color:#334155;"><?php echo contenly_tr('Catatan', 'Notes'); ?> <span style="font-weight:400;color:#94a3b8;">(<?php echo contenly_tr('opsional', 'optional'); ?>)</span>
-                    <textarea id="wdc-completed-notes" rows="2" placeholder="<?php echo contenly_tr('Nama instruktur, lokasi, dll...', 'Instructor name, location, etc...'); ?>" style="border:1px solid #dbe4ea;border-radius:12px;padding:10px 12px;resize:vertical;"></textarea>
-                </label>
-            </div>
-            <div style="margin-top:12px;display:flex;gap:8px;align-items:center;">
-                <button id="wdc-save-completed" type="button" style="border:0;border-radius:999px;background:#16a34a;color:#fff;padding:10px 18px;font-weight:900;font-size:13px;cursor:pointer;"><?php echo contenly_tr('Simpan', 'Save'); ?></button>
-                <span id="wdc-completed-feedback" style="font-size:13px;font-weight:700;"></span>
+                <div class="wdc-add-form-actions">
+                    <button id="wdc-save-completed" type="button"><?php echo contenly_tr('Simpan', 'Save'); ?></button>
+                    <span id="wdc-completed-feedback"></span>
+                </div>
             </div>
         </div>
 
@@ -328,13 +379,23 @@ $completed_count = count($completed_courses);
         }
     }
 
+    function setAddFormOpen(open) {
+        if (!form) return;
+        form.style.display = open ? 'block' : 'none';
+        if (open) {
+            try { form.scrollIntoView({behavior:'smooth', block:'nearest'}); } catch(e) {}
+            var sel = document.getElementById('wdc-completed-course-select');
+            if (sel) sel.focus();
+        }
+    }
     if (toggleBtn && form) {
         toggleBtn.addEventListener('click', function(){
-            form.style.display = form.style.display === 'none' ? 'block' : 'none';
-            if (form.style.display === 'block') {
-                form.scrollIntoView({behavior:'smooth', block:'nearest'});
-            }
+            setAddFormOpen(form.style.display === 'none' || form.style.display === '');
         });
+    }
+    var closeBtn = document.getElementById('wdc-close-add-completed');
+    if (closeBtn && form) {
+        closeBtn.addEventListener('click', function(){ setAddFormOpen(false); });
     }
 
     // Save completed course
@@ -357,7 +418,8 @@ $completed_count = count($completed_courses);
             fd.append('level', opt.getAttribute('data-level') || '');
             fd.append('date_completed', document.getElementById('wdc-completed-date').value);
             fd.append('cert_number', document.getElementById('wdc-completed-cert').value);
-            fd.append('notes', document.getElementById('wdc-completed-notes').value);
+            var notesEl = document.getElementById('wdc-completed-notes');
+            fd.append('notes', notesEl ? notesEl.value : '');
 
             fetch(ajaxUrl, {method:'POST', body:fd, credentials:'same-origin'})
                 .then(function(r){return r.json();})
