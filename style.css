@@ -3559,3 +3559,98 @@ body.whaledive-single-equip .wd-single-gear-visual,
   .single-wm_course .wd-sidebar-card,
   .single-wm_equipment .wd-sidebar-card{position:static!important}
 }
+
+
+/* WDC course single mobile edge breathing 2026-07-11 */
+@media (max-width: 900px) {
+  body.whaledive-single-course .wd-shell,
+  body.single-wm_course .wd-shell,
+  .single-wm_course .wd-shell,
+  body.whaledive-single-course .wd-section .wd-shell,
+  body.single-wm_course .wd-section .wd-shell,
+  body.whaledive-single-course .wd-content-grid.wd-shell,
+  body.single-wm_course .wd-content-grid.wd-shell {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 28px !important;
+    padding-right: 28px !important;
+    box-sizing: border-box !important;
+  }
+  body.whaledive-single-course .wd-compact-hero .wd-shell,
+  body.single-wm_course .wd-compact-hero .wd-shell,
+  .single-wm_course .wd-compact-hero .wd-shell {
+    padding-left: 28px !important;
+    padding-right: 28px !important;
+  }
+  body.whaledive-single-course .wd-content-grid,
+  body.single-wm_course .wd-content-grid,
+  .single-wm_course .wd-content-grid {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    gap: 18px !important;
+  }
+  body.whaledive-single-course .wd-content-main,
+  body.single-wm_course .wd-content-main,
+  .single-wm_course .wd-content-main {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  body.whaledive-single-course .wd-course-outcomes,
+  body.single-wm_course .wd-course-outcomes,
+  .single-wm_course .wd-course-outcomes {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    gap: 12px !important;
+  }
+  body.whaledive-single-course .wd-course-outcomes article,
+  body.single-wm_course .wd-course-outcomes article,
+  .single-wm_course .wd-course-outcomes article {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding: 18px 16px !important;
+  }
+  body.whaledive-single-course .wd-section.white,
+  body.single-wm_course .wd-section.white,
+  .single-wm_course .wd-section.white {
+    padding-top: 28px !important;
+    padding-bottom: 40px !important;
+  }
+  body.whaledive-single-course .wd-content-main > .wd-kicker,
+  body.single-wm_course .wd-content-main > .wd-kicker,
+  .single-wm_course .wd-content-main > .wd-kicker {
+    margin-top: 4px !important;
+  }
+  body.whaledive-single-course .wd-sidebar-card,
+  body.single-wm_course .wd-sidebar-card,
+  .single-wm_course .wd-sidebar-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+@media (max-width: 420px) {
+  body.whaledive-single-course .wd-shell,
+  body.single-wm_course .wd-shell,
+  .single-wm_course .wd-shell,
+  body.whaledive-single-course .wd-section .wd-shell,
+  body.single-wm_course .wd-section .wd-shell,
+  body.whaledive-single-course .wd-compact-hero .wd-shell,
+  body.single-wm_course .wd-compact-hero .wd-shell,
+  .single-wm_course .wd-compact-hero .wd-shell {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+}
