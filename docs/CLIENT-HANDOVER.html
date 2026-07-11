@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Client Handover Guide</title>
+<style>
+@page { size: A4; margin: 16mm 14mm; }
+:root { --ink:#0f172a; --muted:#475569; --line:#e2e8f0; --brand:#06384d; --accent:#0b617c; }
+* { box-sizing: border-box; }
+body {
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  color: var(--ink);
+  font-size: 11.5pt;
+  line-height: 1.55;
+  margin: 0;
+}
+.cover {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 28px 26px;
+  margin-bottom: 22px;
+  background: linear-gradient(135deg, #f7fcff 0%, #eef8fb 100%);
+}
+.cover .kicker {
+  display: inline-block;
+  font-size: 10pt;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+.cover h1 {
+  margin: 0 0 8px;
+  font-size: 24pt;
+  line-height: 1.15;
+  color: var(--brand);
+}
+.cover p { margin: 0; color: var(--muted); }
+.meta {
+  margin-top: 14px;
+  font-size: 10pt;
+  color: var(--muted);
+}
+h1,h2,h3 { color: var(--brand); page-break-after: avoid; }
+h1 { font-size: 20pt; margin: 0 0 12px; }
+h2 {
+  font-size: 14pt;
+  margin: 22px 0 8px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid #dbeafe;
+}
+h3 { font-size: 12pt; margin: 16px 0 6px; }
+p, li { color: #1e293b; }
+ul, ol { padding-left: 1.2em; }
+li { margin: 3px 0; }
+blockquote {
+  margin: 12px 0;
+  padding: 10px 14px;
+  border-left: 4px solid #4CC8ED;
+  background: #f8fafc;
+  color: var(--muted);
+}
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.92em;
+  background: #f1f5f9;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+pre {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  font-size: 10pt;
+}
+pre code { background: transparent; color: inherit; padding: 0; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0 16px;
+  font-size: 10.5pt;
+  page-break-inside: avoid;
+}
+th, td {
+  border: 1px solid var(--line);
+  padding: 8px 9px;
+  vertical-align: top;
+  text-align: left;
+}
+th {
+  background: #06384d;
+  color: #fff;
+  font-weight: 700;
+}
+tr:nth-child(even) td { background: #f8fafc; }
+hr { border: 0; border-top: 1px solid var(--line); margin: 18px 0; }
+strong { color: #0f172a; }
+a { color: #0b617c; text-decoration: none; }
+.footer-note {
+  margin-top: 28px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font-size: 9.5pt;
+  color: var(--muted);
+}
+</style>
+</head>
+<body>
+  <div class="cover">
+    <div class="kicker">Whale Dive Centre</div>
+    <h1>Client Handover Guide</h1>
+    <p>Panduan lengkap admin non-teknis untuk kelola konten website</p>
+    <div class="meta">Generated: 11 July 2026 · Internal handover document</div>
+  </div>
+  <h1>Whale Dive Centre — Panduan Handover Client</h1>
+<p>Dokumen ini untuk <strong>admin non-teknis</strong> yang mengelola konten website Whale Dive Centre lewat WordPress Admin, <strong>tanpa mengubah kode</strong>.</p>
+<p><strong>Prinsip utama:</strong><br />
+Layout/desain tetap. Admin cukup ubah <strong>konten, foto, harga, dan status request</strong>.</p>
+<hr />
+<h2>1. Akses penting</h2>
+<table>
+<thead>
+<tr>
+<th>Keperluan</th>
+<th>URL</th>
+<th>Keterangan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Website publik</td>
+<td><code>https://whaledivecentre.com</code></td>
+<td>Halaman pengunjung</td>
+</tr>
+<tr>
+<td>Login <strong>admin</strong> (kelola konten)</td>
+<td><code>https://whaledivecentre.com/wp-admin/</code></td>
+<td>Masuk lewat form WordPress admin</td>
+</tr>
+<tr>
+<td>Login <strong>member</strong> (siswa/customer)</td>
+<td><code>https://whaledivecentre.com/login/</code></td>
+<td>Bukan untuk kelola konten site</td>
+</tr>
+<tr>
+<td>Dashboard member</td>
+<td><code>https://whaledivecentre.com/dashboard/</code></td>
+<td>Area member setelah login</td>
+</tr>
+</tbody>
+</table>
+<h3>Catatan login (penting)</h3>
+<ul>
+<li><strong>Admin</strong> pakai <code>/wp-admin/</code> → form login WordPress.</li>
+<li><strong>Member</strong> pakai <code>/login/</code>.</li>
+<li>URL lama <code>/member-login/</code> otomatis dialihkan ke <code>/login/</code>.</li>
+<li>Kalau password member salah, user <strong>tetap di halaman <code>/login/</code></strong> (bukan ke halaman admin).</li>
+</ul>
+<blockquote>
+<p>Simpan username/password admin di password manager. Jangan share ke member.</p>
+</blockquote>
+<hr />
+<h2>2. Peta menu admin (yang perlu dipakai)</h2>
+<p>Setelah login admin, fokus ke menu ini:</p>
+<h3>A. <code>WDC Site</code> — pusat konten website</h3>
+<p>Ini menu utama untuk copy marketing &amp; data site.</p>
+<table>
+<thead>
+<tr>
+<th>Submenu</th>
+<th>Untuk apa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Contact &amp; Footer</strong></td>
+<td>Email, telepon, alamat, jam, sosial media, teks footer, CTA footer</td>
+</tr>
+<tr>
+<td><strong>Home Content</strong></td>
+<td>Hero home, proof points, judul section kursus/gear, membership, reviews title</td>
+</tr>
+<tr>
+<td><strong>Notifications</strong></td>
+<td>Email crew saat ada request course/gear; auto-reply ke member</td>
+</tr>
+<tr>
+<td><strong>About Page</strong></td>
+<td>Teks halaman Tentang Kami</td>
+</tr>
+<tr>
+<td><strong>Contact Page</strong></td>
+<td>Teks/form copy halaman kontak</td>
+</tr>
+<tr>
+<td><strong>Partners / Trust</strong></td>
+<td>Partner/brand trust (format khusus, lihat bawah)</td>
+</tr>
+<tr>
+<td><strong>Crew Profiles</strong></td>
+<td>Profil crew (nama, foto, bio)</td>
+</tr>
+<tr>
+<td><strong>Testimonials</strong></td>
+<td>Testimoni member/tamu</td>
+</tr>
+<tr>
+<td><strong>Add Crew / Add Testimonial</strong></td>
+<td>Tambah data baru</td>
+</tr>
+</tbody>
+</table>
+<h3>B. Katalog produk/kursus</h3>
+<table>
+<thead>
+<tr>
+<th>Menu</th>
+<th>Untuk apa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Dive Courses</strong></td>
+<td>Semua kursus (judul, deskripsi, harga, foto, highlight, CTA)</td>
+</tr>
+<tr>
+<td><strong>Dive Equipment</strong></td>
+<td>Semua gear (harga, stok, size, foto, CTA)</td>
+</tr>
+</tbody>
+</table>
+<h3>C. Blog &amp; cerita member</h3>
+<table>
+<thead>
+<tr>
+<th>Menu</th>
+<th>Untuk apa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Posts / Blog</strong></td>
+<td>Artikel blog resmi crew</td>
+</tr>
+<tr>
+<td><strong>Cerita Kamu</strong></td>
+<td>Cerita yang dikirim member — <strong>harus di-approve dulu</strong> sebelum tampil di Blog</td>
+</tr>
+</tbody>
+</table>
+<h3>D. Member &amp; request</h3>
+<table>
+<thead>
+<tr>
+<th>Menu</th>
+<th>Untuk apa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Users</strong></td>
+<td>Data akun member</td>
+</tr>
+<tr>
+<td><strong>WDC Members</strong> (jika ada)</td>
+<td>Ringkasan request/order member</td>
+</tr>
+</tbody>
+</table>
+<h3>Yang <strong>tidak perlu</strong> disentuh admin harian</h3>
+<ul>
+<li>Appearance / Theme File Editor / Plugin settings teknis</li>
+<li>Kode, CSS, rewrite, database</li>
+<li>Menu legacy yang disembunyikan (mis. tool internal dev)</li>
+</ul>
+<hr />
+<h2>3. Tugas harian / mingguan</h2>
+<h3>3.1 Ganti teks Home / About / Contact / Footer</h3>
+<ol>
+<li>Buka <strong>WDC Site</strong></li>
+<li>Pilih submenu yang sesuai (Home Content / About Page / Contact Page / Contact &amp; Footer)</li>
+<li>Edit field</li>
+<li>Klik <strong>Save / Update</strong></li>
+<li>Cek hasil di website publik (hard refresh browser)</li>
+</ol>
+<h3>3.2 Update harga / detail kursus</h3>
+<ol>
+<li>Buka <strong>Dive Courses</strong></li>
+<li>Klik kursus yang mau diubah</li>
+<li>Isi field penting:<br />
+   - Judul &amp; ringkasan<br />
+   - <strong>Featured image</strong> (foto utama)<br />
+   - Harga mulai<br />
+   - Durasi, max students, prasyarat<br />
+   - Includes / highlight<br />
+   - CTA label (contoh: <code>Daftar Open Water</code>)<br />
+   - Show in catalog (tampil/sembunyi)</li>
+<li><strong>Update</strong></li>
+<li>Cek:<br />
+   - <code>/courses/</code><br />
+   - halaman detail kursus</li>
+</ol>
+<h3>3.3 Update gear / stok</h3>
+<ol>
+<li>Buka <strong>Dive Equipment</strong></li>
+<li>Edit item</li>
+<li>Field penting:<br />
+   - Featured image<br />
+   - Harga mulai<br />
+   - Stok<br />
+   - Ukuran tersedia<br />
+   - Service points / CTA</li>
+<li><strong>Update</strong></li>
+<li>Cek <code>/equipment/</code> dan detail item</li>
+</ol>
+<h3>3.4 Ganti foto (cara benar)</h3>
+<p>Foto yang tampil di catalog/detail = <strong>Featured Image</strong> di post course/equipment.</p>
+<ol>
+<li>Buka course/equipment</li>
+<li>Panel kanan <strong>Featured image</strong></li>
+<li>Set / ganti / remove image</li>
+<li>Update</li>
+</ol>
+<blockquote>
+<p>Jangan cari menu “Catalog Images” untuk ganti foto harian. Itu tool internal, sudah disembunyikan.</p>
+</blockquote>
+<h3>3.5 Tambah testimoni</h3>
+<ol>
+<li><strong>WDC Site → Testimonials → Add Testimonial</strong></li>
+<li>Isi nama, isi testimoni, foto (opsional)</li>
+<li>Publish</li>
+<li>Cek section testimoni di home</li>
+</ol>
+<h3>3.6 Update crew</h3>
+<ol>
+<li><strong>WDC Site → Crew Profiles</strong></li>
+<li>Edit / add crew</li>
+<li>Isi nama, role, bio, foto</li>
+<li>Publish</li>
+</ol>
+<h3>3.7 Partners / Trust</h3>
+<p>Di <strong>WDC Site → Partners / Trust</strong>:<br />
+- Format tiap baris: <code>Nama Brand|nama-file.webp</code><br />
+- Pisah baris partner baru dengan <code>---</code><br />
+- File logo ditaruh di folder assets partners (koordinasi dev jika perlu upload file baru)</p>
+<p>Contoh:</p>
+<pre><code class="language-text">NAUI|naui.webp
+TDI|tdi.webp
+---
+Cressi|cressi.webp
+</code></pre>
+<hr />
+<h2>4. Alur bisnis member (request course/gear)</h2>
+<h3>Cara kerja (penting)</h3>
+<ul>
+<li>Harga <strong>tampil publik</strong></li>
+<li>Tombol <strong>Daftar / Beli</strong> butuh login member</li>
+<li>Member mengajukan request dari dashboard</li>
+<li>Crew follow-up manual (bukan checkout otomatis Midtrans penuh)</li>
+<li><strong>Tidak ada WhatsApp CTA publik</strong> di halaman course/equipment</li>
+</ul>
+<h3>Alur member</h3>
+<ol>
+<li>Member buka <code>/login/</code></li>
+<li>Masuk dashboard</li>
+<li>Ajukan kursus (<code>/my-courses/</code>) atau gear (<code>/my-gear/</code>)</li>
+<li>Admin/crew terima notifikasi email (jika Notifications aktif)</li>
+<li>Crew hubungi / proses manual</li>
+</ol>
+<h3>Setting notifikasi</h3>
+<p><strong>WDC Site → Notifications</strong><br />
+- Email crew penerima request<br />
+- On/off notif crew<br />
+- On/off auto-reply ke member</p>
+<p>Kalau email crew kosong, sistem fallback ke email admin/contact.</p>
+<hr />
+<h2>5. Cerita Kamu (moderasi wajib)</h2>
+<p>Member bisa kirim cerita dari area member (<strong>Cerita Kamu</strong>).</p>
+<h3>Aturan</h3>
+<ul>
+<li>Submit member <strong>tidak langsung publish</strong></li>
+<li>Status awal: <strong>Pending review</strong></li>
+<li>Baru tampil di Blog setelah admin <strong>Approve</strong></li>
+</ul>
+<h3>Cara approve</h3>
+<p><strong>Opsi A — dari list</strong><br />
+1. Admin → menu <strong>Cerita Kamu</strong><br />
+2. Cari item Pending<br />
+3. Klik <strong>Approve &amp; publish</strong></p>
+<p><strong>Opsi B — dari edit</strong><br />
+1. Buka cerita<br />
+2. Centang <strong>Approve &amp; publish ke Blog</strong><br />
+3. Update</p>
+<h3>Hasil approve</h3>
+<ul>
+<li>Cerita live di list Cerita Kamu (approved)</li>
+<li>Otomatis dibuatkan/disinkron ke <strong>Blog post</strong> (kategori Community)</li>
+<li>Member melihat status <strong>Live di Blog</strong> di “Kiriman saya”</li>
+</ul>
+<h3>Unapprove</h3>
+<ul>
+<li>Bisa di-unapprove</li>
+<li>Hilang dari publik / blog jadi draft</li>
+</ul>
+<hr />
+<h2>6. Halaman publik yang dikelola</h2>
+<table>
+<thead>
+<tr>
+<th>Halaman</th>
+<th>Admin edit di</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Home</td>
+<td>WDC Site → Home Content + CPT courses/equipment + testimonials/crew</td>
+</tr>
+<tr>
+<td>Courses catalog</td>
+<td>Dive Courses</td>
+</tr>
+<tr>
+<td>Course detail</td>
+<td>Dive Courses (single post)</td>
+</tr>
+<tr>
+<td>Equipment catalog</td>
+<td>Dive Equipment</td>
+</tr>
+<tr>
+<td>Equipment detail</td>
+<td>Dive Equipment (single post)</td>
+</tr>
+<tr>
+<td>About</td>
+<td>WDC Site → About Page + Crew Profiles</td>
+</tr>
+<tr>
+<td>Contact</td>
+<td>WDC Site → Contact Page + Contact &amp; Footer</td>
+</tr>
+<tr>
+<td>Blog</td>
+<td>Posts + Cerita Kamu (approved)</td>
+</tr>
+<tr>
+<td>Login member</td>
+<td><code>/login/</code> (konten template; akun lewat Users)</td>
+</tr>
+<tr>
+<td>Dashboard member</td>
+<td>data request/order member</td>
+</tr>
+</tbody>
+</table>
+<h3>URL penting katalog</h3>
+<ul>
+<li>Courses: <code>/courses/</code></li>
+<li>Course detail: <code>/courses/{slug}/</code></li>
+<li>Equipment: <code>/equipment/</code></li>
+<li>Equipment detail: <code>/equipment/{slug}/</code></li>
+<li>Blog: <code>/blog/</code></li>
+</ul>
+<p>URL lama <code>/course/...</code> dan <code>/gear/...</code> dialihkan otomatis ke format baru.</p>
+<hr />
+<h2>7. Checklist “konten aman diubah”</h2>
+<p>Boleh diubah admin:<br />
+- Teks hero, about, contact, footer<br />
+- Harga, deskripsi, CTA course/gear<br />
+- Foto featured course/gear<br />
+- Testimoni, crew, partners<br />
+- Artikel blog<br />
+- Approval cerita member<br />
+- Email notifikasi request</p>
+<p>Jangan diubah tanpa dev:<br />
+- Plugin / theme code<br />
+- Permalink structure<br />
+- Role capability<br />
+- Database / server / DNS / email server<br />
+- Redirect rules<br />
+- Menu technical hidden tools</p>
+<hr />
+<h2>8. SOP cepat 10 menit (mingguan)</h2>
+<ol>
+<li>Cek request baru (email + WDC Members / user meta request)</li>
+<li>Follow-up member pending</li>
+<li>Review <strong>Cerita Kamu</strong> pending → approve/reject</li>
+<li>Update stok gear jika berubah</li>
+<li>Cek 3 halaman kunci di HP:<br />
+   - Home<br />
+   - 1 course detail<br />
+   - 1 equipment detail</li>
+<li>Pastikan tombol Masuk mengarah ke <code>/login/</code></li>
+<li>Pastikan admin tetap bisa buka <code>/wp-admin/</code></li>
+</ol>
+<hr />
+<h2>9. Troubleshooting admin</h2>
+<table>
+<thead>
+<tr>
+<th>Masalah</th>
+<th>Cek dulu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Edit sudah save tapi web belum berubah</td>
+<td>Hard refresh (<code>Ctrl+Shift+R</code>). Cache browser/server bisa delay.</td>
+</tr>
+<tr>
+<td>Foto course/gear tidak muncul</td>
+<td>Featured image di post tersebut sudah di-set?</td>
+</tr>
+<tr>
+<td>Member tidak bisa daftar/beli</td>
+<td>Sudah login? CTA memang login-first.</td>
+</tr>
+<tr>
+<td>Cerita member tidak muncul di blog</td>
+<td>Sudah di-approve? Status harus Approved + publish.</td>
+</tr>
+<tr>
+<td><code>/wp-admin</code> malah ke login member</td>
+<td>Seharusnya tidak. Pakai <code>/wp-admin/</code> / <code>wp-login.php</code>. Hubungi dev jika masih salah.</td>
+</tr>
+<tr>
+<td>Email request tidak masuk</td>
+<td>WDC Site → Notifications: email crew &amp; folder spam</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>10. Batasan fitur saat handover</h2>
+<p>Sudah jalan untuk operasional harian:<br />
+- Konten site lewat <strong>WDC Site</strong><br />
+- Katalog course/equipment + harga publik<br />
+- Login member <code>/login</code><br />
+- Request course/gear login-gated<br />
+- Moderasi Cerita Kamu → Blog<br />
+- Admin <code>/wp-admin</code> terpisah dari member login</p>
+<p>Belum jadi fokus admin harian / masih lanjutan:<br />
+- Multi-image gallery per produk (selain featured image)<br />
+- FAQ admin-editable penuh<br />
+- Payment gateway full otomatis (Midtrans end-to-end)<br />
+- Status label request yang lebih advance<br />
+- Dual-language field mendalam untuk semua copy</p>
+<hr />
+<h2>11. Kontak teknis / eskalasi</h2>
+<p>Hubungi tim dev jika:<br />
+- Butuh ganti layout/desain<br />
+- Error 500 / halaman putih<br />
+- Login admin/member rusak<br />
+- Redirect salah<br />
+- Email server tidak kirim sama sekali<br />
+- Perlu tambah field baru di admin</p>
+<p>Sertakan:<br />
+1. URL halaman<br />
+2. Screenshot<br />
+3. User role (admin/member)<br />
+4. Waktu kejadian<br />
+5. Langkah reproduksi singkat</p>
+<hr />
+<h2>12. Ringkas untuk owner</h2>
+<p><strong>Kalau cuma ingat 5 hal:</strong><br />
+1. Konten site → menu <strong>WDC Site</strong><br />
+2. Kursus/gear → <strong>Dive Courses / Dive Equipment</strong> + Featured image<br />
+3. Member login → <code>/login/</code><br />
+4. Admin login → <code>/wp-admin/</code><br />
+5. Cerita member harus <strong>di-approve</strong> dulu baru ke Blog</p>
+<hr />
+<p><em>Dokumen handover ini disusun untuk operasional non-teknis. Layout tetap dikunci; admin fokus isi konten dan follow-up member.</em></p>
+  <div class="footer-note">Dokumen operasional non-teknis. Layout tetap; admin fokus isi konten & follow-up member.</div>
+</body>
+</html>
