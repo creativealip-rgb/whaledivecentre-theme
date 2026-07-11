@@ -5047,3 +5047,163 @@ body.whaledive-home #courses .wd-course-body p {
     -webkit-backdrop-filter: none !important;
   }
 }
+
+
+/* WDC course cards match equipment FINAL 2026-07-11ac */
+.whaledive-courses .wd-equipment-grid.course-grid,
+.whaledive-courses #course-catalog .wd-equipment-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  align-items: start !important;
+}
+.whaledive-courses article.wd-course-card.wd-shop-card,
+.whaledive-courses article.wd-equip-card.wd-course-card {
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 0 !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  background: #fff !important;
+  border: 1px solid rgba(6,56,77,.08) !important;
+  box-shadow: 0 14px 34px rgba(2,21,43,.07) !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+.whaledive-courses article.wd-course-card .wd-equip-visual {
+  height: 190px !important;
+  min-height: 190px !important;
+  max-height: 190px !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+}
+.whaledive-courses article.wd-course-card .wd-equip-photo {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  padding: 0 !important;
+  transform: none !important;
+  z-index: 1 !important;
+}
+.whaledive-courses article.wd-course-card .wd-equip-type {
+  z-index: 2 !important;
+}
+.whaledive-courses article.wd-course-card .wd-equip-card-body {
+  padding: 16px !important;
+  gap: 6px !important;
+  background: #fff !important;
+  min-height: 0 !important;
+  height: auto !important;
+}
+.whaledive-courses article.wd-course-card h3 {
+  font-size: 20px !important;
+  line-height: 1.28 !important;
+  letter-spacing: -.03em !important;
+  margin: 0 0 2px !important;
+  color: #061a36 !important;
+  min-height: 0 !important;
+  display: block !important;
+  -webkit-line-clamp: unset !important;
+}
+.whaledive-courses article.wd-course-card .wd-equip-price {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 4px !important;
+  margin: 0 0 6px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+.whaledive-courses article.wd-course-card .wd-price-label {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 0 4px !important;
+  color: #5f7180 !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: .02em !important;
+  text-transform: uppercase !important;
+}
+.whaledive-courses article.wd-course-card .wd-price-amount {
+  display: block !important;
+  width: 100% !important;
+  color: #06384d !important;
+  font-size: 17px !important;
+  line-height: 1.1 !important;
+  font-weight: 950 !important;
+  letter-spacing: -.02em !important;
+  white-space: nowrap !important;
+}
+.whaledive-courses article.wd-course-card .wd-equip-chips {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  margin: 0 0 4px !important;
+}
+.whaledive-courses article.wd-course-card .wd-equip-actions {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin-top: 8px !important;
+  padding-top: 0 !important;
+  border-top: 0 !important;
+}
+.whaledive-courses article.wd-course-card .wd-equip-actions .wd-mini-link,
+.whaledive-courses article.wd-course-card .wd-equip-actions .wd-mini-btn {
+  min-height: 38px !important;
+  min-width: 100px !important;
+  width: max-content !important;
+  padding: 0 16px !important;
+  border-radius: 999px !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 1080px) {
+  .whaledive-courses .wd-equipment-grid.course-grid,
+  .whaledive-courses #course-catalog .wd-equipment-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+@media (max-width: 760px) {
+  .whaledive-courses .wd-equipment-grid.course-grid,
+  .whaledive-courses #course-catalog .wd-equipment-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  .whaledive-courses article.wd-course-card .wd-equip-visual {
+    height: 180px !important;
+    min-height: 180px !important;
+    max-height: 180px !important;
+  }
+  .whaledive-courses article.wd-course-card .wd-equip-card-body {
+    padding: 16px !important;
+  }
+  .whaledive-courses article.wd-course-card h3 {
+    font-size: 18px !important;
+    line-height: 1.25 !important;
+  }
+  /* keep prereq chip, but avoid overcrowding on narrow phones */
+  .whaledive-courses article.wd-course-card .wd-equip-actions .wd-mini-link,
+  .whaledive-courses article.wd-course-card .wd-equip-actions .wd-mini-btn {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+}
+@media (max-width: 420px) {
+  .whaledive-courses article.wd-course-card .wd-course-prereq-chip {
+    max-width: 100% !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+}
