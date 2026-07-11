@@ -23,7 +23,7 @@ require_once get_template_directory() . '/inc/template-functions.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.30');
+    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.31');
     wp_add_inline_style('contenly-style', '.wd-header .gt-lang-switcher{margin-right:10px!important}.wd-header .wd-nav-member{margin-left:8px!important}');
     
     // Google Fonts
@@ -853,7 +853,8 @@ function contenly_render_public_header() {
 
     $close_label = esc_attr(contenly_tr('Tutup menu', 'Close menu'));
     $open_label = esc_attr(contenly_tr('Buka menu', 'Open menu'));
-    $menu_label = esc_html(contenly_tr('Menu', 'Menu'));
+    $brand_name = esc_html('Whale Dive');
+    $menu_kicker = esc_html(contenly_tr('Navigasi', 'Navigate'));
 
     echo '<header class="wd-header"><div class="wd-shell"><div class="wd-nav">'
         . '<a class="wd-brand" href="' . $home_url . '"><img class="wd-brand-logo" src="' . $brand_logo . '" alt="Whale Dive Centre"><span>Whale Dive Centre</span></a>'
@@ -861,17 +862,18 @@ function contenly_render_public_header() {
         . '<div class="wd-menu-backdrop" data-wd-menu-close hidden></div>'
         . '<nav class="wd-menu" id="wd-mobile-menu" aria-label="' . esc_attr(contenly_tr('Navigasi utama', 'Primary navigation')) . '">'
         . '<div class="wd-menu-panel-head">'
-        . '<div class="wd-menu-panel-brand"><img src="' . $brand_logo . '" alt=""><span>' . $menu_label . '</span></div>'
-        . '<button type="button" class="wd-menu-close" data-wd-menu-close aria-label="' . $close_label . '">×</button>'
+        . '<div class="wd-menu-panel-brand"><img src="' . $brand_logo . '" alt=""><div class="wd-menu-panel-copy"><span class="wd-menu-kicker">' . $menu_kicker . '</span><strong>' . $brand_name . '</strong></div></div>'
+        . '<button type="button" class="wd-menu-close" data-wd-menu-close aria-label="' . $close_label . '"><span></span></button>'
         . '</div>'
         . '<div class="wd-menu-links">'
-        . '<a href="' . $home_url . '" data-nav="home"' . $active_class('home') . '>' . esc_html(contenly_tr('Beranda', 'Home')) . '</a>'
-        . '<a href="' . $courses_url . '" data-nav="courses"' . $active_class('courses') . '>' . esc_html(contenly_tr('Kursus', 'Courses')) . '</a>'
-        . '<a href="' . $equipment_url . '" data-nav="equipment"' . $active_class('equipment') . '>' . esc_html(contenly_tr('Peralatan', 'Equipment')) . '</a>'
-        . '<a href="' . $about_url . '" data-nav="about"' . $active_class('about') . '>' . esc_html(contenly_tr('Tentang', 'About')) . '</a>'
-        . '<a href="' . $blog_url . '" data-nav="blog"' . $active_class('blog') . '>' . esc_html(contenly_tr('Blog', 'Blog')) . '</a>'
+        . '<a href="' . $home_url . '" data-nav="home"' . $active_class('home') . '><span>' . esc_html(contenly_tr('Beranda', 'Home')) . '</span></a>'
+        . '<a href="' . $courses_url . '" data-nav="courses"' . $active_class('courses') . '><span>' . esc_html(contenly_tr('Kursus', 'Courses')) . '</span></a>'
+        . '<a href="' . $equipment_url . '" data-nav="equipment"' . $active_class('equipment') . '><span>' . esc_html(contenly_tr('Peralatan', 'Equipment')) . '</span></a>'
+        . '<a href="' . $about_url . '" data-nav="about"' . $active_class('about') . '><span>' . esc_html(contenly_tr('Tentang', 'About')) . '</span></a>'
+        . '<a href="' . $blog_url . '" data-nav="blog"' . $active_class('blog') . '><span>' . esc_html(contenly_tr('Blog', 'Blog')) . '</span></a>'
         . '</div>'
         . '<div class="wd-menu-panel-foot">'
+        . '<div class="wd-menu-foot-label">' . esc_html(contenly_tr('Bahasa', 'Language')) . '</div>'
         . contenly_render_language_switcher('wd-lang-switcher')
         . '<a href="' . $member_url . '" class="wd-nav-member">' . esc_html($member_label) . '</a>'
         . '</div>'
