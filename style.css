@@ -2,7 +2,7 @@
 
 /*
 Theme Name: Whale Dive Centre Theme
-Version: 2.3.76
+Version: 2.3.77
 */
 :root{
   --black:#000;--violet:#3B44AC;--cyan:#4CC8ED;--pale:#96DAEA;--red:#C31C4A;--blue:#004A98;--white:#fff;--navy:#061a36;--ink:#0b1930;--muted:#63748a;
@@ -8075,5 +8075,23 @@ html body.whaledive-equipment .wdc-card-cta .wd-btn.alt{
   .wd-menu-panel-foot .wd-nav-member {
     width: 100% !important;
     max-width: 100% !important;
+  }
+}
+
+
+/* WDC DRAWER ACTIVE STATE (2.3.77) */
+@media (max-width: 1099.98px) {
+  .wd-menu-links a.is-active,
+  .wd-menu-links a[aria-current="page"],
+  .wd-menu .wd-menu-links a.is-active,
+  .wd-menu .wd-menu-links a[aria-current="page"],
+  #wd-mobile-menu .wd-menu-links a.is-active,
+  #wd-mobile-menu .wd-menu-links a[aria-current="page"] {
+    background: rgba(76, 200, 237, .18) !important;
+    border: 1px solid rgba(76, 200, 237, .28) !important;
+    color: #e8fbff !important;
+    -webkit-text-fill-color: #e8fbff !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
   }
 }
