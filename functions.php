@@ -25,7 +25,7 @@ require_once get_template_directory() . '/inc/wdc-catalog-helpers.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.55');
+    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.56');
     wp_add_inline_style('contenly-style', '.wd-header .gt-lang-switcher{margin-right:10px!important}.wd-header .wd-nav-member{margin-left:8px!important}');
     
     // Google Fonts
@@ -3355,10 +3355,30 @@ function wdc_get_content_settings() {
     return wp_parse_args(is_array($saved) ? $saved : [], wdc_content_defaults());
 }
 
+/**
+ * Legacy WDC Content menu removed.
+ * Homepage/public site content now lives under WDC Site only.
+ * Keep helper functions for page-home-travel.php fallback, but hide admin UI.
+ */
 function wdc_admin_content_menu() {
-    add_menu_page('WDC Content', 'WDC Content', 'manage_options', 'wdc-content-settings', 'wdc_render_content_settings_page', 'dashicons-edit-page', 26);
+    // Intentionally empty: do not register WDC Content menu.
 }
-add_action('admin_menu', 'wdc_admin_content_menu');
+// Menu registration disabled (was add_action admin_menu wdc_admin_content_menu).
+
+add_action('admin_menu', function () {
+    remove_menu_page('wdc-content-settings');
+}, 999);
+
+add_action('admin_init', function () {
+    if (!is_admin() || !current_user_can('manage_options')) {
+        return;
+    }
+    $page = isset($_GET['page']) ? sanitize_key(wp_unslash($_GET['page'])) : '';
+    if ($page === 'wdc-content-settings') {
+        wp_safe_redirect(admin_url('admin.php?page=wdc-site'));
+        exit;
+    }
+}, 1);
 
 function wdc_use_classic_editor_for_catalog($use_block_editor, $post_type) {
     if (in_array($post_type, ['wm_course', 'wm_equipment'], true)) {
