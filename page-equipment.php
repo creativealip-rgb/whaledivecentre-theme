@@ -44,14 +44,18 @@ function wdc_equipment_detail_slug($title, $cat_slug) {
     return sanitize_title($cat_slug ?: $title);
 }
 function wdc_equipment_image_url($title, $cat_slug, $theme_uri) {
+    if (function_exists('wdc_equipment_asset_file')) {
+        $file = wdc_equipment_asset_file($title, $cat_slug);
+        return $file ? (rtrim($theme_uri, '/') . '/assets/' . $file) : '';
+    }
     $key = strtolower($title . ' ' . $cat_slug);
     $map = [
-        'mask' => 'wdc-equipment-mask-real.png',
-        'fin' => 'wdc-equipment-fins-real.png',
-        'bcd' => 'wdc-equipment-bcd-real.png',
-        'regulator' => 'wdc-equipment-regulator-real.png',
-        'computer' => 'wdc-equipment-dive-computer-real.png',
-        'wetsuit' => 'wdc-equipment-wetsuit-real.png',
+        'mask' => 'wdc-equipment-mask-real.webp',
+        'fin' => 'wdc-equipment-fins-real.webp',
+        'bcd' => 'wdc-equipment-bcd-real.webp',
+        'regulator' => 'wdc-equipment-regulator-real.webp',
+        'computer' => 'wdc-equipment-dive-computer-real.webp',
+        'wetsuit' => 'wdc-equipment-wetsuit-real.webp',
     ];
     foreach ($map as $needle => $file) {
         if (strpos($key, $needle) !== false) {
@@ -60,6 +64,7 @@ function wdc_equipment_image_url($title, $cat_slug, $theme_uri) {
     }
     return '';
 }
+
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_head(); ?><style id="wd-equipment-ux-pass">.wd-gear-note{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;max-width:820px;margin:0 auto 22px;padding:14px 18px;border-radius:18px;background:#eef8fb;border:1px solid rgba(0,91,122,.1);color:#5b7180}.wd-gear-note b{color:#06384d}.wd-gear-finder{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:0 0 28px}.wd-gear-finder span,.wd-gear-finder a{min-height:42px;display:inline-flex;align-items:center;border-radius:999px;padding:0 14px;font-weight:800;font-size:13px}.wd-gear-finder span{background:#06384d;color:#fff}.wd-gear-finder a{background:#fff;color:#0b617c;border:1px solid rgba(11,97,124,.16);text-decoration:none}.whaledive-equipment .wd-mini-btn{background:#06384d!important;color:#fff!important}.whaledive-equipment .wd-mini-link{border-color:rgba(11,97,124,.24)!important;color:#0b617c!important}.wd-equip-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:0;padding:14px;background:linear-gradient(135deg,#e8fbff,#ffffff)}.wd-equip-visual.has-photo:before{background:linear-gradient(180deg,rgba(3,23,45,.05),rgba(3,23,45,.55));z-index:1}.wd-equip-visual.has-photo:after{z-index:1}.wd-equip-visual.has-photo .wd-equip-type{background:rgba(3,23,45,.62);backdrop-filter:blur(8px)}.whaledive-equipment #equipGrid.wd-page-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:14px!important}.whaledive-equipment .wd-shop-card .wd-equip-card-body{padding:14px!important;display:flex!important;flex-direction:column!important;min-height:238px!important}.whaledive-equipment .wd-shop-card .wd-course-meta{gap:6px!important;margin:0 0 9px!important}.whaledive-equipment .wd-shop-card .wd-course-meta span{padding:5px 8px!important;border-radius:999px!important;background:#eef8fb!important;color:#0b617c!important;font-size:10px!important;font-weight:900!important;line-height:1!important;letter-spacing:.02em!important}.whaledive-equipment .wd-shop-card h3{font-size:20px!important;line-height:1.05!important;letter-spacing:-.03em!important;margin:0 0 10px!important;color:#061a36!important}.whaledive-equipment .wd-shop-card .wd-equip-price{margin:0 0 10px!important;padding:0!important;background:transparent!important;border:0!important}.whaledive-equipment .wd-shop-card .wd-price-label{display:block!important;font-size:11px!important;color:#6f7f8d!important;line-height:1.2!important;margin-bottom:4px!important}.whaledive-equipment .wd-shop-card .wd-price-amount{display:block!important;font-size:clamp(15px,1.2vw,17px)!important;font-weight:900!important;color:#06384d!important;line-height:1!important;white-space:nowrap!important;letter-spacing:-.02em!important}.whaledive-equipment .wd-shop-card .wd-equip-chips{gap:6px!important;margin:0 0 12px!important}.whaledive-equipment .wd-shop-card .wd-equip-chips span{padding:6px 8px!important;border-radius:999px!important;background:#f1fbff!important;color:#4f6575!important;font-size:10px!important;font-weight:800!important;line-height:1.1!important}.whaledive-equipment .wd-shop-card .wd-equip-actions{margin-top:auto!important}.whaledive-equipment .wd-shop-card .wd-mini-link{min-height:34px!important;width:auto!important;padding:0 12px!important;border-radius:999px!important;font-size:12px!important;font-weight:900!important;background:#f3fbff!important;border:1px solid rgba(6,56,77,.12)!important;color:#06384d!important}.whaledive-equipment .wd-shop-card .wd-mini-link:after{content:' →'}@media(max-width:980px){.whaledive-equipment #equipGrid.wd-page-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}@media(max-width:760px){.whaledive-equipment #equipGrid.wd-page-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.whaledive-equipment .wd-shop-card .wd-equip-card-body{min-height:220px!important}}@media(max-width:540px){.whaledive-equipment #equipGrid.wd-page-grid{grid-template-columns:1fr!important}.whaledive-equipment .wd-shop-card{display:grid!important;grid-template-columns:118px minmax(0,1fr)!important}.whaledive-equipment .wd-shop-card .wd-equip-visual{height:100%!important;min-height:178px!important}.whaledive-equipment .wd-shop-card .wd-equip-card-body{min-height:0!important;padding:12px!important}.whaledive-equipment .wd-shop-card h3{font-size:18px!important}}
@@ -107,7 +112,7 @@ function wdc_equipment_image_url($title, $cat_slug, $theme_uri) {
           $brand_name = !empty($brand_terms) ? $brand_terms[0] : '';
           $permalink = home_url('/equipment/' . wdc_equipment_detail_slug($item->post_title, $cat_slug) . '/');
           $use_case = $cat_name ? 'Crew-selected ' . strtolower($cat_name) . ' for training, comfort, and safer dive habits.' : 'Crew-selected dive gear for training, comfort, and safer dive habits.';
-          $image_url = get_the_post_thumbnail_url($item->ID, 'large') ?: wdc_equipment_image_url($item->post_title, $cat_slug, $theme_uri);
+          $image_url = function_exists('wdc_catalog_image_url') ? wdc_catalog_image_url($item->ID, 'equipment') : (get_the_post_thumbnail_url($item->ID, 'large') ?: wdc_equipment_image_url($item->post_title, $cat_slug, $theme_uri));
         ?>
         <article class="wd-equip-card wd-detail-card wd-shop-card" data-href="<?php echo esc_url($permalink); ?>" onclick="if(!event.target.closest('a,button')){window.location.href=this.dataset.href;}" data-cat="cat-<?php echo esc_attr($cat_slug); ?>" style="border-radius:18px!important;overflow:hidden!important;padding:0!important;background:#fff!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important;border:1px solid rgba(6,56,77,.08)!important;min-height:0!important;height:auto!important;display:flex!important;flex-direction:column!important;">
           <div class="wd-equip-visual <?php echo $image_url ? 'has-photo' : ''; ?>" data-cat="<?php echo esc_attr($cat_slug ?: 'gear'); ?>" style="height:190px!important;min-height:0!important;border-radius:0!important;margin:0!important;overflow:hidden!important;background:radial-gradient(circle at 50% 42%,rgba(76,200,237,.24),rgba(255,255,255,.68) 50%,#eef8fb 100%)!important;border-bottom:1px solid rgba(6,56,77,.08)!important;">

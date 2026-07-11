@@ -25,37 +25,18 @@ $levels = get_terms(['taxonomy' => 'course_level', 'hide_empty' => true]);
 $levels = is_wp_error($levels) ? [] : $levels;
 $theme_uri = get_stylesheet_directory_uri();
 function wdc_course_image_url($title, $theme_uri) {
+    if (function_exists('wdc_course_asset_file')) {
+        $file = wdc_course_asset_file($title);
+        return $file ? (rtrim($theme_uri, '/') . '/assets/' . $file) : '';
+    }
     $key = strtolower($title);
     $map = [
-        'underwater photography' => 'wdc-course-underwater-photography.webp',
-        'photography' => 'wdc-course-underwater-photography.webp',
-        'decompression' => 'wdc-course-decompression.webp',
-        'deep diver' => 'wdc-course-deep-diver-real-v2.jpg',
-        'deep' => 'wdc-course-deep-diver-real-v2.jpg',
-        'extended range' => 'wdc-course-decompression.webp',
-        'trimix' => 'wdc-course-decompression.webp',
-        'intro to tech' => 'wdc-course-intro-tech.webp',
-        'advanced nitrox' => 'wdc-course-adv-nitrox.webp',
-        'nitrox' => 'wdc-course-nitrox.webp',
-        'enriched air' => 'wdc-course-nitrox.webp',
-        'decompression' => 'wdc-course-decompression.webp',
-        'deep diver' => 'wdc-course-deep-diver-real-v2.jpg',
-        'deep' => 'wdc-course-deep-diver-real-v2.jpg',
-        'night' => 'wdc-course-discover-scuba.webp',
-        'first aid' => 'wdc-course-decompression.webp',
-        'cpr' => 'wdc-course-decompression.webp',
-        'oxygen' => 'wdc-course-nitrox.webp',
-        'full face' => 'wdc-course-intro-tech.webp',
-        'junior' => 'wdc-course-open-water-real.webp',
-        'trial' => 'wdc-course-discover-scuba.webp',
-        'master scuba' => 'wdc-course-rescue-diver-real.webp',
-        'instructor' => 'wdc-course-instructor-course-real.webp',
-        'discover' => 'wdc-course-discover-scuba.webp',
+        'open water' => 'wdc-course-open-water-real.webp',
         'advanced' => 'wdc-course-advanced-open-water-real.webp',
         'rescue' => 'wdc-course-rescue-diver-real.webp',
         'divemaster' => 'wdc-course-divemaster-real.webp',
         'instructor' => 'wdc-course-instructor-course-real.webp',
-        'open water' => 'wdc-course-open-water-real.webp',
+        'nitrox' => 'wdc-course-nitrox.webp',
     ];
     foreach ($map as $needle => $file) {
         if (strpos($key, $needle) !== false) {
@@ -64,6 +45,7 @@ function wdc_course_image_url($title, $theme_uri) {
     }
     return '';
 }
+
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_head(); ?><style id="wd-courses-equipment-copy">.whaledive-courses .wd-gear-note{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;max-width:820px;margin:0 auto 22px;padding:14px 18px;border-radius:18px;background:#eef8fb;border:1px solid rgba(0,91,122,.1);color:#5b7180}.whaledive-courses .wd-gear-note b{color:#06384d}.whaledive-courses #courseGrid > article[data-visible="1"]{display:flex!important}.whaledive-courses #courseGrid > article[data-visible="0"]{display:none!important}.whaledive-courses .wd-gear-finder{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:0 0 28px}.whaledive-courses .wd-gear-finder span,.whaledive-courses .wd-gear-finder a{min-height:42px;display:inline-flex;align-items:center;border-radius:999px;padding:0 14px;font-weight:800;font-size:13px}.whaledive-courses .wd-gear-finder span{background:#06384d;color:#fff}.whaledive-courses .wd-gear-finder a{background:#fff;color:#0b617c;border:1px solid rgba(11,97,124,.16);text-decoration:none}.whaledive-courses .wd-mini-btn{background:#06384d!important;color:#fff!important}.whaledive-courses .wd-mini-link{border-color:rgba(11,97,124,.24)!important;color:#0b617c!important}.whaledive-courses .wd-equip-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}.whaledive-courses .wd-equip-visual.has-photo:before{background:linear-gradient(180deg,rgba(3,23,45,.05),rgba(3,23,45,.55));z-index:1}.whaledive-courses .wd-equip-visual.has-photo:after{display:none!important;content:none!important}.whaledive-courses .wd-equip-visual.has-photo .wd-equip-type{background:rgba(3,23,45,.62);backdrop-filter:blur(8px)}.whaledive-courses #courseFilters .wd-chip{background:#fff!important;color:#06384d!important;border:1px solid #dde3ea!important;padding:11px 24px!important;border-radius:999px!important;font-size:14px!important;font-weight:700!important;letter-spacing:.01em!important;box-shadow:0 2px 8px rgba(2,21,43,.06)!important;transition:all .2s ease!important;cursor:pointer!important}.whaledive-courses #courseFilters .wd-chip:hover{background:#f7fbfd!important;border-color:#b8c4ce!important}.whaledive-courses #courseFilters .wd-chip.active{background:#06384d!important;color:#fff!important;border-color:#06384d!important;box-shadow:0 4px 14px rgba(6,56,77,.18)!important}.whaledive-courses #courseGrid.wd-page-grid{width:100%!important;max-width:none!important;margin-left:0!important;margin-right:0!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:14px!important}.whaledive-courses .wd-course-card{border-radius:18px!important;overflow:hidden!important;background:#fff!important;border:1px solid rgba(6,56,77,.08)!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important;padding:0!important}.whaledive-courses .wd-course-card .wd-equip-visual{height:138px!important;min-height:0!important;border-radius:0!important;margin:0!important}.whaledive-courses .wd-course-card .wd-equip-type{top:10px!important;left:10px!important;padding:6px 9px!important;border-radius:999px!important;font-size:10px!important;letter-spacing:.08em!important}.whaledive-courses .wd-course-card .wd-equip-card-body{padding:14px!important;display:flex!important;flex-direction:column!important;min-height:238px!important}.whaledive-courses .wd-course-card .wd-course-meta{gap:6px!important;margin:0 0 4px!important}.whaledive-courses .wd-course-card .wd-course-meta span{padding:5px 8px!important;border-radius:999px!important;background:#eef8fb!important;color:#0b617c!important;font-size:10px!important;font-weight:900!important;line-height:1!important;letter-spacing:.02em!important}.whaledive-courses .wd-course-card h3{font-size:20px!important;line-height:1.08!important;letter-spacing:-.03em!important;margin:0 0 2px!important;color:#061a36!important;min-height:0!important}.whaledive-courses .wd-course-card .wd-equip-price{margin:0 0 6px!important;padding:0!important;background:transparent!important;border:0!important}.whaledive-courses .wd-course-card .wd-price-label{display:block!important;font-size:11px!important;color:#6f7f8d!important;line-height:1.2!important;margin-bottom:4px!important}.whaledive-courses .wd-course-card .wd-price-amount{display:block!important;font-size:clamp(15px,1.2vw,17px)!important;font-weight:900!important;color:#06384d!important;line-height:1!important;white-space:nowrap!important;letter-spacing:-.02em!important}.whaledive-courses .wd-course-card .wd-equip-chips{gap:6px!important;margin:0 0 12px!important}.whaledive-courses .wd-course-card .wd-equip-chips span{padding:6px 8px!important;border-radius:999px!important;background:#f1fbff!important;color:#4f6575!important;font-size:10px!important;font-weight:800!important;line-height:1.1!important}.whaledive-courses .wd-course-card .wd-equip-actions{margin-top:8px!important;padding-top:0!important;border-top:0!important}.whaledive-courses .wd-course-card .wd-mini-link{min-height:34px!important;width:auto!important;padding:0 12px!important;border-radius:999px!important;font-size:12px!important;font-weight:900!important;background:#f3fbff!important;border:1px solid rgba(6,56,77,.12)!important;color:#06384d!important}.whaledive-courses .wd-course-card .wd-mini-link:after{content:' →'}@media(max-width:980px){.whaledive-courses #courseGrid.wd-page-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}@media(max-width:760px){.whaledive-courses #courseGrid.wd-page-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.whaledive-courses .wd-course-card .wd-equip-card-body{min-height:220px!important}}@media(max-width:540px){.whaledive-courses #courseGrid.wd-page-grid{grid-template-columns:1fr!important}.whaledive-courses .wd-course-card{display:grid!important;grid-template-columns:118px minmax(0,1fr)!important}.whaledive-courses .wd-course-card .wd-equip-visual{height:100%!important;min-height:178px!important}.whaledive-courses .wd-course-card .wd-equip-card-body{min-height:0!important;padding:12px!important}.whaledive-courses .wd-course-card h3{font-size:18px!important}}
@@ -200,7 +182,7 @@ function wdc_course_image_url($title, $theme_uri) {
             $level_slug = !empty($level_terms) ? $level_terms[0]->slug : '';
             $level_name = !empty($level_terms) ? $level_terms[0]->name : '';
             $permalink = home_url('/courses/' . $course->post_name . '/');
-            $image_url = get_the_post_thumbnail_url($course->ID, 'large') ?: wdc_course_image_url($course->post_title, $theme_uri);
+            $image_url = function_exists('wdc_catalog_image_url') ? wdc_catalog_image_url($course->ID, 'course') : (get_the_post_thumbnail_url($course->ID, 'large') ?: wdc_course_image_url($course->post_title, $theme_uri));
           ?>
           <article class="wd-equip-card wd-detail-card wd-shop-card wd-course-card" data-href="<?php echo esc_url($permalink); ?>" data-cat="cat-<?php echo esc_attr($level_slug); ?>" style="border-radius:18px!important;overflow:hidden!important;padding:0!important;background:#fff!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important;border:1px solid rgba(6,56,77,.08)!important;min-height:0!important;height:auto!important;display:flex!important;flex-direction:column!important;">
             <div class="wd-equip-visual <?php echo $image_url ? 'has-photo' : ''; ?>" data-course-level="<?php echo esc_attr($level_slug ?: 'course'); ?>" style="height:190px!important;min-height:0!important;border:0!important;border-radius:0!important;margin:0!important;padding:0!important;overflow:hidden!important;background:transparent!important;box-shadow:none!important;">

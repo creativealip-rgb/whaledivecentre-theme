@@ -18,6 +18,7 @@ require_once get_template_directory() . '/admin-orders.php';
 require_once get_template_directory() . '/inc/template-tags.php';
 require_once get_template_directory() . '/inc/template-functions.php';
 require_once get_template_directory() . '/inc/wdc-site-content.php';
+require_once get_template_directory() . '/inc/wdc-catalog-helpers.php';
 
 /**
  * Enqueue theme styles and scripts
