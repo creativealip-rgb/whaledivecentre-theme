@@ -41,24 +41,6 @@ foreach ($manual_orders as $mo) {
     <p style="font-size:15px;color:#64748b;"><?php echo contenly_tr('Pusat Whale Dive Centre untuk perencanaan kursus, permintaan alat selam, dan dukungan kru.', 'Your Whale Dive Centre hub for course planning, scuba gear requests, and crew support.'); ?></p>
 </div>
 
-<div class="wdc-dash-stats" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:28px;">
-    <div style="background:linear-gradient(135deg,#eef9fc,#dff4fa);padding:20px;border-radius:16px;border:1px solid #ccecf5;">
-        <div style="font-size:12px;color:#0b617c;text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:8px;"><?php echo contenly_tr('Permintaan Kursus', 'Course Requests'); ?></div>
-        <div style="font-size:34px;font-weight:950;color:#06384d;"><?php echo count($course_requests); ?></div>
-    </div>
-    <div style="background:linear-gradient(135deg,#fff7ed,#ffedd5);padding:20px;border-radius:16px;border:1px solid #fed7aa;">
-        <div style="font-size:12px;color:#9a3412;text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:8px;"><?php echo contenly_tr('Permintaan Peralatan', 'Gear Requests'); ?></div>
-        <div style="font-size:34px;font-weight:950;color:#7c2d12;"><?php echo count($gear_requests); ?></div>
-    </div>
-    <div style="background:linear-gradient(135deg,#f8fafc,#eef2ff);padding:20px;border-radius:16px;border:1px solid #e2e8f0;">
-        <div style="font-size:12px;color:#475569;text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:8px;"><?php echo contenly_tr('Pesanan Langsung', 'Direct Orders'); ?></div>
-        <div style="font-size:34px;font-weight:950;color:#0f172a;"><?php echo count($course_orders) + count($gear_orders) + $manual_total; ?></div>
-    </div>
-    <div style="background:linear-gradient(135deg,#ecfdf5,#dcfce7);padding:20px;border-radius:16px;border:1px solid #bbf7d0;">
-        <div style="font-size:12px;color:#166534;text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:8px;"><?php echo contenly_tr('Terverifikasi / Aktif', 'Verified / Active'); ?></div>
-        <div style="font-size:34px;font-weight:950;color:#166534;"><?php echo count($active_items); ?></div>
-    </div>
-</div>
 
 <!-- Giveaway Section (only for users who haven't claimed) — pulls from Informasi post -->
 <?php if (is_user_logged_in() && get_option('wdc_giveaway_enabled', '1') && wdc_is_new_user() && !wdc_user_claimed_giveaway()) :
@@ -387,29 +369,33 @@ if (is_array($gw_order) && !empty($gw_order['order_id']) && function_exists('wdc
     $gw_track_url = !empty($gw_order['tracking_url']) ? $gw_order['tracking_url'] : wdc_giveaway_tracking_url($gw_order['courier'] ?? '', $gw_track_no);
     $gw_checkout = add_query_arg(['type' => 'giveaway', 'order' => $gw_order['order_id']], contenly_localized_url('/giveaway-checkout/'));
 ?>
-<section id="wdc-giveaway-progress" style="background:#fff;border:1px solid #e6edf2;border-radius:20px;padding:20px;margin-bottom:24px;box-shadow:0 10px 28px rgba(15,23,42,.05);">
-    <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px;">
-        <div>
-            <div style="font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.08em;color:#0369a1;margin-bottom:4px;"><?php echo contenly_tr('Progres Giveaway', 'Giveaway Progress'); ?></div>
-            <h2 style="font-size:22px;font-weight:900;color:#0f172a;margin:0 0 4px;"><?php echo esc_html($gw_order['order_id']); ?></h2>
-            <div style="font-size:13px;color:#475569;"><?php echo esc_html(implode(', ', $gw_item_names) ?: 'Giveaway items'); ?> · Ongkir Rp <?php echo number_format(intval($gw_order['shipping_cost'] ?? 0), 0, ',', '.'); ?></div>
+<section id="wdc-giveaway-progress" class="wdc-card wdc-gw-progress">
+    <div class="wdc-gw-progress-head">
+        <div class="wdc-gw-progress-copy">
+            <div class="wdc-gw-progress-kicker"><?php echo contenly_tr('Progres Giveaway', 'Giveaway Progress'); ?></div>
+            <h2 class="wdc-gw-progress-title"><?php echo esc_html($gw_order['order_id']); ?></h2>
+            <div class="wdc-gw-progress-meta"><?php echo esc_html(implode(', ', $gw_item_names) ?: 'Giveaway items'); ?> · Ongkir Rp <?php echo number_format(intval($gw_order['shipping_cost'] ?? 0), 0, ',', '.'); ?></div>
         </div>
-        <span style="display:inline-flex;align-items:center;padding:8px 14px;border-radius:999px;background:<?php echo esc_attr($gw_meta['bg']); ?>;color:<?php echo esc_attr($gw_meta['color']); ?>;font-size:13px;font-weight:900;"><?php echo esc_html($gw_meta['label']); ?></span>
+        <span class="wdc-gw-progress-badge" style="background:<?php echo esc_attr($gw_meta['bg']); ?>;color:<?php echo esc_attr($gw_meta['color']); ?>;"><?php echo esc_html($gw_meta['label']); ?></span>
     </div>
 
-    <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:18px;">
+    <div class="wdc-gw-progress-steps">
         <?php foreach ($gw_step_keys as $idx => $key) :
             $done = $gw_current_step >= $idx;
             $active = $gw_current_step === $idx;
+            $cls = 'wdc-gw-progress-step';
+            if ($done) $cls .= ' is-done';
+            if ($active) $cls .= ' is-active';
             ?>
-            <div style="background:<?php echo $done ? '#dcfce7' : '#fff'; ?>;border:1px solid <?php echo $active ? '#0ea5e9' : ($done ? '#86efac' : '#e2e8f0'); ?>;border-radius:12px;padding:10px 8px;text-align:center;">
-                <div style="font-size:11px;font-weight:900;color:<?php echo $done ? '#166534' : '#64748b'; ?>;line-height:1.3;"><?php echo esc_html($gw_steps[$key]); ?></div>
+            <div class="<?php echo esc_attr($cls); ?>">
+                <span class="wdc-gw-progress-step-no"><?php echo intval($idx + 1); ?></span>
+                <span class="wdc-gw-progress-step-label"><?php echo esc_html($gw_steps[$key]); ?></span>
             </div>
         <?php endforeach; ?>
     </div>
 
-    <div style="display:grid;gap:10px;background:#fff;border:1px solid #bae6fd;border-radius:14px;padding:16px;">
-        <div style="font-size:14px;color:#334155;line-height:1.7;">
+    <div class="wdc-gw-progress-body">
+        <div class="wdc-gw-progress-details">
             <div><strong><?php echo contenly_tr('Penerima', 'Recipient'); ?>:</strong> <?php echo esc_html($gw_order['recipient_name'] ?? '-'); ?> · <?php echo esc_html($gw_order['phone'] ?? '-'); ?></div>
             <div><strong><?php echo contenly_tr('Alamat', 'Address'); ?>:</strong> <?php echo esc_html($gw_order['address'] ?? '-'); ?>, <?php echo esc_html($gw_order['destination'] ?? '-'); ?></div>
             <div><strong><?php echo contenly_tr('Kurir', 'Courier'); ?>:</strong> <?php echo esc_html(strtoupper($gw_order['courier'] ?? '-')); ?> <?php echo esc_html($gw_order['service'] ?? ''); ?></div>
@@ -419,31 +405,31 @@ if (is_array($gw_order) && !empty($gw_order['order_id']) && function_exists('wdc
         </div>
 
         <?php if (in_array($gw_status, ['awaiting_payment'], true)) : ?>
-            <a href="<?php echo esc_url($gw_checkout); ?>" style="display:inline-flex;justify-content:center;padding:12px 16px;border-radius:12px;background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;text-decoration:none;font-weight:900;">
+            <a class="wdc-gw-progress-cta wdc-gw-progress-cta--warn" href="<?php echo esc_url($gw_checkout); ?>">
                 <?php echo contenly_tr('Lanjut Bayar Ongkir / Upload Bukti', 'Continue Payment / Upload Proof'); ?>
             </a>
         <?php elseif ($gw_status === 'payment_uploaded') : ?>
-            <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:12px;color:#1e40af;font-size:13px;font-weight:700;">
+            <div class="wdc-gw-progress-note wdc-gw-progress-note--info">
                 <?php echo contenly_tr('Bukti transfer sudah diterima. Menunggu admin verifikasi.', 'Transfer proof received. Waiting for admin verification.'); ?>
             </div>
         <?php elseif ($gw_status === 'verified') : ?>
-            <div style="background:#ecfdf5;border:1px solid #a7f3d0;border-radius:12px;padding:12px;color:#065f46;font-size:13px;font-weight:700;">
+            <div class="wdc-gw-progress-note wdc-gw-progress-note--ok">
                 <?php echo contenly_tr('Pembayaran diverifikasi. Crew sedang siapkan pengiriman.', 'Payment verified. Crew is preparing shipment.'); ?>
             </div>
         <?php elseif (in_array($gw_status, ['shipped', 'delivered'], true) && $gw_track_no) : ?>
-            <div style="display:grid;gap:10px;">
-                <div style="background:#f5f3ff;border:1px solid #ddd6fe;border-radius:12px;padding:12px;">
-                    <div style="font-size:12px;font-weight:900;color:#5b21b6;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;"><?php echo contenly_tr('Nomor Resi', 'Tracking Number'); ?></div>
-                    <div style="font-size:20px;font-weight:950;color:#0f172a;letter-spacing:.04em;"><?php echo esc_html($gw_track_no); ?></div>
-                    <div style="font-size:12px;color:#64748b;margin-top:4px;"><?php echo contenly_tr('Pakai resi ini untuk cek posisi paket di situs kurir.', 'Use this tracking number to check package progress on courier site.'); ?></div>
+            <div class="wdc-gw-progress-track">
+                <div class="wdc-gw-progress-resi">
+                    <div class="wdc-gw-progress-resi-label"><?php echo contenly_tr('Nomor Resi', 'Tracking Number'); ?></div>
+                    <div class="wdc-gw-progress-resi-no"><?php echo esc_html($gw_track_no); ?></div>
+                    <div class="wdc-gw-progress-resi-help"><?php echo contenly_tr('Pakai resi ini untuk cek posisi paket di situs kurir.', 'Use this tracking number to check package progress on courier site.'); ?></div>
                 </div>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <div class="wdc-gw-progress-actions">
                     <?php if ($gw_track_url) : ?>
-                    <a href="<?php echo esc_url($gw_track_url); ?>" target="_blank" rel="noopener" style="display:inline-flex;padding:12px 16px;border-radius:12px;background:#6d28d9;color:#fff;text-decoration:none;font-weight:900;">
+                    <a class="wdc-gw-progress-cta" href="<?php echo esc_url($gw_track_url); ?>" target="_blank" rel="noopener">
                         <?php echo contenly_tr('Cek Tracking Resi →', 'Track Package →'); ?>
                     </a>
                     <?php endif; ?>
-                    <button type="button" id="wdc-copy-resi" data-resi="<?php echo esc_attr($gw_track_no); ?>" style="display:inline-flex;padding:12px 16px;border-radius:12px;background:#fff;border:1px solid #c4b5fd;color:#5b21b6;font-weight:900;cursor:pointer;">
+                    <button type="button" id="wdc-copy-resi" class="wdc-gw-progress-cta wdc-gw-progress-cta--ghost" data-resi="<?php echo esc_attr($gw_track_no); ?>">
                         <?php echo contenly_tr('Salin Resi', 'Copy Tracking No.'); ?>
                     </button>
                 </div>
@@ -463,31 +449,73 @@ if (is_array($gw_order) && !empty($gw_order['order_id']) && function_exists('wdc
             });
             </script>
         <?php elseif ($gw_status === 'cancelled') : ?>
-            <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:12px;color:#991b1b;font-size:13px;font-weight:700;">
+            <div class="wdc-gw-progress-note wdc-gw-progress-note--danger">
                 <?php echo contenly_tr('Claim dibatalkan. Hubungi crew jika ada pertanyaan.', 'Claim cancelled. Contact crew if you have questions.'); ?>
             </div>
         <?php endif; ?>
     </div>
 </section>
 <style>
-@media(max-width:720px){
-  #wdc-giveaway-progress > div[style*="grid-template-columns:repeat(5"]{grid-template-columns:1fr 1fr!important}
+.wdc-gw-progress{width:100%;max-width:100%;box-sizing:border-box;margin-bottom:24px}
+.wdc-gw-progress-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:16px}
+.wdc-gw-progress-copy{min-width:0;flex:1 1 auto}
+.wdc-gw-progress-kicker{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#0369a1;margin-bottom:4px}
+.wdc-gw-progress-title{font-size:22px;font-weight:900;color:#0f172a;margin:0 0 4px;line-height:1.2;word-break:break-word}
+.wdc-gw-progress-meta{font-size:13px;color:#475569;line-height:1.45}
+.wdc-gw-progress-badge{display:inline-flex;align-items:center;padding:8px 12px;border-radius:999px;font-size:12px;font-weight:900;white-space:nowrap;flex:0 0 auto}
+.wdc-gw-progress-steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:16px}
+.wdc-gw-progress-step{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:74px;padding:10px 8px;border-radius:14px;border:1px solid #e2e8f0;background:#fff;text-align:center;box-sizing:border-box}
+.wdc-gw-progress-step.is-done{background:#dcfce7;border-color:#86efac}
+.wdc-gw-progress-step.is-active{border-color:#0ea5e9;box-shadow:0 0 0 3px rgba(14,165,233,.12)}
+.wdc-gw-progress-step-no{width:22px;height:22px;border-radius:999px;display:grid;place-items:center;background:#e2e8f0;color:#334155;font-size:11px;font-weight:900}
+.wdc-gw-progress-step.is-done .wdc-gw-progress-step-no{background:#16a34a;color:#fff}
+.wdc-gw-progress-step.is-active .wdc-gw-progress-step-no{background:#0284c7;color:#fff}
+.wdc-gw-progress-step-label{font-size:11px;font-weight:800;color:#64748b;line-height:1.3}
+.wdc-gw-progress-step.is-done .wdc-gw-progress-step-label{color:#166534}
+.wdc-gw-progress-body{display:grid;gap:12px;width:100%;box-sizing:border-box;background:#f8fafc;border:1px solid #e6edf2;border-radius:14px;padding:16px}
+.wdc-gw-progress-details{font-size:14px;color:#334155;line-height:1.7}
+.wdc-gw-progress-note{border-radius:12px;padding:12px 14px;font-size:13px;font-weight:700;line-height:1.5}
+.wdc-gw-progress-note--info{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af}
+.wdc-gw-progress-note--ok{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46}
+.wdc-gw-progress-note--danger{background:#fef2f2;border:1px solid #fecaca;color:#991b1b}
+.wdc-gw-progress-track{display:grid;gap:10px}
+.wdc-gw-progress-resi{background:#f5f3ff;border:1px solid #ddd6fe;border-radius:12px;padding:12px 14px}
+.wdc-gw-progress-resi-label{font-size:12px;font-weight:900;color:#5b21b6;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.wdc-gw-progress-resi-no{font-size:20px;font-weight:950;color:#0f172a;letter-spacing:.04em;word-break:break-all}
+.wdc-gw-progress-resi-help{font-size:12px;color:#64748b;margin-top:4px}
+.wdc-gw-progress-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.wdc-gw-progress-cta{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 14px;border-radius:12px;background:#6d28d9;color:#fff!important;text-decoration:none;font-weight:900;border:0;cursor:pointer;width:100%;box-sizing:border-box}
+.wdc-gw-progress-cta--warn{background:linear-gradient(135deg,#f59e0b,#f97316)}
+.wdc-gw-progress-cta--ghost{background:#fff;border:1px solid #c4b5fd;color:#5b21b6!important}
+.wdc-dash-cta-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:28px;width:100%}
+.wdc-dash-cta-card{background:#fff;border:1px solid var(--wdc-border,#e6edf2);border-radius:var(--wdc-radius,20px);padding:20px;box-shadow:var(--wdc-shadow,0 10px 28px rgba(15,23,42,.06));box-sizing:border-box;min-width:0;display:flex;flex-direction:column}
+.wdc-dash-cta-card h2{font-size:22px;color:#0f172a;margin:10px 0;letter-spacing:-.02em;line-height:1.25}
+.wdc-dash-cta-card p{color:#64748b;line-height:1.65;margin:0 0 18px;flex:1}
+.wdc-dash-cta-card a{display:inline-flex;align-self:flex-start;padding:11px 16px;border-radius:999px;background:#06384d;color:#fff;text-decoration:none;font-weight:900}
+.wdc-dash-cta-kicker{font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;color:#0b617c}
+@media(max-width:767.98px){
+  .wdc-gw-progress-head{flex-direction:column;align-items:stretch}
+  .wdc-gw-progress-badge{align-self:flex-start}
+  .wdc-gw-progress-steps{grid-template-columns:1fr}
+  .wdc-gw-progress-step{min-height:58px;flex-direction:row;justify-content:flex-start;text-align:left;padding:12px}
+  .wdc-gw-progress-actions{grid-template-columns:1fr}
+  .wdc-dash-cta-grid{grid-template-columns:1fr}
 }
 </style>
 <?php endif; ?>
 
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-bottom:28px;">
-    <article style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:24px;box-shadow:0 12px 34px rgba(15,23,42,.06);">
-        <span style="font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;color:#0b617c;"><?php echo contenly_tr('Belajar', 'Learn'); ?></span>
-        <h2 style="font-size:24px;color:#0f172a;margin:10px 0 10px;letter-spacing:.03em;"><?php echo contenly_tr('Gabung Kursus Menyelam', 'Join a dive course'); ?></h2>
-        <p style="color:#64748b;line-height:1.65;margin:0 0 18px;"><?php echo contenly_tr('Mulai Open Water, lanjut ke Advanced, atau bangun keterampilan rescue dan kepemimpinan bersama kru.', 'Start Open Water, continue to Advanced, or build safer rescue and leadership skills with the crew.'); ?></p>
-        <a href="/my-courses/" style="display:inline-flex;padding:11px 16px;border-radius:999px;background:#06384d;color:#fff;text-decoration:none;font-weight:900;"><?php echo contenly_tr('Buka Kursus Saya', 'Open My Courses'); ?></a>
+<div class="wdc-dash-cta-grid">
+    <article class="wdc-dash-cta-card">
+        <span class="wdc-dash-cta-kicker"><?php echo contenly_tr('Belajar', 'Learn'); ?></span>
+        <h2><?php echo contenly_tr('Gabung Kursus Menyelam', 'Join a dive course'); ?></h2>
+        <p><?php echo contenly_tr('Mulai Open Water, lanjut ke Advanced, atau bangun keterampilan rescue dan kepemimpinan bersama kru.', 'Start Open Water, continue to Advanced, or build safer rescue and leadership skills with the crew.'); ?></p>
+        <a href="/my-courses/"><?php echo contenly_tr('Buka Kursus Saya', 'Open My Courses'); ?></a>
     </article>
-    <article style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:24px;box-shadow:0 12px 34px rgba(15,23,42,.06);">
-        <span style="font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;color:#0b617c;"><?php echo contenly_tr('Peralatan', 'Gear'); ?></span>
-        <h2 style="font-size:24px;color:#0f172a;margin:10px 0 10px;letter-spacing:.03em;"><?php echo contenly_tr('Beli Peralatan Selam', 'Buy scuba equipment'); ?></h2>
-        <p style="color:#64748b;line-height:1.65;margin:0 0 18px;"><?php echo contenly_tr('Jelajahi masker, fin, BCD, regulator, baju selam, dan dive computer dengan bantuan fitting sebelum checkout.', 'Browse masks, fins, BCDs, regulators, wetsuits, and dive computers with fit support before checkout.'); ?></p>
-        <a href="/my-gear/" style="display:inline-flex;padding:11px 16px;border-radius:999px;background:#06384d;color:#fff;text-decoration:none;font-weight:900;"><?php echo contenly_tr('Buka Peralatan Saya', 'Open My Gear'); ?></a>
+    <article class="wdc-dash-cta-card">
+        <span class="wdc-dash-cta-kicker"><?php echo contenly_tr('Peralatan', 'Gear'); ?></span>
+        <h2><?php echo contenly_tr('Beli Peralatan Selam', 'Buy scuba equipment'); ?></h2>
+        <p><?php echo contenly_tr('Jelajahi masker, fin, BCD, regulator, baju selam, dan dive computer dengan bantuan fitting sebelum checkout.', 'Browse masks, fins, BCDs, regulators, wetsuits, and dive computers with fit support before checkout.'); ?></p>
+        <a href="/my-gear/"><?php echo contenly_tr('Buka Peralatan Saya', 'Open My Gear'); ?></a>
     </article>
 </div>
 
