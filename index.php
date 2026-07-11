@@ -1,6 +1,6 @@
 <!doctype html>
 <html <?php language_attributes(); ?>>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_head(); ?><style id="wd-home-card-sync">.whaledive-home .wd-course-slider{overflow:visible!important}.whaledive-home .wd-course-grid,.whaledive-home .wd-equipment-grid{width:100%!important;max-width:none!important;margin:0!important;display:grid!important;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))!important;gap:14px!important}.whaledive-home .wd-course-card,.whaledive-home .wd-equip-card{border-radius:18px!important;overflow:hidden!important;background:#fff!important;border:1px solid rgba(6,56,77,.08)!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important;padding:0!important;min-width:0!important}.whaledive-home .wd-course-photo,.whaledive-home .wd-equip-photo{height:180px!important;min-height:0!important;border-radius:0!important;margin:0!important;overflow:hidden!important;background:linear-gradient(135deg,#e8fbff,#fff)!important}.whaledive-home .wd-course-photo img{width:100%!important;height:100%!important;object-fit:cover!important;display:block!important}.whaledive-home .wd-equip-photo img{width:100%!important;height:100%!important;object-fit:contain!important;padding:14px!important;display:block!important}.whaledive-home .wd-course-body,.whaledive-home .wd-equip-card{display:flex!important;flex-direction:column!important}.whaledive-home .wd-course-body,.whaledive-home .wd-equip-home-body{padding:28px 26px 32px!important;min-height:238px!important;display:flex!important;flex-direction:column!important}.whaledive-home .wd-equip-card h3{font-size:20px!important;line-height:1.05!important;letter-spacing:-.03em!important;margin:0 0 10px!important;color:#061a36!important}.whaledive-home .wd-course-card h3{font-size:20px!important;line-height:1.05!important;letter-spacing:-.03em!important;margin:0 0 10px!important;color:#061a36!important}.whaledive-home .wd-course-meta{gap:6px!important;margin:0 0 9px!important}.whaledive-home .wd-course-meta span{padding:5px 8px!important;border-radius:999px!important;background:#eef8fb!important;color:#0b617c!important;font-size:10px!important;font-weight:900!important;line-height:1!important}.whaledive-home .wd-course-card p,.whaledive-home .wd-equip-card p{font-size:13px!important;line-height:1.45!important;color:#5f7180!important}.whaledive-home .wd-course-card a,.whaledive-home .wd-equip-card a{min-height:38px!important;width:auto!important;margin-top:auto!important;margin-bottom:14px!important;padding:12px 24px!important;border-radius:999px!important;font-size:14px!important;font-weight:900!important;background:#f3fbff!important;border:1px solid rgba(6,56,77,.12)!important;color:#06384d!important;display:inline-flex!important;align-items:center!important;text-decoration:none!important}.whaledive-home .wd-course-card a:after,.whaledive-home .wd-equip-card a:after{content:' →'}.whaledive-home #equipment .wd-equip-home-body{background:#fff!important;color:#061a36!important}.whaledive-home #equipment .wd-equip-home-body .wd-course-meta{display:flex!important;gap:6px!important;margin:0 0 9px!important}.whaledive-home #equipment .wd-equip-home-body .wd-course-meta span{padding:5px 8px!important;border-radius:999px!important;background:#eef8fb!important;color:#0b617c!important;font-size:10px!important;font-weight:900!important;line-height:1!important}.whaledive-home #equipment .wd-equip-home-body h3{position:static!important;color:#061a36!important;text-shadow:none!important}.whaledive-home #equipment .wd-equip-home-body p{position:static!important;color:#5f7180!important;text-shadow:none!important;margin:0 0 12px!important}.whaledive-home #equipment .wd-equip-home-body a{width:max-content!important;background:#f3fbff!important;color:#06384d!important;border:1px solid rgba(6,56,77,.12)!important;box-shadow:none!important}.whaledive-home #equipment .wd-home-equip-card{border-radius:18px!important;overflow:hidden!important;background:#fff!important;border:1px solid rgba(6,56,77,.08)!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important;padding:0!important;min-width:0!important;display:flex!important;flex-direction:column!important}.whaledive-home #equipment .wd-home-equip-photo{height:138px!important;min-height:0!important;border-radius:0!important;margin:0!important;overflow:hidden!important;background:linear-gradient(135deg,#e8fbff,#fff)!important}.whaledive-home #equipment .wd-home-equip-photo:before,.whaledive-home #equipment .wd-home-equip-photo:after{display:none!important}.whaledive-home #equipment .wd-home-equip-photo img{width:100%!important;height:100%!important;object-fit:contain!important;padding:14px!important;display:block!important;position:relative!important;z-index:3!important;opacity:1!important;filter:none!important;mix-blend-mode:normal!important}.whaledive-home #equipment .wd-home-equip-body{padding:14px!important;min-height:238px!important;display:flex!important;flex-direction:column!important;background:#fff!important}.whaledive-home #equipment .wd-home-equip-body h3{position:static!important;color:#061a36!important;text-shadow:none!important;font-size:20px!important;line-height:1.05!important;letter-spacing:-.03em!important;margin:0 0 10px!important}.whaledive-home #equipment .wd-home-equip-body p{position:static!important;color:#5f7180!important;text-shadow:none!important;font-size:13px!important;line-height:1.45!important;margin:0 0 12px!important}.whaledive-home #equipment .wd-home-equip-body a{min-height:34px!important;width:max-content!important;margin-top:auto!important;margin-bottom:0!important;padding:0 12px!important;border-radius:999px!important;font-size:12px!important;font-weight:900!important;background:#f3fbff!important;border:1px solid rgba(6,56,77,.12)!important;color:#06384d!important;box-shadow:none!important;display:inline-flex!important;align-items:center!important;text-decoration:none!important}.whaledive-home .wd-slider-hint{display:none!important}@media(max-width:980px){.whaledive-home .wd-course-grid,.whaledive-home .wd-equipment-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}@media(max-width:760px){.whaledive-home .wd-course-grid,.whaledive-home .wd-equipment-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}@media(max-width:540px){.whaledive-home .wd-course-grid,.whaledive-home .wd-equipment-grid{grid-template-columns:1fr!important}.whaledive-home .wd-course-card,.whaledive-home .wd-equip-card{display:grid!important;grid-template-columns:118px minmax(0,1fr)!important}.whaledive-home .wd-course-photo,.whaledive-home .wd-equip-photo{height:100%!important;min-height:178px!important}.whaledive-home .wd-course-body{min-height:0!important;padding:12px!important}.whaledive-home .wd-equip-card h3{margin-top:12px!important}}
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_head(); ?><style id="wd-home-card-sync">.whaledive-home .wd-course-slider{overflow:visible!important}.whaledive-home .wd-course-grid,.whaledive-home .wd-equipment-grid{width:100%!important;max-width:none!important;margin:0!important;display:grid!important;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))!important;gap:14px!important}.whaledive-home .wd-course-card,.whaledive-home .wd-equip-card{border-radius:18px!important;overflow:hidden!important;background:#fff!important;border:1px solid rgba(6,56,77,.08)!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important;padding:0!important;min-width:0!important}.whaledive-home .wd-course-photo,.whaledive-home .wd-equip-photo{height:180px!important;min-height:0!important;border-radius:0!important;margin:0!important;overflow:hidden!important;background:linear-gradient(135deg,#e8fbff,#fff)!important}.whaledive-home .wd-course-photo img{width:100%!important;height:100%!important;object-fit:cover!important;display:block!important}.whaledive-home .wd-equip-photo img{width:100%!important;height:100%!important;object-fit:contain!important;padding:14px!important;display:block!important}.whaledive-home .wd-course-body,.whaledive-home .wd-equip-card{display:flex!important;flex-direction:column!important}.whaledive-home .wd-course-body,.whaledive-home .wd-equip-home-body{padding:28px 26px 32px!important;min-height:238px!important;display:flex!important;flex-direction:column!important}.whaledive-home .wd-equip-card h3{font-size:20px!important;line-height:1.05!important;letter-spacing:-.03em!important;margin:0 0 10px!important;color:#061a36!important}.whaledive-home .wd-course-card h3{font-size:20px!important;line-height:1.05!important;letter-spacing:-.03em!important;margin:0 0 10px!important;color:#061a36!important}.whaledive-home .wd-course-meta{gap:6px!important;margin:0 0 9px!important}.whaledive-home .wd-course-meta span{padding:5px 8px!important;border-radius:999px!important;background:#eef8fb!important;color:#0b617c!important;font-size:10px!important;font-weight:900!important;line-height:1!important}.whaledive-home .wd-course-card p,.whaledive-home .wd-equip-card p{font-size:13px!important;line-height:1.45!important;color:#5f7180!important}.whaledive-home .wd-course-card a,.whaledive-home .wd-equip-card a{min-height:38px!important;width:auto!important;margin-top:auto!important;margin-bottom:14px!important;padding:12px 24px!important;border-radius:999px!important;font-size:14px!important;font-weight:900!important;background:#f3fbff!important;border:1px solid rgba(6,56,77,.12)!important;color:#06384d!important;display:inline-flex!important;align-items:center!important;text-decoration:none!important}.whaledive-home .wd-course-card a:after,.whaledive-home .wd-equip-card a:after{content:' →'}.whaledive-home #equipment .wd-equip-home-body{background:#fff!important;color:#061a36!important}.whaledive-home #equipment .wd-equip-home-body .wd-course-meta{display:flex!important;gap:6px!important;margin:0 0 9px!important}.whaledive-home #equipment .wd-equip-home-body .wd-course-meta span{padding:5px 8px!important;border-radius:999px!important;background:#eef8fb!important;color:#0b617c!important;font-size:10px!important;font-weight:900!important;line-height:1!important}.whaledive-home #equipment .wd-equip-home-body h3{position:static!important;color:#061a36!important;text-shadow:none!important}.whaledive-home #equipment .wd-equip-home-body p{position:static!important;color:#5f7180!important;text-shadow:none!important;margin:0 0 12px!important}.whaledive-home #equipment .wd-equip-home-body a{width:max-content!important;background:#f3fbff!important;color:#06384d!important;border:1px solid rgba(6,56,77,.12)!important;box-shadow:none!important}.whaledive-home #equipment .wd-home-equip-card{border-radius:18px!important;overflow:hidden!important;background:#fff!important;border:1px solid rgba(6,56,77,.08)!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important;padding:0!important;min-width:0!important;display:flex!important;flex-direction:column!important}.whaledive-home #equipment .wd-home-equip-photo{height:138px!important;min-height:0!important;border-radius:0!important;margin:0!important;overflow:hidden!important;background:linear-gradient(135deg,#e8fbff,#fff)!important}.whaledive-home #equipment .wd-home-equip-photo:before,.whaledive-home #equipment .wd-home-equip-photo:after{display:none!important}.whaledive-home #equipment .wd-home-equip-photo img{width:100%!important;height:100%!important;object-fit:contain!important;padding:14px!important;display:block!important;position:relative!important;z-index:3!important;opacity:1!important;filter:none!important;mix-blend-mode:normal!important}.whaledive-home #equipment .wd-home-equip-body{padding:14px!important;min-height:238px!important;display:flex!important;flex-direction:column!important;background:#fff!important}.whaledive-home #equipment .wd-home-equip-body h3{position:static!important;color:#061a36!important;text-shadow:none!important;font-size:20px!important;line-height:1.05!important;letter-spacing:-.03em!important;margin:0 0 10px!important}.whaledive-home #equipment .wd-home-equip-body p{position:static!important;color:#5f7180!important;text-shadow:none!important;font-size:13px!important;line-height:1.45!important;margin:0 0 12px!important}.whaledive-home #equipment .wd-home-equip-body a{min-height:34px!important;width:max-content!important;margin-top:auto!important;margin-bottom:0!important;padding:0 12px!important;border-radius:999px!important;font-size:12px!important;font-weight:900!important;background:#f3fbff!important;border:1px solid rgba(6,56,77,.12)!important;color:#06384d!important;box-shadow:none!important;display:inline-flex!important;align-items:center!important;text-decoration:none!important}.whaledive-home .wd-slider-hint{display:none!important}@media(max-width:980px){.whaledive-home .wd-course-grid,.whaledive-home .wd-equipment-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}@media(max-width:760px){.whaledive-home .wd-course-grid,.whaledive-home .wd-equipment-grid{grid-template-columns:1fr!important}}@media(max-width:540px){.whaledive-home .wd-course-grid,.whaledive-home .wd-equipment-grid{grid-template-columns:1fr!important}.whaledive-home .wd-course-card,.whaledive-home .wd-equip-card{display:flex!important;flex-direction:column!important;grid-template-columns:none!important}.whaledive-home .wd-course-photo,.whaledive-home .wd-equip-photo{height:100%!important;min-height:178px!important}.whaledive-home .wd-course-body{min-height:0!important;padding:12px!important}.whaledive-home .wd-equip-card h3{margin-top:12px!important}}
 .whaledive-home #courses .wd-course-card{border-radius:18px!important;overflow:hidden!important;background:#fff!important;border:1px solid rgba(6,56,77,.08)!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important;padding:0!important;min-width:0!important;display:flex!important;flex-direction:column!important}.whaledive-home #courses .wd-course-photo{height:138px!important;min-height:0!important;border-radius:0!important;margin:0!important;overflow:hidden!important}.whaledive-home #courses .wd-course-body{padding:28px 26px 32px!important;min-height:238px!important;display:flex!important;flex-direction:column!important;background:#fff!important;color:#061a36!important}.whaledive-home #courses .wd-course-body h3{position:static!important;color:#061a36!important;text-shadow:none!important;font-size:20px!important;line-height:1.05!important;letter-spacing:-.03em!important;margin:0 0 10px!important}.whaledive-home #courses .wd-course-body p{position:static!important;color:#5f7180!important;text-shadow:none!important;font-size:13px!important;line-height:1.45!important;margin:0 0 12px!important}.whaledive-home #courses .wd-course-body a{min-height:38px!important;width:max-content!important;margin-top:auto!important;margin-bottom:0!important;padding:12px 24px!important;border-radius:999px!important;font-size:14px!important;font-weight:900!important;background:#f3fbff!important;border:1px solid rgba(6,56,77,.12)!important;color:#06384d!important;box-shadow:none!important;display:inline-flex!important;align-items:center!important;text-decoration:none!important}.whaledive-home #courses .wd-course-meta{display:flex!important;gap:6px!important;margin:0 0 9px!important;flex-wrap:wrap!important}.whaledive-home #courses .wd-course-meta span{padding:5px 8px!important;border-radius:999px!important;background:#eef8fb!important;color:#0b617c!important;font-size:10px!important;font-weight:900!important;line-height:1!important}.whaledive-home #courses .wd-course-index{display:none!important}
 
 .whaledive-home .wd-course-grid .wd-course-card{display:flex!important;flex-direction:column!important}.whaledive-home .wd-course-grid .wd-course-body{padding:28px 26px 32px!important;min-height:238px!important;display:flex!important;flex-direction:column!important;background:#fff!important;color:#061a36!important}.whaledive-home .wd-course-grid .wd-course-body h3{position:static!important;color:#061a36!important;text-shadow:none!important;font-size:20px!important;line-height:1.05!important;letter-spacing:-.03em!important;margin:0 0 10px!important}.whaledive-home .wd-course-grid .wd-course-body p{position:static!important;color:#5f7180!important;text-shadow:none!important;font-size:13px!important;line-height:1.45!important;margin:0 0 12px!important}.whaledive-home .wd-course-grid .wd-course-body a{min-height:38px!important;width:max-content!important;margin-top:auto!important;margin-bottom:0!important;padding:12px 24px!important;border-radius:999px!important;font-size:14px!important;font-weight:900!important;background:#f3fbff!important;border:1px solid rgba(6,56,77,.12)!important;color:#06384d!important;box-shadow:none!important;display:inline-flex!important;align-items:center!important;text-decoration:none!important}.whaledive-home .wd-course-grid .wd-course-no{display:none!important}
@@ -183,6 +183,110 @@ body.whaledive-home #equipment .wd-equip-photo{height:180px!important}
   .whaledive-home .wd-trust-row-5{gap:8px!important}
   .whaledive-home .wd-trust-row-5 img{max-height:22px!important;padding:4px 6px!important}
 }
+
+/* WDC home course grid responsive FINAL 2026-07-11h */
+body.whaledive-home #courses .wd-course-grid,
+body.whaledive-home #wd-tab-naui,
+body.whaledive-home #wd-tab-tdi,
+body.whaledive-home .wd-course-grid {
+  display: grid !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  grid-auto-flow: row !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 18px !important;
+}
+body.whaledive-home #courses .wd-course-card,
+body.whaledive-home .wd-course-card {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+body.whaledive-home #courses .wd-course-body,
+body.whaledive-home .wd-course-body {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+body.whaledive-home #courses .wd-course-body h3,
+body.whaledive-home .wd-course-body h3 {
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  hyphens: auto !important;
+  font-size: clamp(16px, 1.6vw, 20px) !important;
+  line-height: 1.15 !important;
+  min-height: 0 !important;
+}
+body.whaledive-home #courses .wd-course-body p,
+body.whaledive-home .wd-course-body p {
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  min-height: 0 !important;
+}
+body.whaledive-home #courses .wd-course-meta,
+body.whaledive-home .wd-course-meta {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}
+@media (max-width: 1100px) {
+  body.whaledive-home #courses .wd-course-grid,
+  body.whaledive-home #wd-tab-naui,
+  body.whaledive-home #wd-tab-tdi,
+  body.whaledive-home .wd-course-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+@media (max-width: 760px) {
+  body.whaledive-home #courses .wd-course-grid,
+  body.whaledive-home #wd-tab-naui,
+  body.whaledive-home #wd-tab-tdi,
+  body.whaledive-home .wd-course-grid,
+  body.whaledive-home .wd-equipment-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  body.whaledive-home #courses .wd-course-card,
+  body.whaledive-home .wd-course-card,
+  body.whaledive-home .wd-home-equip-card {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+  }
+  body.whaledive-home #courses .wd-course-photo,
+  body.whaledive-home .wd-course-photo {
+    width: 100% !important;
+    height: 160px !important;
+    min-height: 160px !important;
+  }
+  body.whaledive-home #courses .wd-course-body h3,
+  body.whaledive-home .wd-course-body h3 {
+    font-size: 18px !important;
+    line-height: 1.2 !important;
+  }
+  body.whaledive-home #courses .wd-course-body a,
+  body.whaledive-home .wd-course-body a {
+    width: max-content !important;
+    max-width: 100% !important;
+  }
+}
+@media (max-width: 540px) {
+  body.whaledive-home #courses .wd-course-grid,
+  body.whaledive-home #wd-tab-naui,
+  body.whaledive-home #wd-tab-tdi {
+    grid-template-columns: 1fr !important;
+  }
+  /* kill old horizontal mini-card layout that squishes titles */
+  body.whaledive-home .wd-course-card {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+  }
+}
 </style></head>
 <body <?php body_class('whaledive-home'); ?>><?php wp_body_open(); ?>
 <main class="wd-page">
@@ -201,17 +305,17 @@ body.whaledive-home #equipment .wd-equip-photo{height:180px!important}
 <button class="wd-chip active" data-tab="naui" onclick="wdSwitchTab('naui')">NAUI</button>
 <button class="wd-chip" data-tab="tdi" onclick="wdSwitchTab('tdi')">TDI</button>
 </div>
-<div class="wd-course-grid" id="wd-tab-naui" style="width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;display:grid!important;grid-auto-flow:row!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:22px!important;">
+<div class="wd-course-grid" id="wd-tab-naui" style="width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;display:grid!important;grid-auto-flow:row!important;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))!important;gap:18px!important;">
 <?php
 $naui_courses=[
 ['Open Water Scuba Diver',contenly_tr('Non-Profesional','Non-Professional'),contenly_tr('3-4 hari','3-4 days'),contenly_tr('Sertifikasi pertama untuk dive aman bersama buddy.','Your first certification to dive safely with a buddy.'),'open-water-scuba-diver','wdc-course-open-water-real.png'],
 ['Advanced Open Water Diver',contenly_tr('Non-Profesional','Non-Professional'),contenly_tr('2-3 hari','2-3 days'),contenly_tr('Kembangkan skill dengan dive lebih dalam, navigasi, dan pengalaman khusus.','Expand your skills with deeper dives, navigation, and specialty experiences.'),'advanced-open-water-diver','wdc-course-advanced-open-water-real.png'],
 ['Rescue Scuba Diver',contenly_tr('Non-Profesional','Non-Professional'),contenly_tr('2-3 hari','2-3 days'),contenly_tr('Pelajari pencegahan dan penanganan darurat selam.','Learn to prevent and manage dive emergencies.'),'rescue-scuba-diver','wdc-course-rescue-diver-real.png'],
-['Master Scuba Diver',contenly_tr('Non-Profesional','Non-Professional'),contenly_tr('Bervariasi','Varies'),contenly_tr('Capai puncak diver rekreasional dengan skill dan specialty.','Reach the top recreational diver path with skills and specialties.'),'master-scuba-diver','wdc-course-rescue-diver-real.png']
+['Master Scuba Diver',contenly_tr('Non-Profesional','Non-Professional'),contenly_tr('Bervariasi','Varies'),contenly_tr('Capai puncak diver rekreasional dengan skill dan specialty.','Reach the top recreational diver path with skills and specialties.'),'master-scuba-diver','wdc-course-deep-diver-real-v2.jpg']
 ];
 foreach($naui_courses as $e): ?><article class="wd-course-card"><div class="wd-course-photo" style="background-image:linear-gradient(135deg,rgba(232,251,255,.28),rgba(255,255,255,.42)),url('<?php echo esc_url(get_template_directory_uri().'/assets/'.$e[5]); ?>')!important;background-size:cover,contain!important;background-position:center!important;background-repeat:no-repeat!important;"><img src="<?php echo esc_url(get_template_directory_uri().'/assets/'.$e[5]); ?>" alt="<?php echo esc_attr($e[0]); ?>" loading="eager" decoding="async"></div><div class="wd-course-body"><div class="wd-course-meta"><span><?php echo esc_html($e[1]); ?></span><span><?php echo esc_html($e[2]); ?></span></div><h3><?php echo esc_html($e[0]); ?></h3><p><?php echo esc_html($e[3]); ?></p><a href="/courses/"><?php echo esc_html(contenly_tr('Lihat Detail','View Details')); ?></a></div></article><?php endforeach; ?>
 </div>
-<div class="wd-course-grid wd-hidden" id="wd-tab-tdi" style="width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;display:none!important;grid-auto-flow:row!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:22px!important;">
+<div class="wd-course-grid wd-hidden" id="wd-tab-tdi" style="width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;display:none!important;grid-auto-flow:row!important;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))!important;gap:18px!important;">
 <?php
 $tdi_courses=[
 ['Intro to Tech',contenly_tr('Perkenalan','Intro'),contenly_tr('1-2 hari','1-2 days'),contenly_tr('Perkenalan diving teknis dan peralatan lanjutan.','Introduction to technical diving and advanced equipment.'),'intro-to-tech','wdc-course-intro-tech.webp'],

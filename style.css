@@ -2301,8 +2301,9 @@ article.wd-mini-article::before{content:none!important;display:none!important}
 .home #courses .wd-course-slider::-webkit-scrollbar{height:9px}
 .home #courses .wd-course-slider::-webkit-scrollbar-track{background:rgba(255,255,255,.1);border-radius:999px}
 .home #courses .wd-course-slider::-webkit-scrollbar-thumb{background:linear-gradient(90deg,#4CC8ED,#1abc9c);border-radius:999px}
-.home #courses .wd-course-grid{display:flex!important;grid-template-columns:none!important;gap:18px!important;align-items:stretch;min-width:max-content;margin:0!important}
-.home #courses .wd-course-card{flex:0 0 clamp(280px,28vw,350px)!important;grid-column:auto!important;position:relative;overflow:hidden;padding:0!important;border:1px solid rgba(255,255,255,.14)!important;border-radius:30px!important;background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.06))!important;box-shadow:0 24px 60px rgba(0,0,0,.18)!important;scroll-snap-align:start;text-align:left!important}
+/* neutralized home course flex slider */
+.home #courses .wd-course-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:18px!important;align-items:stretch;min-width:0!important;overflow:visible!important}
+.home #courses .wd-course-card{flex:1 1 auto!important;grid-column:auto!important;position:relative;overflow:hidden;padding:0!important;border:1px solid rgba(255,255,255,.14)!important;border-radius:30px!important;background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.06))!important;box-shadow:0 24px 60px rgba(0,0,0,.18)!important;scroll-snap-align:start;text-align:left!important}
 .home #courses .wd-course-card:nth-last-child(-n+2){grid-column:auto!important}
 .home #courses .wd-course-photo{height:210px;overflow:hidden;background:#03172d}
 .home #courses .wd-course-photo img{display:block;width:100%;height:100%;object-fit:cover;transform:scale(1.02);transition:transform .35s ease}
@@ -2313,7 +2314,7 @@ article.wd-mini-article::before{content:none!important;display:none!important}
 .home #courses .wd-course-card p{color:rgba(255,255,255,.76)!important}
 .home #courses .wd-course-card a{margin-top:auto!important}
 .home #courses .wd-slider-hint{margin-top:8px;color:rgba(255,255,255,.58);font-size:13px;font-weight:800;letter-spacing:.04em}
-@media(max-width:760px){.home #courses .wd-course-card{flex-basis:82vw!important}.home #courses .wd-course-photo{height:190px}.home #courses .wd-course-body{min-height:270px}}
+@media(max-width:760px){.home #courses .wd-course-card{flex-basis:auto!important;max-width:100%!important;width:100%!important}.home #courses .wd-course-photo{height:190px}.home #courses .wd-course-body{min-height:270px}}
 
 
 /* WDC tighten course slider vertical spacing 2026-05-14 */
@@ -2321,7 +2322,7 @@ article.wd-mini-article::before{content:none!important;display:none!important}
 .home #courses .wd-course-slider{margin-top:24px!important;padding-bottom:12px!important}
 .home #courses .wd-course-photo{height:170px!important}
 .home #courses .wd-course-body{min-height:210px!important;padding:20px!important}
-.home #courses .wd-course-card{flex-basis:clamp(260px,25vw,310px)!important}
+.home #courses .wd-course-card{flex-basis:auto!important;max-width:100%!important;width:100%!important}
 .home #courses .wd-course-card p{margin-bottom:14px!important;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .home #courses .wd-slider-hint{margin-top:4px!important}
 .home #courses .wd-section-cta{margin-top:22px!important}
@@ -2331,7 +2332,7 @@ article.wd-mini-article::before{content:none!important;display:none!important}
 /* WDC course slider - balanced spacing 2026-07-10 */
 .home #courses.wd-section{padding-top:52px!important;padding-bottom:40px!important}
 .home #courses .wd-course-slider{margin-top:22px!important;padding-bottom:10px!important}
-.home #courses .wd-course-card{flex-basis:clamp(255px,24vw,300px)!important;border-radius:28px!important}
+.home #courses .wd-course-card{flex-basis:auto!important;max-width:100%!important;width:100%!important}
 .home #courses .wd-course-photo{height:150px!important}
 .home #courses .wd-course-body{min-height:0!important;height:auto!important;padding:22px 20px 24px!important;display:flex!important;flex-direction:column!important;gap:2px!important}
 .home #courses .wd-course-card h3{font-size:20px!important;line-height:1.1!important;margin-bottom:6px!important}
@@ -2340,7 +2341,7 @@ article.wd-mini-article::before{content:none!important;display:none!important}
 .home #courses .wd-course-card a{padding:12px 18px!important;font-size:13px!important;margin-top:auto!important;border-radius:12px!important}
 .home #courses .wd-slider-hint{display:none!important}
 .home #courses .wd-section-cta{margin-top:18px!important}
-@media(max-width:760px){.home #courses .wd-course-card{flex-basis:78vw!important}.home #courses .wd-course-photo{height:140px!important}.home #courses.wd-section{padding-top:44px!important;padding-bottom:32px!important}}
+@media(max-width:760px){.home #courses .wd-course-card{flex-basis:auto!important;max-width:100%!important;width:100%!important}.home #courses .wd-course-photo{height:140px!important}.home #courses.wd-section{padding-top:44px!important;padding-bottom:32px!important}}
 
 
 /* WDC reduce course CTA padding 2026-05-14 */
@@ -3141,8 +3142,8 @@ body.whaledive-single-course .wd-sidebar-note,
   .wd-shell{width:100%!important;max-width:100vw!important;box-sizing:border-box!important;padding-left:24px!important;padding-right:24px!important}
   img,video,canvas,svg{max-width:100%;height:auto}
   .home #courses .wd-course-slider{width:100%!important;max-width:100vw!important;margin-left:0!important;margin-right:0!important;padding-left:0!important;padding-right:0!important;box-sizing:border-box!important}
-  .home #courses .wd-course-grid{min-width:0!important;width:max-content!important;max-width:none!important}
-  .home #courses .wd-course-card{flex-basis:calc(100vw - 72px)!important;max-width:318px!important}
+  .home #courses .wd-course-grid{min-width:0!important;width:100%!important;max-width:100%!important}
+  .home #courses .wd-course-card{flex-basis:auto!important;max-width:100%!important;width:100%!important}
   .home #courses .wd-course-card a{max-width:100%!important;white-space:normal!important}
   .whaledive-equipment #equipGrid .wd-equip-photo{left:auto!important;right:auto!important;max-width:100%!important;transform:none!important;object-fit:contain!important;padding:10px!important;box-sizing:border-box!important}
   .whaledive-equipment #equipGrid .wd-equip-visual{overflow:hidden!important}
@@ -4147,4 +4148,177 @@ body.home .wd-dark .wd-section-cta .wd-btn.alt,
 /* undo equipment catalog hide-label if any leftover */
 .whaledive-equipment .wd-price-label {
   display: block !important;
+}
+
+
+/* WDC home mobile course grid FINAL 2026-07-11i */
+body.home #courses .wd-course-grid,
+body.whaledive-home #courses .wd-course-grid,
+body.home #wd-tab-naui,
+body.home #wd-tab-tdi,
+body.whaledive-home #wd-tab-naui,
+body.whaledive-home #wd-tab-tdi {
+  display: grid !important;
+  grid-auto-flow: row !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 18px !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: visible !important;
+}
+body.home #courses .wd-course-card,
+body.whaledive-home #courses .wd-course-card {
+  display: flex !important;
+  flex-direction: column !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  grid-template-columns: none !important;
+}
+body.home #courses .wd-course-body h3,
+body.whaledive-home #courses .wd-course-body h3 {
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  font-size: clamp(16px, 1.5vw, 20px) !important;
+  line-height: 1.2 !important;
+}
+@media (max-width: 1100px) {
+  body.home #courses .wd-course-grid,
+  body.whaledive-home #courses .wd-course-grid,
+  body.home #wd-tab-naui,
+  body.home #wd-tab-tdi,
+  body.whaledive-home #wd-tab-naui,
+  body.whaledive-home #wd-tab-tdi {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+@media (max-width: 760px) {
+  body.home #courses .wd-course-grid,
+  body.whaledive-home #courses .wd-course-grid,
+  body.home #wd-tab-naui,
+  body.home #wd-tab-tdi,
+  body.whaledive-home #wd-tab-naui,
+  body.whaledive-home #wd-tab-tdi,
+  body.home .wd-equipment-grid,
+  body.whaledive-home .wd-equipment-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  body.home #courses .wd-course-card,
+  body.whaledive-home #courses .wd-course-card,
+  body.home .wd-equip-card,
+  body.whaledive-home .wd-equip-card,
+  body.home .wd-home-equip-card,
+  body.whaledive-home .wd-home-equip-card {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+    width: 100% !important;
+  }
+  body.home #courses .wd-course-photo,
+  body.whaledive-home #courses .wd-course-photo {
+    width: 100% !important;
+    height: 160px !important;
+    min-height: 160px !important;
+  }
+}
+
+
+/* WDC home course cards NO SQUISH FINAL 2026-07-11j */
+body.home #courses .wd-course-slider,
+body.whaledive-home #courses .wd-course-slider {
+  overflow: visible !important;
+  overflow-x: visible !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  scroll-snap-type: none !important;
+}
+body.home #courses .wd-course-grid,
+body.whaledive-home #courses .wd-course-grid,
+body.home #wd-tab-naui,
+body.home #wd-tab-tdi,
+body.whaledive-home #wd-tab-naui,
+body.whaledive-home #wd-tab-tdi {
+  display: grid !important;
+  grid-auto-flow: row !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 18px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow: visible !important;
+}
+body.home #courses .wd-course-card,
+body.whaledive-home #courses .wd-course-card {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: none !important;
+  flex-basis: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  grid-template-columns: none !important;
+}
+body.home #courses .wd-course-photo,
+body.whaledive-home #courses .wd-course-photo,
+body.home #courses .wd-course-body,
+body.whaledive-home #courses .wd-course-body {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+body.home #courses .wd-course-body h3,
+body.whaledive-home #courses .wd-course-body h3 {
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  writing-mode: horizontal-tb !important;
+  font-size: clamp(16px, 1.5vw, 20px) !important;
+  line-height: 1.2 !important;
+}
+body.home #courses .wd-course-body p,
+body.whaledive-home #courses .wd-course-body p {
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+}
+@media (max-width: 1100px) {
+  body.home #courses .wd-course-grid,
+  body.whaledive-home #courses .wd-course-grid,
+  body.home #wd-tab-naui,
+  body.home #wd-tab-tdi,
+  body.whaledive-home #wd-tab-naui,
+  body.whaledive-home #wd-tab-tdi {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+@media (max-width: 760px) {
+  body.home #courses .wd-course-grid,
+  body.whaledive-home #courses .wd-course-grid,
+  body.home #wd-tab-naui,
+  body.home #wd-tab-tdi,
+  body.whaledive-home #wd-tab-naui,
+  body.whaledive-home #wd-tab-tdi {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  body.home #courses .wd-course-card,
+  body.whaledive-home #courses .wd-course-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex-basis: auto !important;
+  }
+  body.home #courses .wd-course-photo,
+  body.whaledive-home #courses .wd-course-photo {
+    height: 160px !important;
+    min-height: 160px !important;
+  }
+  body.home #courses .wd-course-body h3,
+  body.whaledive-home #courses .wd-course-body h3 {
+    font-size: 18px !important;
+  }
 }
