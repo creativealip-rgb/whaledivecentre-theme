@@ -25,7 +25,7 @@ require_once get_template_directory() . '/inc/wdc-catalog-helpers.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.56');
+    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.57');
     wp_add_inline_style('contenly-style', '.wd-header .gt-lang-switcher{margin-right:10px!important}.wd-header .wd-nav-member{margin-left:8px!important}');
     
     // Google Fonts
@@ -47,7 +47,7 @@ function contenly_enqueue_scripts() {
     wp_add_inline_script('jquery', 'var wdcMemberAjax = ' . wp_json_encode($member_ajax_config) . ';', 'before');
     
     // Main theme JavaScript
-    wp_enqueue_script('contenly-main', get_template_directory_uri() . '/assets/js/main.js', ['jquery'], '1.0.7', true);
+    wp_enqueue_script('contenly-main', get_template_directory_uri() . '/assets/js/main.js', ['jquery'], '1.0.8', true);
     
     // Media uploader for story pages (wp_editor + image upload)
     if (is_page_template('page-cerita-kamu.php') && is_user_logged_in()) {
@@ -1155,55 +1155,13 @@ function wdc_public_mobile_and_call_cleanup() {
     ?>
     <script id="wdc-public-nav-call-cleanup">
     document.addEventListener('DOMContentLoaded', function(){
-      var nav = document.querySelector('.wd-nav');
-      var toggle = document.querySelector('.wd-hamburger');
-      var menu = document.querySelector('.wd-menu');
-      var backdrop = document.querySelector('.wd-menu-backdrop');
-      function setMenuOpen(open){
-        if(!nav || !toggle || !menu) return;
-        document.body.classList.toggle('wd-menu-open', open);
-        nav.classList.toggle('wd-menu-open', open);
-        menu.classList.toggle('is-open', open);
-        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-        if(open){
-          if(backdrop){
-            if(backdrop.parentElement !== document.body){ document.body.appendChild(backdrop); }
-            backdrop.removeAttribute('hidden');
-          }
-          if(menu.parentElement !== document.body){ document.body.appendChild(menu); }
-        } else {
-          if(backdrop){
-            backdrop.setAttribute('hidden', 'hidden');
-            if(nav){ nav.appendChild(backdrop); }
-          }
-          if(nav && menu.parentElement === document.body){ nav.appendChild(menu); }
-        }
-        document.documentElement.classList.toggle('wd-menu-lock', open);
-        document.body.style.overflow = open ? 'hidden' : '';
-      }
-      if(nav && toggle && menu){
-        toggle.addEventListener('click', function(e){
-          e.preventDefault();
-          e.stopPropagation();
-          setMenuOpen(!document.body.classList.contains('wd-menu-open'));
-        });
-        document.querySelectorAll('[data-wd-menu-close]').forEach(function(el){
-          el.addEventListener('click', function(){ setMenuOpen(false); });
-        });
-        menu.querySelectorAll('a').forEach(function(link){
-          link.addEventListener('click', function(){ setMenuOpen(false); });
-        });
-        document.addEventListener('keydown', function(e){
-          if(e.key === 'Escape') setMenuOpen(false);
-        });
-      }
+      /* Menu open/close owned by assets/js/main.js — avoid double handlers. */
       var callLinks = Array.prototype.slice.call(document.querySelectorAll('a[aria-label="Call Whale Dive Centre"], a[aria-label*="Call Whale Dive"]'));
       callLinks.slice(1).forEach(function(link){ link.remove(); });
     });
     </script>
     <style id="wdc-public-mobile-call-cleanup-css">
       @media(max-width:760px){
-        .wd-nav.wd-menu-open .wd-menu{opacity:1!important;visibility:visible!important;transform:translateY(0)!important}
         .wd-nav .gt-lang-switcher{justify-content:flex-start!important;margin:4px 0!important}
         .wd-nav .wd-nav-member{display:inline-flex!important;justify-content:center!important;min-height:42px!important}
         a[aria-label="Call Whale Dive Centre"],a[aria-label*="Call Whale Dive"]{right:14px!important;bottom:14px!important;z-index:900!important}

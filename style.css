@@ -4971,9 +4971,9 @@ body.whaledive-home #courses .wd-course-body p {
     -webkit-backdrop-filter: none !important;
   }
 
-  /* Full-page overlay ABOVE navbar, BELOW drawer */
+  /* Full-page overlay ABOVE navbar, BELOW drawer (only while open) */
   html body.wd-menu-open .wd-menu-backdrop,
-  html body > .wd-menu-backdrop {
+  html body.wd-menu-open > .wd-menu-backdrop {
     display: block !important;
     position: fixed !important;
     inset: 0 !important;
@@ -5023,10 +5023,10 @@ body.whaledive-home #courses .wd-course-body p {
     pointer-events: none !important;
   }
 
-  /* SIDEBAR only: sharp above blur */
+  /* SIDEBAR only: sharp above blur (require open class — never sticky body child) */
   html body.wd-menu-open #wd-mobile-menu,
   html body.wd-menu-open .wd-menu,
-  html body > #wd-mobile-menu,
+  html body.wd-menu-open > #wd-mobile-menu,
   html body > .wd-menu.is-open,
   html body.wd-menu-open .wd-nav .wd-menu {
     position: fixed !important;
@@ -5050,7 +5050,7 @@ body.whaledive-home #courses .wd-course-body p {
     -webkit-font-smoothing: antialiased !important;
   }
   html body.wd-menu-open #wd-mobile-menu *,
-  html body > #wd-mobile-menu *,
+  html body.wd-menu-open > #wd-mobile-menu *,
   html body.wd-menu-open .wd-menu * {
     filter: none !important;
     backdrop-filter: none !important;
@@ -5581,5 +5581,89 @@ body.whaledive-single-course .wd-course-full-image-hero .wd-kicker{
     margin-right:auto!important;
     padding-left:20px!important;
     padding-right:20px!important;
+  }
+}
+
+/* WDC mobile fix 2.3.57: center NAUI/TDI + drawer close reliable */
+@media (max-width: 760px) {
+  /* Home + catalog filter tabs stay centered on mobile */
+  .wd-filter-bar,
+  #courses .wd-filter-bar,
+  body.whaledive-home #courses .wd-filter-bar,
+  body.home #courses .wd-filter-bar,
+  #courseFilters.wd-filter-bar,
+  #equipFilters.wd-filter-bar {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 10px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    overflow: visible !important;
+    text-align: center !important;
+  }
+  .wd-filter-bar .wd-chip,
+  #courses .wd-filter-bar .wd-chip,
+  #courseFilters .wd-chip,
+  #equipFilters .wd-chip {
+    flex: 0 0 auto !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Backdrop only active while menu open — never sticky body child */
+  html body > .wd-menu-backdrop:not([hidden]),
+  html body.wd-menu-open > .wd-menu-backdrop,
+  html body.wd-menu-open .wd-menu-backdrop {
+    display: block !important;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 1250 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+  html body > .wd-menu-backdrop[hidden],
+  html body:not(.wd-menu-open) > .wd-menu-backdrop {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  /* Drawer body-child only forced open when open class present */
+  html body.wd-menu-open > #wd-mobile-menu,
+  html body.wd-menu-open > .wd-menu,
+  html body > #wd-mobile-menu.is-open,
+  html body > .wd-menu.is-open {
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    left: auto !important;
+    bottom: 0 !important;
+    z-index: 1300 !important;
+    transform: translateX(0) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+  html body:not(.wd-menu-open) > #wd-mobile-menu:not(.is-open),
+  html body:not(.wd-menu-open) > .wd-menu:not(.is-open) {
+    transform: translateX(104%) !important;
+    pointer-events: none !important;
+  }
+
+  /* Close button always clickable above everything in drawer */
+  html body #wd-mobile-menu .wd-menu-close,
+  html body .wd-menu .wd-menu-close,
+  html body.wd-menu-open .wd-menu-close {
+    position: relative !important;
+    z-index: 2 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    touch-action: manipulation !important;
   }
 }

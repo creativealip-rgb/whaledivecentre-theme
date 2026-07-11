@@ -28,78 +28,109 @@
         const wdcToggle = document.querySelector('.wd-hamburger');
         const wdcMenu = document.querySelector('.wd-menu');
         const wdcNav = document.querySelector('.wd-nav');
-        const wdcBackdrop = document.querySelector('.wd-menu-backdrop');
+        let wdcBackdrop = document.querySelector('.wd-menu-backdrop');
+
+        function getMenuParts() {
+            return {
+                toggle: document.querySelector('.wd-hamburger'),
+                menu: document.querySelector('#wd-mobile-menu') || document.querySelector('.wd-menu'),
+                nav: document.querySelector('.wd-nav'),
+                backdrop: document.querySelector('.wd-menu-backdrop')
+            };
+        }
 
         function setWdcMenuOpen(open) {
-            if (!wdcToggle || !wdcMenu) return;
+            const parts = getMenuParts();
+            const toggle = parts.toggle || wdcToggle;
+            const menu = parts.menu || wdcMenu;
+            const nav = parts.nav || wdcNav;
+            const backdrop = parts.backdrop || wdcBackdrop;
+            if (!toggle || !menu) return;
+
             document.body.classList.toggle('wd-menu-open', open);
             document.documentElement.classList.toggle('wd-menu-lock', open);
-            if (wdcNav) wdcNav.classList.toggle('wd-menu-open', open);
-            wdcMenu.classList.toggle('is-open', open);
-            wdcToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+            if (nav) nav.classList.toggle('wd-menu-open', open);
+            menu.classList.toggle('is-open', open);
+            toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
             document.body.style.overflow = open ? 'hidden' : '';
+            document.documentElement.style.overflow = open ? 'hidden' : '';
 
             // Reparent backdrop + drawer to <body> so:
             // - page blur is full-viewport
             // - drawer sits ABOVE blur and never inherits header filter/stacking
             if (open) {
-                if (wdcBackdrop) {
-                    if (wdcBackdrop.parentElement !== document.body) document.body.appendChild(wdcBackdrop);
-                    wdcBackdrop.removeAttribute('hidden');
+                if (backdrop) {
+                    if (backdrop.parentElement !== document.body) document.body.appendChild(backdrop);
+                    backdrop.removeAttribute('hidden');
+                    backdrop.style.pointerEvents = 'auto';
                 }
-                if (wdcMenu.parentElement !== document.body) {
-                    wdcMenu.dataset.wdOrigParent = 'nav';
-                    document.body.appendChild(wdcMenu);
+                if (menu.parentElement !== document.body) {
+                    menu.dataset.wdOrigParent = 'nav';
+                    document.body.appendChild(menu);
                 }
+                menu.style.pointerEvents = 'auto';
             } else {
-                if (wdcBackdrop) {
-                    wdcBackdrop.setAttribute('hidden', 'hidden');
+                if (backdrop) {
+                    backdrop.setAttribute('hidden', 'hidden');
+                    backdrop.style.pointerEvents = 'none';
                 }
-                var nav = wdcNav || document.querySelector('.wd-nav');
                 if (nav) {
-                    if (wdcBackdrop && wdcBackdrop.parentElement === document.body) {
-                        nav.appendChild(wdcBackdrop);
+                    if (backdrop && backdrop.parentElement === document.body) {
+                        nav.appendChild(backdrop);
                     }
-                    if (wdcMenu.parentElement === document.body) {
-                        nav.appendChild(wdcMenu);
+                    if (menu.parentElement === document.body) {
+                        nav.appendChild(menu);
                     }
                 }
             }
 
             // clear old inline transform hacks from previous popup menu
-            wdcMenu.style.removeProperty('opacity');
-            wdcMenu.style.removeProperty('visibility');
-            wdcMenu.style.removeProperty('pointer-events');
-            wdcMenu.style.removeProperty('transform');
-            wdcMenu.style.removeProperty('filter');
-            wdcMenu.style.removeProperty('backdrop-filter');
+            menu.style.removeProperty('opacity');
+            menu.style.removeProperty('visibility');
+            menu.style.removeProperty('transform');
+            menu.style.removeProperty('filter');
+            menu.style.removeProperty('backdrop-filter');
+            wdcBackdrop = backdrop;
         }
 
         if (wdcToggle && wdcMenu) {
+            // Capture-phase open/close so sticky overlays can't swallow taps
             document.addEventListener('click', function(event) {
-                const toggle = event.target.closest('.wd-hamburger');
-                if (!toggle) return;
-
-                event.preventDefault();
-                event.stopPropagation();
-                event.stopImmediatePropagation();
-                setWdcMenuOpen(!document.body.classList.contains('wd-menu-open'));
-            }, true);
-
-            document.addEventListener('click', function(event) {
-                if (!document.body.classList.contains('wd-menu-open')) return;
-                if (event.target.closest('[data-wd-menu-close]')) {
+                const closeEl = event.target.closest('[data-wd-menu-close], .wd-menu-close');
+                if (closeEl) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    event.stopImmediatePropagation();
                     setWdcMenuOpen(false);
                     return;
                 }
-                if (wdcMenu.contains(event.target) || wdcToggle.contains(event.target)) return;
+
+                const toggle = event.target.closest('.wd-hamburger');
+                if (toggle) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    event.stopImmediatePropagation();
+                    setWdcMenuOpen(!document.body.classList.contains('wd-menu-open'));
+                    return;
+                }
+
+                if (!document.body.classList.contains('wd-menu-open')) return;
+                const menu = document.querySelector('#wd-mobile-menu') || document.querySelector('.wd-menu');
+                if (menu && menu.contains(event.target)) return;
+                // outside / backdrop
                 setWdcMenuOpen(false);
-            });
+            }, true);
 
             wdcMenu.querySelectorAll('a').forEach(function(link) {
                 link.addEventListener('click', function() {
                     setWdcMenuOpen(false);
                 });
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && document.body.classList.contains('wd-menu-open')) {
+                    setWdcMenuOpen(false);
+                }
             });
         }
 
