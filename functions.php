@@ -23,7 +23,7 @@ require_once get_template_directory() . '/inc/template-functions.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.6');
+    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.7');
     wp_add_inline_style('contenly-style', '.wd-header .gt-lang-switcher{margin-right:10px!important}.wd-header .wd-nav-member{margin-left:8px!important}');
     
     // Google Fonts
@@ -743,6 +743,72 @@ function contenly_render_language_switcher($class = '') {
         . '</div>';
 }
 
+
+function contenly_render_public_footer() {
+    $home = esc_url(home_url('/'));
+    $courses = esc_url(home_url('/courses/'));
+    $equipment = esc_url(home_url('/equipment/'));
+    $about = esc_url(home_url('/about/'));
+    $blog = esc_url(home_url('/blog/'));
+    $contact = esc_url(home_url('/contact/'));
+    $conservation = esc_url(home_url('/conservation/'));
+    $gallery = esc_url(home_url('/gallery/'));
+    $trips = esc_url(home_url('/trips/'));
+    $testimonials = esc_url(home_url('/testimonials/'));
+    $year = esc_html(date('Y'));
+    ?>
+  <footer id="site-footer" class="wd-footer">
+    <div class="wd-shell">
+      <div class="wd-footer-top">
+        <div class="wd-footer-brand">
+          <span class="wd-footer-kicker"><?php echo esc_html(contenly_tr('Siap dive?', 'Ready to dive?')); ?></span>
+          <h2>Whale Dive Centre</h2>
+          <p><?php echo esc_html(contenly_tr('Pelatihan selam, trip komunitas, dukungan peralatan, dan pengalaman peduli laut untuk petualangan bawah air yang lebih aman.', 'Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.')); ?></p>
+          <a class="wd-btn alt" href="<?php echo $contact; ?>"><?php echo esc_html(contenly_tr('Mulai Konsultasi', 'Start Inquiry')); ?></a>
+        </div>
+        <nav class="wd-footer-col" aria-label="<?php echo esc_attr(contenly_tr('Jelajahi', 'Explore')); ?>">
+          <h3><?php echo esc_html(contenly_tr('Jelajahi', 'Explore')); ?></h3>
+          <a href="<?php echo $courses; ?>"><?php echo esc_html(contenly_tr('Kursus Selam', 'Dive Courses')); ?></a>
+          <a href="<?php echo $equipment; ?>"><?php echo esc_html(contenly_tr('Peralatan Selam', 'Scuba Equipment')); ?></a>
+          <a href="<?php echo $trips; ?>"><?php echo esc_html(contenly_tr('Dive Trips', 'Dive Trips')); ?></a>
+          <a href="<?php echo $gallery; ?>"><?php echo esc_html(contenly_tr('Galeri', 'Gallery')); ?></a>
+          <a href="<?php echo $testimonials; ?>"><?php echo esc_html(contenly_tr('Testimoni', 'Testimonials')); ?></a>
+          <a href="<?php echo $conservation; ?>"><?php echo esc_html(contenly_tr('Konservasi', 'Conservation')); ?></a>
+          <a href="<?php echo $about; ?>"><?php echo esc_html(contenly_tr('Tentang Kami', 'About Us')); ?></a>
+          <a href="<?php echo $blog; ?>">Blog</a>
+        </nav>
+        <nav class="wd-footer-col" aria-label="<?php echo esc_attr(contenly_tr('Kursus', 'Courses')); ?>">
+          <h3><?php echo esc_html(contenly_tr('Kursus', 'Courses')); ?></h3>
+          <a href="<?php echo esc_url(home_url('/courses/open-water-scuba-diver/')); ?>">Open Water Scuba Diver</a>
+          <a href="<?php echo esc_url(home_url('/courses/advanced-open-water-diver/')); ?>">Advanced Open Water</a>
+          <a href="<?php echo esc_url(home_url('/courses/rescue-scuba-diver/')); ?>">Rescue Scuba Diver</a>
+          <a href="<?php echo esc_url(home_url('/courses/divemaster/')); ?>">Divemaster</a>
+          <a href="<?php echo esc_url(home_url('/courses/instructor/')); ?>"><?php echo esc_html(contenly_tr('Instruktur', 'Instructor')); ?></a>
+          <a href="<?php echo esc_url(home_url('/courses/intro-to-tech/')); ?>">Technical Diver</a>
+          <a href="<?php echo $courses; ?>"><?php echo esc_html(contenly_tr('Lihat Semua Kursus', 'View All Courses')); ?></a>
+        </nav>
+        <div class="wd-footer-col">
+          <h3><?php echo esc_html(contenly_tr('Kontak', 'Contact')); ?></h3>
+          <p>Email: <a href="mailto:info@whaledivecentre.com">info@whaledivecentre.com</a></p>
+          <p><?php echo esc_html(contenly_tr('Telepon', 'Phone')); ?>: <a href="tel:+622127939068">(021) 27939068</a></p>
+          <p>Jl. Tanah Kusir II No.3, Kebayoran Lama, Jakarta Selatan 12240</p>
+          <div class="wd-social">
+            <a href="https://www.instagram.com/whaledivecentre.id/" target="_blank" rel="noopener" aria-label="Instagram"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+            <a href="https://www.facebook.com/whaledive.id/" target="_blank" rel="noopener" aria-label="Facebook"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+            <a href="https://x.com/whaledivecentre" target="_blank" rel="noopener" aria-label="X (Twitter)"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="wd-footer-bottom">
+        <span>&copy; <?php echo $year; ?> Whale Dive Centre. <?php echo esc_html(contenly_tr('Hak cipta dilindungi.', 'All rights reserved.')); ?></span>
+        <span><?php echo esc_html(contenly_tr('Jalur pelatihan NAUI / TDI / DAN', 'NAUI / TDI / DAN training pathways')); ?></span>
+      </div>
+    </div>
+  </footer>
+  <script>document.addEventListener('DOMContentLoaded',function(){var path=location.pathname;document.querySelectorAll('.wd-menu a[data-nav]').forEach(function(a){var key=a.getAttribute('data-nav');var active=(key==='home'&&(path==='/'||path==='/en/'||path==='/home/'||path==='/en/home/'))||(key!=='home'&&path.indexOf('/'+key+'/')===0);if(active){a.classList.add('is-active');a.setAttribute('aria-current','page');}});});</script>
+    <?php
+}
+
 function contenly_render_public_header() {
     if (is_user_logged_in() && !headers_sent()) {
         nocache_headers();
@@ -765,6 +831,14 @@ function contenly_render_public_header() {
         $active_key = 'about';
     } elseif (false !== strpos($request_path, '/blog/') || false !== strpos($request_path, '/journal/') || is_singular('post')) {
         $active_key = 'blog';
+    } elseif (false !== strpos($request_path, '/gallery/')) {
+        $active_key = 'gallery';
+    } elseif (false !== strpos($request_path, '/trips/')) {
+        $active_key = 'trips';
+    } elseif (false !== strpos($request_path, '/testimonials/')) {
+        $active_key = 'testimonials';
+    } elseif (false !== strpos($request_path, '/contact/')) {
+        $active_key = 'contact';
     }
     $active_class = function($key) use ($active_key) {
         return $key === $active_key ? ' class="is-active" aria-current="page"' : '';
