@@ -3745,6 +3745,75 @@ function wdc_admin_assets($hook) {
     if ($hook === 'toplevel_page_wdc-content-settings') {
         wp_enqueue_media();
     }
+    $page = isset($_GET['page']) ? sanitize_key(wp_unslash($_GET['page'])) : '';
+    $wdc_admin_pages = [
+        'wdc-member-list',
+        'wdc-member-admin',
+        'wdc-giveaway-orders',
+        'wdc-giveaway-settings',
+        'wdc-course-requests',
+        'wdc-gear-requests',
+        'wdc-direct-orders',
+        'wdc-payment-settings',
+    ];
+    if (!in_array($page, $wdc_admin_pages, true) && strpos((string) $hook, 'wdc-') === false) {
+        return;
+    }
+    $css = '
+    body.wp-admin .wrap.wdc-admin-full,
+    body.wp-admin .wrap.wdc-gw-admin { max-width: none !important; width: 100% !important; margin-right: 0 !important; }
+    body.wp-admin #wpbody-content .wrap.wdc-admin-full,
+    body.wp-admin #wpbody-content .wrap.wdc-gw-admin { box-sizing: border-box; }
+    .wdc-admin-full .wdc-ml-toolbar {
+      display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+      margin:16px 0 12px; background:#fff; border:1px solid #c3c4c7; border-radius:8px; padding:12px 14px;
+      box-sizing:border-box; width:100%;
+    }
+    .wdc-admin-full .wdc-ml-toolbar input[type="search"] {
+      flex:1 1 280px; min-width:220px; max-width:420px; margin:0;
+    }
+    .wdc-admin-full .wdc-ml-meta { color:#646970; margin:0 0 12px; }
+    .wdc-admin-full .wdc-ml-table-wrap {
+      width:100%; overflow-x:auto; background:#fff; border:1px solid #c3c4c7; border-radius:8px;
+      box-sizing:border-box;
+    }
+    .wdc-admin-full table.wdc-ml-table {
+      width:100% !important; max-width:none !important; margin:0 !important; border:0 !important;
+      table-layout: fixed;
+    }
+    .wdc-admin-full table.wdc-ml-table th,
+    .wdc-admin-full table.wdc-ml-table td {
+      vertical-align: middle; padding:12px 14px;
+    }
+    .wdc-admin-full table.wdc-ml-table th.col-member { width:22%; }
+    .wdc-admin-full table.wdc-ml-table th.col-email { width:24%; }
+    .wdc-admin-full table.wdc-ml-table th.col-num { width:8%; text-align:center; }
+    .wdc-admin-full table.wdc-ml-table th.col-date { width:12%; }
+    .wdc-admin-full table.wdc-ml-table th.col-actions { width:18%; }
+    .wdc-admin-full table.wdc-ml-table td.col-num { text-align:center; }
+    .wdc-admin-full table.wdc-ml-table td.col-actions { white-space:nowrap; }
+    .wdc-admin-full .wdc-ml-user strong { display:block; font-size:13px; }
+    .wdc-admin-full .wdc-ml-user small { color:#646970; }
+    .wdc-admin-full .wdc-ml-email { word-break: break-all; }
+    .wdc-admin-full .wdc-ml-panel {
+      width:100%; box-sizing:border-box; background:#fff; border:1px solid #c3c4c7;
+      border-radius:8px; padding:16px; margin:12px 0 18px;
+    }
+    .wdc-admin-full .wdc-ml-form-panel {
+      width:100%; box-sizing:border-box; background:#f6f7f7; border:1px solid #c3c4c7;
+      border-radius:8px; padding:16px; margin:18px 0;
+    }
+    .wdc-admin-full .wdc-ml-related {
+      display:grid; grid-template-columns:1fr 1fr; gap:14px; width:100%;
+    }
+    @media (max-width: 960px) {
+      .wdc-admin-full .wdc-ml-related { grid-template-columns:1fr; }
+      .wdc-admin-full table.wdc-ml-table { table-layout: auto; }
+    }
+    ';
+    wp_register_style('wdc-admin-ops', false, [], '1.0.1');
+    wp_enqueue_style('wdc-admin-ops');
+    wp_add_inline_style('wdc-admin-ops', $css);
 }
 add_action('admin_enqueue_scripts', 'wdc_admin_assets');
 
@@ -4217,7 +4286,7 @@ function wdc_render_member_list_admin() {
         'order' => 'ASC',
     ]);
 
-    echo '<div class="wrap" style="max-width:none;">';
+    echo '<div class="wrap wdc-admin-full">';
     if ($user_id) {
         $user = get_userdata($user_id);
         if (!$user) {
@@ -4249,7 +4318,7 @@ function wdc_render_member_list_admin() {
             echo '<div class="notice ' . esc_attr($cls) . ' is-dismissible"><p>' . esc_html($map[$updated] ?? 'Saved.') . '</p></div>';
         }
 
-        echo '<div style="background:#fff;border:1px solid #dcdcde;border-radius:8px;padding:16px;margin:12px 0 18px;width:100%;box-sizing:border-box;">';
+        echo '<div class="wdc-ml-panel">';
         echo '<strong style="font-size:16px;">' . esc_html($user->display_name ?: $user->user_login) . '</strong>';
         echo '<div style="color:#64748b;margin-top:4px;">' . esc_html($user->user_email) . ' · @' . esc_html($user->user_login) . ' · user #' . intval($user_id) . '</div>';
         echo '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;font-size:12px;">';
@@ -4264,7 +4333,7 @@ function wdc_render_member_list_admin() {
         echo '<h2 style="margin-top:8px;">Kursus di halaman member</h2>';
         echo '<p class="description">Ini yang muncul di <code>/my-courses/</code> member. Admin bisa tambah / edit / hapus.</p>';
         if ($completed) {
-            echo '<table class="widefat striped" style="width:100%;margin:12px 0;"><thead><tr>';
+            echo '<div class="wdc-ml-table-wrap" style="margin:12px 0;"><table class="widefat striped wdc-ml-table"><thead><tr>';
             echo '<th>Kursus</th><th>Level</th><th>Status</th><th>Tanggal</th><th>Sertifikat</th><th>Aksi</th>';
             echo '</tr></thead><tbody>';
             foreach ($completed as $i => $c) {
@@ -4291,14 +4360,14 @@ function wdc_render_member_list_admin() {
                 echo '</form>';
                 echo '</td></tr>';
             }
-            echo '</tbody></table>';
+            echo '</tbody></table></div>';
         } else {
             echo '<div class="notice notice-info inline"><p>Belum ada kursus di halaman member ini.</p></div>';
         }
 
         // Add / edit form
         $is_edit = is_array($edit_row);
-        echo '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;width:100%;box-sizing:border-box;margin:18px 0;">';
+        echo '<div class="wdc-ml-form-panel">';
         echo '<h2 style="margin:0 0 10px;font-size:16px;">' . ($is_edit ? 'Edit Kursus #' . intval($edit_index + 1) : 'Tambah Kursus ke Member') . '</h2>';
         echo '<form method="post">';
         wp_nonce_field('wdc_member_list_update', 'wdc_member_list_nonce');
@@ -4349,7 +4418,7 @@ function wdc_render_member_list_admin() {
         // Related requests/orders quick view
         if ($course_requests || $course_orders) {
             echo '<h2>Request / Order terkait</h2>';
-            echo '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;">';
+            echo '<div class="wdc-ml-related">';
             echo '<div style="background:#fff;border:1px solid #dcdcde;border-radius:10px;padding:12px;"><strong>Course Requests</strong>';
             if ($course_requests) {
                 echo '<ul style="margin:8px 0 0;padding-left:18px;">';
@@ -4385,18 +4454,18 @@ function wdc_render_member_list_admin() {
     if ($updated) {
         echo '<div class="notice notice-success is-dismissible"><p>Saved.</p></div>';
     }
-    echo '<form method="get" style="display:flex;gap:10px;align-items:center;margin:16px 0;background:#fff;border:1px solid #dcdcde;border-radius:8px;padding:12px;width:100%;box-sizing:border-box;">';
+    echo '<form method="get" class="wdc-ml-toolbar">';
     echo '<input type="hidden" name="page" value="wdc-member-list">';
-    echo '<input type="search" name="s" value="' . esc_attr($search) . '" placeholder="Cari nama / email / username" style="min-width:280px;">';
+    echo '<input type="search" name="s" value="' . esc_attr($search) . '" placeholder="Cari nama / email / username">';
     echo '<button class="button button-primary">Cari</button>';
     if ($search !== '') {
         echo '<a class="button" href="' . esc_url(admin_url('admin.php?page=wdc-member-list')) . '">Reset</a>';
     }
     echo '</form>';
 
-    echo '<p style="color:#64748b;">Menampilkan ' . count($rows) . ' member terbaru' . ($search ? ' (filter: ' . esc_html($search) . ')' : '') . '.</p>';
-    echo '<table class="widefat striped" style="width:100%;"><thead><tr>';
-    echo '<th>Member</th><th>Email</th><th>Kursus</th><th>Request</th><th>Order</th><th>Registered</th><th>Aksi</th>';
+    echo '<p class="wdc-ml-meta">Menampilkan <strong>' . count($rows) . '</strong> member terbaru' . ($search ? ' (filter: ' . esc_html($search) . ')' : '') . '.</p>';
+    echo '<div class="wdc-ml-table-wrap"><table class="widefat striped wdc-ml-table"><thead><tr>';
+    echo '<th class="col-member">Member</th><th class="col-email">Email</th><th class="col-num">Kursus</th><th class="col-num">Request</th><th class="col-num">Order</th><th class="col-date">Registered</th><th class="col-actions">Aksi</th>';
     echo '</tr></thead><tbody>';
     if (!$rows) {
         echo '<tr><td colspan="7">Tidak ada member.</td></tr>';
@@ -4405,17 +4474,17 @@ function wdc_render_member_list_admin() {
         $u = $row['user'];
         $manage_url = add_query_arg(['page' => 'wdc-member-list', 'user_id' => $u->ID], admin_url('admin.php'));
         echo '<tr>';
-        echo '<td><strong>' . esc_html($u->display_name ?: $u->user_login) . '</strong><br><small style="color:#64748b;">@' . esc_html($u->user_login) . ' · #' . intval($u->ID) . '</small></td>';
-        echo '<td>' . esc_html($u->user_email) . '</td>';
-        echo '<td><strong>' . intval($row['completed_count']) . '</strong></td>';
-        echo '<td>' . intval($row['course_requests_count']) . '</td>';
-        echo '<td>' . intval($row['course_orders_count']) . '</td>';
-        echo '<td>' . esc_html(mysql2date('Y-m-d', $u->user_registered)) . '</td>';
-        echo '<td><a class="button button-primary button-small" href="' . esc_url($manage_url) . '">Kelola Kursus</a> ';
+        echo '<td class="wdc-ml-user col-member"><strong>' . esc_html($u->display_name ?: $u->user_login) . '</strong><small>@' . esc_html($u->user_login) . ' · #' . intval($u->ID) . '</small></td>';
+        echo '<td class="wdc-ml-email col-email">' . esc_html($u->user_email) . '</td>';
+        echo '<td class="col-num"><strong>' . intval($row['completed_count']) . '</strong></td>';
+        echo '<td class="col-num">' . intval($row['course_requests_count']) . '</td>';
+        echo '<td class="col-num">' . intval($row['course_orders_count']) . '</td>';
+        echo '<td class="col-date">' . esc_html(mysql2date('Y-m-d', $u->user_registered)) . '</td>';
+        echo '<td class="col-actions"><a class="button button-primary button-small" href="' . esc_url($manage_url) . '">Kelola Kursus</a> ';
         echo '<a class="button button-small" href="' . esc_url(get_edit_user_link($u->ID)) . '">WP User</a></td>';
         echo '</tr>';
     }
-    echo '</tbody></table></div>';
+    echo '</tbody></table></div></div>';
 }
 
 /**
