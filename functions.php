@@ -25,7 +25,7 @@ require_once get_template_directory() . '/inc/wdc-catalog-helpers.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.50');
+    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.52');
     wp_add_inline_style('contenly-style', '.wd-header .gt-lang-switcher{margin-right:10px!important}.wd-header .wd-nav-member{margin-left:8px!important}');
     
     // Google Fonts
@@ -2354,6 +2354,42 @@ add_filter('get_site_icon_url', function ($url) {
     return get_stylesheet_directory_uri() . '/assets/brand/favicon-192.png';
 });
 
+
+/**
+ * Canonical public catalog URLs:
+ * course  → /courses/{slug}/
+ * equip   → /equipment/{slug}/
+ * Legacy  → /course/ and /gear/ 301 to public paths.
+ */
+function wdc_catalog_public_permalink($permalink, $post) {
+    if (!($post instanceof WP_Post)) {
+        return $permalink;
+    }
+    if ($post->post_type === 'wm_course' && $post->post_name) {
+        return home_url('/courses/' . $post->post_name . '/');
+    }
+    if ($post->post_type === 'wm_equipment' && $post->post_name) {
+        return home_url('/equipment/' . $post->post_name . '/');
+    }
+    return $permalink;
+}
+add_filter('post_type_link', 'wdc_catalog_public_permalink', 15, 2);
+
+add_action('template_redirect', function () {
+    if (is_admin() || wp_doing_ajax() || (defined('REST_REQUEST') && REST_REQUEST)) {
+        return;
+    }
+    $path = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?: '', '/');
+    $path = preg_replace('#^en/#', '', $path);
+    if (preg_match('#^course/([^/]+)/?$#', $path, $m)) {
+        wp_safe_redirect(home_url('/courses/' . $m[1] . '/'), 301);
+        exit;
+    }
+    if (preg_match('#^gear/([^/]+)/?$#', $path, $m)) {
+        wp_safe_redirect(home_url('/equipment/' . $m[1] . '/'), 301);
+        exit;
+    }
+}, 0);
 
 /**
  * Whale Dive course detail pretty routes.

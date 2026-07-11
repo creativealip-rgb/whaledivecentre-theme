@@ -110,7 +110,7 @@ function wdc_equipment_image_url($title, $cat_slug, $theme_uri) {
           $cat_slug = !empty($cat_terms) ? $cat_terms[0]->slug : '';
           $cat_name = !empty($cat_terms) ? $cat_terms[0]->name : '';
           $brand_name = !empty($brand_terms) ? $brand_terms[0] : '';
-          $permalink = home_url('/equipment/' . wdc_equipment_detail_slug($item->post_title, $cat_slug) . '/');
+          $permalink = home_url('/equipment/' . $item->post_name . '/');
           $use_case = $cat_name ? 'Crew-selected ' . strtolower($cat_name) . ' for training, comfort, and safer dive habits.' : 'Crew-selected dive gear for training, comfort, and safer dive habits.';
           $image_url = function_exists('wdc_catalog_image_url') ? wdc_catalog_image_url($item->ID, 'equipment') : (get_the_post_thumbnail_url($item->ID, 'large') ?: wdc_equipment_image_url($item->post_title, $cat_slug, $theme_uri));
         ?>

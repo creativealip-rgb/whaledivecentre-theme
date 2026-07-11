@@ -80,7 +80,7 @@ rewind_posts();
 <main class="wd-page">
   <?php contenly_render_public_header(); ?>
 
-  <section class="wd-compact-hero wd-courses-hero wd-course-full-image-hero" style="--course-hero-image:url('<?php echo esc_url($course_image); ?>');background-image:linear-gradient(90deg,rgba(2,17,38,.9) 0%,rgba(2,17,38,.76) 36%,rgba(2,17,38,.42) 68%,rgba(2,17,38,.5) 100%),url('<?php echo esc_url($course_image); ?>')!important;background-size:cover!important;background-position:center 45%!important;">
+  <section class="wd-compact-hero wd-courses-hero wd-course-full-image-hero" style="--course-hero-image:url('<?php echo esc_url($course_image); ?>');background-image:linear-gradient(100deg,rgba(2,17,38,.96) 0%,rgba(2,17,38,.9) 40%,rgba(2,17,38,.72) 68%,rgba(2,17,38,.58) 100%),url('<?php echo esc_url($course_image); ?>')!important;background-size:cover!important;background-position:center 45%!important;">
     <div class="wd-shell wd-inner-grid">
       <div>
         <div class="wd-breadcrumb">

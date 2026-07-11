@@ -372,7 +372,7 @@ function wdc_get_home_courses($agency = 'NAUI', $limit = 4) {
             'level' => $level,
             'duration' => $duration,
             'excerpt' => $excerpt,
-            'url' => home_url('/courses/' . $p->post_name . '/'),
+            'url' => get_permalink($p) ?: home_url('/courses/' . $p->post_name . '/'),
             'image' => wdc_catalog_image_url($p->ID, 'course'),
         ];
     }
@@ -423,7 +423,7 @@ function wdc_get_home_equipment($limit = 4) {
                 'title' => $p->post_title,
                 'category' => $cat->name,
                 'excerpt' => $excerpt,
-                'url' => home_url('/equipment/' . $p->post_name . '/'),
+                'url' => get_permalink($p) ?: home_url('/equipment/' . $p->post_name . '/'),
                 'image' => wdc_catalog_image_url($p->ID, 'equipment'),
             ];
         }
@@ -455,7 +455,7 @@ function wdc_get_home_equipment($limit = 4) {
                 'title' => $p->post_title,
                 'category' => $cat,
                 'excerpt' => $excerpt,
-                'url' => home_url('/equipment/' . $p->post_name . '/'),
+                'url' => get_permalink($p) ?: home_url('/equipment/' . $p->post_name . '/'),
                 'image' => wdc_catalog_image_url($p->ID, 'equipment'),
             ];
         }
