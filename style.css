@@ -4387,8 +4387,8 @@ body.whaledive-home #courses .wd-course-body p {
     right: 0 !important;
     left: auto !important;
     bottom: 0 !important;
-    width: calc(100vw - 56px) !important;
-    max-width: none !important;
+    width: min(78vw, 300px) !important;
+    max-width: 300px !important;
     min-width: 0 !important;
     height: 100dvh !important;
     max-height: 100dvh !important;
@@ -4538,10 +4538,10 @@ body.whaledive-home #courses .wd-course-body p {
   }
   .wd-menu-links a.is-active,
   .wd-menu-links a[aria-current="page"] {
-    background: linear-gradient(90deg, rgba(76,200,237,.18), rgba(76,200,237,.08)) !important;
-    border-color: rgba(76,200,237,.16) !important;
-    color: #dff7ff !important;
-    box-shadow: inset 3px 0 0 #4CC8ED !important;
+    background: rgba(76, 200, 237, .18) !important;
+    border-color: rgba(76, 200, 237, .28) !important;
+    color: #e8fbff !important;
+    box-shadow: none !important;
   }
 
   .wd-menu-panel-foot {
@@ -4622,15 +4622,15 @@ body.whaledive-home #courses .wd-course-body p {
 }
 
 
-/* WDC drawer width full FINAL 2026-07-11q align left tight */
+/* WDC drawer narrow clean active FINAL 2026-07-11r */
 @media (max-width: 760px) {
   body.home .wd-menu,
   body.whaledive-home .wd-menu,
   body.whaledive-inner .wd-menu,
   .wd-nav .wd-menu,
   #wd-mobile-menu {
-    width: calc(100vw - 48px) !important;
-    max-width: none !important;
+    width: min(78vw, 300px) !important;
+    max-width: 300px !important;
     min-width: 0 !important;
     right: 0 !important;
     left: auto !important;
@@ -4638,7 +4638,6 @@ body.whaledive-home #courses .wd-course-body p {
     padding: 0 !important;
   }
 
-  /* one shared left gutter = logo + menu text same edge */
   #wd-mobile-menu .wd-menu-panel-head,
   #wd-mobile-menu .wd-menu-links,
   #wd-mobile-menu .wd-menu-panel-foot {
@@ -4656,8 +4655,9 @@ body.whaledive-home #courses .wd-course-body p {
     padding-bottom: 12px !important;
   }
   #wd-mobile-menu .wd-menu-links {
-    padding-top: 8px !important;
-    padding-bottom: 6px !important;
+    padding-top: 10px !important;
+    padding-bottom: 8px !important;
+    gap: 6px !important;
     align-items: stretch !important;
   }
   #wd-mobile-menu .wd-menu-panel-foot {
@@ -4665,10 +4665,13 @@ body.whaledive-home #courses .wd-course-body p {
     padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important;
   }
 
-  /* menu items: left aligned, flush with logo text column */
+  /* clean menu items */
   #wd-mobile-menu .wd-menu-links a,
   #wd-mobile-menu .wd-menu-links a span,
-  body.wd-menu-open #wd-mobile-menu .wd-menu-links a {
+  body.wd-menu-open #wd-mobile-menu .wd-menu-links a,
+  body.home .wd-menu .wd-menu-links a,
+  body.whaledive-home .wd-menu .wd-menu-links a,
+  .wd-nav .wd-menu .wd-menu-links a {
     display: flex !important;
     justify-content: flex-start !important;
     align-items: center !important;
@@ -4676,16 +4679,42 @@ body.whaledive-home #courses .wd-course-body p {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
-    padding: 0 10px 0 0 !important;
-    min-height: 44px !important;
-    border-radius: 10px !important;
+    padding: 12px 14px !important;
+    min-height: 46px !important;
+    border-radius: 12px !important;
     box-sizing: border-box !important;
+    border: 1px solid transparent !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: rgba(255,255,255,.92) !important;
+    font-size: 15px !important;
+    font-weight: 750 !important;
+    letter-spacing: -.01em !important;
+    text-transform: none !important;
+    position: relative !important;
+    overflow: hidden !important;
   }
-  /* active: bar on left, text stays left-aligned like logo */
+  #wd-mobile-menu .wd-menu-links a:before,
+  #wd-mobile-menu .wd-menu-links a:after,
+  body.wd-menu-open #wd-mobile-menu .wd-menu-links a:before,
+  body.wd-menu-open #wd-mobile-menu .wd-menu-links a:after {
+    content: none !important;
+    display: none !important;
+    box-shadow: none !important;
+  }
+
+  /* active page = solid different background, no left bar overlap */
   #wd-mobile-menu .wd-menu-links a.is-active,
-  #wd-mobile-menu .wd-menu-links a[aria-current="page"] {
-    padding-left: 10px !important;
-    box-shadow: inset 3px 0 0 #4CC8ED !important;
+  #wd-mobile-menu .wd-menu-links a[aria-current="page"],
+  body.wd-menu-open #wd-mobile-menu .wd-menu-links a.is-active,
+  body.wd-menu-open #wd-mobile-menu .wd-menu-links a[aria-current="page"],
+  body.home .wd-menu .wd-menu-links a.is-active,
+  body.whaledive-home .wd-menu .wd-menu-links a.is-active {
+    background: rgba(76, 200, 237, .18) !important;
+    border: 1px solid rgba(76, 200, 237, .28) !important;
+    color: #e8fbff !important;
+    box-shadow: none !important;
+    padding: 12px 14px !important;
   }
 
   #wd-mobile-menu .wd-menu-panel-brand {
@@ -4707,19 +4736,11 @@ body.whaledive-home #courses .wd-course-body p {
     box-sizing: border-box !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
-    text-align: left !important;
   }
 
-  /* kill any old center rules fighting the drawer */
   #wd-mobile-menu,
   #wd-mobile-menu .wd-menu-links,
   #wd-mobile-menu a {
-    text-align: left !important;
-  }
-  body.home .wd-menu a,
-  body.whaledive-home .wd-menu a,
-  .wd-nav .wd-menu a {
-    justify-content: flex-start !important;
     text-align: left !important;
   }
 }
@@ -4729,12 +4750,7 @@ body.whaledive-home #courses .wd-course-body p {
   body.whaledive-inner .wd-menu,
   .wd-nav .wd-menu,
   #wd-mobile-menu {
-    width: calc(100vw - 36px) !important;
-  }
-  #wd-mobile-menu .wd-menu-panel-head,
-  #wd-mobile-menu .wd-menu-links,
-  #wd-mobile-menu .wd-menu-panel-foot {
-    padding-left: 12px !important;
-    padding-right: 12px !important;
+    width: min(82vw, 288px) !important;
+    max-width: 288px !important;
   }
 }
