@@ -313,6 +313,121 @@ add_action('template_redirect', function () {
 
 
 /**
+ * Member story moderation helpers.
+ * Submit stays pending until admin approves. Approved stories also sync to Blog (post).
+ */
+function wdc_story_is_approved($post_id) {
+    return get_post_meta((int) $post_id, '_wdc_story_approved', true) === '1';
+}
+
+function wdc_story_blog_category_id() {
+    $term = get_term_by('slug', 'community', 'category');
+    if ($term && !is_wp_error($term)) {
+        return (int) $term->term_id;
+    }
+    $created = wp_insert_term('Community', 'category', ['slug' => 'community']);
+    if (!is_wp_error($created) && !empty($created['term_id'])) {
+        return (int) $created['term_id'];
+    }
+    return 0;
+}
+
+function wdc_story_sync_blog_post($story_id, $approved = true) {
+    $story_id = (int) $story_id;
+    $story = get_post($story_id);
+    if (!$story || $story->post_type !== 'wdc_story') {
+        return 0;
+    }
+
+    $blog_id = (int) get_post_meta($story_id, '_wdc_story_blog_post_id', true);
+    if (!$approved) {
+        if ($blog_id > 0 && get_post($blog_id)) {
+            wp_update_post([
+                'ID' => $blog_id,
+                'post_status' => 'draft',
+            ]);
+        }
+        return $blog_id;
+    }
+
+    $author_name = get_post_meta($story_id, '_wdc_story_author_name', true);
+    if ($author_name === '') {
+        $author_name = get_the_author_meta('display_name', $story->post_author);
+    }
+
+    $payload = [
+        'post_type' => 'post',
+        'post_title' => $story->post_title,
+        'post_content' => $story->post_content,
+        'post_excerpt' => $story->post_excerpt ?: wp_trim_words(wp_strip_all_tags($story->post_content), 40),
+        'post_status' => 'publish',
+        'post_author' => (int) $story->post_author,
+    ];
+
+    if ($blog_id > 0 && get_post($blog_id)) {
+        $payload['ID'] = $blog_id;
+        $blog_id = wp_update_post($payload, true);
+    } else {
+        $blog_id = wp_insert_post($payload, true);
+    }
+
+    if (!$blog_id || is_wp_error($blog_id)) {
+        return 0;
+    }
+
+    $cat_id = wdc_story_blog_category_id();
+    if ($cat_id > 0) {
+        wp_set_post_categories((int) $blog_id, [$cat_id], false);
+    }
+
+    $thumb_id = get_post_thumbnail_id($story_id);
+    if ($thumb_id) {
+        set_post_thumbnail((int) $blog_id, $thumb_id);
+    }
+
+    $gallery = get_post_meta($story_id, '_wdc_story_gallery', true);
+    if (is_array($gallery)) {
+        update_post_meta((int) $blog_id, '_wdc_story_gallery', $gallery);
+    }
+
+    update_post_meta((int) $blog_id, '_wdc_story_source_id', $story_id);
+    update_post_meta((int) $blog_id, '_wdc_story_author_name', $author_name);
+    update_post_meta((int) $blog_id, '_wdc_from_member_story', '1');
+    update_post_meta($story_id, '_wdc_story_blog_post_id', (int) $blog_id);
+
+    return (int) $blog_id;
+}
+
+function wdc_story_set_approval($story_id, $approved) {
+    $story_id = (int) $story_id;
+    if ($story_id <= 0 || get_post_type($story_id) !== 'wdc_story') {
+        return false;
+    }
+
+    $approved = $approved ? '1' : '0';
+    update_post_meta($story_id, '_wdc_story_approved', $approved);
+
+    if ($approved === '1') {
+        wp_update_post([
+            'ID' => $story_id,
+            'post_status' => 'publish',
+        ]);
+        wdc_story_sync_blog_post($story_id, true);
+    } else {
+        $current = get_post_status($story_id);
+        if ($current === 'publish') {
+            wp_update_post([
+                'ID' => $story_id,
+                'post_status' => 'pending',
+            ]);
+        }
+        wdc_story_sync_blog_post($story_id, false);
+    }
+
+    return true;
+}
+
+/**
  * Handle story submission from frontend (with image uploads + rich content)
  */
 add_action('init', function() {
@@ -330,13 +445,14 @@ add_action('init', function() {
                 'post_type' => 'wdc_story',
                 'post_title' => $title,
                 'post_content' => $content,
-                'post_status' => 'pending',
+                'post_status' => 'pending', // always moderation queue
                 'post_author' => $user->ID,
             ]);
             if ($post_id && !is_wp_error($post_id)) {
                 wp_set_object_terms($post_id, $type, 'story_type');
                 update_post_meta($post_id, '_wdc_story_author_name', $user->display_name);
                 update_post_meta($post_id, '_wdc_story_approved', '0');
+                update_post_meta($post_id, '_wdc_story_submitted_at', current_time('mysql'));
 
                 // Handle image uploads
                 if (!empty($_FILES['story_images']['name'][0])) {
@@ -365,9 +481,19 @@ add_action('init', function() {
 
                     if ($gallery_ids) {
                         update_post_meta($post_id, '_wdc_story_gallery', $gallery_ids);
-                        // Set first image as featured image
                         set_post_thumbnail($post_id, $gallery_ids[0]);
                     }
+                }
+
+                // Notify admins about pending review.
+                $admin_email = get_option('admin_email');
+                if ($admin_email) {
+                    $edit_link = admin_url('post.php?post=' . $post_id . '&action=edit');
+                    wp_mail(
+                        $admin_email,
+                        '[WDC] Cerita member menunggu review',
+                        "Cerita baru menunggu approval.\n\nJudul: {$title}\nMember: {$user->display_name}\n\nReview: {$edit_link}"
+                    );
                 }
 
                 wp_redirect(add_query_arg(['submitted' => '1'], contenly_localized_url('/cerita-kamu/')));
@@ -383,20 +509,149 @@ add_action('init', function() {
 add_action('add_meta_boxes', function() {
     add_meta_box('wdc_story_approval', 'Approval Status', function($post) {
         $approved = get_post_meta($post->ID, '_wdc_story_approved', true);
+        $blog_id = (int) get_post_meta($post->ID, '_wdc_story_blog_post_id', true);
         wp_nonce_field('wdc_story_approval', 'wdc_story_approval_nonce');
-        echo '<label><input type="checkbox" name="wdc_story_approved" value="1" ' . checked($approved, '1', false) . '> Approved for publication</label>';
-        echo '<p class="description">Centang untuk approve cerita ini. Story akan tampil di halaman Cerita Kamu.</p>';
+        echo '<label style="display:flex;gap:8px;align-items:flex-start;font-weight:600;">';
+        echo '<input type="checkbox" name="wdc_story_approved" value="1" ' . checked($approved, '1', false) . ' style="margin-top:3px;">';
+        echo '<span>Approve & publish ke Blog</span>';
+        echo '</label>';
+        echo '<p class="description" style="margin-top:8px;">Submit member masuk status <strong>Pending Review</strong>. Centang + Update baru tampil di Blog dan halaman Cerita Kamu.</p>';
+        if ($blog_id > 0) {
+            $link = get_edit_post_link($blog_id);
+            if ($link) {
+                echo '<p class="description">Blog post: <a href="' . esc_url($link) . '">#' . (int) $blog_id . '</a></p>';
+            }
+        }
+        if ($post->post_status === 'pending') {
+            echo '<p style="margin:10px 0 0;padding:8px 10px;border-radius:8px;background:#fff7ed;color:#9a3412;font-size:12px;font-weight:700;">Menunggu review admin</p>';
+        } elseif ($approved === '1' && $post->post_status === 'publish') {
+            echo '<p style="margin:10px 0 0;padding:8px 10px;border-radius:8px;background:#ecfdf5;color:#065f46;font-size:12px;font-weight:700;">Approved & live</p>';
+        }
     }, 'wdc_story', 'side', 'high');
 });
 
-add_action('save_post_wdc_story', function($post_id) {
-    if (!isset($_POST['wdc_story_approval_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_story_approval_nonce'])), 'wdc_story_approval')) {
+add_action('save_post_wdc_story', function($post_id, $post, $update) {
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
         return;
     }
-    $approved = isset($_POST['wdc_story_approved']) ? '1' : '0';
-    update_post_meta($post_id, '_wdc_story_approved', $approved);
-    if ($approved === '1') {
-        wp_update_post(['ID' => $post_id, 'post_status' => 'publish']);
+    if (wp_is_post_revision($post_id)) {
+        return;
+    }
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    // Admin checkbox path
+    if (isset($_POST['wdc_story_approval_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_story_approval_nonce'])), 'wdc_story_approval')) {
+        $approved = isset($_POST['wdc_story_approved']);
+        wdc_story_set_approval($post_id, $approved);
+    }
+}, 10, 3);
+
+/**
+ * Block unapproved story singles from public view.
+ */
+add_action('template_redirect', function () {
+    if (is_admin() || !is_singular('wdc_story')) {
+        return;
+    }
+    $post_id = get_queried_object_id();
+    if ($post_id && !wdc_story_is_approved($post_id) && !current_user_can('edit_post', $post_id)) {
+        wp_safe_redirect(home_url('/blog/'), 302);
+        exit;
+    }
+}, 5);
+
+/**
+ * Admin list UX: pending badge + approved column.
+ */
+add_filter('manage_wdc_story_posts_columns', function ($cols) {
+    $new = [];
+    foreach ($cols as $key => $label) {
+        $new[$key] = $label;
+        if ($key === 'title') {
+            $new['wdc_story_moderation'] = 'Moderation';
+        }
+    }
+    if (!isset($new['wdc_story_moderation'])) {
+        $new['wdc_story_moderation'] = 'Moderation';
+    }
+    return $new;
+});
+
+add_action('manage_wdc_story_posts_custom_column', function ($col, $post_id) {
+    if ($col !== 'wdc_story_moderation') {
+        return;
+    }
+    $approved = wdc_story_is_approved($post_id);
+    $status = get_post_status($post_id);
+    if ($approved && $status === 'publish') {
+        echo '<span style="color:#065f46;font-weight:700;">Approved</span>';
+        $blog_id = (int) get_post_meta($post_id, '_wdc_story_blog_post_id', true);
+        if ($blog_id) {
+            echo '<br><a href="' . esc_url(get_edit_post_link($blog_id)) . '">Blog #' . $blog_id . '</a>';
+        }
+        return;
+    }
+    echo '<span style="color:#9a3412;font-weight:700;">Pending review</span>';
+}, 10, 2);
+
+/**
+ * Quick Approve row action in Cerita Kamu list.
+ */
+add_filter('post_row_actions', function ($actions, $post) {
+    if ($post->post_type !== 'wdc_story' || !current_user_can('edit_post', $post->ID)) {
+        return $actions;
+    }
+    if (wdc_story_is_approved($post->ID) && $post->post_status === 'publish') {
+        $url = wp_nonce_url(
+            admin_url('admin-post.php?action=wdc_story_unapprove&post_id=' . $post->ID),
+            'wdc_story_unapprove_' . $post->ID
+        );
+        $actions['wdc_unapprove'] = '<a href="' . esc_url($url) . '">Unapprove</a>';
+        return $actions;
+    }
+    $url = wp_nonce_url(
+        admin_url('admin-post.php?action=wdc_story_approve&post_id=' . $post->ID),
+        'wdc_story_approve_' . $post->ID
+    );
+    $actions['wdc_approve'] = '<a href="' . esc_url($url) . '" style="color:#065f46;font-weight:700;">Approve & publish</a>';
+    return $actions;
+}, 10, 2);
+
+add_action('admin_post_wdc_story_approve', function () {
+    $post_id = isset($_GET['post_id']) ? absint($_GET['post_id']) : 0;
+    if (!$post_id || !current_user_can('edit_post', $post_id) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['_wpnonce'] ?? '')), 'wdc_story_approve_' . $post_id)) {
+        wp_die('Not allowed.');
+    }
+    wdc_story_set_approval($post_id, true);
+    wp_safe_redirect(admin_url('edit.php?post_type=wdc_story&wdc_story_msg=approved'));
+    exit;
+});
+
+add_action('admin_post_wdc_story_unapprove', function () {
+    $post_id = isset($_GET['post_id']) ? absint($_GET['post_id']) : 0;
+    if (!$post_id || !current_user_can('edit_post', $post_id) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['_wpnonce'] ?? '')), 'wdc_story_unapprove_' . $post_id)) {
+        wp_die('Not allowed.');
+    }
+    wdc_story_set_approval($post_id, false);
+    wp_safe_redirect(admin_url('edit.php?post_type=wdc_story&wdc_story_msg=unapproved'));
+    exit;
+});
+
+add_action('admin_notices', function () {
+    if (!is_admin()) {
+        return;
+    }
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    if (!$screen || $screen->post_type !== 'wdc_story') {
+        return;
+    }
+    $msg = isset($_GET['wdc_story_msg']) ? sanitize_key(wp_unslash($_GET['wdc_story_msg'])) : '';
+    if ($msg === 'approved') {
+        echo '<div class="notice notice-success is-dismissible"><p>Cerita di-approve & dipublish ke Blog.</p></div>';
+    } elseif ($msg === 'unapproved') {
+        echo '<div class="notice notice-warning is-dismissible"><p>Cerita di-unapprove & disembunyikan dari Blog.</p></div>';
     }
 });
 

@@ -229,7 +229,7 @@ $active_filter = sanitize_text_field($_GET['type'] ?? '');
 
 <!-- Published stories -->
 <?php
-$story_args = ['post_type' => 'wdc_story', 'posts_per_page' => 20, 'post_status' => 'publish', 'orderby' => 'date', 'order' => 'DESC'];
+$story_args = ['post_type' => 'wdc_story', 'posts_per_page' => 20, 'post_status' => 'publish', 'orderby' => 'date', 'order' => 'DESC', 'meta_query' => [['key' => '_wdc_story_approved', 'value' => '1']]];
 if ($active_filter) {
     $story_args['tax_query'] = [['taxonomy' => 'story_type', 'field' => 'slug', 'terms' => $active_filter]];
 }
@@ -278,6 +278,44 @@ $stories = new WP_Query($story_args);
     <h3 style="font-size:20px;color:#0f172a;margin-bottom:8px;"><?php echo contenly_tr('Belum ada cerita', 'No stories yet'); ?></h3>
     <p style="color:#64748b;"><?php echo contenly_tr('Jadilah yang pertama berbagi pengalaman dive kamu!', 'Be the first to share your dive experience!'); ?></p>
 </div>
+<?php endif; ?>
+
+
+<!-- Own submissions (pending/approved) -->
+<?php
+$own_args = [
+    'post_type' => 'wdc_story',
+    'posts_per_page' => 10,
+    'post_status' => ['pending', 'publish', 'draft'],
+    'author' => $user_id,
+    'orderby' => 'date',
+    'order' => 'DESC',
+];
+$own = new WP_Query($own_args);
+if ($user_id && $own->have_posts()) :
+?>
+<section style="margin-top:10px;margin-bottom:28px;background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:20px;box-shadow:0 12px 34px rgba(15,23,42,.05);">
+  <h2 style="font-size:18px;font-weight:900;color:#0f172a;margin:0 0 14px;"><?php echo contenly_tr('Kiriman saya', 'My submissions'); ?></h2>
+  <div style="display:grid;gap:10px;">
+    <?php while ($own->have_posts()) : $own->the_post();
+      $approved = get_post_meta(get_the_ID(), '_wdc_story_approved', true) === '1';
+      $st = get_post_status();
+      $label = ($approved && $st === 'publish')
+        ? contenly_tr('Live di Blog', 'Live on Blog')
+        : contenly_tr('Menunggu review admin', 'Waiting for admin review');
+      $color = ($approved && $st === 'publish') ? '#065f46' : '#9a3412';
+      $bg = ($approved && $st === 'publish') ? '#ecfdf5' : '#fff7ed';
+    ?>
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border:1px solid #e2e8f0;border-radius:14px;">
+      <div>
+        <div style="font-weight:800;color:#0f172a;"><?php echo esc_html(get_the_title()); ?></div>
+        <div style="font-size:12px;color:#94a3b8;margin-top:4px;"><?php echo esc_html(get_the_date()); ?></div>
+      </div>
+      <span style="display:inline-flex;padding:6px 10px;border-radius:999px;background:<?php echo esc_attr($bg); ?>;color:<?php echo esc_attr($color); ?>;font-size:12px;font-weight:800;white-space:nowrap;"><?php echo esc_html($label); ?></span>
+    </div>
+    <?php endwhile; wp_reset_postdata(); ?>
+  </div>
+</section>
 <?php endif; ?>
 
 <?php require_once get_template_directory() . '/dashboard-footer.php'; ?>
