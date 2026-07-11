@@ -2,7 +2,7 @@
 
 /*
 Theme Name: Whale Dive Centre Theme
-Version: 2.3.75
+Version: 2.3.76
 */
 :root{
   --black:#000;--violet:#3B44AC;--cyan:#4CC8ED;--pale:#96DAEA;--red:#C31C4A;--blue:#004A98;--white:#fff;--navy:#061a36;--ink:#0b1930;--muted:#63748a;
@@ -8022,5 +8022,58 @@ html body.whaledive-equipment .wdc-card-cta .wd-btn.alt{
     visibility: visible !important;
     transform: none !important;
     overflow: visible !important;
+  }
+}
+
+
+/* WDC DRAWER FULL WIDTH FIX (2.3.76)
+   Tablet had panel-head/links not spanning drawer width (206/106 vs 300). */
+@media (max-width: 1099.98px) {
+  .wd-menu,
+  .wd-header .wd-menu,
+  .wd-nav .wd-menu,
+  #wd-mobile-menu {
+    align-items: stretch !important;
+    box-sizing: border-box !important;
+  }
+  .wd-menu > *,
+  .wd-menu .wd-menu-panel-head,
+  .wd-menu .wd-menu-links,
+  .wd-menu .wd-menu-panel-foot,
+  .wd-menu-panel-head,
+  .wd-menu-links,
+  .wd-menu-panel-foot {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    align-self: stretch !important;
+  }
+  .wd-menu-panel-head {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+  .wd-menu-panel-brand {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+  .wd-menu-links {
+    width: 100% !important;
+  }
+  .wd-menu-links a,
+  .wd-menu .wd-menu-links a {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .wd-menu-panel-foot {
+    width: 100% !important;
+  }
+  .wd-menu-panel-foot .wd-lang-switcher,
+  .wd-menu-panel-foot .gt-lang-switcher,
+  .wd-menu-panel-foot .wd-nav-member {
+    width: 100% !important;
+    max-width: 100% !important;
   }
 }
