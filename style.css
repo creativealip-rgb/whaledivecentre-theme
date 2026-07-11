@@ -2,7 +2,7 @@
 
 /*
 Theme Name: Whale Dive Centre Theme
-Version: 2.3.70
+Version: 2.3.71
 */
 :root{
   --black:#000;--violet:#3B44AC;--cyan:#4CC8ED;--pale:#96DAEA;--red:#C31C4A;--blue:#004A98;--white:#fff;--navy:#061a36;--ink:#0b1930;--muted:#63748a;
@@ -2465,13 +2465,13 @@ article.wd-mini-article::before{content:none!important;display:none!important}
 .whaledive-blog .wd-blog-featured-media b{position:absolute;left:18px;bottom:18px;border-radius:999px;background:rgba(255,255,255,.92);color:#052b45;padding:9px 13px;font-size:12px;text-transform:uppercase;letter-spacing:.08em}
 .whaledive-blog .wd-blog-featured-body{padding:26px 28px 28px;text-align:left}
 .whaledive-blog .wd-blog-meta-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:12px;color:#64748b;font-size:13px;font-weight:700}.whaledive-blog .wd-blog-meta-row span{border-radius:999px;background:#eaf8fb;color:#076176;padding:7px 11px}.whaledive-blog .wd-blog-meta-row em{font-style:normal}
-.whaledive-blog .wd-blog-featured-body h2{margin:0 0 12px;font-size:clamp(28px,3.4vw,44px);line-height:1.08;letter-spacing:-.035em}.whaledive-blog .wd-blog-featured-body h2 a,.whaledive-blog .wd-blog-card-modern h3 a,.whaledive-blog .wd-blog-mini strong,.whaledive-single .wd-side-card a{color:#071b2d;text-decoration:none}.whaledive-blog .wd-blog-featured-body p{margin:0 0 18px;color:#5c7080;font-size:17px;line-height:1.75}.whaledive-blog .wd-blog-read{display:inline-flex;border-radius:999px;background:#06384d;color:#fff!important;padding:12px 16px;text-decoration:none;font-weight:900}
+.whaledive-blog .wd-blog-featured-body h2{margin:0 0 12px;font-size:clamp(28px,3.4vw,44px);line-height:1.08;letter-spacing:-.035em}.whaledive-blog .wd-blog-featured-body h2 a,.whaledive-blog .wd-blog-card-modern h3 a,.whaledive-blog .wd-blog-mini strong,.whaledive-single .wd-side-card a{color:#071b2d;text-decoration:none}.whaledive-blog .wd-blog-featured-body p{margin:0 0 18px;color:#5c7080;font-size:17px;line-height:1.75}.whaledive-blog .wd-blog-read{display:inline-flex;border-radius:999px;background:#004A98;color:#fff!important;padding:12px 16px;text-decoration:none;font-weight:900}
 .whaledive-blog .wd-blog-side-card{height:100%;padding:20px}.whaledive-blog .wd-blog-side-card>span{display:block;color:#08a7c7;font-weight:900;text-transform:uppercase;letter-spacing:.12em;font-size:12px}.whaledive-blog .wd-blog-side-card h3{margin:6px 0 16px;color:#071b2d}.whaledive-blog .wd-blog-mini-list{display:grid;gap:12px}.whaledive-blog .wd-blog-mini a{display:grid;grid-template-columns:82px 1fr;gap:12px;align-items:center;text-decoration:none}.whaledive-blog .wd-blog-mini-thumb{height:72px;border-radius:16px;overflow:hidden;background:#eaf8fb}.whaledive-blog .wd-blog-mini small{display:block;color:#0b7890;font-size:12px;font-weight:800;margin-bottom:4px}.whaledive-blog .wd-blog-mini strong{font-size:14px;line-height:1.35}
-.whaledive-blog .wd-blog-grid-modern{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:20px!important}.whaledive-blog .wd-blog-card-media{display:block;aspect-ratio:16/10;background:#eaf8fb}.whaledive-blog .wd-blog-card-body{text-align:left;padding:18px}.whaledive-blog .wd-blog-card-body span{display:block;color:#0b7890;font-size:12px;font-weight:900;margin-bottom:8px}.whaledive-blog .wd-blog-card-body h3{margin:0 0 10px;font-size:21px;line-height:1.18}.whaledive-blog .wd-blog-card-body p{margin:0 0 14px;color:#607382;line-height:1.6}.whaledive-blog .wd-blog-card-body>a{color:#06384d;font-weight:900;text-decoration:none}
+.whaledive-blog .wd-blog-grid-modern{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:20px!important}.whaledive-blog .wd-blog-card-media{display:block;aspect-ratio:16/10;background:#eaf8fb}.whaledive-blog .wd-blog-card-body{text-align:left;padding:18px}.whaledive-blog .wd-blog-card-body span{display:block;color:#0b7890;font-size:12px;font-weight:900;margin-bottom:8px}.whaledive-blog .wd-blog-card-body h3{margin:0 0 10px;font-size:21px;line-height:1.18}.whaledive-blog .wd-blog-card-body p{margin:0 0 14px;color:#607382;line-height:1.6}.whaledive-blog .wd-blog-card-body>a{color:#004A98;font-weight:900;text-decoration:none}
 .whaledive-blog .wd-blog-featured{display:none!important}
 
 /* WDC single post Ganesha-inspired layout 2026-05-14 */
-.whaledive-single .wd-story-page{padding:122px 0 72px;background:linear-gradient(180deg,#f5fbff 0%,#fff 100%)}.whaledive-single .wd-story-grid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:22px;align-items:start}.whaledive-single .wd-story-head{padding:32px 32px 24px}.whaledive-single .wd-story-meta-row{display:flex;gap:9px;flex-wrap:wrap;color:#64748b;font-size:13px;font-weight:800;margin-bottom:12px}.whaledive-single .wd-story-head h1{margin:0 0 14px;color:#071b2d;font-size:clamp(34px,4.3vw,56px);line-height:1.06;letter-spacing:-.04em}.whaledive-single .wd-story-cats{display:flex;gap:8px;flex-wrap:wrap}.whaledive-single .wd-story-cats span{border-radius:999px;background:#eaf8fb;color:#076176;padding:7px 11px;font-size:12px;font-weight:900}.whaledive-single .wd-story-excerpt{margin:16px 0 0;border-left:4px solid #08a7c7;padding-left:14px;color:#50697b;font-size:18px;line-height:1.75}.whaledive-single .wd-story-cover{margin:0;aspect-ratio:16/8;overflow:hidden;border-top:1px solid rgba(7,55,78,.12);border-bottom:1px solid rgba(7,55,78,.12)}.whaledive-single .wd-story-cover img{width:100%;height:100%;object-fit:cover;display:block}.whaledive-single .wd-story-body{padding:28px 32px 32px}.whaledive-single .wd-story-content{font-size:19px;line-height:1.9;color:#334155}.whaledive-single .wd-story-content p{margin:0 0 1.1em}.whaledive-single .wd-story-tip{margin-top:16px;background:#eef8fb;border:1px solid rgba(8,167,199,.18);border-radius:18px;padding:18px}.whaledive-single .wd-story-tip h3{margin:0 0 7px;color:#06384d}.whaledive-single .wd-story-tip p{margin:0;color:#516879;line-height:1.7}.whaledive-single .wd-story-foot{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.whaledive-single .wd-story-foot a,.whaledive-single .wd-side-cta a{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:12px 16px;font-weight:900;text-decoration:none}.whaledive-single .wd-story-foot .ghost{border:1px solid #cbd5e1;color:#334155;background:#fff}.whaledive-single .wd-story-foot .primary,.whaledive-single .wd-side-cta a{background:#06384d;color:#fff}.whaledive-single .wd-story-side{position:sticky;top:96px;display:grid;gap:14px}.whaledive-single .wd-side-card{padding:18px}.whaledive-single .wd-side-card h3{margin:0 0 12px;color:#06384d}.whaledive-single .wd-side-card ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}.whaledive-single .wd-side-card li{display:grid;gap:4px}.whaledive-single .wd-side-card small{color:#64748b;font-size:12px}.whaledive-single .wd-side-cta{background:linear-gradient(135deg,#eaf8fb,#fff)}.whaledive-single .wd-side-cta p{color:#5c7080;line-height:1.6}
+.whaledive-single .wd-story-page{padding:122px 0 72px;background:linear-gradient(180deg,#f5fbff 0%,#fff 100%)}.whaledive-single .wd-story-grid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:22px;align-items:start}.whaledive-single .wd-story-head{padding:32px 32px 24px}.whaledive-single .wd-story-meta-row{display:flex;gap:9px;flex-wrap:wrap;color:#64748b;font-size:13px;font-weight:800;margin-bottom:12px}.whaledive-single .wd-story-head h1{margin:0 0 14px;color:#071b2d;font-size:clamp(34px,4.3vw,56px);line-height:1.06;letter-spacing:-.04em}.whaledive-single .wd-story-cats{display:flex;gap:8px;flex-wrap:wrap}.whaledive-single .wd-story-cats span{border-radius:999px;background:#eaf8fb;color:#076176;padding:7px 11px;font-size:12px;font-weight:900}.whaledive-single .wd-story-excerpt{margin:16px 0 0;border-left:4px solid #08a7c7;padding-left:14px;color:#50697b;font-size:18px;line-height:1.75}.whaledive-single .wd-story-cover{margin:0;aspect-ratio:16/8;overflow:hidden;border-top:1px solid rgba(7,55,78,.12);border-bottom:1px solid rgba(7,55,78,.12)}.whaledive-single .wd-story-cover img{width:100%;height:100%;object-fit:cover;display:block}.whaledive-single .wd-story-body{padding:28px 32px 32px}.whaledive-single .wd-story-content{font-size:19px;line-height:1.9;color:#334155}.whaledive-single .wd-story-content p{margin:0 0 1.1em}.whaledive-single .wd-story-tip{margin-top:16px;background:#eef8fb;border:1px solid rgba(8,167,199,.18);border-radius:18px;padding:18px}.whaledive-single .wd-story-tip h3{margin:0 0 7px;color:#004A98}.whaledive-single .wd-story-tip p{margin:0;color:#516879;line-height:1.7}.whaledive-single .wd-story-foot{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.whaledive-single .wd-story-foot a,.whaledive-single .wd-side-cta a{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:12px 16px;font-weight:900;text-decoration:none}.whaledive-single .wd-story-foot .ghost{border:1px solid #cbd5e1;color:#334155;background:#fff}.whaledive-single .wd-story-foot .primary,.whaledive-single .wd-side-cta a{background:#004A98;color:#fff}.whaledive-single .wd-story-side{position:sticky;top:96px;display:grid;gap:14px}.whaledive-single .wd-side-card{padding:18px}.whaledive-single .wd-side-card h3{margin:0 0 12px;color:#004A98}.whaledive-single .wd-side-card ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}.whaledive-single .wd-side-card li{display:grid;gap:4px}.whaledive-single .wd-side-card small{color:#64748b;font-size:12px}.whaledive-single .wd-side-cta{background:linear-gradient(135deg,#eaf8fb,#fff)}.whaledive-single .wd-side-cta p{color:#5c7080;line-height:1.6}
 @media(max-width:980px){.whaledive-blog .wd-blog-latest-layout,.whaledive-single .wd-story-grid{grid-template-columns:1fr}.whaledive-blog .wd-blog-grid-modern{grid-template-columns:1fr 1fr!important}.whaledive-single .wd-story-side{position:static}}@media(max-width:680px){.whaledive-blog .wd-blog-grid-modern{grid-template-columns:1fr!important}.whaledive-blog .wd-blog-latest-layout{margin-top:22px}.whaledive-single .wd-story-page{padding-top:98px}.whaledive-single .wd-story-head,.whaledive-single .wd-story-body{padding-left:18px;padding-right:18px}.whaledive-blog .wd-blog-featured-body{padding:20px}.whaledive-blog .wd-blog-mini a{grid-template-columns:70px 1fr}}
 
 
@@ -2488,8 +2488,8 @@ article.wd-mini-article::before{content:none!important;display:none!important}
 .whaledive-equipment #equipment-catalog .wd-equipment-trust,
 .whaledive-equipment #equipment-catalog .wd-gear-finder{display:none!important}
 .whaledive-equipment #equipFilters{display:flex!important;flex-wrap:wrap!important;gap:10px!important;justify-content:center!important;margin:18px auto 26px!important;position:relative!important;z-index:2!important}
-.whaledive-equipment #equipFilters .wd-chip{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:38px!important;padding:0 14px!important;border-radius:999px!important;border:1px solid rgba(7,55,78,.18)!important;background:#fff!important;color:#06384d!important;font-weight:900!important;box-shadow:0 8px 20px rgba(0,28,52,.07)!important;cursor:pointer!important;opacity:1!important;visibility:visible!important}
-.whaledive-equipment #equipFilters .wd-chip.active{background:#06384d!important;color:#fff!important;border-color:#06384d!important}
+.whaledive-equipment #equipFilters .wd-chip{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:38px!important;padding:0 14px!important;border-radius:999px!important;border:1px solid rgba(7,55,78,.18)!important;background:#fff!important;color:#004A98!important;font-weight:900!important;box-shadow:0 8px 20px rgba(0,28,52,.07)!important;cursor:pointer!important;opacity:1!important;visibility:visible!important}
+.whaledive-equipment #equipFilters .wd-chip.active{background:#004A98!important;color:#fff!important;border-color:#004A98!important}
 .whaledive-equipment #equipGrid.wd-page-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:16px!important}
 .whaledive-equipment .wd-shop-card{border-radius:22px!important;overflow:hidden!important;padding:0!important;box-shadow:0 12px 30px rgba(0,28,52,.08)!important}
 .whaledive-equipment .wd-equip-visual{min-height:132px!important;height:132px!important;border-radius:0!important;margin:0!important}
@@ -2521,7 +2521,7 @@ article.wd-mini-article::before{content:none!important;display:none!important}
 .whaledive-courses #course-pathway .wd-course-trust{display:none!important}
 .whaledive-courses #courseFilters{display:flex!important;flex-wrap:wrap!important;gap:10px!important;justify-content:center!important;margin:18px auto 26px!important;position:relative!important;z-index:2!important}
 .whaledive-courses #courseFilters .wd-chip{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:38px!important;padding:0 14px!important;border-radius:999px!important;border:1px solid rgba(255,255,255,.24)!important;background:rgba(255,255,255,.12)!important;color:#fff!important;font-weight:900!important;box-shadow:0 8px 20px rgba(0,0,0,.12)!important;cursor:pointer!important;opacity:1!important;visibility:visible!important}
-.whaledive-courses #courseFilters .wd-chip.active{background:#fff!important;color:#06384d!important;border-color:#fff!important}
+.whaledive-courses #courseFilters .wd-chip.active{background:#fff!important;color:#004A98!important;border-color:#fff!important}
 .whaledive-courses #courseGrid.wd-page-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:16px!important}
 .whaledive-courses .wd-course-decision-card{padding:0 0 16px!important;border-radius:22px!important;overflow:hidden!important;text-align:left!important}
 .whaledive-courses .wd-course-photo{display:block!important;width:100%!important;height:138px!important;aspect-ratio:auto!important;border-radius:0!important;margin:0 0 14px!important;object-fit:cover!important;box-shadow:none!important}
@@ -2574,18 +2574,18 @@ article.wd-mini-article::before{content:none!important;display:none!important}
 
 /* WDC course cards travel-style compact with price 2026-05-14 */
 .whaledive-courses #courseGrid{align-items:start!important}
-.whaledive-courses .wd-course-decision-card{display:block!important;align-self:start!important;height:auto!important;min-height:0!important;padding:0 0 12px!important;background:#fff!important;color:#06384d!important;border:0!important;box-shadow:0 14px 30px rgba(0,28,52,.12)!important}
+.whaledive-courses .wd-course-decision-card{display:block!important;align-self:start!important;height:auto!important;min-height:0!important;padding:0 0 12px!important;background:#fff!important;color:#004A98!important;border:0!important;box-shadow:0 14px 30px rgba(0,28,52,.12)!important}
 .whaledive-courses .wd-course-photo{height:132px!important;margin:0 0 12px!important}
-.whaledive-courses .wd-course-decision-card h3{color:#06384d!important;font-size:16px!important;line-height:1.2!important;margin:0 14px 8px!important;min-height:38px!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important}
+.whaledive-courses .wd-course-decision-card h3{color:#004A98!important;font-size:16px!important;line-height:1.2!important;margin:0 14px 8px!important;min-height:38px!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important}
 .whaledive-courses .wd-course-chips{display:flex!important;flex-wrap:nowrap!important;margin:0 14px 12px!important;color:#5b7180!important;gap:6px!important}
 .whaledive-courses .wd-course-chips span{background:transparent!important;border:0!important;color:#5b7180!important;padding:0!important;font-size:12px!important;font-weight:800!important}
 .whaledive-courses .wd-course-chips span+span:before{content:'•';margin-right:6px;color:#9ab3bd}
 .whaledive-courses .wd-course-chips span:nth-child(3){display:none!important}
 .whaledive-courses .wd-course-price{display:block!important;background:transparent!important;border:0!important;margin:0 14px 12px!important;padding:0!important}
 .whaledive-courses .wd-course-price .wd-price-label{display:block!important;color:#7a8d96!important;font-size:12px!important;font-weight:700!important;text-transform:none!important;letter-spacing:0!important;margin-bottom:3px!important}
-.whaledive-courses .wd-course-price .wd-price-amount{display:block!important;color:#06384d!important;font-size:19px!important;line-height:1.1!important;font-weight:950!important}
+.whaledive-courses .wd-course-price .wd-price-amount{display:block!important;color:#004A98!important;font-size:19px!important;line-height:1.1!important;font-weight:950!important}
 .whaledive-courses .wd-course-actions{margin:0 14px!important}
-.whaledive-courses .wd-course-actions .wd-mini-link{background:#06384d!important;color:#fff!important;border-color:#06384d!important;min-height:36px!important;border-radius:12px!important;font-size:12px!important;box-shadow:none!important}
+.whaledive-courses .wd-course-actions .wd-mini-link{background:#004A98!important;color:#fff!important;border-color:#004A98!important;min-height:36px!important;border-radius:12px!important;font-size:12px!important;box-shadow:none!important}
 @media(max-width:560px){.whaledive-courses .wd-course-photo{height:128px!important}.whaledive-courses .wd-course-decision-card h3{min-height:auto!important}}
 
 
@@ -2650,7 +2650,7 @@ article.wd-mini-article::before{content:none!important;display:none!important}
 .whaledive-equipment .wd-equip-price{margin:0 0 6px!important;padding:0!important;background:transparent!important;border:0!important}
 .whaledive-equipment .wd-equip-chips{gap:6px!important;margin:0 0 4px!important}
 .whaledive-equipment .wd-equip-actions{display:block!important;margin-top:8px!important;padding-top:0!important;border-top:0!important}
-.whaledive-equipment .wd-equip-actions .wd-mini-link{display:inline-flex!important;align-items:center!important;justify-content:center!important;width:max-content!important;min-width:128px!important;min-height:38px!important;margin:0!important;padding:0 16px!important;border-radius:999px!important;background:#f3fbff!important;border:1px solid rgba(6,56,77,.14)!important;color:#06384d!important;font-size:12px!important;font-weight:900!important;box-shadow:none!important;text-decoration:none!important}
+.whaledive-equipment .wd-equip-actions .wd-mini-link{display:inline-flex!important;align-items:center!important;justify-content:center!important;width:max-content!important;min-width:128px!important;min-height:38px!important;margin:0!important;padding:0 16px!important;border-radius:999px!important;background:#f3fbff!important;border:1px solid rgba(6,56,77,.14)!important;color:#004A98!important;font-size:12px!important;font-weight:900!important;box-shadow:none!important;text-decoration:none!important}
 
 /* WDC single course polish 2026-05-16 */
 .single-wm_course .wd-compact-hero{
@@ -2907,7 +2907,7 @@ article.wd-mini-article::before{content:none!important;display:none!important}
   line-height:1.05!important;
   letter-spacing:-.035em!important;
   margin:0 0 16px!important;
-  color:#06384d!important;
+  color:#004A98!important;
 }
 .single-wm_course .wd-content-main > .wd-title:after{
   content:"";
@@ -3018,7 +3018,7 @@ body.whaledive-single-course .wd-content-main > .wd-title{
   line-height:1.05!important;
   letter-spacing:-.035em!important;
   margin:0 0 16px!important;
-  color:#06384d!important;
+  color:#004A98!important;
 }
 body.whaledive-single-course .wd-content-main > .wd-title:after{
   content:"";
@@ -3081,22 +3081,22 @@ body.whaledive-single-course .wd-community .wd-sub{margin-top:10px!important;mar
 .whaledive-single .wd-story-cover{aspect-ratio:16/6.8!important;border-radius:0 0 28px 28px;background:#eaf8fb}
 .whaledive-single .wd-story-cover img{object-position:center 46%}
 .whaledive-single .wd-story-checklist{margin:20px 0 0;padding:20px;border-radius:20px;background:linear-gradient(135deg,#f7fbfd 0%,#eef8fb 100%);border:1px solid rgba(8,167,199,.18)}
-.whaledive-single .wd-story-checklist h3{margin:0 0 10px;color:#06384d;font-size:20px;letter-spacing:-.02em}
+.whaledive-single .wd-story-checklist h3{margin:0 0 10px;color:#004A98;font-size:20px;letter-spacing:-.02em}
 .whaledive-single .wd-story-checklist ul{margin:0;padding-left:20px;color:#425466;line-height:1.75}
 .whaledive-single .wd-story-checklist li{margin:0 0 6px}
-.whaledive-single .wd-story-bottom-cta{padding:0 0 48px;background:#fff;text-align:center;color:#06384d}
+.whaledive-single .wd-story-bottom-cta{padding:0 0 48px;background:#fff;text-align:center;color:#004A98}
 .whaledive-single .wd-story-bottom-cta .wd-shell{max-width:920px;padding:38px 44px;border-radius:30px;background:radial-gradient(circle at 82% 10%,rgba(150,218,234,.34),transparent 30%),linear-gradient(135deg,#f7fbfd 0%,#eef8fb 100%);border:1px solid rgba(8,167,199,.18);box-shadow:0 22px 56px rgba(2,32,46,.1)}
 .whaledive-single .wd-story-bottom-cta .wd-kicker{background:rgba(8,167,199,.11);border-color:rgba(8,167,199,.2);color:#0b617c}
-.whaledive-single .wd-story-bottom-cta h2{margin:14px 0 10px;color:#06384d;font-size:clamp(32px,3.6vw,48px);line-height:1.04;letter-spacing:-.045em}
+.whaledive-single .wd-story-bottom-cta h2{margin:14px 0 10px;color:#004A98;font-size:clamp(32px,3.6vw,48px);line-height:1.04;letter-spacing:-.045em}
 .whaledive-single .wd-story-bottom-cta p{margin:0 auto 22px;max-width:620px;color:#607684;font-size:17px;line-height:1.7}
 .whaledive-single .wd-side-card h3{letter-spacing:-.025em}
 @media(max-width:680px){.whaledive-single .wd-story-cover{aspect-ratio:4/3!important;border-radius:0}.whaledive-single .wd-story-bottom-cta{padding:42px 0 46px}}
 
 /* WDC unified detail CTA card 2026-05-16 */
-.wdc-card-cta{padding:0 0 48px;background:#fff;text-align:center;color:#06384d}
+.wdc-card-cta{padding:0 0 48px;background:#fff;text-align:center;color:#004A98}
 .wdc-card-cta .wd-shell{max-width:920px;padding:38px 44px;border-radius:30px;background:radial-gradient(circle at 82% 10%,rgba(150,218,234,.34),transparent 30%),linear-gradient(135deg,#f7fbfd 0%,#eef8fb 100%);border:1px solid rgba(8,167,199,.18);box-shadow:0 22px 56px rgba(2,32,46,.1)}
 .wdc-card-cta .wd-kicker{background:rgba(8,167,199,.11);border-color:rgba(8,167,199,.2);color:#0b617c}
-.wdc-card-cta h2{margin:14px 0 10px;color:#06384d;font-size:clamp(32px,3.6vw,48px);line-height:1.04;letter-spacing:-.045em}
+.wdc-card-cta h2{margin:14px 0 10px;color:#004A98;font-size:clamp(32px,3.6vw,48px);line-height:1.04;letter-spacing:-.045em}
 .wdc-card-cta p{margin:0 auto 22px;max-width:620px;color:#607684;font-size:17px;line-height:1.7}
 .whaledive-single-course .wd-content-section,.whaledive-single-equipment .wd-gear-detail-body{padding-bottom:46px}
 @media(max-width:680px){.wdc-card-cta{padding-bottom:38px}.wdc-card-cta .wd-shell{padding:30px 22px;border-radius:24px}}
@@ -3109,9 +3109,9 @@ body.whaledive-single-course .wd-sidebar-price,
 body.whaledive-single-course .wd-sidebar-price .wd-price-label,
 .single-wm_course .wd-sidebar-price .wd-price-label{display:block!important;font-size:12px!important;font-weight:900!important;text-transform:uppercase!important;letter-spacing:.08em!important;color:#5f7180!important;margin:0!important}
 body.whaledive-single-course .wd-sidebar-price .wd-price-amount,
-.single-wm_course .wd-sidebar-price .wd-price-amount{display:block!important;margin-top:4px!important;color:#06384d!important;font-size:28px!important;line-height:1.05!important;font-weight:950!important;letter-spacing:-.04em!important}
+.single-wm_course .wd-sidebar-price .wd-price-amount{display:block!important;margin-top:4px!important;color:#004A98!important;font-size:28px!important;line-height:1.05!important;font-weight:950!important;letter-spacing:-.04em!important}
 body.whaledive-single-course .wd-sidebar-card h4,
-.single-wm_course .wd-sidebar-card h4{margin:16px 0 6px!important;color:#06384d!important;font-size:15px!important;text-transform:none!important;letter-spacing:-.01em!important}
+.single-wm_course .wd-sidebar-card h4{margin:16px 0 6px!important;color:#004A98!important;font-size:15px!important;text-transform:none!important;letter-spacing:-.01em!important}
 body.whaledive-single-course .wd-sidebar-includes,
 .single-wm_course .wd-sidebar-includes{color:#607684!important;line-height:1.6!important;font-size:14px!important;margin-bottom:0!important}
 body.whaledive-single-course .wd-sidebar-card .wd-btn,
@@ -3123,7 +3123,7 @@ body.whaledive-single-course .wd-sidebar-note,
 .whaledive-equipment #equipGrid .wd-price-label,
 .whaledive-equipment #equipGrid .wd-price-amount{display:block!important;width:100%!important;flex-basis:100%!important}
 /* WDC auth pages 2026-05-16 */
-.wdc-auth-page{background:#f6fbfd;color:#06384d}
+.wdc-auth-page{background:#f6fbfd;color:#004A98}
 .wdc-auth-hero{position:relative;overflow:hidden;padding:132px 0 76px;background:radial-gradient(circle at 12% 18%,rgba(76,200,237,.28),transparent 34%),linear-gradient(135deg,#021126 0%,#083c5d 46%,#0b617c 100%);color:#fff}
 .wdc-auth-hero:before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(180deg,#000,transparent 78%)}
 .wdc-auth-grid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 470px;gap:48px;align-items:center}
@@ -3135,12 +3135,12 @@ body.whaledive-single-course .wd-sidebar-note,
 .wdc-auth-proof{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:34px;max-width:650px}
 .wdc-auth-proof div{padding:16px;border-radius:18px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(12px)}
 .wdc-auth-proof b{display:block;color:#fff;font-size:22px}.wdc-auth-proof span{color:rgba(255,255,255,.72);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
-.wdc-auth-card{padding:30px;border-radius:30px;background:linear-gradient(180deg,#fff,#eefaff);box-shadow:0 30px 80px rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.65);color:#06384d}
+.wdc-auth-card{padding:30px;border-radius:30px;background:linear-gradient(180deg,#fff,#eefaff);box-shadow:0 30px 80px rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.65);color:#004A98}
 .wdc-auth-card h2{margin:0 0 16px;font-size:32px;letter-spacing:.03em}.wdc-auth-card p{margin:0 0 24px;color:#5f7180;line-height:1.55}
 .wdc-auth-form{display:grid;gap:18px}.wdc-auth-field label{display:block;margin:0 0 10px;color:#5b7180;font-size:12px;font-weight:950;letter-spacing:.08em;text-transform:uppercase}
 .wdc-auth-field input{width:100%;height:52px;border:1px solid rgba(6,56,77,.12);border-radius:16px;padding:0 14px;background:#fff;color:#061a36;box-sizing:border-box;box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
 .wdc-auth-field input:focus{outline:3px solid rgba(76,200,237,.26);border-color:#4cc8ed}
-.wd-password-wrap{position:relative}.wd-password-wrap input{padding-right:92px!important}.wd-password-toggle{position:absolute;right:8px;top:10px;height:32px;border:0;border-radius:999px;background:#06384d;color:#fff;font-weight:900;padding:0 12px;cursor:pointer}
+.wd-password-wrap{position:relative}.wd-password-wrap input{padding-right:92px!important}.wd-password-toggle{position:absolute;right:8px;top:10px;height:32px;border:0;border-radius:999px;background:#004A98;color:#fff;font-weight:900;padding:0 12px;cursor:pointer}
 .wdc-auth-row{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#5f7180;font-size:14px}.wdc-auth-row a,.wdc-auth-switch a{color:#0b617c;font-weight:900}.wdc-auth-row label{display:flex;align-items:center;gap:8px}
 .wdc-auth-submit{width:100%;height:54px;border:0;border-radius:999px;background:linear-gradient(135deg,#4cc8ed,#0b617c);color:#fff;font-size:15px;font-weight:950;cursor:pointer;box-shadow:0 16px 34px rgba(11,97,124,.24)}
 .wdc-auth-switch{margin:22px 0 0!important;text-align:center!important;color:#5f7180!important;font-size:14px}.wdc-auth-alert{padding:12px 14px;border-radius:16px;background:#fff8e6;color:#946000;border:1px solid rgba(243,156,18,.26);font-weight:800}
@@ -3292,7 +3292,7 @@ body.wdc-brand-font-mode .wd-hero-simple p{
 body.whaledive-login .wd-header,body.whaledive-register .wd-header,body.wdc-auth-page .wd-header{display:none!important}
 body.whaledive-login .wdc-auth-hero,body.whaledive-register .wdc-auth-hero,body.wdc-auth-page .wdc-auth-hero{padding-top:28px!important}
 .wd-inner-hero h1{line-height:1.04!important;letter-spacing:-.035em!important}
-.wd-inner-hero .wd-btn.alt{background:rgba(255,255,255,.94)!important;color:#06384d!important;border:1px solid rgba(255,255,255,.8)!important;box-shadow:0 14px 32px rgba(0,0,0,.18)!important}
+.wd-inner-hero .wd-btn.alt{background:rgba(255,255,255,.94)!important;color:#004A98!important;border:1px solid rgba(255,255,255,.8)!important;box-shadow:0 14px 32px rgba(0,0,0,.18)!important}
 .wd-inner-hero .wd-btn.alt:hover{background:#96DAEA!important;color:#03172d!important}
 .wd-header .wd-menu a[aria-current="page"]{color:#96DAEA!important;background:rgba(255,255,255,.08)!important;border-radius:999px!important}
 
@@ -3323,7 +3323,7 @@ body.whaledive-single-course .wd-sidebar-card{border-radius:24px!important}
 .wdc-card-cta .wd-shell,.wd-story-bottom-cta .wd-shell,.whaledive-single .wd-story-bottom-cta .wd-shell{border-radius:24px!important}
 .wdc-card-cta .wd-btn.alt,.wd-story-bottom-cta .wd-btn.alt,.wd-community .wd-btn.alt{background:linear-gradient(135deg,var(--wdc-blue,#004A98),var(--wdc-blue-violet,#3B44AC))!important;color:#fff!important;border-color:transparent!important;box-shadow:0 14px 34px rgba(0,74,152,.32)!important;min-height:54px!important;padding:0 34px!important;font-size:16.5px!important;font-weight:900!important;letter-spacing:.01em!important}
 /* Dark section CTA + chips (homepage courses) */
-.wd-dark .wd-section-cta .wd-btn.alt{background:rgba(255,255,255,.94)!important;color:#06384d!important;border:1px solid rgba(255,255,255,.5)!important;box-shadow:0 8px 24px rgba(0,0,0,.22)!important;font-weight:700!important}
+.wd-dark .wd-section-cta .wd-btn.alt{background:#4CC8ED!important;color:#000000!important;border:1px solid rgba(255,255,255,.35)!important;box-shadow:0 8px 24px rgba(0,0,0,.22)!important;font-weight:900!important}
 .wd-dark .wd-section-cta .wd-btn.alt:hover{background:#fff!important;box-shadow:0 12px 32px rgba(0,0,0,.3)!important;transform:translateY(-1px)!important}
 .wd-dark .wd-filter-bar .wd-chip:not(.active){background:rgba(255,255,255,.12)!important;color:rgba(255,255,255,.85)!important;border-color:rgba(255,255,255,.28)!important}
 .wd-dark .wd-filter-bar .wd-chip:not(.active):hover{background:rgba(255,255,255,.2)!important;color:#fff!important;border-color:rgba(255,255,255,.4)!important}
@@ -3779,7 +3779,7 @@ body.whaledive-single-course .wdc-card-cta,
 .single-wm_course .wdc-card-cta,
 body.whaledive-single-course .wd-content-sidebar,
 .single-wm_course .wd-content-sidebar{
-  color:#06384d!important;
+  color:#004A98!important;
 }
 body.whaledive-single-course .wd-section.white,
 .single-wm_course .wd-section.white{
@@ -3811,7 +3811,7 @@ body.whaledive-single-equip .wdc-card-cta .wd-shell,
   background:linear-gradient(145deg,#f7fcff 0%,#e8f7fb 100%)!important;
   border:1px solid rgba(6,56,77,.14)!important;
   box-shadow:0 16px 40px rgba(2,32,46,.08)!important;
-  color:#06384d!important;
+  color:#004A98!important;
   text-align:center!important;
 }
 body.whaledive-single-course .wdc-card-cta .wd-kicker,
@@ -3949,7 +3949,7 @@ body.whaledive-single-course .wd-footer,
 .wd-footer .wd-btn.alt,
 body.whaledive-home .wd-footer .wd-btn.alt {
   background: #ffffff !important;
-  color: #06384d !important;
+  color: #004A98 !important;
   border: 1px solid rgba(255,255,255,.92) !important;
   box-shadow: 0 14px 30px rgba(0,0,0,.22) !important;
   font-weight: 900 !important;
@@ -3994,7 +3994,7 @@ body.whaledive-home .wd-footer .wd-btn.alt:hover {
    Scope away from course/equipment catalog cards so live card chrome wins. */
 .wd-btn.alt {
   background: #f3fbff !important;
-  color: #06384d !important;
+  color: #004A98 !important;
   border: 1px solid rgba(6,56,77,.14) !important;
   box-shadow: none !important;
   font-weight: 900 !important;
@@ -4013,7 +4013,7 @@ body.whaledive-home .wd-footer .wd-btn.alt:hover {
 .wd-footer .wd-btn.alt,
 body.whaledive-home .wd-footer .wd-btn.alt {
   background: #ffffff !important;
-  color: #06384d !important;
+  color: #004A98 !important;
   border: 1px solid rgba(255,255,255,.92) !important;
   box-shadow: 0 14px 30px rgba(0,0,0,.22) !important;
 }
@@ -4053,7 +4053,7 @@ body.whaledive-home .wd-footer .wd-btn.alt {
 .whaledive-home #articles .wd-mini-article .wd-article-link {
   background: #f3fbff !important;
   border: 1px solid rgba(6,56,77,.12) !important;
-  color: #06384d !important;
+  color: #004A98 !important;
 }
 
 
@@ -4063,13 +4063,13 @@ body.whaledive-home .wd-footer .wd-btn.alt {
 .wd-agency-badge{
   display:inline-flex;align-items:center;gap:8px;
   padding:8px 20px;border-radius:999px;
-  background:var(--agency-color,#06384d);color:#fff;
+  background:var(--agency-color,#004A98);color:#fff;
   font-size:15px;font-weight:900;letter-spacing:.04em;
   font-family:"Plus Jakarta Sans",sans-serif;
 }
 .wd-agency-rule{
   flex:1;height:2px;border-radius:1px;
-  background:linear-gradient(90deg,color-mix(in srgb,var(--agency-color,#06384d) 20%,transparent),transparent);
+  background:linear-gradient(90deg,color-mix(in srgb,var(--agency-color,#004A98) 20%,transparent),transparent);
 }
 .wd-agency-count{font-size:13px;font-weight:700;color:#5b7180;white-space:nowrap}
 .wd-agency-desc{color:#5b7180;font-size:15px;line-height:1.6;margin:0 0 22px;max-width:640px}
@@ -4160,7 +4160,7 @@ body.single-wm_equipment .wd-shell,
 .whaledive-equipment #equipGrid .wd-shop-card .wd-mini-link {
   background: #f3fbff !important;
   border: 1px solid rgba(6,56,77,.14) !important;
-  color: #06384d !important;
+  color: #004A98 !important;
   box-shadow: none !important;
 }
 .whaledive-courses #courseGrid .wd-course-card .wd-mini-link:after,
@@ -4169,8 +4169,8 @@ body.single-wm_equipment .wd-shell,
 }
 .whaledive-courses #courseGrid .wd-course-card .wd-mini-btn,
 .whaledive-equipment #equipGrid .wd-shop-card .wd-mini-btn {
-  background: #06384d !important;
-  border: 1px solid #06384d !important;
+  background: #004A98 !important;
+  border: 1px solid #004A98 !important;
   color: #fff !important;
 }
 
@@ -5249,7 +5249,7 @@ body.whaledive-home #courses .wd-course-body p {
 .whaledive-courses article.wd-course-card .wd-price-amount {
   display: block !important;
   width: 100% !important;
-  color: #06384d !important;
+  color: #004A98 !important;
   font-size: 17px !important;
   line-height: 1.1 !important;
   font-weight: 950 !important;
@@ -5339,8 +5339,8 @@ body.home .wd-hero .wd-actions .wd-btn:not(.alt),
 body.whaledive-home .wd-hero-simple .wd-actions .wd-btn:not(.alt){
   background:#ffffff!important;
   background-image:none!important;
-  color:#06384d!important;
-  -webkit-text-fill-color:#06384d!important;
+  color:#004A98!important;
+  -webkit-text-fill-color:#004A98!important;
   border:1px solid rgba(255,255,255,.98)!important;
   box-shadow:0 14px 30px rgba(0,0,0,.24)!important;
   font-weight:900!important;
@@ -5352,8 +5352,8 @@ body.home .wd-hero .wd-actions .wd-btn:not(.alt):hover,
 .wd-hero .wd-actions > .wd-btn:not(.alt):hover,
 body.whaledive-home .wd-hero-simple .wd-actions .wd-btn:not(.alt):hover{
   background:#eef8fb!important;
-  color:#042f40!important;
-  -webkit-text-fill-color:#042f40!important;
+  color:#3B44AC!important;
+  -webkit-text-fill-color:#3B44AC!important;
 }
 /* Dark surface secondary = solid navy (consistent brand, high contrast) */
 body.whaledive-home .wd-hero .wd-actions .wd-btn.alt,
@@ -5362,11 +5362,11 @@ body.home .wd-hero .wd-actions .wd-btn.alt,
 .home .wd-hero .wd-btn.alt,
 .wd-hero .wd-btn.alt,
 body.whaledive-home .wd-hero-simple .wd-actions .wd-btn.alt{
-  background:#06384d!important;
+  background:#4CC8ED!important;
   background-image:none!important;
-  color:#ffffff!important;
-  -webkit-text-fill-color:#ffffff!important;
-  border:1px solid rgba(255,255,255,.28)!important;
+  color:#000000!important;
+  -webkit-text-fill-color:#000000!important;
+  border:1px solid rgba(255,255,255,.35)!important;
   box-shadow:0 12px 26px rgba(0,0,0,.22)!important;
   font-weight:900!important;
 }
@@ -5376,7 +5376,7 @@ body.home .wd-hero .wd-actions .wd-btn.alt:hover,
 .home .wd-hero .wd-btn.alt:hover,
 .wd-hero .wd-btn.alt:hover,
 body.whaledive-home .wd-hero-simple .wd-actions .wd-btn.alt:hover{
-  background:#042f40!important;
+  background:#3B44AC!important;
   color:#ffffff!important;
   -webkit-text-fill-color:#ffffff!important;
 }
@@ -6069,7 +6069,7 @@ h3,.wdc-h3{font-family:var(--wdc-font-display)!important;font-size:var(--wdc-h3)
 }
 .wdc-card--soft{background:var(--wdc-surface-2)}
 .wdc-card--accent{border-color:rgba(11,97,124,.18);box-shadow:0 12px 30px rgba(11,97,124,.08)}
-.wdc-card--dark{background:linear-gradient(145deg,#06384d,#0b617c);color:#fff;border:0;box-shadow:var(--wdc-shadow-lg)}
+.wdc-card--dark{background:linear-gradient(145deg,#004A98,#0b617c);color:#fff;border:0;box-shadow:var(--wdc-shadow-lg)}
 .wdc-card--flat{box-shadow:none}
 .wdc-card__title{margin:0 0 6px;font-size:var(--wdc-h3);font-weight:800;color:var(--wdc-text);line-height:1.25}
 .wdc-card__text{margin:0;font-size:var(--wdc-body-sm);color:var(--wdc-text-3);line-height:1.55}
@@ -6287,10 +6287,10 @@ button.wdc-btn,
 .wd-blog-search button,
 .wd-blog-pagination a,
 .wd-featured-read,
-body.wm-member-app .dashboard-main a[style*="background:#06384d"],
-body.wm-member-app .dashboard-main a[style*="background: #06384d"],
-body.wm-member-app .dashboard-main button[style*="background:#06384d"],
-body.wm-member-app .dashboard-main button[style*="background: #06384d"],
+body.wm-member-app .dashboard-main a[style*="background:#004A98"],
+body.wm-member-app .dashboard-main a[style*="background: #004A98"],
+body.wm-member-app .dashboard-main button[style*="background:#004A98"],
+body.wm-member-app .dashboard-main button[style*="background: #004A98"],
 body.wm-member-app .dashboard-main button[style*="background:#4cc8ed"],
 body.wm-member-app .dashboard-main button[style*="background: #4cc8ed"]{
   display:inline-flex!important;
@@ -6577,13 +6577,13 @@ button.wd-btn:not(.alt),
 .wm-checkout .wm-btn,
 .wm-checkout button[type=submit],
 .whaledive-auth .wd-auth-form .wd-btn,
-body.wm-member-app .dashboard-main a[style*="background:#06384d"],
-body.wm-member-app .dashboard-main a[style*="background: #06384d"]{
-  background: #06384d !important;
+body.wm-member-app .dashboard-main a[style*="background:#004A98"],
+body.wm-member-app .dashboard-main a[style*="background: #004A98"]{
+  background: #004A98 !important;
   background-image: none !important;
   color: #fff !important;
   -webkit-text-fill-color: #fff !important;
-  border: 1px solid #06384d !important;
+  border: 1px solid #004A98 !important;
   box-shadow: 0 10px 22px rgba(6,56,77,.18) !important;
 }
 
@@ -6597,8 +6597,8 @@ a.wd-btn.alt:not(.wd-hero .wd-btn):not(.wd-footer .wd-btn):not(.wd-inner-hero .w
 .wdc-gw-progress-cta--ghost{
   background: #fff !important;
   background-image: none !important;
-  color: #06384d !important;
-  -webkit-text-fill-color: #06384d !important;
+  color: #004A98 !important;
+  -webkit-text-fill-color: #004A98 !important;
   border: 1px solid #cfe0e8 !important;
   box-shadow: none !important;
 }
@@ -6610,7 +6610,7 @@ a.wd-btn.alt:not(.wd-hero .wd-btn):not(.wd-footer .wd-btn):not(.wd-inner-hero .w
 .wd-dark .wd-btn.alt,
 .wd-dark .wd-section-cta .wd-btn,
 .wd-dark .wd-section-cta .wd-btn.alt{
-  background: #06384d !important;
+  background: #004A98 !important;
   background-image: none !important;
   color: #fff !important;
   -webkit-text-fill-color: #fff !important;
@@ -6624,8 +6624,8 @@ a.wd-btn.alt:not(.wd-hero .wd-btn):not(.wd-footer .wd-btn):not(.wd-inner-hero .w
 .wd-dark .wd-btn:not(.alt){
   background: #ffffff !important;
   background-image: none !important;
-  color: #06384d !important;
-  -webkit-text-fill-color: #06384d !important;
+  color: #004A98 !important;
+  -webkit-text-fill-color: #004A98 !important;
   border: 1px solid rgba(255,255,255,.98) !important;
   box-shadow: 0 14px 30px rgba(0,0,0,.24) !important;
 }
@@ -6643,8 +6643,8 @@ a.wd-btn.alt:not(.wd-hero .wd-btn):not(.wd-footer .wd-btn):not(.wd-inner-hero .w
 .whaledive-equipment .wd-mini-link{
   background: #eef8fb !important;
   background-image: none !important;
-  color: #06384d !important;
-  -webkit-text-fill-color: #06384d !important;
+  color: #004A98 !important;
+  -webkit-text-fill-color: #004A98 !important;
   border: 1px solid rgba(11,97,124,.16) !important;
   box-shadow: none !important;
 }
@@ -6652,21 +6652,21 @@ a.wd-btn.alt:not(.wd-hero .wd-btn):not(.wd-footer .wd-btn):not(.wd-inner-hero .w
 /* Catalog enroll/buy solid primary */
 .whaledive-courses .wd-mini-btn,
 .whaledive-equipment .wd-mini-btn{
-  background: #06384d !important;
+  background: #004A98 !important;
   background-image: none !important;
   color: #fff !important;
   -webkit-text-fill-color: #fff !important;
-  border: 1px solid #06384d !important;
+  border: 1px solid #004A98 !important;
 }
 
 /* Success only when explicitly marked */
 .wdc-btn--success,
 button.wdc-btn--success{
-  background: #047857 !important;
+  background: #004A98 !important;
   background-image: none !important;
   color: #fff !important;
   -webkit-text-fill-color: #fff !important;
-  border-color: #047857 !important;
+  border-color: #004A98 !important;
 }
 
 /* Kill cyan solid CTA leftovers */
@@ -6675,7 +6675,7 @@ a[style*="background:#4cc8ed"],
 button[style*="background:#4cc8ed"],
 a[style*="background: #4cc8ed"],
 button[style*="background: #4cc8ed"]{
-  background: #06384d !important;
+  background: #004A98 !important;
   background-image: none !important;
   color: #fff !important;
   -webkit-text-fill-color: #fff !important;
@@ -6689,18 +6689,18 @@ body.whaledive-home #equipment .wd-section-cta .wd-btn.alt,
 body.whaledive-home #articles .wd-article-head .wd-btn,
 body.whaledive-home #membership .wd-btn,
 body.whaledive-home #membership .wd-btn.alt{
-  background:#06384d!important;
+  background:#004A98!important;
   background-image:none!important;
   color:#fff!important;
   -webkit-text-fill-color:#fff!important;
-  border:1px solid #06384d!important;
+  border:1px solid #004A98!important;
   box-shadow:0 10px 22px rgba(6,56,77,.18)!important;
 }
 body.whaledive-home .wd-section:not(.wd-dark) .wd-section-cta .wd-btn.alt,
 body.whaledive-home #equipment .wd-section-cta .wd-btn.alt{
   background:#fff!important;
-  color:#06384d!important;
-  -webkit-text-fill-color:#06384d!important;
+  color:#004A98!important;
+  -webkit-text-fill-color:#004A98!important;
   border:1px solid #cfe0e8!important;
   box-shadow:none!important;
 }
@@ -6718,7 +6718,7 @@ body:not(.wdc-skip) button.wd-btn:not(.alt),
 .wd-blog-search button,
 .wd-blog-pagination a,
 .wd-featured-read{
-  background:#06384d!important;
+  background:#004A98!important;
   background-image:none!important;
   color:#fff!important;
   -webkit-text-fill-color:#fff!important;
@@ -6737,8 +6737,8 @@ body.whaledive-equipment .wd-inner-hero .wd-btn:not(.alt),
 body.whaledive-inner .wd-inner-hero .wd-btn:not(.alt){
   background:#ffffff!important;
   background-image:none!important;
-  color:#06384d!important;
-  -webkit-text-fill-color:#06384d!important;
+  color:#004A98!important;
+  -webkit-text-fill-color:#004A98!important;
   border:1px solid rgba(255,255,255,.98)!important;
   box-shadow:0 14px 30px rgba(0,0,0,.24)!important;
 }
@@ -6756,7 +6756,7 @@ body.whaledive-home .wd-dark .wd-section-cta .wd-btn.alt,
 body.whaledive-courses .wd-inner-hero .wd-btn.alt,
 body.whaledive-equipment .wd-inner-hero .wd-btn.alt,
 body.whaledive-inner .wd-inner-hero .wd-btn.alt{
-  background:#06384d!important;
+  background:#004A98!important;
   background-image:none!important;
   color:#ffffff!important;
   -webkit-text-fill-color:#ffffff!important;
@@ -6770,14 +6770,14 @@ body.whaledive-inner .wd-inner-hero .wd-btn.alt{
 .whaledive-equipment .wd-mini-link{
   background:#eef8fb!important;
   background-image:none!important;
-  color:#06384d!important;
-  -webkit-text-fill-color:#06384d!important;
+  color:#004A98!important;
+  -webkit-text-fill-color:#004A98!important;
   border:1px solid rgba(11,97,124,.16)!important;
   box-shadow:none!important;
 }
 
 /* Success explicit only */
-.wdc-btn--success{background:#047857!important;color:#fff!important;-webkit-text-fill-color:#fff!important;border-color:#047857!important;background-image:none!important}
+.wdc-btn--success{background:#004A98!important;color:#fff!important;-webkit-text-fill-color:#fff!important;border-color:#004A98!important;background-image:none!important}
 
 
 /* Section CTA hard lock — no transparent leftovers */
@@ -6790,11 +6790,11 @@ body.whaledive-home #courses .wd-section-cta .wd-btn,
 body.whaledive-home #courses .wd-section-cta .wd-btn.alt,
 body.whaledive-home #equipment .wd-section-cta .wd-btn,
 body.whaledive-home #equipment .wd-section-cta .wd-btn.alt{
-  background:#06384d!important;
+  background:#004A98!important;
   background-image:none!important;
   color:#fff!important;
   -webkit-text-fill-color:#fff!important;
-  border:1px solid #06384d!important;
+  border:1px solid #004A98!important;
   box-shadow:0 10px 22px rgba(6,56,77,.18)!important;
   opacity:1!important;
 }
@@ -6805,8 +6805,8 @@ body.whaledive-home .wd-dark .wd-section-cta .wd-btn,
 body.whaledive-home .wd-dark .wd-section-cta .wd-btn.alt{
   background:#ffffff!important;
   background-image:none!important;
-  color:#06384d!important;
-  -webkit-text-fill-color:#06384d!important;
+  color:#004A98!important;
+  -webkit-text-fill-color:#004A98!important;
   border:1px solid rgba(255,255,255,.98)!important;
   box-shadow:0 14px 30px rgba(0,0,0,.24)!important;
 }
@@ -6824,8 +6824,8 @@ body.whaledive-inner .wd-footer .wd-btn,
 body.whaledive-inner .wd-footer .wd-btn.alt{
   background:#ffffff!important;
   background-image:none!important;
-  color:#06384d!important;
-  -webkit-text-fill-color:#06384d!important;
+  color:#004A98!important;
+  -webkit-text-fill-color:#004A98!important;
   border:1px solid rgba(255,255,255,.98)!important;
   box-shadow:0 14px 30px rgba(0,0,0,.24)!important;
   opacity:1!important;
@@ -6836,8 +6836,8 @@ body.whaledive-inner .wd-footer .wd-btn.alt{
 .wd-footer-brand .wd-btn:hover,
 .wd-footer-brand .wd-btn.alt:hover{
   background:#eef8fb!important;
-  color:#042f40!important;
-  -webkit-text-fill-color:#042f40!important;
+  color:#3B44AC!important;
+  -webkit-text-fill-color:#3B44AC!important;
 }
 
 /* Community/membership CTA on light community section stays solid navy + white text */
@@ -6845,11 +6845,11 @@ body.whaledive-inner .wd-footer .wd-btn.alt{
 .wd-community .wd-btn.alt,
 body.whaledive-home .wd-community .wd-btn,
 body.whaledive-home .wd-community .wd-btn.alt{
-  background:#06384d!important;
+  background:#004A98!important;
   background-image:none!important;
   color:#ffffff!important;
   -webkit-text-fill-color:#ffffff!important;
-  border:1px solid #06384d!important;
+  border:1px solid #004A98!important;
   box-shadow:0 10px 22px rgba(6,56,77,.18)!important;
 }
 
@@ -7219,10 +7219,10 @@ button.wdc-btn,
 a.wdc-btn,
 .whaledive-courses .wd-mini-btn,
 .whaledive-equipment .wd-mini-btn,
-body.wm-member-app .dashboard-main a[style*="background:#06384d"],
-body.wm-member-app .dashboard-main a[style*="background: #06384d"],
-body.wm-member-app .dashboard-main button[style*="background:#06384d"],
-body.wm-member-app .dashboard-main button[style*="background: #06384d"],
+body.wm-member-app .dashboard-main a[style*="background:#004A98"],
+body.wm-member-app .dashboard-main a[style*="background: #004A98"],
+body.wm-member-app .dashboard-main button[style*="background:#004A98"],
+body.wm-member-app .dashboard-main button[style*="background: #004A98"],
 body.wm-member-app .dashboard-main a[style*="background:#004A98"],
 body.wm-member-app .dashboard-main button[style*="background:#004A98"]{
   background:#004A98!important;
@@ -7417,20 +7417,20 @@ body.whaledive-home #equipment .wd-section-cta .wd-btn.alt{
 }
 
 /* Kill non-brand leftovers used as buttons */
-a[style*="background:#06384d"],
-button[style*="background:#06384d"],
-a[style*="background: #06384d"],
-button[style*="background: #06384d"],
+a[style*="background:#004A98"],
+button[style*="background:#004A98"],
+a[style*="background: #004A98"],
+button[style*="background: #004A98"],
 a[style*="background:#4cc8ed"],
 button[style*="background:#4cc8ed"],
-a[style*="background:#047857"],
-button[style*="background:#047857"],
-a[style*="background:#059669"],
-button[style*="background:#059669"],
-a[style*="background:#6d28d9"],
-button[style*="background:#6d28d9"],
-a[style*="background:#f59e0b"],
-button[style*="background:#f59e0b"]{
+a[style*="background:#004A98"],
+button[style*="background:#004A98"],
+a[style*="background:#004A98"],
+button[style*="background:#004A98"],
+a[style*="background:#3B44AC"],
+button[style*="background:#3B44AC"],
+a[style*="background:#4CC8ED"],
+button[style*="background:#4CC8ED"]{
   background:#004A98!important;
   background-image:none!important;
   color:#FFFFFF!important;
@@ -7458,7 +7458,7 @@ button[style*="background:#f59e0b"]{
 
 
 /* Non-brand button killer (2.3.70)
-   Force every CTA away from #06384d / greens / purples / oranges */
+   Force every CTA away from #004A98 / greens / purples / oranges */
 .wd-btn,
 .wd-btn-primary,
 .wd-mini-btn,
@@ -7592,6 +7592,136 @@ body.whaledive-home #articles .wd-article-head .wd-btn{
 
 /* Danger remains brand red */
 .wdc-btn--danger{
+  background:#C31C4A!important;
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF!important;
+  border-color:#C31C4A!important;
+}
+
+
+/* WDC BRAND BUTTON ABSOLUTE FINAL (2.3.71)
+   Palette only: #000 #3B44AC #4CC8ED #96DAEA #C31C4A #004A98 #FFF
+   Wins over all earlier 2.3.66 navy leftovers. */
+html body a.wd-btn:not(.alt),
+html body button.wd-btn:not(.alt),
+html body .wd-btn:not(.alt),
+html body .wd-mini-btn,
+html body .wdc-auth-submit,
+html body .wdc-gw-btn-primary,
+html body .wdc-gw-progress-cta,
+html body .wdc-dash-cta-card a,
+html body .wd-blog-search button,
+html body .wd-blog-pagination a,
+html body .wd-featured-read,
+html body .wd-blog-read,
+html body .whaledive-single .wd-story-foot .primary,
+html body .whaledive-single .wd-side-cta a,
+html body .wd-contact-form button[type="submit"],
+html body .wd-contact-form .wd-btn,
+html body .whaledive-about .wd-contact-form .wd-btn,
+html body .whaledive-about .wd-contact-form button[type="submit"],
+html body .whaledive-courses .wd-mini-btn,
+html body .whaledive-equipment .wd-mini-btn,
+html body .wd-password-toggle,
+html body .wd-chip.active,
+html body #courseFilters .wd-chip.active,
+html body #equipFilters .wd-chip.active{
+  background:#004A98!important;
+  background-image:none!important;
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF!important;
+  border:1px solid #004A98!important;
+}
+
+/* Soft / secondary light */
+html body .wd-btn.alt,
+html body .wd-mini-link,
+html body .wdc-btn--secondary,
+html body .wdc-btn--soft,
+html body .wdc-gw-progress-cta--ghost,
+html body .whaledive-courses .wd-mini-link,
+html body .whaledive-equipment .wd-mini-link{
+  background:rgba(150,218,234,.22)!important;
+  background-image:none!important;
+  color:#004A98!important;
+  -webkit-text-fill-color:#004A98!important;
+  border:1px solid rgba(76,200,237,.35)!important;
+  box-shadow:none!important;
+}
+
+/* Dark / photo surfaces */
+html body .wd-hero .wd-btn:not(.alt),
+html body .wd-inner-hero .wd-btn:not(.alt),
+html body .wd-dark .wd-section-cta .wd-btn:not(.alt),
+html body.whaledive-home .wd-hero .wd-btn:not(.alt),
+html body.whaledive-home .wd-dark .wd-section-cta .wd-btn:not(.alt),
+html body.whaledive-courses .wd-inner-hero .wd-btn:not(.alt),
+html body.whaledive-equipment .wd-inner-hero .wd-btn:not(.alt),
+html body.whaledive-about .wd-inner-hero .wd-btn:not(.alt){
+  background:#FFFFFF!important;
+  background-image:none!important;
+  color:#004A98!important;
+  -webkit-text-fill-color:#004A98!important;
+  border:1px solid rgba(255,255,255,.98)!important;
+  box-shadow:0 14px 30px rgba(0,0,0,.24)!important;
+}
+html body .wd-hero .wd-btn.alt,
+html body .wd-inner-hero .wd-btn.alt,
+html body .wd-dark .wd-section-cta .wd-btn.alt,
+html body.whaledive-home .wd-hero .wd-btn.alt,
+html body.whaledive-home .wd-dark .wd-section-cta .wd-btn,
+html body.whaledive-home .wd-dark .wd-section-cta .wd-btn.alt,
+html body.whaledive-courses .wd-inner-hero .wd-btn.alt,
+html body.whaledive-equipment .wd-inner-hero .wd-btn.alt,
+html body.whaledive-about .wd-inner-hero .wd-btn.alt{
+  background:#4CC8ED!important;
+  background-image:none!important;
+  color:#000000!important;
+  -webkit-text-fill-color:#000000!important;
+  border:1px solid rgba(255,255,255,.35)!important;
+  box-shadow:0 12px 26px rgba(0,0,0,.22)!important;
+}
+
+/* Footer */
+html body .wd-footer .wd-btn,
+html body .wd-footer .wd-btn.alt{
+  background:#FFFFFF!important;
+  background-image:none!important;
+  color:#004A98!important;
+  -webkit-text-fill-color:#004A98!important;
+  border:1px solid rgba(255,255,255,.98)!important;
+}
+
+/* Membership / community conversion */
+html body.whaledive-home #membership .wd-btn,
+html body.whaledive-home #membership .wd-btn.alt,
+html body .wd-community .wd-btn,
+html body .wd-community .wd-btn.alt,
+html body .wdc-card-cta .wd-btn,
+html body .wdc-card-cta .wd-btn.alt,
+html body .wd-story-bottom-cta .wd-btn,
+html body .wd-story-bottom-cta .wd-btn.alt{
+  background:linear-gradient(135deg,#004A98,#3B44AC)!important;
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF!important;
+  border:1px solid #004A98!important;
+}
+
+/* Light section end CTAs solid brand blue */
+html body.whaledive-home .wd-section:not(.wd-dark) .wd-section-cta .wd-btn,
+html body.whaledive-home .wd-section:not(.wd-dark) .wd-section-cta .wd-btn.alt,
+html body.whaledive-home #equipment .wd-section-cta .wd-btn,
+html body.whaledive-home #equipment .wd-section-cta .wd-btn.alt,
+html body.whaledive-home #articles .wd-article-head .wd-btn{
+  background:#004A98!important;
+  background-image:none!important;
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF!important;
+  border:1px solid #004A98!important;
+}
+
+/* Danger brand red only */
+html body .wdc-btn--danger{
   background:#C31C4A!important;
   color:#FFFFFF!important;
   -webkit-text-fill-color:#FFFFFF!important;

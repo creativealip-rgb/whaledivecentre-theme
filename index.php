@@ -11,7 +11,7 @@
 /* CTA button: unified dark-section primary/secondary */
 .whaledive-home .wd-dark .wd-section-cta .wd-btn,
 .whaledive-home .wd-dark .wd-section-cta .wd-btn:not(.alt){background:#ffffff!important;background-image:none!important;border:1px solid rgba(255,255,255,.98)!important;color:#004A98!important;-webkit-text-fill-color:#004A98!important;font-weight:900!important;box-shadow:0 14px 30px rgba(0,0,0,.24)!important}
-.whaledive-home .wd-dark .wd-section-cta .wd-btn.alt{background:#004A98!important;background-image:none!important;border:1px solid rgba(255,255,255,.28)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;font-weight:900!important;box-shadow:0 12px 26px rgba(0,0,0,.22)!important}
+.whaledive-home .wd-dark .wd-section-cta .wd-btn.alt{background:#4CC8ED!important;background-image:none!important;border:1px solid rgba(255,255,255,.35)!important;color:#000000!important;-webkit-text-fill-color:#000000!important;font-weight:900!important;box-shadow:0 12px 26px rgba(0,0,0,.22)!important}
 .whaledive-home #courses .wd-section-cta{padding:0!important;margin:28px 0 0!important}
 
 
