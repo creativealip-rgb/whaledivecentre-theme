@@ -615,9 +615,12 @@ $status_steps = ['Payment Uploaded' => 'Proof received', 'Verified' => 'Payment 
 <?php endif; ?>
 
 <div style="background:linear-gradient(135deg,#f8fdff,#eef9fc);border:1px solid #ccecf5;border-radius:20px;padding:22px;">
-    <div style="font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;color:#0b617c;margin-bottom:6px;"><?php echo contenly_tr('Langkah Selanjutnya', 'Recommended next step'); ?></div>
-    <h2 style="font-size:22px;color:#004A98;margin:0 0 6px;letter-spacing:.03em;"><?php echo contenly_tr('Pilih kursus atau minta saran peralatan.', 'Pick a course or request gear advice.'); ?></h2>
-    <p style="color:#64748b;margin:0 0 16px;line-height:1.6;"><?php echo contenly_tr('Area member fokus pada kebutuhan anggota: kursus menyelam dan membeli peralatan selam yang tepat.', 'The member area now focuses on what Whale Dive Centre members need most: joining courses and buying the right dive gear.'); ?></p>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;"><a href="/my-courses/" style="display:inline-flex;padding:10px 14px;border-radius:999px;background:#004A98;color:#fff;text-decoration:none;font-weight:900;"><?php echo contenly_tr('Lihat Kursus', 'Browse Courses'); ?></a><a href="/my-gear/" style="display:inline-flex;padding:10px 14px;border-radius:999px;background:#fff;color:#004A98;text-decoration:none;font-weight:900;border:1px solid #ccecf5;"><?php echo contenly_tr('Lihat Peralatan', 'Browse Gear'); ?></a></div>
+    <div style="font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;color:#0b617c;margin-bottom:6px;"><?php echo contenly_tr('Langkah Selanjutnya', 'Next step'); ?></div>
+    <h2 style="font-size:22px;color:#004A98;margin:0 0 6px;letter-spacing:.03em;"><?php echo contenly_tr('Pilih kursus atau lihat peralatan.', 'Choose a course or browse gear.'); ?></h2>
+    <p style="color:#64748b;margin:0 0 16px;line-height:1.6;"><?php echo contenly_tr('Lanjut ke kursus untuk daftar/lacak sertifikasi, atau buka peralatan untuk cek katalog dan tanya crew.', 'Go to courses to enroll/track certifications, or open gear to browse the catalog and ask the crew.'); ?></p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a href="<?php echo esc_url(function_exists('contenly_localized_url') ? contenly_localized_url('/my-courses/') : home_url('/my-courses/')); ?>" style="display:inline-flex;padding:10px 14px;border-radius:999px;background:#004A98;color:#fff;text-decoration:none;font-weight:900;"><?php echo contenly_tr('Pilih Kursus', 'Choose Course'); ?></a>
+        <a href="<?php echo esc_url(function_exists('contenly_localized_url') ? contenly_localized_url('/my-gear/') : home_url('/my-gear/')); ?>" style="display:inline-flex;padding:10px 14px;border-radius:999px;background:#fff;color:#004A98;text-decoration:none;font-weight:900;border:1px solid #ccecf5;"><?php echo contenly_tr('Lihat Peralatan', 'Browse Gear'); ?></a>
+    </div>
 </div>
 <?php require_once get_template_directory() . '/dashboard-footer.php'; ?>
