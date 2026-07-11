@@ -169,7 +169,7 @@ rewind_posts();
     </div>
   </section>
 
-  <section class="wdc-card-cta"><div class="wd-shell"><span class="wd-kicker"><?php echo esc_html(contenly_tr('Siap saat kamu siap', 'Ready when you are')); ?></span><h2><?php echo esc_html(contenly_tr('Daftar lewat akun member.', 'Enroll through your member account.')); ?></h2><p><?php echo esc_html(contenly_tr('Ajukan kursus dari dashboard. Crew follow-up setelah request masuk — tanpa chat WA di halaman publik.', 'Request the course from your dashboard. Crew follows up after the request lands — no public WhatsApp CTA.')); ?></p><a class="wd-btn alt" href="<?php echo esc_url($action_url); ?>"><?php echo esc_html($cta_label); ?></a></div></section>
+  <section class="wdc-card-cta"><div class="wd-shell"><span class="wd-kicker"><?php echo esc_html(contenly_tr('Siap saat kamu siap', 'Ready when you are')); ?></span><h2><?php echo esc_html(contenly_tr('Daftar lewat akun member.', 'Enroll through your member account.')); ?></h2><p><?php echo esc_html(contenly_tr('Ajukan kursus dari dashboard. Crew follow-up setelah request masuk.', 'Request the course from your dashboard. Crew follows up after the request lands.')); ?></p><a class="wd-btn alt" href="<?php echo esc_url($action_url); ?>"><?php echo esc_html($cta_label); ?></a></div></section>
   <?php contenly_render_public_footer(); ?>
 </main>
 

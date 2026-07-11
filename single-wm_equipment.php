@@ -177,7 +177,7 @@ rewind_posts();
     </div>
   </section>
 
-  <section class="wdc-card-cta"><div class="wd-shell"><span class="wd-kicker"><?php echo esc_html(contenly_tr('Siap saat kamu siap', 'Ready when you are')); ?></span><h2><?php echo esc_html(contenly_tr('Ajukan lewat akun member.', 'Request through your member account.')); ?></h2><p><?php echo esc_html(contenly_tr('Ajukan gear dari dashboard. Crew follow-up size/stok setelah request masuk — tanpa chat WA di halaman publik.', 'Request gear from your dashboard. Crew follows up on size/stock after the request lands — no public WhatsApp CTA.')); ?></p><a class="wd-btn alt" href="<?php echo esc_url($action_url); ?>"><?php echo esc_html($cta_label); ?></a></div></section>
+  <section class="wdc-card-cta"><div class="wd-shell"><span class="wd-kicker"><?php echo esc_html(contenly_tr('Siap saat kamu siap', 'Ready when you are')); ?></span><h2><?php echo esc_html(contenly_tr('Ajukan lewat akun member.', 'Request through your member account.')); ?></h2><p><?php echo esc_html(contenly_tr('Ajukan gear dari dashboard. Crew follow-up size/stok setelah request masuk.', 'Request gear from your dashboard. Crew follows up on size/stock after the request lands.')); ?></p><a class="wd-btn alt" href="<?php echo esc_url($action_url); ?>"><?php echo esc_html($cta_label); ?></a></div></section>
   <?php contenly_render_public_footer(); ?>
 </main>
 
