@@ -2,7 +2,7 @@
 
 /*
 Theme Name: Whale Dive Centre Theme
-Version: 2.3.72
+Version: 2.3.73
 */
 :root{
   --black:#000;--violet:#3B44AC;--cyan:#4CC8ED;--pale:#96DAEA;--red:#C31C4A;--blue:#004A98;--white:#fff;--navy:#061a36;--ink:#0b1930;--muted:#63748a;
@@ -7774,3 +7774,92 @@ html body .wd-shop-card .wd-equip-photo{
 /* base legacy .wd-equip-visual padding 22px must not win on catalog cards */
 .wd-equip-visual{padding:0!important}
 .wd-shop-card{padding:0!important}
+
+
+/* WDC CARD CTA INNER PAD (2.3.73)
+   Fix: .wd-shell global mobile padding:0 kills card CTA inner space.
+   Badge/title/button were flush to card edge. */
+html body .wdc-card-cta,
+html body.whaledive-courses .wdc-card-cta,
+html body.whaledive-equipment .wdc-card-cta,
+html body.whaledive-blog .wdc-card-cta{
+  padding-left:16px!important;
+  padding-right:16px!important;
+  box-sizing:border-box!important;
+}
+html body .wdc-card-cta .wd-shell,
+html body.whaledive-courses .wdc-card-cta .wd-shell,
+html body.whaledive-equipment .wdc-card-cta .wd-shell,
+html body.whaledive-blog .wdc-card-cta .wd-shell{
+  width:100%!important;
+  max-width:920px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  padding:34px 28px 30px!important;
+  border-radius:24px!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  text-align:center!important;
+  gap:0!important;
+}
+html body .wdc-card-cta .wd-kicker,
+html body.whaledive-courses .wdc-card-cta .wd-kicker,
+html body.whaledive-equipment .wdc-card-cta .wd-kicker{
+  margin:0 0 14px!important;
+}
+html body .wdc-card-cta h2,
+html body.whaledive-courses .wdc-card-cta h2,
+html body.whaledive-equipment .wdc-card-cta h2{
+  margin:0 0 12px!important;
+  max-width:20ch!important;
+  padding:0 4px!important;
+}
+html body .wdc-card-cta p,
+html body.whaledive-courses .wdc-card-cta p,
+html body.whaledive-equipment .wdc-card-cta p{
+  margin:0 0 22px!important;
+  max-width:36ch!important;
+  padding:0 4px!important;
+}
+html body .wdc-card-cta .wd-btn,
+html body .wdc-card-cta .wd-btn.alt,
+html body.whaledive-courses .wdc-card-cta .wd-btn,
+html body.whaledive-courses .wdc-card-cta .wd-btn.alt,
+html body.whaledive-equipment .wdc-card-cta .wd-btn,
+html body.whaledive-equipment .wdc-card-cta .wd-btn.alt{
+  width:auto!important;
+  max-width:100%!important;
+  min-width:min(100%, 220px)!important;
+  margin:0 auto!important;
+  box-sizing:border-box!important;
+  white-space:normal!important;
+  padding:0 22px!important;
+}
+@media(max-width:680px){
+  html body .wdc-card-cta,
+  html body.whaledive-courses .wdc-card-cta,
+  html body.whaledive-equipment .wdc-card-cta{
+    padding-left:16px!important;
+    padding-right:16px!important;
+  }
+  html body .wdc-card-cta .wd-shell,
+  html body.whaledive-courses .wdc-card-cta .wd-shell,
+  html body.whaledive-equipment .wdc-card-cta .wd-shell{
+    padding:28px 20px 24px!important;
+    border-radius:22px!important;
+  }
+  html body .wdc-card-cta .wd-btn,
+  html body .wdc-card-cta .wd-btn.alt,
+  html body.whaledive-courses .wdc-card-cta .wd-btn,
+  html body.whaledive-courses .wdc-card-cta .wd-btn.alt,
+  html body.whaledive-equipment .wdc-card-cta .wd-btn,
+  html body.whaledive-equipment .wdc-card-cta .wd-btn.alt{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin-top:2px!important;
+    padding:0 18px!important;
+  }
+}
