@@ -73,24 +73,11 @@ function wdc_get_order_item_types() {
 // 3. Admin Menu
 // ============================================================
 function wdc_register_order_admin_menu() {
-    add_submenu_page(
-        'wdc-member-admin',
-        'Input Pesanan',
-        '🛒 Input Pesanan',
-        'manage_options',
-        'wdc-input-orders',
-        'wdc_render_input_orders_page'
-    );
-    add_submenu_page(
-        'wdc-member-admin',
-        'Semua Pesanan',
-        '📋 Semua Pesanan',
-        'manage_options',
-        'wdc-all-orders',
-        'wdc_render_all_orders_page'
-    );
+    // Menu "Input Pesanan" + "Semua Pesanan" disembunyikan.
+    // Halaman tetap ada di file ini kalau nanti butuh restore.
+    return;
 }
-add_action('admin_menu', 'wdc_register_order_admin_menu');
+// add_action('admin_menu', 'wdc_register_order_admin_menu');
 
 // ============================================================
 // 4. Admin Page: Input Pesanan Manual
