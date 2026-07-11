@@ -1,6 +1,7 @@
 <?php
 /**
  * Template Name: Contact Page
+ * Style matched to About page contact form.
  */
 $wd_contact_notice = '';
 $wd_contact_notice_type = '';
@@ -44,35 +45,46 @@ if (isset($_GET['wd_contact'])) {
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_head(); ?>
-<style id="wd-contact-page-polish">
-body.whaledive-contact .wd-contact-hero{padding:132px 0 56px;background:linear-gradient(135deg,#03172d 0%,#004A98 100%);color:#fff}
-body.whaledive-contact .wd-contact-hero .wd-kicker{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.2);color:#fff}
-body.whaledive-contact .wd-contact-hero h1{margin:14px 0 12px;font-size:clamp(34px,6vw,52px);line-height:1.05;color:#fff}
-body.whaledive-contact .wd-contact-hero p{margin:0;max-width:680px;color:rgba(255,255,255,.88);line-height:1.7}
-body.whaledive-contact .wd-contact-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:24px;align-items:start}
-body.whaledive-contact .wd-contact-cards{display:flex;flex-direction:column;gap:0;padding:24px;border-radius:28px;background:linear-gradient(180deg,#fff,#f7fcff);border:1px solid rgba(76,200,237,.24);box-shadow:0 18px 44px rgba(3,36,58,.09)}
-body.whaledive-contact .wd-contact-card{display:flex;flex-direction:column;gap:6px;padding:16px 0;border-bottom:1px solid rgba(6,56,77,.08)}
-body.whaledive-contact .wd-contact-card:last-child{border-bottom:0;padding-bottom:0}
-body.whaledive-contact .wd-contact-card strong{color:#06384d;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
-body.whaledive-contact .wd-contact-card a{color:#0b617c;font-weight:800}
-body.whaledive-contact .wd-contact-card span{color:#516b7a;line-height:1.6}
-body.whaledive-contact .wd-contact-form{padding:26px;border-radius:28px;background:#fff;border:1px solid rgba(6,56,77,.1);box-shadow:0 18px 44px rgba(2,32,46,.08);display:grid;gap:14px}
-body.whaledive-contact .wd-contact-form label{display:grid;gap:7px;color:#04172d;font-weight:800;font-size:14px}
+<style id="wd-contact-match-about">
+/* Shared contact form look — same as About */
+.wd-contact-form small{display:block;margin-top:7px;color:#64748b;font-size:12px;line-height:1.45}
+.wd-form-privacy{margin:0;color:#64748b;font-size:13px;line-height:1.5}
+.wd-contact-notice{margin:18px 0 0;padding:14px 16px;border-radius:16px;font-weight:800;line-height:1.45}
+.wd-contact-notice.success{background:#e7f8ef;color:#05603a;border:1px solid rgba(5,96,58,.18)}
+.wd-contact-notice.error{background:#fff3e8;color:#9a3412;border:1px solid rgba(154,52,18,.18)}
+.wd-contact-hp{position:absolute;left:-9999px;opacity:0;pointer-events:none}
+.wd-contact-card{display:flex;flex-direction:column;gap:8px}
+.wd-contact-card strong{color:#06384d;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.wd-contact-card a{display:inline-flex;color:#0b617c;font-weight:800}
+
+body.whaledive-contact .wd-inner-hero{padding-top:150px!important;padding-bottom:58px!important;min-height:auto!important}
+body.whaledive-contact .wd-inner-hero h1{max-width:18ch}
+body.whaledive-contact .wd-inner-hero p{max-width:52ch;color:rgba(255,255,255,.9)}
+body.whaledive-contact #contact-form{background:linear-gradient(180deg,#ffffff 0%,#f3fbff 100%)}
+body.whaledive-contact .wd-contact-grid{margin-top:30px!important;align-items:stretch;gap:26px!important}
+body.whaledive-contact .wd-contact-cards{display:flex;flex-direction:column;gap:0;padding:26px!important;border-radius:30px!important;background:linear-gradient(180deg,#ffffff,#f7fcff)!important;border:1px solid rgba(76,200,237,.24)!important;box-shadow:0 18px 44px rgba(3,36,58,.09)!important}
+body.whaledive-contact .wd-contact-card{position:relative;padding:0 0 18px 42px!important;border-radius:0!important;background:transparent!important;border:0!important;box-shadow:none!important;min-height:0}
+body.whaledive-contact .wd-contact-card:not(:last-child){margin-bottom:18px!important;border-bottom:1px solid rgba(6,56,77,.08)!important}
+body.whaledive-contact .wd-contact-card:before{content:"";position:absolute;left:0;top:2px;width:22px;height:22px;border-radius:999px;background:linear-gradient(135deg,#4CC8ED,#0b617c);box-shadow:0 8px 18px rgba(76,200,237,.22)}
+body.whaledive-contact .wd-contact-card strong{font-size:12px!important;color:#06384d!important}
+body.whaledive-contact .wd-contact-card span,
+body.whaledive-contact .wd-contact-card a{color:#526b7a!important;line-height:1.55!important}
+body.whaledive-contact .wd-contact-card a{font-weight:900!important;color:#0b617c!important}
+body.whaledive-contact .wd-map-link{display:inline-flex!important;align-items:center!important;justify-content:center!important;width:max-content!important;margin-top:8px!important;padding:10px 14px!important;border-radius:999px!important;background:#e9f8fc!important;color:#064a63!important;border:1px solid rgba(76,200,237,.32)!important;text-decoration:none!important}
+body.whaledive-contact .wd-contact-form{padding:28px!important;border-radius:30px!important;background:#fff!important;border:1px solid rgba(0,91,122,.12)!important;box-shadow:0 22px 56px rgba(3,36,58,.12)!important;display:grid;gap:14px}
+body.whaledive-contact .wd-contact-form:before{content:"<?php echo esc_js(contenly_tr('Kirim pesan ke crew', 'Send a message to the crew')); ?>";display:block;margin:0 0 18px;color:#06384d;font-size:20px;font-weight:900;letter-spacing:-.02em}
+body.whaledive-contact .wd-contact-form label{display:grid;gap:7px!important;color:#04172d;font-weight:800;font-size:14px}
 body.whaledive-contact .wd-contact-form input,
 body.whaledive-contact .wd-contact-form select,
-body.whaledive-contact .wd-contact-form textarea{width:100%;border:1px solid rgba(6,56,77,.14);border-radius:14px;padding:12px 14px;font:inherit;color:#0b1930;background:#f8fcff}
-body.whaledive-contact .wd-contact-form small,
-body.whaledive-contact .wd-form-privacy{color:#64748b;font-size:12px;font-weight:600;line-height:1.45}
-body.whaledive-contact .wd-contact-notice{margin:0 0 18px;padding:14px 16px;border-radius:16px;font-weight:800;line-height:1.45}
-body.whaledive-contact .wd-contact-notice.success{background:#e7f8ef;color:#05603a;border:1px solid rgba(5,96,58,.18)}
-body.whaledive-contact .wd-contact-notice.error{background:#fff3e8;color:#9a3412;border:1px solid rgba(154,52,18,.18)}
-body.whaledive-contact .wd-contact-hp{position:absolute;left:-9999px;opacity:0;pointer-events:none}
-body.whaledive-contact .wd-map-link{margin-top:4px}
-@media(max-width:900px){
-  body.whaledive-contact .wd-contact-grid{grid-template-columns:1fr}
-}
-@media(max-width:560px){
-  body.whaledive-contact .wd-contact-hero{padding:110px 0 40px}
+body.whaledive-contact .wd-contact-form textarea{width:100%;border-radius:16px!important;border:1px solid rgba(0,91,122,.16)!important;background:#f8fcff!important;padding:12px 14px;font:inherit;color:#0b1930;box-sizing:border-box}
+body.whaledive-contact .wd-contact-form input:focus,
+body.whaledive-contact .wd-contact-form select:focus,
+body.whaledive-contact .wd-contact-form textarea:focus{background:#fff!important;border-color:#4CC8ED!important;box-shadow:0 0 0 4px rgba(76,200,237,.14)!important;outline:none!important}
+body.whaledive-contact .wd-contact-form .wd-btn{min-height:48px;justify-content:center}
+@media(max-width:860px){
+  body.whaledive-contact .wd-contact-grid{grid-template-columns:1fr!important}
+  body.whaledive-contact .wd-contact-card{padding-left:54px!important}
+  body.whaledive-contact .wd-contact-form{padding:22px!important}
   body.whaledive-contact .wd-contact-form .wd-btn{width:100%}
 }
 </style>
@@ -81,24 +93,28 @@ body.whaledive-contact .wd-map-link{margin-top:4px}
 <main class="wd-page">
   <?php contenly_render_public_header(); ?>
 
-  <section class="wd-contact-hero">
-    <div class="wd-shell">
-      <span class="wd-kicker"><?php echo esc_html(contenly_tr('Hubungi Kami', 'Get in Touch')); ?></span>
-      <h1><?php echo esc_html(contenly_tr('Mulai percakapan dengan crew.', 'Start a conversation with the crew.')); ?></h1>
-      <p><?php echo esc_html(contenly_tr('Tanya jadwal kursus, ketersediaan peralatan, trip, atau konsultasi jalur sertifikasi. Kami balas dalam 24 jam.', 'Ask about course schedules, equipment availability, trips, or certification pathways. We reply within 24 hours.')); ?></p>
+  <section class="wd-inner-hero">
+    <div class="wd-shell wd-inner-grid">
+      <div>
+        <span class="wd-kicker"><?php echo esc_html(contenly_tr('Hubungi Kami', 'Get in Touch')); ?></span>
+        <h1><?php echo esc_html(contenly_tr('Mulai percakapan dengan crew.', 'Start a conversation with the crew.')); ?></h1>
+        <p><?php echo esc_html(contenly_tr('Tanya jadwal kursus, ketersediaan peralatan, atau jalur sertifikasi. Kami balas dalam 24 jam.', 'Ask about course schedules, equipment availability, or certification pathways. We reply within 24 hours.')); ?></p>
+      </div>
     </div>
   </section>
 
   <section class="wd-section white" id="contact-form">
     <div class="wd-shell">
+      <span class="wd-kicker"><?php echo esc_html(contenly_tr('Hubungi Kami', 'Get in Touch')); ?></span>
+      <h2 class="wd-title"><?php echo esc_html(contenly_tr('Mulai percakapan', 'Start the conversation')); ?></h2>
       <?php if ($wd_contact_notice) : ?>
         <div class="wd-contact-notice <?php echo esc_attr($wd_contact_notice_type); ?>" role="status"><?php echo esc_html($wd_contact_notice); ?></div>
       <?php endif; ?>
       <div class="wd-contact-grid">
         <div class="wd-contact-cards">
           <div class="wd-contact-card"><strong>Email</strong><a href="mailto:info@whaledivecentre.com">info@whaledivecentre.com</a></div>
-          <div class="wd-contact-card"><strong><?php echo esc_html(contenly_tr('Telepon', 'Phone')); ?></strong><a href="tel:+622****9068">(021) 27939068</a></div>
-          <div class="wd-contact-card"><strong><?php echo esc_html(contenly_tr('Jam Operasional', 'Business Hours')); ?></strong><span><?php echo esc_html(contenly_tr('Senin - Sabtu, 09:00 - 18:00 WIB. Jadwal kursus dan trip dikonfirmasi berdasarkan perjanjian.', 'Monday - Saturday, 09:00 - 18:00 WIB. Course and trip schedules are confirmed by appointment.')); ?></span></div>
+          <div class="wd-contact-card"><strong><?php echo esc_html(contenly_tr('Telepon', 'Phone')); ?></strong><a href="tel:+622127939068">(021) 27939068</a></div>
+          <div class="wd-contact-card"><strong><?php echo esc_html(contenly_tr('Jam Operasional', 'Business Hours')); ?></strong><span><?php echo esc_html(contenly_tr('Senin - Sabtu, 09:00 - 18:00 WIB. Jadwal kursus dan perjalanan dikonfirmasi berdasarkan perjanjian.', 'Monday - Saturday, 09:00 - 18:00 WIB. Course and trip schedules are confirmed by appointment.')); ?></span></div>
           <div class="wd-contact-card">
             <strong><?php echo esc_html(contenly_tr('Lokasi', 'Location')); ?></strong>
             <span>Jl. Tanah Kusir II No.3, RT.10/RW.9, Kebayoran Lama Selatan, Jakarta Selatan 12240</span>
@@ -111,13 +127,12 @@ body.whaledive-contact .wd-map-link{margin-top:4px}
           <input type="hidden" name="wd_contact_submit" value="1">
           <label class="wd-contact-hp" aria-hidden="true">Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
           <label><?php echo esc_html(contenly_tr('Nama Anda', 'Your Name')); ?><input type="text" name="your-name" placeholder="<?php echo esc_attr(contenly_tr('Nama Anda', 'Your name')); ?>" required></label>
-          <label><?php echo esc_html(contenly_tr('Email', 'Email')); ?><input type="email" name="email" placeholder="you@example.com"><small><?php echo esc_html(contenly_tr('Opsional jika kamu lebih suka balasan tertulis.', 'Optional if you prefer a written reply.')); ?></small></label>
+          <label><?php echo esc_html(contenly_tr('Email', 'Email')); ?><input type="email" name="email" placeholder="you@example.com"><small><?php echo esc_html(contenly_tr('Gunakan email jika Anda lebih suka balasan tertulis.', 'Use email if you prefer a written reply.')); ?></small></label>
           <label><?php echo esc_html(contenly_tr('Nomor WhatsApp', 'WhatsApp Number')); ?><input type="tel" name="whatsapp" placeholder="+62..." required><small><?php echo esc_html(contenly_tr('Wajib agar crew bisa membalas dalam 24 jam.', 'Required so our crew can reply within 24 hours.')); ?></small></label>
           <label><?php echo esc_html(contenly_tr('Apa yang Anda butuhkan?', 'What do you need?')); ?>
             <select name="category">
               <option><?php echo esc_html(contenly_tr('Pertanyaan kursus', 'Course inquiry')); ?></option>
               <option><?php echo esc_html(contenly_tr('Ketersediaan peralatan', 'Equipment availability')); ?></option>
-              <option><?php echo esc_html(contenly_tr('Dive trip', 'Dive trip')); ?></option>
               <option><?php echo esc_html(contenly_tr('Pertanyaan umum', 'General question')); ?></option>
             </select>
           </label>
@@ -131,4 +146,27 @@ body.whaledive-contact .wd-map-link{margin-top:4px}
 
   <?php contenly_render_public_footer(); ?>
 </main>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var p = new URLSearchParams(window.location.search);
+  var name = p.get('name');
+  if(name){
+    var nameInput = document.querySelector('input[name="your-name"]');
+    if(nameInput) nameInput.value = name;
+    var waInput = document.querySelector('input[name="whatsapp"]');
+    if(waInput && p.get('whatsapp')) waInput.value = p.get('whatsapp');
+    var emailInput = document.querySelector('input[name="email"]');
+    if(emailInput && p.get('email')) emailInput.value = p.get('email');
+    var msgInput = document.querySelector('textarea[name="message"]');
+    if(msgInput){
+      var msg = 'Course inquiry from homepage:\n';
+      if(p.get('cert')) msg += 'Certification: ' + p.get('cert') + '\n';
+      if(p.get('schedule')) msg += 'Schedule: ' + p.get('schedule') + '\n';
+      if(p.get('group')) msg += 'Group: ' + p.get('group');
+      msgInput.value = msg;
+    }
+    document.getElementById('contact-form')?.scrollIntoView({behavior:'smooth'});
+  }
+});
+</script>
 <?php wp_footer(); ?></body></html>

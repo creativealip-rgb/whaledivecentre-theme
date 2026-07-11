@@ -23,7 +23,7 @@ require_once get_template_directory() . '/inc/template-functions.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.7');
+    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.8');
     wp_add_inline_style('contenly-style', '.wd-header .gt-lang-switcher{margin-right:10px!important}.wd-header .wd-nav-member{margin-left:8px!important}');
     
     // Google Fonts
@@ -752,8 +752,6 @@ function contenly_render_public_footer() {
     $blog = esc_url(home_url('/blog/'));
     $contact = esc_url(home_url('/contact/'));
     $conservation = esc_url(home_url('/conservation/'));
-    $gallery = esc_url(home_url('/gallery/'));
-    $trips = esc_url(home_url('/trips/'));
     $testimonials = esc_url(home_url('/testimonials/'));
     $year = esc_html(date('Y'));
     ?>
@@ -770,8 +768,6 @@ function contenly_render_public_footer() {
           <h3><?php echo esc_html(contenly_tr('Jelajahi', 'Explore')); ?></h3>
           <a href="<?php echo $courses; ?>"><?php echo esc_html(contenly_tr('Kursus Selam', 'Dive Courses')); ?></a>
           <a href="<?php echo $equipment; ?>"><?php echo esc_html(contenly_tr('Peralatan Selam', 'Scuba Equipment')); ?></a>
-          <a href="<?php echo $trips; ?>"><?php echo esc_html(contenly_tr('Dive Trips', 'Dive Trips')); ?></a>
-          <a href="<?php echo $gallery; ?>"><?php echo esc_html(contenly_tr('Galeri', 'Gallery')); ?></a>
           <a href="<?php echo $testimonials; ?>"><?php echo esc_html(contenly_tr('Testimoni', 'Testimonials')); ?></a>
           <a href="<?php echo $conservation; ?>"><?php echo esc_html(contenly_tr('Konservasi', 'Conservation')); ?></a>
           <a href="<?php echo $about; ?>"><?php echo esc_html(contenly_tr('Tentang Kami', 'About Us')); ?></a>
@@ -831,10 +827,6 @@ function contenly_render_public_header() {
         $active_key = 'about';
     } elseif (false !== strpos($request_path, '/blog/') || false !== strpos($request_path, '/journal/') || is_singular('post')) {
         $active_key = 'blog';
-    } elseif (false !== strpos($request_path, '/gallery/')) {
-        $active_key = 'gallery';
-    } elseif (false !== strpos($request_path, '/trips/')) {
-        $active_key = 'trips';
     } elseif (false !== strpos($request_path, '/testimonials/')) {
         $active_key = 'testimonials';
     } elseif (false !== strpos($request_path, '/contact/')) {
@@ -2432,53 +2424,30 @@ add_action('init', function() {
     add_rewrite_rule('^blog/page/([0-9]+)/?$', 'index.php?pagename=blog&paged=$matches[1]', 'top');
 });
 
-// Gallery route
-add_action('init', function() {
-    add_rewrite_rule('^gallery/?$', 'index.php?pagename=gallery', 'top');
-});
-
-// Testimonials route
+// Testimonials route only (gallery/trips removed)
 add_action('init', function() {
     add_rewrite_rule('^testimonials/?$', 'index.php?pagename=testimonials', 'top');
 });
 
-// Dive Trips route
-add_action('init', function() {
-    add_rewrite_rule('^trips/?$', 'index.php?pagename=trips', 'top');
-});
-
-// Template routing for new pages
-add_filter('template_include', function($template) {
-    global $wp_query;
-    
-    $pagename = get_query_var('pagename');
-    
-    // Blog archive — uses page-blog.php template assignment
-    
-    // Gallery
-    if ($pagename === 'gallery') {
-        $new_template = locate_template(['whaledive-page-gallery.php']);
-        if ($new_template) {
-            return $new_template;
-        }
+// Redirect removed public pages: gallery + trips
+add_action('template_redirect', function () {
+    $path = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?: '', '/');
+    $path = preg_replace('#^en/#', '', $path);
+    if (in_array($path, ['gallery', 'trips'], true)) {
+        wp_safe_redirect(home_url('/'), 301);
+        exit;
     }
-    
-    // Testimonials
+}, 0);
+
+// Template routing for remaining special pages
+add_filter('template_include', function($template) {
+    $pagename = get_query_var('pagename');
     if ($pagename === 'testimonials') {
         $new_template = locate_template(['whaledive-page-testimonials.php']);
         if ($new_template) {
             return $new_template;
         }
     }
-    
-    // Trips
-    if ($pagename === 'trips') {
-        $new_template = locate_template(['whaledive-page-trips.php']);
-        if ($new_template) {
-            return $new_template;
-        }
-    }
-    
     return $template;
 });
 
