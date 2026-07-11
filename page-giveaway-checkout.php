@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!is_user_logged_in()) {
-    wp_redirect(add_query_arg('redirect_to', rawurlencode($_SERVER['REQUEST_URI'] ?? '/dashboard/'), contenly_localized_url('/member-login/')));
+    wp_redirect(add_query_arg('redirect_to', rawurlencode($_SERVER['REQUEST_URI'] ?? '/dashboard/'), contenly_localized_url('/login/')));
     exit;
 }
 

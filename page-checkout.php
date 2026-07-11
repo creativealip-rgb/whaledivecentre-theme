@@ -28,7 +28,7 @@ if (!$booking_id && !$is_direct_checkout) {
 }
 
 if ($is_direct_checkout && !is_user_logged_in()) {
-    wp_redirect(add_query_arg('redirect_to', rawurlencode($_SERVER['REQUEST_URI'] ?? '/checkout/'), contenly_localized_url('/member-login/')));
+    wp_redirect(add_query_arg('redirect_to', rawurlencode($_SERVER['REQUEST_URI'] ?? '/checkout/'), contenly_localized_url('/login/')));
     exit;
 }
 

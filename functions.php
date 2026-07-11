@@ -1098,7 +1098,7 @@ function contenly_render_public_header() {
     $equipment_url = esc_url(contenly_localized_url('/equipment/'));
     $about_url = esc_url(contenly_localized_url('/about/'));
     $blog_url = esc_url(contenly_localized_url('/blog/'));
-    $member_url = is_user_logged_in() ? esc_url(contenly_localized_url('/dashboard/')) : esc_url(contenly_localized_url('/member-login/'));
+    $member_url = is_user_logged_in() ? esc_url(contenly_localized_url('/dashboard/')) : esc_url(contenly_localized_url('/login/'));
     $member_label = is_user_logged_in() ? contenly_tr('Dashboard', 'Dashboard') : contenly_tr('Masuk', 'Login');
     $request_path = trailingslashit(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/');
     $active_key = ($request_path === '/' || $request_path === '/en/' || $request_path === '/home/' || $request_path === '/en/home/') ? 'home' : '';
@@ -1237,6 +1237,7 @@ function contenly_local_en_template_map() {
         '/en/journal/' => 'page-blog.php',
         '/en/about/' => 'page-about.php',
         '/en/contact/' => 'page-about.php',
+        '/en/login/' => 'page-login.php',
         '/en/member-login/' => 'page-login.php',
         '/en/member-register/' => 'page-register.php',
     ];
@@ -1250,7 +1251,8 @@ function contenly_local_en_source_slug_map() {
         '/en/journal/' => 'blog',
         '/en/about/' => 'about',
         '/en/contact/' => 'about',
-        '/en/member-login/' => 'member-login',
+        '/en/login/' => 'login',
+        '/en/member-login/' => 'login',
         '/en/member-register/' => 'member-register',
     ];
 }
@@ -1707,7 +1709,7 @@ function contenly_get_seo_context() {
             'Beli peralatan selam berkualitas — masker, wetsuit, BCD, regulator, fin, dive computer — di Whale Dive Centre.',
             'Buy quality dive gear — masks, wetsuits, BCDs, regulators, fins, dive computers — at Whale Dive Centre.'
         );
-    } elseif (is_page('member-login')) {
+    } elseif (is_page(['login', 'member-login'])) {
         $description = contenly_tr(
             'Masuk ke akun member Whale Dive Centre untuk kelola kursus, gear, dan sertifikasi selam Anda.',
             'Sign in to your Whale Dive Centre member account to manage courses, gear, and dive certifications.'
@@ -2821,26 +2823,57 @@ add_action('template_redirect', function() {
     }
 });
 
-// Redirect /login/ and /register/ to custom pages (before WP hijacks them)
+// Member login lives at /login/. Keep /member-login as legacy 301.
+// Do NOT force admin auth through member login.
 add_action('init', function() {
-    $uri = trim($_SERVER['REQUEST_URI'], '/');
-    if ($uri === 'login') {
-        wp_redirect(home_url('/member-login/'), 301);
+    $path = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?: '', '/');
+    $path = preg_replace('#^en/#', '', $path);
+    if ($path === 'member-login') {
+        $target = home_url('/login/');
+        $qs = $_SERVER['QUERY_STRING'] ?? '';
+        if ($qs !== '') {
+            $target .= (strpos($target, '?') === false ? '?' : '&') . $qs;
+        }
+        wp_redirect($target, 301);
         exit;
     }
-    if ($uri === 'register') {
+    if ($path === 'register') {
         wp_redirect(home_url('/member-register/'), 301);
         exit;
     }
 }, 1);
 
-// Override WP login/register URLs
+// Front-end login/register URLs. Keep wp-admin on default wp-login.php.
 add_filter('login_url', function($url, $redirect, $force_reauth) {
-    return home_url('/member-login/');
+    $redirect = (string) $redirect;
+    $req = (string) ($_SERVER['REQUEST_URI'] ?? '');
+    $is_admin_flow = (
+        is_admin()
+        || strpos($req, 'wp-admin') !== false
+        || strpos($req, 'wp-login.php') !== false
+        || strpos($redirect, 'wp-admin') !== false
+        || strpos($redirect, 'wp-login.php') !== false
+    );
+    if ($is_admin_flow) {
+        return $url; // native wp-login.php for admin
+    }
+    $login = home_url('/login/');
+    if ($redirect !== '') {
+        $login = add_query_arg('redirect_to', rawurlencode($redirect), $login);
+    }
+    if (!empty($force_reauth)) {
+        $login = add_query_arg('reauth', '1', $login);
+    }
+    return $login;
 }, 10, 3);
 add_filter('register_url', function() {
     return home_url('/member-register/');
 });
+
+// Never send wp-admin visitors to member login.
+add_action('login_init', function () {
+    // no-op guard marker for future hooks
+}, 0);
 
 // Serve member templates even when the matching WP pages are not created yet.
 function wdc_member_template_route_map() {
@@ -2947,7 +2980,7 @@ add_filter('template_include', function($template) {
 
 add_filter('pre_get_document_title', function($title) {
     $path = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
-    if ($path === 'member-login') {
+    if ($path === 'login' || $path === 'member-login') {
         return 'Member Login - Whale Dive Centre';
     }
     if ($path === 'member-register') {
@@ -2999,7 +3032,7 @@ function wdc_member_action_url($type, $item_id = 0, $item_title = '', $extra = [
         return $target;
     }
 
-    $login = function_exists('contenly_localized_url') ? contenly_localized_url('/member-login/') : home_url('/member-login/');
+    $login = function_exists('contenly_localized_url') ? contenly_localized_url('/login/') : home_url('/login/');
     // Encode full target so nested query args survive HTML + login redirect.
     return $login . (strpos($login, '?') === false ? '?' : '&') . 'redirect_to=' . rawurlencode($target);
 }

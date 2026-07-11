@@ -6,7 +6,7 @@
 
 if (!is_user_logged_in()) {
     $requested_uri = isset($_SERVER['REQUEST_URI']) ? wp_unslash($_SERVER['REQUEST_URI']) : contenly_localized_url('/dashboard/');
-    wp_redirect(add_query_arg('redirect_to', $requested_uri, home_url('/member-login/')));
+    wp_redirect(add_query_arg('redirect_to', $requested_uri, home_url('/login/')));
     exit;
 }
 
