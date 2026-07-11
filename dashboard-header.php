@@ -67,7 +67,7 @@ $wdc_member_icon = function ($path) {
         .dashboard-sidebar { background: white; padding: 24px 16px; height: 100vh; position: sticky; top: 0; border-right: 1px solid #f1f5f9; overflow-y: auto; }
         .dashboard-main { background: #f8fafc; padding: 32px 40px; min-height: 100vh; }
         .user-profile { text-align: center; padding: 24px 16px; border-bottom: 1px solid #f1f5f9; margin-bottom: 16px; }
-        .user-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #539294, #539294); display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; font-weight: 700; margin: 0 auto 12px; }
+        .user-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, var(--wdc-blue), var(--wdc-blue-violet)); display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; font-weight: 700; margin: 0 auto 12px; }
         .user-name { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
         .user-email { font-size: 13px; color: #5f7180; margin-bottom: 8px; }
         .user-tier { display: inline-block; padding: 4px 12px; border-radius: 9999px; font-size: 11px; font-weight: 600; background: #fef3c7; color: #d97706; }
@@ -137,7 +137,7 @@ $wdc_member_icon = function ($path) {
         /* Mobile Menu Toggle - Contenly Style */
         .mobile-menu-toggle { display: none; position: fixed; top: 10px; left: 14px; z-index: 1000; background: transparent; border: 2px solid rgba(255,255,255,.5); border-radius: 8px; width: 40px; height: 40px; cursor: pointer; box-shadow: none; align-items: center; justify-content: center; flex-direction: column; gap: 4px; padding: 8px; transition: all .2s ease; }
         .mobile-menu-toggle:hover { background: transparent; border-color: rgba(255,255,255,.65); }
-        .mobile-menu-toggle span { display: block; width: 20px; height: 2px; background: #539294; border-radius: 2px; transition: all 0.28s ease; margin: 0; }
+        .mobile-menu-toggle span { display: block; width: 20px; height: 2px; background: var(--wdc-blue); border-radius: 2px; transition: all 0.28s ease; margin: 0; }
         .mobile-menu-toggle.active { background: transparent; border-color: rgba(255,255,255,.65); }
         .mobile-menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
         .mobile-menu-toggle.active span:nth-child(2) { opacity: 0; }
@@ -177,6 +177,50 @@ $wdc_member_icon = function ($path) {
         body.wdc-brand-font-mode, body.wdc-brand-font-mode input, body.wdc-brand-font-mode select, body.wdc-brand-font-mode textarea, body.wdc-brand-font-mode button { font-family:'Open Sans',Arial,sans-serif !important; }
         body.wdc-brand-font-mode h1, body.wdc-brand-font-mode h2, body.wdc-brand-font-mode h3, body.wdc-brand-font-mode .page-title { font-family:'iBrand','Open Sans',Arial,sans-serif !important; font-weight:400; }
 
+
+        /* WDC dashboard shell polish 2026-07-11f */
+        .dashboard-wrapper { min-height: 100vh; }
+        .dashboard-main { padding: 28px 28px 40px !important; max-width: 100%; overflow-x: hidden; }
+        .dashboard-main > div:first-child,
+        .dashboard-main > section:first-of-type,
+        .dashboard-main > h1.page-title { max-width: 1120px; }
+        .dashboard-main .wdc-dash-stats,
+        .dashboard-main > div[style*="grid-template-columns:repeat(4"] {
+          display: grid !important;
+          grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+          gap: 14px !important;
+        }
+        .dashboard-main a.wd-btn,
+        .dashboard-main a[style*="border-radius:999"],
+        .dashboard-main a[style*="border-radius: 999"] {
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          min-height: 42px !important;
+          padding: 10px 18px !important;
+          border-radius: 999px !important;
+          font-weight: 800 !important;
+          text-decoration: none !important;
+        }
+        @media (max-width: 1100px) {
+          .dashboard-main .wdc-dash-stats,
+          .dashboard-main > div[style*="grid-template-columns:repeat(4"] {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .dashboard-main { padding: 72px 16px 24px !important; }
+          .dashboard-main .wdc-dash-stats,
+          .dashboard-main > div[style*="grid-template-columns:repeat(4"] {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+          .user-avatar { background: linear-gradient(135deg, var(--wdc-blue), var(--wdc-blue-violet)) !important; }
+          .dashboard-home-btn { background: linear-gradient(135deg, var(--wdc-blue), var(--wdc-blue-violet)) !important; box-shadow: 0 10px 24px rgba(0,74,152,.22) !important; }
+          .dashboard-menu a:hover, .dashboard-menu a.active { color: var(--wdc-blue) !important; background: rgba(76,200,237,.14) !important; }
+          .user-tier { background: rgba(76,200,237,.16) !important; color: var(--wdc-blue) !important; }
+          .mobile-menu-toggle span { background: var(--wdc-blue) !important; }
+        }
+
         @media (max-width: 768px) {
             .dashboard-wrapper { grid-template-columns: 1fr; padding: 0; width:100%; max-width:100vw; overflow-x:hidden; }
             .dashboard-sidebar { position: fixed; top: 0; left: -100%; width: 75%; max-width: 260px; height: 100vh; z-index: 1001; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; background: white; box-shadow: 4px 0 24px rgba(0,0,0,0.12); }
@@ -189,19 +233,19 @@ $wdc_member_icon = function ($path) {
             
             /* Mobile sidebar styling - MORE COMPACT */
             .user-profile { padding: 20px 16px 16px; border-bottom: 1px solid #f1f5f9; }
-            .user-avatar { width: 56px; height: 56px; font-size: 24px; background: linear-gradient(135deg, #539294, #539294); margin-bottom: 8px; }
+            .user-avatar { width: 56px; height: 56px; font-size: 24px; background: linear-gradient(135deg, var(--wdc-blue), var(--wdc-blue-violet)); margin-bottom: 8px; }
             .user-name { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 2px; }
             .user-email { font-size: 12px; color: #94a3b8; margin-bottom: 8px; display: none; }
             .user-tier { display: inline-block; padding: 4px 10px; background: #fef3c7; color: #d97706; border-radius: 9999px; font-size: 11px; font-weight: 600; }
             
-            .dashboard-home-btn { background: linear-gradient(135deg, #539294, #539294) !important; color: #ffffff !important; justify-content: center !important; margin: 12px 16px 16px !important; border-radius: 10px !important; font-weight: 700 !important; padding: 12px 16px !important; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important; font-size: 13px !important; text-shadow: 0 1px 2px rgba(0,0,0,0.25); }
+            .dashboard-home-btn { background: linear-gradient(135deg, var(--wdc-blue), var(--wdc-blue-violet)) !important; color: #ffffff !important; justify-content: center !important; margin: 12px 16px 16px !important; border-radius: 10px !important; font-weight: 700 !important; padding: 12px 16px !important; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important; font-size: 13px !important; text-shadow: 0 1px 2px rgba(0,0,0,0.25); }
             .dashboard-menu a.dashboard-home-btn { color:#ffffff !important; font-weight:700 !important; }
             .dashboard-menu a.dashboard-home-btn span:not(.menu-icon) { color:#ffffff !important; }
             
             .dashboard-menu { padding: 0 8px; }
             .dashboard-menu li { margin-bottom: 2px; }
             .dashboard-menu a { padding: 10px 12px !important; border-radius: 8px !important; font-weight: 500 !important; color: #475569 !important; font-size: 13px !important; }
-            .dashboard-menu a:hover, .dashboard-menu a.active { background: #f0f9ff !important; color: #539294 !important; }
+            .dashboard-menu a:hover, .dashboard-menu a.active { background: #f0f9ff !important; color: var(--wdc-blue) !important; }
             .dashboard-menu .menu-icon { width:24px; height:24px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; background:#e8f8fc; color:#0b617c; flex:0 0 24px; }
             .dashboard-menu .menu-icon svg { width:14px; height:14px; }
             .dashboard-menu .badge { background: #fee2e2 !important; color: #dc2626 !important; padding: 2px 6px !important; border-radius: 9999px !important; font-size: 10px !important; font-weight: 600 !important; }

@@ -23,7 +23,7 @@ require_once get_template_directory() . '/inc/template-functions.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.19');
+    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.20');
     wp_add_inline_style('contenly-style', '.wd-header .gt-lang-switcher{margin-right:10px!important}.wd-header .wd-nav-member{margin-left:8px!important}');
     
     // Google Fonts
@@ -295,11 +295,26 @@ add_action('init', function() {
     add_rewrite_rule('^cerita-kamu/?$', 'index.php?pagename=cerita-kamu', 'top');
 });
 
+/* WDC legacy member-dashboard redirect 2026-07-11 */
+add_action('template_redirect', function () {
+    if (is_admin() || wp_doing_ajax() || (defined('REST_REQUEST') && REST_REQUEST)) {
+        return;
+    }
+    if (is_page('member-dashboard')) {
+        $target = function_exists('contenly_localized_url')
+            ? contenly_localized_url('/dashboard/')
+            : home_url('/dashboard/');
+        wp_safe_redirect($target, 301);
+        exit;
+    }
+}, 1);
+
+
 /**
  * Handle story submission from frontend (with image uploads + rich content)
  */
 add_action('init', function() {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wdc_story_nonce']) && is_user_logged_in()) {
+    if ((($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') && isset($_POST['wdc_story_nonce']) && is_user_logged_in()) {
         if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_story_nonce'])), 'wdc_story_submit')) {
             return;
         }
