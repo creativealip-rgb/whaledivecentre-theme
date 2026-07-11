@@ -2,7 +2,7 @@
 
 /*
 Theme Name: Whale Dive Centre Theme
-Version: 2.3.67
+Version: 2.3.68
 */
 :root{
   --black:#000;--violet:#3B44AC;--cyan:#4CC8ED;--pale:#96DAEA;--red:#C31C4A;--blue:#004A98;--white:#fff;--navy:#061a36;--ink:#0b1930;--muted:#63748a;
@@ -6828,4 +6828,25 @@ body.whaledive-home .wd-community .wd-btn.alt{
   -webkit-text-fill-color:#ffffff!important;
   border:1px solid #06384d!important;
   box-shadow:0 10px 22px rgba(6,56,77,.18)!important;
+}
+
+
+/* About hero full-width copy (2.3.68) */
+body.whaledive-about .wd-about-hero.wdc-about-v2-hero .wd-inner-grid{
+  display:block!important;
+  grid-template-columns:1fr!important;
+}
+body.whaledive-about .wdc-about-hero-copy{
+  width:100%!important;
+  max-width:100%!important;
+}
+body.whaledive-about .wdc-about-hero-copy h1{
+  max-width:100%!important;
+}
+body.whaledive-about .wdc-about-hero-copy p{
+  max-width:min(920px,100%)!important;
+}
+body.whaledive-about .wd-about-hero .wd-inner-hero h1,
+body.whaledive-about .wd-about-hero h1{
+  max-width:100%!important;
 }
