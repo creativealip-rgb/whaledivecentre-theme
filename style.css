@@ -4945,12 +4945,12 @@ body.whaledive-home #courses .wd-course-body p {
 }
 
 
-/* WDC menu open even fullpage blur FINAL 2026-07-11aa
-   Page content blurs under overlay; drawer + its text stay sharp.
-   Drawer is reparented to body (JS) and painted ABOVE backdrop.
+/* WDC menu open even fullpage blur FINAL 2026-07-11ab
+   Full page + top navbar go under dim/blur.
+   Only the right drawer stays sharp above the overlay.
 */
 @media (max-width: 760px) {
-  /* kill header glass while open */
+  /* kill header glass so blur overlay works evenly */
   html body.wd-menu-open .wd-header,
   html body.wd-menu-open.whaledive-home .wd-header,
   html body.wd-menu-open.whaledive-inner .wd-header,
@@ -4959,10 +4959,9 @@ body.whaledive-home #courses .wd-course-body p {
   html body.wd-menu-open .wd-header .wd-nav {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    background: #010c1b !important;
   }
 
-  /* full-page dim+blur under drawer only */
+  /* Full-page overlay ABOVE navbar, BELOW drawer */
   html body.wd-menu-open .wd-menu-backdrop,
   html body > .wd-menu-backdrop {
     display: block !important;
@@ -4979,7 +4978,7 @@ body.whaledive-home #courses .wd-course-body p {
     padding: 0 !important;
     border: 0 !important;
     border-radius: 0 !important;
-    z-index: 1200 !important;
+    z-index: 1250 !important;
     background: rgba(2, 10, 22, .55) !important;
     backdrop-filter: blur(8px) !important;
     -webkit-backdrop-filter: blur(8px) !important;
@@ -4990,26 +4989,23 @@ body.whaledive-home #courses .wd-course-body p {
     filter: none !important;
   }
 
-  /* top navbar solid above page blur, below drawer */
-  html body.wd-menu-open .wd-header {
-    z-index: 1210 !important;
+  /* Navbar UNDER the blur overlay (red box area also blurs) */
+  html body.wd-menu-open .wd-header,
+  html body.wd-menu-open.whaledive-home .wd-header,
+  html body.wd-menu-open.whaledive-inner .wd-header {
+    z-index: 1200 !important;
+    background: #010c1b !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    background: #010c1b !important;
   }
   html body.wd-menu-open .wd-nav,
-  html body.wd-menu-open .wd-header .wd-nav {
+  html body.wd-menu-open .wd-header .wd-nav,
+  html body.wd-menu-open .wd-header .wd-shell {
     position: relative !important;
-    z-index: 1211 !important;
+    z-index: auto !important;
     background: #010c1b !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-  }
-  html body.wd-menu-open .wd-brand,
-  html body.wd-menu-open .wd-brand img,
-  html body.wd-menu-open .wd-brand span {
-    filter: none !important;
-    opacity: 1 !important;
   }
   html body.wd-menu-open .wd-hamburger {
     opacity: 0 !important;
@@ -5017,7 +5013,7 @@ body.whaledive-home #courses .wd-course-body p {
     pointer-events: none !important;
   }
 
-  /* SIDEBAR DRAWER: solid + sharp + above blur overlay */
+  /* SIDEBAR only: sharp above blur */
   html body.wd-menu-open #wd-mobile-menu,
   html body.wd-menu-open .wd-menu,
   html body > #wd-mobile-menu,
@@ -5035,7 +5031,6 @@ body.whaledive-home #courses .wd-course-body p {
     filter: none !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    /* fully opaque so page blur never shows through */
     background: #071b33 !important;
     background-image:
       radial-gradient(circle at 100% 0%, rgba(76,200,237,.14), transparent 40%),
