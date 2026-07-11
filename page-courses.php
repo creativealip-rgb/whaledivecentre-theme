@@ -118,7 +118,16 @@ function wdc_course_image_url($title, $theme_uri) {
 .whaledive-courses #course-catalog .wd-equip-price,.whaledive-courses .wd-course-card .wd-equip-price{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:4px!important;flex-wrap:nowrap!important}
 .whaledive-courses .wd-course-card .wd-price-label{display:block!important;width:100%!important;margin:0!important}
 .whaledive-courses .wd-course-card .wd-price-amount{display:block!important;width:100%!important;margin:0!important}
-</style></head>
+</style><style id="wd-course-card-image-fullbleed">
+.whaledive-courses article.wd-course-card .wd-equip-visual,
+.whaledive-courses article.wd-course-card .wd-equip-visual.has-photo{padding:0!important;border:0!important;border-bottom:0!important;background:transparent!important;background-image:none!important;box-shadow:none!important}
+.whaledive-courses article.wd-course-card .wd-equip-visual:before,
+.whaledive-courses article.wd-course-card .wd-equip-visual:after,
+.whaledive-courses article.wd-course-card .wd-equip-visual.has-photo:before,
+.whaledive-courses article.wd-course-card .wd-equip-visual.has-photo:after{content:none!important;display:none!important}
+.whaledive-courses article.wd-course-card .wd-equip-photo{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;padding:0!important;margin:0!important;border:0!important;object-fit:cover!important;background:transparent!important}
+</style>
+</head>
 <body <?php body_class('whaledive-inner whaledive-courses'); ?>><?php wp_body_open(); ?>
 <main class="wd-page">
   <?php contenly_render_public_header(); ?>
@@ -194,8 +203,8 @@ function wdc_course_image_url($title, $theme_uri) {
             $image_url = get_the_post_thumbnail_url($course->ID, 'large') ?: wdc_course_image_url($course->post_title, $theme_uri);
           ?>
           <article class="wd-equip-card wd-detail-card wd-shop-card wd-course-card" data-href="<?php echo esc_url($permalink); ?>" data-cat="cat-<?php echo esc_attr($level_slug); ?>" style="border-radius:18px!important;overflow:hidden!important;padding:0!important;background:#fff!important;box-shadow:0 14px 34px rgba(2,21,43,.07)!important;border:1px solid rgba(6,56,77,.08)!important;min-height:0!important;height:auto!important;display:flex!important;flex-direction:column!important;">
-            <div class="wd-equip-visual <?php echo $image_url ? 'has-photo' : ''; ?>" data-course-level="<?php echo esc_attr($level_slug ?: 'course'); ?>" style="height:190px!important;min-height:0!important;border-radius:0!important;margin:0!important;overflow:hidden!important;background:radial-gradient(circle at 50% 42%,rgba(76,200,237,.18),rgba(3,23,45,.35) 55%,#03172d 100%)!important;border-bottom:1px solid rgba(6,56,77,.08)!important;">
-              <?php if($image_url): ?><img class="wd-equip-photo" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($course->post_title); ?>" loading="lazy" style="width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important;padding:0!important;display:block!important;position:relative!important;z-index:2!important;transform:none!important;" onerror="this.closest('.wd-equip-visual').classList.remove('has-photo');this.remove();"><?php else: ?><span class="wd-equip-mark"><?php echo esc_html($level_name ? mb_substr($level_name, 0, 1) : 'C'); ?></span><?php endif; ?>
+            <div class="wd-equip-visual <?php echo $image_url ? 'has-photo' : ''; ?>" data-course-level="<?php echo esc_attr($level_slug ?: 'course'); ?>" style="height:190px!important;min-height:0!important;border:0!important;border-radius:0!important;margin:0!important;padding:0!important;overflow:hidden!important;background:transparent!important;box-shadow:none!important;">
+              <?php if($image_url): ?><img class="wd-equip-photo" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($course->post_title); ?>" loading="lazy" style="position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important;padding:0!important;margin:0!important;border:0!important;display:block!important;z-index:1!important;transform:none!important;background:transparent!important;" onerror="this.closest('.wd-equip-visual').classList.remove('has-photo');this.remove();"><?php else: ?><span class="wd-equip-mark"><?php echo esc_html($level_name ? mb_substr($level_name, 0, 1) : 'C'); ?></span><?php endif; ?>
               <?php if($level_name): ?><span class="wd-equip-type"><?php echo esc_html($level_name); ?></span><?php endif; ?>
             </div>
             <div class="wd-equip-card-body" style="padding:16px!important;min-height:0!important;height:auto!important;display:flex!important;flex-direction:column!important;gap:6px!important;background:#fff!important;">
