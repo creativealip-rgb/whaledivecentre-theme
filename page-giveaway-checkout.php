@@ -124,7 +124,7 @@ get_header();
             <div style="border-top:1px solid #e5e7eb;padding-top:16px;">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
                     <span style="color:#64748b;font-size:14px;"><?php echo contenly_tr('Item Giveaway', 'Giveaway Items'); ?></span>
-                    <span style="font-weight:700;color:#10b981;"><?php echo count($selected_items); ?> item</span>
+                    <span style="font-weight:700;color:#3B44AC;"><?php echo count($selected_items); ?> item</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
                     <span style="color:#64748b;font-size:14px;"><?php echo contenly_tr('Berat Total', 'Total Weight'); ?></span>
@@ -136,7 +136,7 @@ get_header();
                 </div>
                 <div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:2px solid #e5e7eb;">
                     <span style="font-size:16px;font-weight:800;color:#0f172a;"><?php echo contenly_tr('Total Ongkir', 'Total Shipping'); ?></span>
-                    <span style="font-size:22px;font-weight:950;color:#059669;">Rp <?php echo number_format($shipping_cost, 0, ',', '.'); ?></span>
+                    <span style="font-size:22px;font-weight:950;color:#004A98;">Rp <?php echo number_format($shipping_cost, 0, ',', '.'); ?></span>
                 </div>
             </div>
         </div>
@@ -225,7 +225,7 @@ get_header();
                 <h2 style="font-size:24px;font-weight:800;color:#0f172a;margin:0 0 8px;"><?php echo contenly_tr('Bukti Transfer Diterima!', 'Transfer Proof Received!'); ?></h2>
                 <p style="color:#64748b;margin:0 0 24px;"><?php echo contenly_tr('Crew akan verifikasi dalam 24 jam. Giveaway kamu akan dikirim setelah verifikasi.', 'Crew will verify within 24 hours. Your giveaway will be shipped after verification.'); ?></p>
                 <a href="<?php echo esc_url(contenly_localized_url('/dashboard/')); ?>"
-                   style="display:inline-block;padding:14px 32px;background:#059669;color:#fff;text-decoration:none;border-radius:12px;font-weight:700;">
+                   style="display:inline-block;padding:14px 32px;background:#004A98;color:#fff;text-decoration:none;border-radius:12px;font-weight:700;">
                     <?php echo contenly_tr('← Kembali ke Dashboard', '← Back to Dashboard'); ?>
                 </a>
             </div>

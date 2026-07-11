@@ -2,7 +2,7 @@
 
 /*
 Theme Name: Whale Dive Centre Theme
-Version: 2.3.69
+Version: 2.3.70
 */
 :root{
   --black:#000;--violet:#3B44AC;--cyan:#4CC8ED;--pale:#96DAEA;--red:#C31C4A;--blue:#004A98;--white:#fff;--navy:#061a36;--ink:#0b1930;--muted:#63748a;
@@ -42,19 +42,31 @@ Version: 2.3.69
   --wdc-lh-tight:1.15;
   --wdc-lh-title:1.08;
   --wdc-container:1180px;
-  --wdc-btn-primary:#06384d;
-  --wdc-btn-primary-hover:#042f40;
-  --wdc-btn-primary-text:#ffffff;
-  --wdc-btn-secondary-bg:#ffffff;
-  --wdc-btn-secondary-text:#06384d;
-  --wdc-btn-secondary-border:#cfe0e8;
-  --wdc-btn-soft-bg:#eef8fb;
-  --wdc-btn-soft-text:#0b617c;
-  --wdc-btn-soft-border:rgba(11,97,124,.16);
-  --wdc-btn-success:#047857;
-  --wdc-btn-success-hover:#065f46;
-  --wdc-btn-danger:#b91c1c;
-  --wdc-btn-danger-hover:#991b1b;
+  --wdc-brand-black:#000000;
+  --wdc-brand-violet:#3B44AC;
+  --wdc-brand-cyan:#4CC8ED;
+  --wdc-brand-pale:#96DAEA;
+  --wdc-brand-red:#C31C4A;
+  --wdc-brand-blue:#004A98;
+  --wdc-brand-white:#FFFFFF;
+  --wdc-btn-primary:#004A98;
+  --wdc-btn-primary-hover:#3B44AC;
+  --wdc-btn-primary-grad:linear-gradient(135deg,#004A98,#3B44AC);
+  --wdc-btn-primary-text:#FFFFFF;
+  --wdc-btn-secondary-bg:#FFFFFF;
+  --wdc-btn-secondary-text:#004A98;
+  --wdc-btn-secondary-border:rgba(0,74,152,.22);
+  --wdc-btn-soft-bg:rgba(150,218,234,.22);
+  --wdc-btn-soft-text:#004A98;
+  --wdc-btn-soft-border:rgba(76,200,237,.35);
+  --wdc-btn-success:#004A98;
+  --wdc-btn-success-hover:#3B44AC;
+  --wdc-btn-danger:#C31C4A;
+  --wdc-btn-danger-hover:#9a163a;
+  --wdc-btn-dark-primary-bg:#FFFFFF;
+  --wdc-btn-dark-primary-text:#004A98;
+  --wdc-btn-dark-secondary-bg:#4CC8ED;
+  --wdc-btn-dark-secondary-text:#000000;
   --wdc-btn-radius:999px;
   --wdc-btn-height:48px;
   --wdc-btn-height-sm:40px;
@@ -7172,4 +7184,416 @@ body.whaledive-blog .wd-blog-simple-head h1{
   body.whaledive-equipment h2.wd-title{
     font-size:var(--wdc-section-h2)!important;
   }
+}
+
+
+/* =========================================================================
+   WDC BRAND BUTTON LOCK (2.3.70)
+   Palette ONLY:
+   #000000 | #3B44AC | #4CC8ED | #96DAEA | #C31C4A | #004A98 | #FFFFFF
+   Gradients/combos allowed within this set.
+   ========================================================================= */
+
+/* Primary — solid brand blue, hover violet / gradient */
+a.wd-btn:not(.alt),
+button.wd-btn:not(.alt),
+.wd-btn:not(.alt),
+.wd-btn-primary,
+.wd-mini-btn,
+.wdc-auth-submit,
+.wdc-gw-btn-primary,
+.wdc-gw-btn-secondary,
+.wdc-gw-progress-cta,
+.wdc-gw-progress-cta--warn,
+.wdc-dash-cta-card a,
+.wd-blog-search button,
+.wd-blog-pagination a,
+.wd-featured-read,
+.wm-auth-form .wm-btn,
+.wm-auth-form .wm-btn-primary,
+.wm-checkout .wm-btn,
+.wm-checkout button[type=submit],
+.whaledive-auth .wd-auth-form .wd-btn,
+.wdc-btn,
+button.wdc-btn,
+a.wdc-btn,
+.whaledive-courses .wd-mini-btn,
+.whaledive-equipment .wd-mini-btn,
+body.wm-member-app .dashboard-main a[style*="background:#06384d"],
+body.wm-member-app .dashboard-main a[style*="background: #06384d"],
+body.wm-member-app .dashboard-main button[style*="background:#06384d"],
+body.wm-member-app .dashboard-main button[style*="background: #06384d"],
+body.wm-member-app .dashboard-main a[style*="background:#004A98"],
+body.wm-member-app .dashboard-main button[style*="background:#004A98"]{
+  background:#004A98!important;
+  background-image:none!important;
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF!important;
+  border:1px solid #004A98!important;
+  box-shadow:0 12px 28px rgba(0,74,152,.24)!important;
+}
+a.wd-btn:not(.alt):hover,
+button.wd-btn:not(.alt):hover,
+.wd-btn:not(.alt):hover,
+.wd-btn-primary:hover,
+.wd-mini-btn:hover,
+.wdc-auth-submit:hover,
+.wdc-gw-btn-primary:hover,
+.wdc-gw-progress-cta:hover,
+.wdc-dash-cta-card a:hover,
+.wdc-btn:hover,
+.whaledive-courses .wd-mini-btn:hover,
+.whaledive-equipment .wd-mini-btn:hover{
+  background:#3B44AC!important;
+  background-image:linear-gradient(135deg,#004A98,#3B44AC)!important;
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF!important;
+  border-color:#3B44AC!important;
+}
+
+/* Secondary on light surfaces — white + blue border/text */
+.wdc-btn--secondary,
+.wd-btn-secondary,
+.wd-btn.alt,
+.wd-mini-link,
+.wdc-gw-progress-cta--ghost,
+.whaledive-courses .wd-mini-link,
+.whaledive-equipment .wd-mini-link,
+.whaledive-courses .wd-course-card .wd-mini-link,
+.whaledive-equipment .wd-shop-card .wd-mini-link{
+  background:#FFFFFF!important;
+  background-image:none!important;
+  color:#004A98!important;
+  -webkit-text-fill-color:#004A98!important;
+  border:1px solid rgba(0,74,152,.22)!important;
+  box-shadow:none!important;
+}
+.wdc-btn--secondary:hover,
+.wd-btn-secondary:hover,
+.wd-btn.alt:hover,
+.wd-mini-link:hover,
+.wdc-gw-progress-cta--ghost:hover{
+  background:rgba(150,218,234,.22)!important;
+  color:#004A98!important;
+  -webkit-text-fill-color:#004A98!important;
+  border-color:rgba(76,200,237,.45)!important;
+}
+
+/* Soft tertiary — pale cyan wash */
+.wdc-btn--soft{
+  background:rgba(150,218,234,.22)!important;
+  background-image:none!important;
+  color:#004A98!important;
+  -webkit-text-fill-color:#004A98!important;
+  border:1px solid rgba(76,200,237,.35)!important;
+  box-shadow:none!important;
+}
+
+/* Success = brand blue/violet (no green outside palette) */
+.wdc-btn--success,
+button.wdc-btn--success,
+.wdc-gw-progress-cta--success{
+  background:linear-gradient(135deg,#004A98,#3B44AC)!important;
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF!important;
+  border:1px solid #004A98!important;
+  box-shadow:0 12px 28px rgba(0,74,152,.24)!important;
+}
+
+/* Danger = brand red only */
+.wdc-btn--danger{
+  background:#C31C4A!important;
+  background-image:none!important;
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF!important;
+  border:1px solid #C31C4A!important;
+  box-shadow:0 12px 28px rgba(195,28,74,.22)!important;
+}
+.wdc-btn--danger:hover{
+  background:#9a163a!important;
+}
+
+/* Dark-band / photo hero: primary white + blue text */
+body.whaledive-home .wd-hero .wd-actions .wd-btn:not(.alt),
+body.home .wd-hero .wd-actions .wd-btn:not(.alt),
+body.whaledive-home .wd-hero-simple .wd-actions .wd-btn:not(.alt),
+.wd-hero .wd-actions .wd-btn:not(.alt),
+.wd-inner-hero .wd-actions .wd-btn:not(.alt),
+.wd-inner-hero .wd-btn:not(.alt),
+.wd-dark .wd-section-cta .wd-btn:not(.alt),
+body.whaledive-courses .wd-inner-hero .wd-btn:not(.alt),
+body.whaledive-equipment .wd-inner-hero .wd-btn:not(.alt),
+body.whaledive-inner .wd-inner-hero .wd-btn:not(.alt),
+.wd-dark .wd-section-cta .wd-btn,
+body.whaledive-home .wd-dark .wd-section-cta .wd-btn,
+body.whaledive-home .wd-dark .wd-section-cta .wd-btn:not(.alt){
+  background:#FFFFFF!important;
+  background-image:none!important;
+  color:#004A98!important;
+  -webkit-text-fill-color:#004A98!important;
+  border:1px solid rgba(255,255,255,.98)!important;
+  box-shadow:0 14px 30px rgba(0,0,0,.24)!important;
+}
+
+/* Dark-band secondary: cyan solid + black text (high outdoor contrast) */
+body.whaledive-home .wd-hero .wd-actions .wd-btn.alt,
+body.home .wd-hero .wd-actions .wd-btn.alt,
+body.whaledive-home .wd-hero-simple .wd-actions .wd-btn.alt,
+.wd-hero .wd-actions .wd-btn.alt,
+.wd-inner-hero .wd-actions .wd-btn.alt,
+.wd-inner-hero .wd-btn.alt,
+.wd-dark .wd-section-cta .wd-btn.alt,
+body.whaledive-home .wd-dark .wd-section-cta .wd-btn.alt,
+body.whaledive-courses .wd-inner-hero .wd-btn.alt,
+body.whaledive-equipment .wd-inner-hero .wd-btn.alt,
+body.whaledive-inner .wd-inner-hero .wd-btn.alt{
+  background:#4CC8ED!important;
+  background-image:none!important;
+  color:#000000!important;
+  -webkit-text-fill-color:#000000!important;
+  border:1px solid rgba(255,255,255,.35)!important;
+  box-shadow:0 12px 26px rgba(0,0,0,.22)!important;
+}
+body.whaledive-home .wd-hero .wd-actions .wd-btn.alt:hover,
+.wd-hero .wd-btn.alt:hover,
+.wd-inner-hero .wd-btn.alt:hover,
+.wd-dark .wd-section-cta .wd-btn.alt:hover{
+  background:#96DAEA!important;
+  color:#000000!important;
+  -webkit-text-fill-color:#000000!important;
+}
+
+/* Footer CTA on dark footer — white + blue text */
+.wd-footer .wd-btn,
+.wd-footer .wd-btn.alt,
+.wd-footer-brand .wd-btn,
+.wd-footer-brand .wd-btn.alt,
+body.whaledive-home .wd-footer .wd-btn,
+body.whaledive-home .wd-footer .wd-btn.alt{
+  background:#FFFFFF!important;
+  background-image:none!important;
+  color:#004A98!important;
+  -webkit-text-fill-color:#004A98!important;
+  border:1px solid rgba(255,255,255,.98)!important;
+  box-shadow:0 14px 30px rgba(0,0,0,.24)!important;
+}
+.wd-footer .wd-btn:hover,
+.wd-footer .wd-btn.alt:hover{
+  background:#96DAEA!important;
+  color:#000000!important;
+  -webkit-text-fill-color:#000000!important;
+}
+
+/* Community membership CTA — brand blue */
+.wd-community .wd-btn,
+.wd-community .wd-btn.alt,
+body.whaledive-home .wd-community .wd-btn,
+body.whaledive-home .wd-community .wd-btn.alt{
+  background:#004A98!important;
+  background-image:linear-gradient(135deg,#004A98,#3B44AC)!important;
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF!important;
+  border:1px solid #004A98!important;
+}
+
+/* Light section CTAs */
+.wd-section-cta .wd-btn,
+.wd-section-cta .wd-btn.alt,
+body.whaledive-home .wd-section:not(.wd-dark) .wd-section-cta .wd-btn,
+body.whaledive-home .wd-section:not(.wd-dark) .wd-section-cta .wd-btn.alt,
+body.whaledive-home #equipment .wd-section-cta .wd-btn,
+body.whaledive-home #articles .wd-article-head .wd-btn{
+  background:#004A98!important;
+  background-image:none!important;
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF!important;
+  border:1px solid #004A98!important;
+}
+body.whaledive-home #equipment .wd-section-cta .wd-btn.alt{
+  background:#FFFFFF!important;
+  color:#004A98!important;
+  -webkit-text-fill-color:#004A98!important;
+  border:1px solid rgba(0,74,152,.22)!important;
+}
+
+/* Kill non-brand leftovers used as buttons */
+a[style*="background:#06384d"],
+button[style*="background:#06384d"],
+a[style*="background: #06384d"],
+button[style*="background: #06384d"],
+a[style*="background:#4cc8ed"],
+button[style*="background:#4cc8ed"],
+a[style*="background:#047857"],
+button[style*="background:#047857"],
+a[style*="background:#059669"],
+button[style*="background:#059669"],
+a[style*="background:#6d28d9"],
+button[style*="background:#6d28d9"],
+a[style*="background:#f59e0b"],
+button[style*="background:#f59e0b"]{
+  background:#004A98!important;
+  background-image:none!important;
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF!important;
+  border-color:#004A98!important;
+}
+
+/* Password toggle etc small brand controls */
+.wd-password-toggle{
+  background:#004A98!important;
+  color:#FFFFFF!important;
+}
+
+/* Chip active = brand blue (filter pills act like buttons) */
+.wd-chip.active,
+#courseFilters .wd-chip.active,
+#equipFilters .wd-chip.active,
+.whaledive-courses #courseFilters .wd-chip.active,
+.whaledive-equipment #equipFilters .wd-chip.active{
+  background:#004A98!important;
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF!important;
+  border-color:#004A98!important;
+}
+
+
+/* Non-brand button killer (2.3.70)
+   Force every CTA away from #06384d / greens / purples / oranges */
+.wd-btn,
+.wd-btn-primary,
+.wd-mini-btn,
+.wdc-auth-submit,
+.wdc-gw-btn-primary,
+.wdc-gw-btn-secondary,
+.wdc-gw-progress-cta,
+.wdc-dash-cta-card a,
+.wd-blog-search button,
+.wd-blog-pagination a,
+.wd-featured-read,
+.whaledive-courses .wd-mini-btn,
+.whaledive-equipment .wd-mini-btn,
+.whaledive-home .wd-section-cta .wd-btn,
+.whaledive-home .wd-section-cta .wd-btn.alt,
+.whaledive-home #membership .wd-btn,
+.whaledive-home #membership .wd-btn.alt,
+.whaledive-home #articles .wd-article-head .wd-btn,
+.wd-community .wd-btn,
+.wd-community .wd-btn.alt,
+body.whaledive-about .wd-btn:not(.alt),
+.page-template-page-about .wd-btn:not(.alt),
+.wdc-btn:not(.wdc-btn--secondary):not(.wdc-btn--soft):not(.wdc-btn--danger){
+  background:#004A98!important;
+  background-image:none!important;
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF!important;
+  border:1px solid #004A98!important;
+}
+
+/* Restore intentional exceptions AFTER the force-blue rule */
+
+/* Secondary / soft links */
+.wd-btn.alt:not(.wd-hero .wd-btn):not(.wd-footer .wd-btn):not(.wd-inner-hero .wd-btn):not(.wd-dark .wd-btn),
+.wd-mini-link,
+.wdc-btn--secondary,
+.wdc-btn--soft,
+.wdc-gw-progress-cta--ghost,
+.whaledive-courses .wd-mini-link,
+.whaledive-equipment .wd-mini-link{
+  background:#FFFFFF!important;
+  background-image:none!important;
+  color:#004A98!important;
+  -webkit-text-fill-color:#004A98!important;
+  border:1px solid rgba(0,74,152,.22)!important;
+  box-shadow:none!important;
+}
+.wd-mini-link,
+.whaledive-courses .wd-mini-link,
+.whaledive-equipment .wd-mini-link{
+  background:rgba(150,218,234,.22)!important;
+  border-color:rgba(76,200,237,.35)!important;
+}
+
+/* Dark surfaces: primary white / secondary cyan */
+.wd-hero .wd-btn:not(.alt),
+.wd-inner-hero .wd-btn:not(.alt),
+.wd-dark .wd-section-cta .wd-btn:not(.alt),
+body.whaledive-home .wd-hero .wd-btn:not(.alt),
+body.whaledive-home .wd-dark .wd-section-cta .wd-btn:not(.alt),
+body.whaledive-courses .wd-inner-hero .wd-btn:not(.alt),
+body.whaledive-equipment .wd-inner-hero .wd-btn:not(.alt),
+body.whaledive-about .wd-inner-hero .wd-btn:not(.alt){
+  background:#FFFFFF!important;
+  background-image:none!important;
+  color:#004A98!important;
+  -webkit-text-fill-color:#004A98!important;
+  border:1px solid rgba(255,255,255,.98)!important;
+}
+.wd-hero .wd-btn.alt,
+.wd-inner-hero .wd-btn.alt,
+.wd-dark .wd-section-cta .wd-btn.alt,
+body.whaledive-home .wd-hero .wd-btn.alt,
+body.whaledive-home .wd-dark .wd-section-cta .wd-btn.alt,
+body.whaledive-courses .wd-inner-hero .wd-btn.alt,
+body.whaledive-equipment .wd-inner-hero .wd-btn.alt,
+body.whaledive-about .wd-inner-hero .wd-btn.alt{
+  background:#4CC8ED!important;
+  background-image:none!important;
+  color:#000000!important;
+  -webkit-text-fill-color:#000000!important;
+  border:1px solid rgba(255,255,255,.35)!important;
+}
+
+/* Footer white CTA */
+.wd-footer .wd-btn,
+.wd-footer .wd-btn.alt{
+  background:#FFFFFF!important;
+  background-image:none!important;
+  color:#004A98!important;
+  -webkit-text-fill-color:#004A98!important;
+  border:1px solid rgba(255,255,255,.98)!important;
+}
+
+/* Membership community on light bg — blue gradient OK */
+body.whaledive-home #membership .wd-btn,
+body.whaledive-home #membership .wd-btn.alt,
+.wd-community .wd-btn,
+.wd-community .wd-btn.alt{
+  background:linear-gradient(135deg,#004A98,#3B44AC)!important;
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF!important;
+  border:1px solid #004A98!important;
+}
+
+/* Light section CTA solid blue */
+body.whaledive-home .wd-section:not(.wd-dark) .wd-section-cta .wd-btn,
+body.whaledive-home .wd-section:not(.wd-dark) .wd-section-cta .wd-btn.alt,
+body.whaledive-home #equipment .wd-section-cta .wd-btn,
+body.whaledive-home #equipment .wd-section-cta .wd-btn.alt,
+body.whaledive-home #articles .wd-article-head .wd-btn{
+  background:#004A98!important;
+  background-image:none!important;
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF!important;
+  border:1px solid #004A98!important;
+}
+/* equipment secondary can stay white if needed - keep solid blue for consistency */
+
+/* Catalog enroll/buy solid brand blue */
+.whaledive-courses .wd-mini-btn,
+.whaledive-equipment .wd-mini-btn,
+.whaledive-courses a.wd-mini-btn,
+.whaledive-equipment a.wd-mini-btn{
+  background:#004A98!important;
+  background-image:none!important;
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF!important;
+  border:1px solid #004A98!important;
+}
+
+/* Danger remains brand red */
+.wdc-btn--danger{
+  background:#C31C4A!important;
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF!important;
+  border-color:#C31C4A!important;
 }

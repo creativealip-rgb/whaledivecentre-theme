@@ -207,8 +207,8 @@ foreach ($manual_orders as $mo) {
 .wdc-gw-ongkir-meta small{display:block;color:#64748b;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
 .wdc-gw-ongkir-meta strong{color:#0f172a;font-size:13px}
 .wdc-gw-help{margin:0;padding-left:18px;color:#64748b;font-size:12px;line-height:1.55}
-.wdc-gw-btn-secondary{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:999px;background:var(--wdc-btn-primary,#06384d);color:#fff!important;text-decoration:none;font-size:13px;font-weight:900}
-.wdc-gw-btn-primary{display:inline-flex;align-items:center;justify-content:center;width:100%;min-height:48px;padding:0 16px;border:0;border-radius:999px;background:var(--wdc-btn-primary,#06384d);color:#fff!important;font-size:14px;font-weight:900;cursor:pointer;box-shadow:var(--wdc-btn-shadow,0 10px 22px rgba(6,56,77,.18))}
+.wdc-gw-btn-secondary{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:999px;background:var(--wdc-btn-primary,#004A98);color:#fff!important;text-decoration:none;font-size:13px;font-weight:900}
+.wdc-gw-btn-primary{display:inline-flex;align-items:center;justify-content:center;width:100%;min-height:48px;padding:0 16px;border:0;border-radius:999px;background:var(--wdc-btn-primary,#004A98);color:#fff!important;font-size:14px;font-weight:900;cursor:pointer;box-shadow:var(--wdc-btn-shadow,0 10px 22px rgba(6,56,77,.18))}
 .wdc-gw-btn-primary:disabled{opacity:.7;cursor:wait}
 .wdc-gw-file{display:flex;align-items:center;gap:10px;padding:12px;border:1.5px dashed #cbd5e1;border-radius:12px;background:#fff}
 .wdc-gw-file input{max-width:140px}
@@ -480,13 +480,13 @@ if (is_array($gw_order) && !empty($gw_order['order_id']) && function_exists('wdc
 .wdc-gw-progress-note--danger{background:#fef2f2;border:1px solid #fecaca;color:#991b1b}
 .wdc-gw-progress-track{display:grid;gap:10px}
 .wdc-gw-progress-resi{background:#f5f3ff;border:1px solid #ddd6fe;border-radius:12px;padding:12px 14px}
-.wdc-gw-progress-resi-label{font-size:12px;font-weight:900;color:#5b21b6;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.wdc-gw-progress-resi-label{font-size:12px;font-weight:900;color:#004A98;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
 .wdc-gw-progress-resi-no{font-size:20px;font-weight:950;color:#0f172a;letter-spacing:.04em;word-break:break-all}
 .wdc-gw-progress-resi-help{font-size:12px;color:#64748b;margin-top:4px}
 .wdc-gw-progress-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.wdc-gw-progress-cta{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 14px;border-radius:999px;background:var(--wdc-btn-primary,#06384d);color:#fff!important;text-decoration:none;font-weight:900;border:0;cursor:pointer;width:100%;box-sizing:border-box}
-.wdc-gw-progress-cta--warn{background:var(--wdc-btn-primary,#06384d)!important}
-.wdc-gw-progress-cta--ghost{background:#fff!important;border:1px solid var(--wdc-btn-secondary-border,#cfe0e8)!important;color:var(--wdc-btn-secondary-text,#06384d)!important;box-shadow:none!important}
+.wdc-gw-progress-cta{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 14px;border-radius:999px;background:var(--wdc-btn-primary,#004A98);color:#fff!important;text-decoration:none;font-weight:900;border:0;cursor:pointer;width:100%;box-sizing:border-box}
+.wdc-gw-progress-cta--warn{background:var(--wdc-btn-primary,#004A98)!important}
+.wdc-gw-progress-cta--ghost{background:#fff!important;border:1px solid var(--wdc-btn-secondary-border,#cfe0e8)!important;color:var(--wdc-btn-secondary-text,#004A98)!important;box-shadow:none!important}
 .wdc-dash-cta-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:28px;width:100%}
 .wdc-dash-cta-card{background:#fff;border:1px solid var(--wdc-border,#e6edf2);border-radius:var(--wdc-radius,20px);padding:20px;box-shadow:var(--wdc-shadow,0 10px 28px rgba(15,23,42,.06));box-sizing:border-box;min-width:0;display:flex;flex-direction:column}
 .wdc-dash-cta-card h2{font-size:22px;color:#0f172a;margin:10px 0;letter-spacing:-.02em;line-height:1.25}
@@ -581,8 +581,8 @@ $status_steps = ['Payment Uploaded' => 'Proof received', 'Verified' => 'Payment 
 
 <div style="background:linear-gradient(135deg,#f8fdff,#eef9fc);border:1px solid #ccecf5;border-radius:20px;padding:22px;">
     <div style="font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;color:#0b617c;margin-bottom:6px;"><?php echo contenly_tr('Langkah Selanjutnya', 'Recommended next step'); ?></div>
-    <h2 style="font-size:22px;color:#06384d;margin:0 0 6px;letter-spacing:.03em;"><?php echo contenly_tr('Pilih kursus atau minta saran peralatan.', 'Pick a course or request gear advice.'); ?></h2>
+    <h2 style="font-size:22px;color:#004A98;margin:0 0 6px;letter-spacing:.03em;"><?php echo contenly_tr('Pilih kursus atau minta saran peralatan.', 'Pick a course or request gear advice.'); ?></h2>
     <p style="color:#64748b;margin:0 0 16px;line-height:1.6;"><?php echo contenly_tr('Area member fokus pada kebutuhan anggota: kursus menyelam dan membeli peralatan selam yang tepat.', 'The member area now focuses on what Whale Dive Centre members need most: joining courses and buying the right dive gear.'); ?></p>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;"><a href="/my-courses/" style="display:inline-flex;padding:10px 14px;border-radius:999px;background:#06384d;color:#fff;text-decoration:none;font-weight:900;"><?php echo contenly_tr('Lihat Kursus', 'Browse Courses'); ?></a><a href="/my-gear/" style="display:inline-flex;padding:10px 14px;border-radius:999px;background:#fff;color:#06384d;text-decoration:none;font-weight:900;border:1px solid #ccecf5;"><?php echo contenly_tr('Lihat Peralatan', 'Browse Gear'); ?></a></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;"><a href="/my-courses/" style="display:inline-flex;padding:10px 14px;border-radius:999px;background:#004A98;color:#fff;text-decoration:none;font-weight:900;"><?php echo contenly_tr('Lihat Kursus', 'Browse Courses'); ?></a><a href="/my-gear/" style="display:inline-flex;padding:10px 14px;border-radius:999px;background:#fff;color:#004A98;text-decoration:none;font-weight:900;border:1px solid #ccecf5;"><?php echo contenly_tr('Lihat Peralatan', 'Browse Gear'); ?></a></div>
 </div>
 <?php require_once get_template_directory() . '/dashboard-footer.php'; ?>
