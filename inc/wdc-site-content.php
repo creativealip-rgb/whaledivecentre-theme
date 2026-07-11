@@ -110,6 +110,29 @@ function wdc_site_defaults() {
         'membership_3_text' => 'Semua kartu dive di satu tempat',
         'membership_cta_label' => 'Buat Akun Gratis',
         'membership_cta_url' => '/member-register/',
+        // Courses page closing CTA
+        'courses_page_cta_kicker' => 'Butuh saran kursus?',
+        'courses_page_cta_title' => 'Crew bantu pilih jalur yang tepat.',
+        'courses_page_cta_text' => 'Ceritakan level sertifikasi, target tanggal, dan tujuan kenyamanan — kami rekomendasikan kursus yang cocok.',
+        'courses_page_cta_label' => 'Tanya Rencana Kursus',
+        'courses_page_cta_url' => '/contact/',
+        'courses_hero_cta_label' => 'Tanya Rencana Kursus',
+        'courses_hero_cta_url' => '/contact/',
+        // Equipment page closing CTA
+        'equip_page_cta_kicker' => 'Butuh saran gear?',
+        'equip_page_cta_title' => 'Crew bantu cari yang pas.',
+        'equip_page_cta_text' => 'Ceritakan level sertifikasi, rencana dive, dan budget — kami rekomendasikan gear yang cocok.',
+        'equip_page_cta_label' => 'Ajukan via Member',
+        'equip_page_cta_url' => '',
+        'equip_hero_cta_label' => 'Tanya Ketersediaan',
+        'equip_hero_cta_url' => '/contact/',
+        // Single course/equipment closing CTA copy
+        'course_single_cta_kicker' => 'Siap saat kamu siap',
+        'course_single_cta_title' => 'Daftar lewat akun member.',
+        'course_single_cta_text' => 'Ajukan kursus dari dashboard. Crew follow-up setelah request masuk.',
+        'equip_single_cta_kicker' => 'Siap saat kamu siap',
+        'equip_single_cta_title' => 'Ajukan lewat akun member.',
+        'equip_single_cta_text' => 'Ajukan gear dari dashboard. Crew follow-up size/stok setelah request masuk.',
     ];
 }
 
@@ -186,6 +209,7 @@ function wdc_site_admin_menu() {
     add_submenu_page('wdc-site', 'Notifications', 'Notifications', 'manage_options', 'wdc-site-notify', 'wdc_render_notifications_page');
     add_submenu_page('wdc-site', 'About Page', 'About Page', 'manage_options', 'wdc-site-about', 'wdc_render_about_page');
     add_submenu_page('wdc-site', 'Contact Page', 'Contact Page', 'manage_options', 'wdc-site-contact', 'wdc_render_contact_page');
+    add_submenu_page('wdc-site', 'Courses & Equipment CTA', 'Courses & Equipment CTA', 'manage_options', 'wdc-site-cta', 'wdc_render_cta_page');
     add_submenu_page('wdc-site', 'Partners / Trust', 'Partners / Trust', 'manage_options', 'wdc-site-partners', 'wdc_render_partners_page');
     add_submenu_page(
         'wdc-site',
@@ -275,7 +299,7 @@ function wdc_site_save_posted_keys($keys) {
             if ($key === 'email') {
                 $current[$key] = sanitize_email($raw);
             }
-            if (in_array($key, ['hero_cta1_url', 'hero_cta2_url', 'hero_card_cta_url', 'footer_cta_url', 'about_cta1_url', 'about_cta2_url', 'membership_cta_url', 'courses_cta_url', 'articles_cta_url'], true)) {
+            if (in_array($key, ['hero_cta1_url', 'hero_cta2_url', 'hero_card_cta_url', 'footer_cta_url', 'about_cta1_url', 'about_cta2_url', 'membership_cta_url', 'courses_cta_url', 'articles_cta_url', 'courses_page_cta_url', 'courses_hero_cta_url', 'equip_page_cta_url', 'equip_hero_cta_url'], true)) {
                 // allow relative paths
                 $current[$key] = sanitize_text_field($raw);
             }
@@ -291,6 +315,10 @@ function wdc_site_save_posted_keys($keys) {
             'courses_sub', 'equip_sub', 'articles_sub', 'articles_title',
             'membership_title', 'membership_text',
             'membership_1_text', 'membership_2_text', 'membership_3_text',
+            'courses_page_cta_text', 'equip_page_cta_text',
+            'course_single_cta_text', 'equip_single_cta_text',
+            'courses_page_cta_title', 'equip_page_cta_title',
+            'course_single_cta_title', 'equip_single_cta_title',
         ], true)) {
             $current[$key] = sanitize_textarea_field($raw);
         } elseif ($key === 'contact_map_url') {
@@ -772,6 +800,66 @@ function wdc_render_about_page() {
     echo '</form>';
     echo '<p><a class="button" href="' . esc_url(home_url('/about/')) . '" target="_blank" rel="noopener">Preview About</a></p>';
     echo '</div>';
+}
+
+
+function wdc_render_cta_page() {
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+    $keys = [
+        'courses_page_cta_kicker', 'courses_page_cta_title', 'courses_page_cta_text', 'courses_page_cta_label', 'courses_page_cta_url',
+        'courses_hero_cta_label', 'courses_hero_cta_url',
+        'equip_page_cta_kicker', 'equip_page_cta_title', 'equip_page_cta_text', 'equip_page_cta_label', 'equip_page_cta_url',
+        'equip_hero_cta_label', 'equip_hero_cta_url',
+        'course_single_cta_kicker', 'course_single_cta_title', 'course_single_cta_text',
+        'equip_single_cta_kicker', 'equip_single_cta_title', 'equip_single_cta_text',
+    ];
+    $saved = false;
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $saved = wdc_site_save_posted_keys($keys);
+    }
+    echo '<div class="wrap"><h1>WDC Site — Courses & Equipment CTA</h1>';
+    if ($saved) {
+        echo '<div class="notice notice-success is-dismissible"><p>Saved.</p></div>';
+    }
+    echo '<p>Edit copy + link tombol CTA untuk halaman Courses / Equipment (hero tanya + closing card). Single course/equipment hanya copy; tombol single tetap pakai CTA label per item + member login flow.</p>';
+    echo '<form method="post">';
+    wp_nonce_field('wdc_site_save', 'wdc_site_nonce');
+    echo '<h2>Courses page</h2><table class="form-table" role="presentation"><tbody>';
+    wdc_site_field('courses_hero_cta_label', 'Hero button label');
+    wdc_site_field('courses_hero_cta_url', 'Hero button URL', 'text', 'Default: /contact/');
+    wdc_site_field('courses_page_cta_kicker', 'Closing CTA kicker');
+    wdc_site_field('courses_page_cta_title', 'Closing CTA title', 'textarea');
+    wdc_site_field('courses_page_cta_text', 'Closing CTA text', 'textarea');
+    wdc_site_field('courses_page_cta_label', 'Closing CTA button label');
+    wdc_site_field('courses_page_cta_url', 'Closing CTA button URL', 'text', 'Default: /contact/');
+    echo '</tbody></table>';
+
+    echo '<h2>Equipment page</h2><table class="form-table" role="presentation"><tbody>';
+    wdc_site_field('equip_hero_cta_label', 'Hero button label');
+    wdc_site_field('equip_hero_cta_url', 'Hero button URL', 'text', 'Default: /contact/');
+    wdc_site_field('equip_page_cta_kicker', 'Closing CTA kicker');
+    wdc_site_field('equip_page_cta_title', 'Closing CTA title', 'textarea');
+    wdc_site_field('equip_page_cta_text', 'Closing CTA text', 'textarea');
+    wdc_site_field('equip_page_cta_label', 'Closing CTA button label');
+    wdc_site_field('equip_page_cta_url', 'Closing CTA button URL', 'text', 'Kosongkan = pakai member action URL (login/dashboard). Isi /contact/ kalau mau ke contact.');
+    echo '</tbody></table>';
+
+    echo '<h2>Single course / equipment closing copy</h2><table class="form-table" role="presentation"><tbody>';
+    wdc_site_field('course_single_cta_kicker', 'Course single kicker');
+    wdc_site_field('course_single_cta_title', 'Course single title', 'textarea');
+    wdc_site_field('course_single_cta_text', 'Course single text', 'textarea');
+    wdc_site_field('equip_single_cta_kicker', 'Equipment single kicker');
+    wdc_site_field('equip_single_cta_title', 'Equipment single title', 'textarea');
+    wdc_site_field('equip_single_cta_text', 'Equipment single text', 'textarea');
+    echo '</tbody></table>';
+    submit_button('Save Courses & Equipment CTA');
+    echo '</form>';
+    echo '<p>';
+    echo '<a class="button" href="' . esc_url(home_url('/courses/')) . '" target="_blank" rel="noopener">Preview Courses</a> ';
+    echo '<a class="button" href="' . esc_url(home_url('/equipment/')) . '" target="_blank" rel="noopener">Preview Equipment</a>';
+    echo '</p></div>';
 }
 
 function wdc_render_contact_page() {
