@@ -4070,7 +4070,7 @@ body.whaledive-home .wd-footer .wd-btn.alt {
 }
 
 
-/* WDC agency header + blog compress 2026-07-11 */
+/* WDC agency header 2026-07-11 */
 .wd-agency-block{margin-bottom:56px}
 .wd-agency-head{display:flex;align-items:center;gap:16px;margin-bottom:20px}
 .wd-agency-badge{
@@ -4086,34 +4086,3 @@ body.whaledive-home .wd-footer .wd-btn.alt {
 }
 .wd-agency-count{font-size:13px;font-weight:700;color:#5b7180;white-space:nowrap}
 .wd-agency-desc{color:#5b7180;font-size:15px;line-height:1.6;margin:0 0 22px;max-width:640px}
-
-/* Blog: collapse stacked critical overrides into one final pass */
-.whaledive-blog .wd-blog-section-head{text-align:center;max-width:940px;margin:0 auto 26px;color:#fff}
-.whaledive-blog .wd-blog-section-head .wd-kicker{
-  display:inline-flex!important;margin:0 0 14px!important;padding:8px 14px!important;
-  border-radius:999px!important;background:rgba(76,200,237,.18)!important;
-  border:1px solid rgba(76,200,237,.38)!important;color:#96DAEA!important;
-  font-size:12px!important;font-weight:900!important;letter-spacing:.13em!important;text-transform:uppercase!important
-}
-.whaledive-blog .wd-blog-section-head h2{
-  margin:0 auto 14px!important;max-width:900px!important;color:#fff!important;
-  font-size:clamp(42px,7vw,86px)!important;font-weight:900!important;line-height:.95!important;
-  letter-spacing:-.065em!important;text-shadow:0 16px 40px rgba(0,0,0,.45)!important
-}
-.whaledive-blog .wd-blog-section-head p{
-  margin:0 auto!important;max-width:720px!important;color:rgba(255,255,255,.78)!important;
-  font-size:18px!important;line-height:1.7!important
-}
-.whaledive-blog article.wd-blog-featured-card,
-.whaledive-blog article.wd-blog-card-modern,
-.whaledive-blog .wd-blog-side-card,
-.whaledive-blog article.wd-blog-mini{
-  background:#fff!important;color:#061a36!important;border-radius:26px!important;overflow:hidden!important
-}
-.whaledive-blog .wd-blog-featured-body h2,
-.whaledive-blog .wd-blog-featured-body h2 a,
-.whaledive-blog .wd-blog-card-body h3,
-.whaledive-blog .wd-blog-card-body h3 a,
-.whaledive-blog .wd-blog-mini strong{color:#061a36!important}
-.whaledive-blog .wd-blog-featured-body p,
-.whaledive-blog .wd-blog-card-body p{color:#334155!important}
