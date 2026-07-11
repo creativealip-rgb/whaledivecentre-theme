@@ -5613,6 +5613,60 @@ body.whaledive-single-course .wd-course-full-image-hero .wd-kicker{
   }
 }
 
+/* WDC article card text overflow fix 2.3.59 */
+.whaledive-home #articles .wd-mini-article,
+.whaledive-home #articles .wd-featured-card {
+  overflow: hidden !important;
+  min-width: 0 !important;
+}
+.whaledive-home #articles .wd-mini-article b,
+.whaledive-home #articles .wd-mini-article h3,
+.whaledive-home #articles .wd-mini-article p,
+.whaledive-home #articles .wd-mini-article .wd-article-link,
+.whaledive-home #articles .wd-featured-card span,
+.whaledive-home #articles .wd-featured-card h3,
+.whaledive-home #articles .wd-featured-card p,
+.whaledive-home #articles .wd-featured-card a {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+.whaledive-home #articles .wd-mini-article-image b,
+.whaledive-home #articles .wd-mini-article-image h3,
+.whaledive-home #articles .wd-mini-article-image p,
+.whaledive-home #articles .wd-mini-article-image .wd-article-link {
+  width: auto !important;
+  max-width: calc(100% - 44px) !important;
+  margin-left: 22px !important;
+  margin-right: 22px !important;
+}
+.whaledive-home #articles .wd-mini-article h3,
+.whaledive-home #articles .wd-featured-card h3 {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  min-height: 0 !important;
+}
+.whaledive-home #articles .wd-featured-card h3 {
+  -webkit-line-clamp: 3 !important;
+}
+.whaledive-home #articles .wd-mini-article p,
+.whaledive-home #articles .wd-featured-card p {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
+  min-height: 0 !important;
+  max-width: 100% !important;
+}
+.whaledive-home #articles .wd-featured-card p {
+  -webkit-line-clamp: 3 !important;
+}
+
 /* WDC mobile fix 2.3.57: center NAUI/TDI + drawer close reliable */
 @media (max-width: 760px) {
   /* Home + catalog filter tabs stay centered on mobile */
