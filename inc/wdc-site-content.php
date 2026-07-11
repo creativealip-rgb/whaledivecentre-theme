@@ -68,6 +68,18 @@ function wdc_site_defaults() {
         'contact_success' => 'Terima kasih. Pesan Anda sudah terkirim dan crew akan membalas dalam 24 jam.',
         'contact_map_url' => 'https://www.google.com/maps/search/?api=1&query=Jl.%20Tanah%20Kusir%20II%20No.3%20Jakarta%20Selatan',
         'contact_hours_note' => 'Senin - Sabtu, 09:00 - 18:00 WIB. Jadwal kursus dan perjalanan dikonfirmasi berdasarkan perjanjian.',
+        'crew_kicker' => 'Leadership Team',
+        'crew_title' => 'Profesional berpengalaman yang membangun ekosistem diving Indonesia.',
+        'values_kicker' => 'Nilai Kerja',
+        'values_title' => 'Safety, integrity, continuous learning.',
+        'value_1_title' => 'Keselamatan',
+        'value_1_text' => 'Setiap training, trip, dan rekomendasi dipandu oleh kesiapan diver, kondisi, dan standar konservatif.',
+        'value_2_title' => 'Integritas',
+        'value_2_text' => 'Progress diver dibangun dengan evaluasi jujur, bukan sertifikasi terburu-buru.',
+        'value_3_title' => 'Pembelajaran berkelanjutan',
+        'value_3_text' => 'WDC mendukung diver untuk terus naik level melalui edukasi, praktik, dan leadership.',
+        'value_4_title' => 'Konservasi laut',
+        'value_4_text' => 'Kami mendorong perilaku bawah air yang bertanggung jawab dan menghormati ekosistem laut.',
     ];
 }
 
@@ -145,6 +157,20 @@ function wdc_site_admin_menu() {
     add_submenu_page('wdc-site', 'About Page', 'About Page', 'manage_options', 'wdc-site-about', 'wdc_render_about_page');
     add_submenu_page('wdc-site', 'Contact Page', 'Contact Page', 'manage_options', 'wdc-site-contact', 'wdc_render_contact_page');
     add_submenu_page('wdc-site', 'Partners / Trust', 'Partners / Trust', 'manage_options', 'wdc-site-partners', 'wdc_render_partners_page');
+    add_submenu_page(
+        'wdc-site',
+        'Crew Profiles',
+        'Crew Profiles',
+        'edit_posts',
+        'edit.php?post_type=wdc_crew'
+    );
+    add_submenu_page(
+        'wdc-site',
+        'Add Crew',
+        'Add Crew',
+        'edit_posts',
+        'post-new.php?post_type=wdc_crew'
+    );
     add_submenu_page(
         'wdc-site',
         'Testimonials',
@@ -229,6 +255,8 @@ function wdc_site_save_posted_keys($keys) {
             'trust_text', 'partners',
             'about_title', 'about_text', 'about_intro_title', 'about_intro_p1', 'about_intro_p2',
             'contact_title', 'contact_text', 'contact_success', 'contact_hours_note',
+            'crew_title', 'values_title',
+            'value_1_text', 'value_2_text', 'value_3_text', 'value_4_text',
         ], true)) {
             $current[$key] = sanitize_textarea_field($raw);
         } elseif ($key === 'contact_map_url') {
@@ -613,6 +641,12 @@ function wdc_render_about_page() {
         'about_kicker', 'about_title', 'about_text',
         'about_cta1_label', 'about_cta1_url', 'about_cta2_label', 'about_cta2_url',
         'about_intro_kicker', 'about_intro_title', 'about_intro_p1', 'about_intro_p2',
+        'crew_kicker', 'crew_title',
+        'values_kicker', 'values_title',
+        'value_1_title', 'value_1_text',
+        'value_2_title', 'value_2_text',
+        'value_3_title', 'value_3_text',
+        'value_4_title', 'value_4_text',
     ];
     $saved = false;
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -637,6 +671,21 @@ function wdc_render_about_page() {
     wdc_site_field('about_intro_title', 'Intro title', 'textarea');
     wdc_site_field('about_intro_p1', 'Intro paragraph 1', 'textarea');
     wdc_site_field('about_intro_p2', 'Intro paragraph 2', 'textarea');
+    echo '<tr><th colspan="2"><h2 style="margin:18px 0 0">Crew section</h2></th></tr>';
+    wdc_site_field('crew_kicker', 'Crew kicker');
+    wdc_site_field('crew_title', 'Crew title', 'textarea');
+    echo '<tr><td colspan="2"><p class="description">Profil crew di menu <strong>WDC Site → Crew Profiles</strong> (nama, role, bio, foto).</p></td></tr>';
+    echo '<tr><th colspan="2"><h2 style="margin:18px 0 0">Values section</h2></th></tr>';
+    wdc_site_field('values_kicker', 'Values kicker');
+    wdc_site_field('values_title', 'Values title', 'textarea');
+    wdc_site_field('value_1_title', 'Value 1 title');
+    wdc_site_field('value_1_text', 'Value 1 text', 'textarea');
+    wdc_site_field('value_2_title', 'Value 2 title');
+    wdc_site_field('value_2_text', 'Value 2 text', 'textarea');
+    wdc_site_field('value_3_title', 'Value 3 title');
+    wdc_site_field('value_3_text', 'Value 3 text', 'textarea');
+    wdc_site_field('value_4_title', 'Value 4 title');
+    wdc_site_field('value_4_text', 'Value 4 text', 'textarea');
     echo '</tbody></table>';
     submit_button('Save About Page');
     echo '</form>';
@@ -783,4 +832,179 @@ function wdc_contact_inquiry_recipient() {
     }
     return get_option('admin_email') ?: 'info@whaledivecentre.com';
 }
+
+
+function wdc_register_crew_cpt() {
+    if (post_type_exists('wdc_crew')) {
+        return;
+    }
+    register_post_type('wdc_crew', [
+        'labels' => [
+            'name' => 'Crew Profiles',
+            'singular_name' => 'Crew Profile',
+            'add_new_item' => 'Add Crew Profile',
+            'edit_item' => 'Edit Crew Profile',
+            'all_items' => 'All Crew',
+            'menu_name' => 'Crew Profiles',
+        ],
+        'public' => false,
+        'show_ui' => true,
+        'show_in_menu' => 'wdc-site',
+        'supports' => ['title', 'editor', 'thumbnail', 'page-attributes'],
+        'show_in_rest' => false,
+        'capability_type' => 'post',
+    ]);
+}
+add_action('init', 'wdc_register_crew_cpt');
+
+function wdc_crew_meta_boxes() {
+    add_meta_box('wdc_crew_details', 'Crew Details', 'wdc_render_crew_meta_box', 'wdc_crew', 'normal', 'high');
+}
+add_action('add_meta_boxes', 'wdc_crew_meta_boxes');
+
+function wdc_render_crew_meta_box($post) {
+    wp_nonce_field('wdc_save_crew', 'wdc_crew_nonce');
+    $role = get_post_meta($post->ID, '_wdc_role', true);
+    $asset = get_post_meta($post->ID, '_wdc_asset', true);
+    echo '<p><label><strong>Role / credentials</strong><br><input type="text" name="_wdc_role" value="' . esc_attr($role) . '" class="widefat" placeholder="NAUI Instructor"></label></p>';
+    echo '<p><label><strong>Fallback image filename (optional)</strong><br><input type="text" name="_wdc_asset" value="' . esc_attr($asset) . '" class="widefat" placeholder="wdc-about-ebram-pool.jpg"></label></p>';
+    echo '<p class="description">Title = nama. Editor = bio. Featured image = foto utama. Kalau featured image kosong, pakai file di <code>assets/</code> dari fallback filename.</p>';
+    echo '<p class="description">Urutan tampil: Order (page attributes) naik dulu.</p>';
+}
+
+function wdc_save_crew_meta($post_id, $post) {
+    if ($post->post_type !== 'wdc_crew') {
+        return;
+    }
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    if (!isset($_POST['wdc_crew_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_crew_nonce'])), 'wdc_save_crew')) {
+        return;
+    }
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+    update_post_meta($post_id, '_wdc_role', sanitize_text_field(wp_unslash($_POST['_wdc_role'] ?? '')));
+    $asset = sanitize_file_name(wp_unslash($_POST['_wdc_asset'] ?? ''));
+    update_post_meta($post_id, '_wdc_asset', $asset);
+}
+add_action('save_post', 'wdc_save_crew_meta', 10, 2);
+
+function wdc_default_crew_profiles() {
+    return [
+        [
+            'name' => 'Ebram Harimurti',
+            'role' => 'NAUI Course Director, NAUI Rep. Indonesia, TDI Instructor, DAN Instructor Trainer',
+            'bio' => 'Penyelam profesional Indonesia sejak 1998 dengan pengalaman lebih dari dua dekade di diving, marine tourism, dan underwater operations. Ketua Umum IDCA serta Ketua Indonesia Divers Rescue Team (IDRT), berfokus pada profesionalisme, keselamatan, search and rescue, dan konservasi laut.',
+            'asset' => 'wdc-about-ebram-pool.jpg',
+            'order' => 1,
+        ],
+        [
+            'name' => 'Mimi Amilia',
+            'role' => 'NAUI Instructor, DAN Instructor, TDI Diver',
+            'bio' => 'Penyelam profesional sejak 2012 yang aktif dalam penyelaman rekreasi, edukasi, konservasi laut, dan pengembangan komunitas. Ketua Umum KP3I, mendorong partisipasi, kompetensi, dan kepemimpinan perempuan dalam industri penyelaman nasional.',
+            'asset' => 'wdc-about-mimi-pool.jpg',
+            'order' => 2,
+        ],
+        [
+            'name' => 'Jovan Lesmana',
+            'role' => 'NAUI Instructor',
+            'bio' => 'Penyelam profesional Indonesia sejak 2010 dengan pengalaman penyelaman rekreasi, eksplorasi bawah laut, dan operasional diving. Aktif mempromosikan keselamatan, etika penyelaman, dan pelestarian ekosistem laut untuk generasi penyelam berikutnya.',
+            'asset' => 'wdc-about-jovan.jpg',
+            'order' => 3,
+        ],
+    ];
+}
+
+function wdc_seed_default_crew() {
+    if (get_option('wdc_crew_seeded')) {
+        return;
+    }
+    if (!post_type_exists('wdc_crew')) {
+        return;
+    }
+    $count = (int) wp_count_posts('wdc_crew')->publish;
+    if ($count > 0) {
+        update_option('wdc_crew_seeded', 1, false);
+        return;
+    }
+    foreach (wdc_default_crew_profiles() as $row) {
+        $id = wp_insert_post([
+            'post_type' => 'wdc_crew',
+            'post_status' => 'publish',
+            'post_title' => $row['name'],
+            'post_content' => $row['bio'],
+            'menu_order' => (int) $row['order'],
+        ], true);
+        if (!is_wp_error($id)) {
+            update_post_meta($id, '_wdc_role', $row['role']);
+            update_post_meta($id, '_wdc_asset', $row['asset']);
+        }
+    }
+    update_option('wdc_crew_seeded', 1, false);
+}
+add_action('init', 'wdc_seed_default_crew', 40);
+
+function wdc_get_crew_profiles() {
+    $posts = get_posts([
+        'post_type' => 'wdc_crew',
+        'post_status' => 'publish',
+        'numberposts' => 20,
+        'orderby' => ['menu_order' => 'ASC', 'date' => 'ASC'],
+    ]);
+    $items = [];
+    foreach ($posts as $p) {
+        $asset = (string) get_post_meta($p->ID, '_wdc_asset', true);
+        $img = get_the_post_thumbnail_url($p->ID, 'large');
+        if (!$img && $asset) {
+            $img = get_template_directory_uri() . '/assets/' . ltrim($asset, '/');
+        }
+        $items[] = [
+            'name' => $p->post_title,
+            'role' => (string) get_post_meta($p->ID, '_wdc_role', true),
+            'bio' => trim(wp_strip_all_tags($p->post_content)),
+            'image' => $img ?: '',
+            'alt' => $p->post_title,
+        ];
+    }
+    if ($items) {
+        return $items;
+    }
+    // fallback defaults if none published
+    $fallback = [];
+    foreach (wdc_default_crew_profiles() as $row) {
+        $fallback[] = [
+            'name' => $row['name'],
+            'role' => $row['role'],
+            'bio' => $row['bio'],
+            'image' => get_template_directory_uri() . '/assets/' . $row['asset'],
+            'alt' => $row['name'],
+        ];
+    }
+    return $fallback;
+}
+
+function wdc_crew_columns($columns) {
+    $new = [];
+    foreach ($columns as $key => $label) {
+        $new[$key] = $label;
+        if ($key === 'title') {
+            $new['wdc_role'] = 'Role';
+            $new['wdc_asset'] = 'Fallback image';
+        }
+    }
+    return $new;
+}
+add_filter('manage_wdc_crew_posts_columns', 'wdc_crew_columns');
+
+function wdc_crew_column_content($column, $post_id) {
+    if ($column === 'wdc_role') {
+        echo esc_html(get_post_meta($post_id, '_wdc_role', true) ?: '—');
+    }
+    if ($column === 'wdc_asset') {
+        echo esc_html(get_post_meta($post_id, '_wdc_asset', true) ?: '—');
+    }
+}
+add_action('manage_wdc_crew_posts_custom_column', 'wdc_crew_column_content', 10, 2);
 

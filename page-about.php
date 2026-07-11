@@ -89,22 +89,52 @@ if (isset($_GET['wd_contact'])) {
   </section>
 
   <!-- CREW -->
-  <section class="wd-section white wd-crew-proof" id="crew"><div class="wd-shell"><span class="wd-kicker"><?php echo esc_html(contenly_tr('Leadership Team', 'Leadership Team')); ?></span><h2 class="wd-title"><?php echo esc_html(contenly_tr('Profesional berpengalaman yang membangun ekosistem diving Indonesia.', 'Experienced professionals advancing Indonesia’s diving ecosystem.')); ?></h2><div class="wd-profile-grid">
-    <article class="wd-profile-card"><img src="<?php echo esc_url($theme_uri); ?>/assets/wdc-about-ebram-pool.jpg" alt="Ebram Harimurti scuba training"><div><h3>Ebram Harimurti</h3><b>NAUI Course Director, NAUI Rep. Indonesia, TDI Instructor, DAN Instructor Trainer</b><p><?php echo esc_html(contenly_tr('Penyelam profesional Indonesia sejak 1998 dengan pengalaman lebih dari dua dekade di diving, marine tourism, dan underwater operations. Ketua Umum IDCA serta Ketua Indonesia Divers Rescue Team (IDRT), berfokus pada profesionalisme, keselamatan, search and rescue, dan konservasi laut.', 'Indonesian professional diver active since 1998 with more than two decades of experience in diving, marine tourism, and underwater operations. President of IDCA and Chairman of Indonesia Divers Rescue Team (IDRT), focused on professionalism, safety, search and rescue, and marine conservation.')); ?></p></div></article>
-    <article class="wd-profile-card"><img src="<?php echo esc_url($theme_uri); ?>/assets/wdc-about-mimi-pool.jpg" alt="Mimi Amilia scuba training"><div><h3>Mimi Amilia</h3><b>NAUI Instructor, DAN Instructor, TDI Diver</b><p><?php echo esc_html(contenly_tr('Penyelam profesional sejak 2012 yang aktif dalam penyelaman rekreasi, edukasi, konservasi laut, dan pengembangan komunitas. Ketua Umum KP3I, mendorong partisipasi, kompetensi, dan kepemimpinan perempuan dalam industri penyelaman nasional.', 'Professional diver active since 2012 across recreational diving, education, marine conservation, and community development. President of KP3I, promoting women’s participation, competence, and leadership in Indonesia’s diving industry.')); ?></p></div></article>
-    <article class="wd-profile-card"><img src="<?php echo esc_url($theme_uri); ?>/assets/wdc-about-jovan.jpg" alt="Jovan Lesmana NAUI Instructor"><div><h3>Jovan Lesmana</h3><b>NAUI Instructor</b><p><?php echo esc_html(contenly_tr('Penyelam profesional Indonesia sejak 2010 dengan pengalaman penyelaman rekreasi, eksplorasi bawah laut, dan operasional diving. Aktif mempromosikan keselamatan, etika penyelaman, dan pelestarian ekosistem laut untuk generasi penyelam berikutnya.', 'Indonesian professional diver active since 2010 with experience in recreational diving, underwater exploration, and diving operations. Actively promotes safety, diving ethics, and marine ecosystem protection for future divers.')); ?></p></div></article>
+  <?php
+  $wdc_crew_kicker = function_exists('wdc_site_get') ? wdc_site_get('crew_kicker', contenly_tr('Leadership Team', 'Leadership Team')) : contenly_tr('Leadership Team', 'Leadership Team');
+  $wdc_crew_title = function_exists('wdc_site_get') ? wdc_site_get('crew_title', contenly_tr('Profesional berpengalaman yang membangun ekosistem diving Indonesia.', 'Experienced professionals advancing Indonesia’s diving ecosystem.')) : contenly_tr('Profesional berpengalaman yang membangun ekosistem diving Indonesia.', 'Experienced professionals advancing Indonesia’s diving ecosystem.');
+  $wdc_crew = function_exists('wdc_get_crew_profiles') ? wdc_get_crew_profiles() : [];
+  ?>
+  <section class="wd-section white wd-crew-proof" id="crew"><div class="wd-shell"><span class="wd-kicker"><?php echo esc_html($wdc_crew_kicker); ?></span><h2 class="wd-title"><?php echo esc_html($wdc_crew_title); ?></h2><div class="wd-profile-grid">
+    <?php foreach ($wdc_crew as $member) :
+      $img = $member['image'] ?? '';
+      if (!$img) { continue; }
+    ?>
+    <article class="wd-profile-card"><img src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr($member['alt'] ?? $member['name'] ?? 'Crew'); ?>"><div><h3><?php echo esc_html($member['name'] ?? ''); ?></h3><b><?php echo esc_html($member['role'] ?? ''); ?></b><p><?php echo esc_html($member['bio'] ?? ''); ?></p></div></article>
+    <?php endforeach; ?>
   </div></div></section>
 
   <!-- HOW WE WORK -->
+  <?php
+  $wdc_values = [];
+  for ($i = 1; $i <= 4; $i++) {
+    $title = function_exists('wdc_site_get') ? wdc_site_get('value_' . $i . '_title') : '';
+    $text = function_exists('wdc_site_get') ? wdc_site_get('value_' . $i . '_text') : '';
+    if ($title === '' && $text === '') {
+      continue;
+    }
+    $wdc_values[] = [
+      'n' => str_pad((string) $i, 2, '0', STR_PAD_LEFT),
+      'title' => $title,
+      'text' => $text,
+    ];
+  }
+  if (!$wdc_values) {
+    $wdc_values = [
+      ['n' => '01', 'title' => contenly_tr('Keselamatan', 'Safety'), 'text' => contenly_tr('Setiap training, trip, dan rekomendasi dipandu oleh kesiapan diver, kondisi, dan standar konservatif.', 'Every training, trip, and recommendation is guided by diver readiness, conditions, and conservative standards.')],
+      ['n' => '02', 'title' => contenly_tr('Integritas', 'Integrity'), 'text' => contenly_tr('Progress diver dibangun dengan evaluasi jujur, bukan sertifikasi terburu-buru.', 'Diver progress is built through honest evaluation, not rushed certification.')],
+      ['n' => '03', 'title' => contenly_tr('Pembelajaran berkelanjutan', 'Continuous learning'), 'text' => contenly_tr('WDC mendukung diver untuk terus naik level melalui edukasi, praktik, dan leadership.', 'WDC supports divers to keep improving through education, practice, and leadership.')],
+      ['n' => '04', 'title' => contenly_tr('Konservasi laut', 'Marine conservation'), 'text' => contenly_tr('Kami mendorong perilaku bawah air yang bertanggung jawab dan menghormati ekosistem laut.', 'We promote responsible underwater behavior and respect for marine ecosystems.')],
+    ];
+  }
+  ?>
   <section class="wd-section wdc-about-values">
     <div class="wd-shell">
-      <span class="wd-kicker"><?php echo esc_html(contenly_tr('Nilai Kerja', 'Working Values')); ?></span>
-      <h2 class="wd-title"><?php echo esc_html(contenly_tr('Safety, integrity, continuous learning.', 'Safety, integrity, continuous learning.')); ?></h2>
+      <span class="wd-kicker"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('values_kicker', contenly_tr('Nilai Kerja', 'Working Values')) : contenly_tr('Nilai Kerja', 'Working Values')); ?></span>
+      <h2 class="wd-title"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('values_title', contenly_tr('Safety, integrity, continuous learning.', 'Safety, integrity, continuous learning.')) : contenly_tr('Safety, integrity, continuous learning.', 'Safety, integrity, continuous learning.')); ?></h2>
       <div class="wd-about-crew-grid">
-        <div class="wd-crew-card"><div class="wd-crew-icon">01</div><h3><?php echo esc_html(contenly_tr('Keselamatan', 'Safety')); ?></h3><span><?php echo esc_html(contenly_tr('Setiap training, trip, dan rekomendasi dipandu oleh kesiapan diver, kondisi, dan standar konservatif.', 'Every training, trip, and recommendation is guided by diver readiness, conditions, and conservative standards.')); ?></span></div>
-        <div class="wd-crew-card"><div class="wd-crew-icon">02</div><h3><?php echo esc_html(contenly_tr('Integritas', 'Integrity')); ?></h3><span><?php echo esc_html(contenly_tr('Progress diver dibangun dengan evaluasi jujur, bukan sertifikasi terburu-buru.', 'Diver progress is built through honest evaluation, not rushed certification.')); ?></span></div>
-        <div class="wd-crew-card"><div class="wd-crew-icon">03</div><h3><?php echo esc_html(contenly_tr('Pembelajaran berkelanjutan', 'Continuous learning')); ?></h3><span><?php echo esc_html(contenly_tr('WDC mendukung diver untuk terus naik level melalui edukasi, praktik, dan leadership.', 'WDC supports divers to keep improving through education, practice, and leadership.')); ?></span></div>
-        <div class="wd-crew-card"><div class="wd-crew-icon">04</div><h3><?php echo esc_html(contenly_tr('Konservasi laut', 'Marine conservation')); ?></h3><span><?php echo esc_html(contenly_tr('Kami mendorong perilaku bawah air yang bertanggung jawab dan menghormati ekosistem laut.', 'We promote responsible underwater behavior and respect for marine ecosystems.')); ?></span></div>
+        <?php foreach ($wdc_values as $val) : ?>
+        <div class="wd-crew-card"><div class="wd-crew-icon"><?php echo esc_html($val['n']); ?></div><h3><?php echo esc_html($val['title']); ?></h3><span><?php echo esc_html($val['text']); ?></span></div>
+        <?php endforeach; ?>
       </div>
     </div>
   </section>
