@@ -3256,7 +3256,7 @@ function wdc_ajax_save_direct_checkout() {
     update_user_meta($user_id, $meta_key, array_slice($orders, 0, 25));
 
     wdc_send_member_commerce_email($user_id, 'Payment proof received - ' . $order_id, 'Thanks. We received your payment proof for <strong>' . esc_html($item) . '</strong>. The crew will verify it soon.');
-    wdc_send_admin_commerce_email('New WDC direct order - ' . $order_id, 'A member uploaded payment proof for <strong>' . esc_html($item) . '</strong>.<br>Open WDC Members > Direct Orders to verify it.');
+    wdc_send_admin_commerce_email('New WDC direct order - ' . $order_id, 'A member uploaded payment proof for <strong>' . esc_html($item) . '</strong>.<br>Cek Course/Gear Requests atau hubungi member via WA.');
 
     wp_send_json_success(['order_id' => $order_id]);
 }
@@ -3321,8 +3321,7 @@ function wdc_register_member_admin_menu() {
     add_submenu_page('wdc-member-admin', 'Member List', 'Member List', 'manage_options', 'wdc-member-list', 'wdc_render_member_list_admin');
     add_submenu_page('wdc-member-admin', 'Course Requests', 'Course Requests' . wdc_admin_menu_badge(wdc_member_admin_pending_count('course', 'requests')), 'manage_options', 'wdc-course-requests', 'wdc_render_course_admin_page');
     add_submenu_page('wdc-member-admin', 'Gear Requests', 'Gear Requests' . wdc_admin_menu_badge(wdc_member_admin_pending_count('equipment', 'requests')), 'manage_options', 'wdc-gear-requests', 'wdc_render_gear_admin_page');
-    $direct_pending = wdc_member_admin_pending_count('course', 'orders') + wdc_member_admin_pending_count('equipment', 'orders');
-    add_submenu_page('wdc-member-admin', 'Direct Orders', 'Direct Orders' . wdc_admin_menu_badge($direct_pending), 'manage_options', 'wdc-direct-orders', 'wdc_render_direct_orders_admin_page');
+    // Direct Orders menu hidden: order flow now WA-first; Course/Gear Requests remain.
     add_submenu_page('wdc-member-admin', 'Payment Settings', 'Payment Settings', 'manage_options', 'wdc-payment-settings', 'wdc_render_payment_settings_page');
 }
 add_action('admin_menu', 'wdc_register_member_admin_menu');
@@ -3753,7 +3752,6 @@ function wdc_admin_assets($hook) {
         'wdc-giveaway-settings',
         'wdc-course-requests',
         'wdc-gear-requests',
-        'wdc-direct-orders',
         'wdc-payment-settings',
     ];
     if (!in_array($page, $wdc_admin_pages, true) && strpos((string) $hook, 'wdc-') === false) {
