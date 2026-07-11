@@ -164,13 +164,13 @@ function wdc_course_image_url($title, $theme_uri) {
         $ac = $agency_colors[$agency_name] ?? '#06384d';
         $ad = $agency_desc[$agency_name] ?? '';
       ?>
-      <div style="margin-bottom:56px;">
-        <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
-          <span class="wd-chiplet"><?php echo esc_html($agency_name); ?></span>
-          <span class="wd-chiplet"></span>
-          <span class="wd-chiplet"><?php echo count($agency_courses); ?> <?php echo contenly_tr('kursus', 'courses'); ?></span>
+      <div class="wd-agency-block" data-agency="<?php echo esc_attr(strtolower($agency_name)); ?>" style="--agency-color:<?php echo esc_attr($ac); ?>;">
+        <div class="wd-agency-head">
+          <span class="wd-agency-badge"><?php echo esc_html($agency_name); ?></span>
+          <span class="wd-agency-rule" aria-hidden="true"></span>
+          <span class="wd-agency-count"><?php echo count($agency_courses); ?> <?php echo contenly_tr('kursus', 'courses'); ?></span>
         </div>
-        <?php if($ad): ?><p style="color:#5b7180;font-size:15px;line-height:1.6;margin:0 0 22px;max-width:640px;"><?php echo esc_html($ad); ?></p><?php endif; ?>
+        <?php if($ad): ?><p class="wd-agency-desc"><?php echo esc_html($ad); ?></p><?php endif; ?>
 
         <div id="courseGrid" class="wd-equipment-grid wd-page-grid wd-catalog-grid">
           <?php foreach($agency_courses as $course):
