@@ -463,9 +463,15 @@ function wdc_get_home_equipment($limit = 4) {
     return $items;
 }
 
+/**
+ * Catalog Images is a one-shot dev/backfill tool, not daily admin content.
+ * Keep page for emergency direct URL only (hidden under options.php parent).
+ * Daily photo edits: Dive Courses / Dive Equipment → Featured image.
+ */
 function wdc_site_admin_menu_catalog_tools() {
+    // options.php parent = registered but not shown in sidebar menus.
     add_submenu_page(
-        'wdc-site',
+        'options.php',
         'Catalog Images',
         'Catalog Images',
         'manage_options',
