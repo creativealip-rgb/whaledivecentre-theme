@@ -11,6 +11,25 @@ $course_requests = get_user_meta($user_id, '_wdc_course_requests', true);
 $course_requests = is_array($course_requests) ? $course_requests : [];
 $course_orders = get_user_meta($user_id, '_wdc_course_orders', true);
 $course_orders = is_array($course_orders) ? $course_orders : [];
+// Giveaway was historically stored in course_orders for activity tracking — hide from Kursus Saya.
+$course_orders = array_values(array_filter($course_orders, function ($order) {
+    if (!is_array($order)) {
+        return false;
+    }
+    $type = sanitize_key($order['type'] ?? '');
+    $id = (string) ($order['id'] ?? '');
+    $item = (string) ($order['item'] ?? '');
+    if ($type === 'giveaway') {
+        return false;
+    }
+    if (stripos($id, 'GW-') === 0) {
+        return false;
+    }
+    if (stripos($item, 'Giveaway') === 0) {
+        return false;
+    }
+    return true;
+}));
 
 if ((($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') && isset($_POST['wdc_course_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_course_nonce'])), 'wdc_course_request')) {
     $selected_course = sanitize_text_field(wp_unslash($_POST['selected_course'] ?? ''));

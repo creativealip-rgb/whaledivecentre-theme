@@ -311,19 +311,8 @@ add_action('wp_ajax_wdc_submit_giveaway', function() {
     update_user_meta($user_id, '_wdc_giveaway_order', $order);
     update_user_meta($user_id, '_wdc_giveaway_claimed', true);
 
-    // Also add to course_orders for dashboard activity tracking
-    $existing_orders = get_user_meta($user_id, '_wdc_course_orders', true);
-    $existing_orders = is_array($existing_orders) ? $existing_orders : [];
-    $existing_orders[] = [
-        'id'         => $order_id,
-        'item'       => contenly_tr('Giveaway: ', 'Giveaway: ') . implode(', ', $item_ids),
-        'status'     => 'Awaiting Payment',
-        'admin_note' => contenly_tr('Menunggu TF ongkir sesuai SS quote', 'Waiting shipping TF matching quote screenshot'),
-        'type'       => 'giveaway',
-        'amount'     => $shipping_cost,
-        'created_at' => current_time('mysql'),
-    ];
-    update_user_meta($user_id, '_wdc_course_orders', $existing_orders);
+    // Do NOT push giveaway into _wdc_course_orders — that pollutes Kursus Saya.
+    // Progress lives in _wdc_giveaway_order + dashboard giveaway section.
 
     wp_send_json_success([
         'order_id' => $order_id,
@@ -754,57 +743,11 @@ function wdc_giveaway_tracking_url($courier = '', $resi = '') {
 }
 
 /**
- * Sync giveaway order status into activity feed (_wdc_course_orders).
+ * Giveaway progress lives on dashboard via _wdc_giveaway_order.
+ * Do not sync into _wdc_course_orders (pollutes Kursus Saya).
  */
 function wdc_giveaway_sync_activity($user_id, $order) {
-    $user_id = intval($user_id);
-    if (!$user_id || !is_array($order)) {
-        return;
-    }
-    $status = sanitize_key($order['status'] ?? 'awaiting_payment');
-    $meta = wdc_giveaway_status_meta($status);
-    $activity_status = [
-        'awaiting_payment' => 'Awaiting Payment',
-        'payment_uploaded' => 'Payment Uploaded',
-        'verified'         => 'Verified',
-        'shipped'          => 'Active',
-        'delivered'        => 'Completed',
-        'cancelled'        => 'Cancelled',
-    ][$status] ?? 'Requested';
-
-    $note = $meta['label'];
-    if (!empty($order['tracking_number'])) {
-        $note .= ' · Resi: ' . $order['tracking_number'];
-    }
-    if (!empty($order['admin_note'])) {
-        $note .= ' · ' . $order['admin_note'];
-    }
-
-    $existing_orders = get_user_meta($user_id, '_wdc_course_orders', true);
-    $existing_orders = is_array($existing_orders) ? $existing_orders : [];
-    $found = false;
-    foreach ($existing_orders as &$eo) {
-        if (($eo['type'] ?? '') === 'giveaway' && ($eo['id'] ?? '') === ($order['order_id'] ?? '')) {
-            $eo['status'] = $activity_status;
-            $eo['admin_note'] = $note;
-            $eo['amount'] = intval($order['shipping_cost'] ?? 0);
-            $found = true;
-            break;
-        }
-    }
-    unset($eo);
-    if (!$found) {
-        $existing_orders[] = [
-            'id'         => $order['order_id'] ?? '',
-            'item'       => contenly_tr('Giveaway: ', 'Giveaway: ') . implode(', ', $order['items'] ?? []),
-            'status'     => $activity_status,
-            'admin_note' => $note,
-            'type'       => 'giveaway',
-            'amount'     => intval($order['shipping_cost'] ?? 0),
-            'created_at' => $order['created_at'] ?? current_time('mysql'),
-        ];
-    }
-    update_user_meta($user_id, '_wdc_course_orders', $existing_orders);
+    return;
 }
 
 /**

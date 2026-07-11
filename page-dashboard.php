@@ -545,7 +545,17 @@ if ($wdc_dash_infos) :
 <?php endif; ?>
 
 <?php
-$recent_activity = array_slice(array_merge($course_orders, $gear_orders, $course_requests, $gear_requests), 0, 5);
+$recent_activity = array_values(array_filter(array_merge($course_orders, $gear_orders, $course_requests, $gear_requests), function ($item) {
+    if (!is_array($item)) return false;
+    $type = sanitize_key($item['type'] ?? '');
+    $id = (string) ($item['id'] ?? '');
+    $label = (string) ($item['item'] ?? $item['course'] ?? $item['gear'] ?? '');
+    if ($type === 'giveaway' || stripos($id, 'GW-') === 0 || stripos($label, 'Giveaway') === 0) {
+        return false;
+    }
+    return true;
+}));
+$recent_activity = array_slice($recent_activity, 0, 5);
 $status_steps = ['Payment Uploaded' => 'Proof received', 'Verified' => 'Payment verified', 'Active' => 'Ready / active', 'Completed' => 'Completed', 'Cancelled' => 'Cancelled', 'Requested' => 'Crew review', 'Awaiting Payment' => 'Waiting for payment'];
 ?>
 
