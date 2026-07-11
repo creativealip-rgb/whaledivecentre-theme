@@ -121,7 +121,7 @@ rewind_posts();
         <div class="wd-sidebar-card">
           <?php if ($price) : ?>
           <div class="wd-sidebar-price">
-            <span class="wd-price-label"><?php echo contenly_tr('Harga', 'Price'); ?></span>
+            <span class="wd-price-label"><?php echo contenly_tr('Harga mulai', 'Starting price'); ?></span>
             <span class="wd-price-amount">Rp <?php echo number_format((float) $price, 0, ',', '.'); ?></span>
           </div>
           <?php endif; ?>

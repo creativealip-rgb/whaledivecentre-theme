@@ -202,7 +202,7 @@ function wdc_course_image_url($title, $theme_uri) {
               <h3 style="font-size:20px!important;line-height:1.08!important;letter-spacing:-.03em!important;margin:0 0 2px!important;color:#061a36!important;min-height:0!important;"><?php echo esc_html($course->post_title); ?></h3>
               <?php if($price): ?>
               <div class="wd-equip-price" style="margin:0 0 6px!important;padding:0!important;background:transparent!important;border:0!important;">
-                <span class="wd-price-label" style="display:block!important;margin:0 0 4px!important;font-size:11px!important;line-height:1.2!important;color:#789!important;"><?php echo contenly_tr('Harga kursus · jadwal atas permintaan', 'Course price · schedule on request'); ?></span>
+                <span class="wd-price-label" style="display:block!important;margin:0 0 4px!important;font-size:11px!important;line-height:1.2!important;color:#789!important;"><?php echo contenly_tr('Harga mulai', 'Starting price'); ?></span>
                 <span class="wd-price-amount" style="display:block!important;font-size:17px!important;line-height:1!important;color:#06384d!important;font-weight:900!important;white-space:nowrap!important;">Rp <?php echo number_format((float)$price,0,',','.'); ?></span>
               </div>
               <?php endif; ?>
