@@ -2,7 +2,7 @@
 
 /*
 Theme Name: Whale Dive Centre Theme
-Version: 2.3.73
+Version: 2.3.74
 */
 :root{
   --black:#000;--violet:#3B44AC;--cyan:#4CC8ED;--pale:#96DAEA;--red:#C31C4A;--blue:#004A98;--white:#fff;--navy:#061a36;--ink:#0b1930;--muted:#63748a;
@@ -7861,5 +7861,132 @@ html body.whaledive-equipment .wdc-card-cta .wd-btn.alt{
     min-width:0!important;
     margin-top:2px!important;
     padding:0 18px!important;
+  }
+}
+
+
+/* WDC NAV TABLET HAMBURGER (2.3.74)
+   Old hamburger only at max-width:760px.
+   Tablet 768-1100 still showed full inline menu → logo cut + crowded nav.
+   Force mobile drawer for all <=1099.98px. Desktop full menu from 1100+. */
+@media(max-width:1099.98px){
+  .wd-header .wd-nav,
+  .wd-nav{
+    padding:12px 16px!important;
+    min-height:64px!important;
+    height:auto!important;
+    gap:10px!important;
+    align-items:center!important;
+  }
+  .wd-brand{
+    min-width:0!important;
+    max-width:calc(100% - 64px)!important;
+    flex:1 1 auto!important;
+    overflow:hidden!important;
+  }
+  .wd-brand img,
+  .wd-brand-logo{
+    width:34px!important;
+    height:34px!important;
+    flex:0 0 34px!important;
+  }
+  .wd-brand span{
+    font-size:16px!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    max-width:100%!important;
+  }
+  .wd-hamburger{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    flex:0 0 46px!important;
+    width:46px!important;
+    height:46px!important;
+    margin-left:auto!important;
+    position:relative!important;
+    z-index:1002!important;
+    border-radius:15px!important;
+    background:rgba(255,255,255,.12)!important;
+    border:1px solid rgba(255,255,255,.24)!important;
+  }
+  /* Hide inline menu; open as right drawer when .wd-menu-open */
+  .wd-menu,
+  .wd-header .wd-menu{
+    position:fixed!important;
+    top:0!important;
+    right:0!important;
+    left:auto!important;
+    bottom:0!important;
+    width:min(340px,86vw)!important;
+    max-width:86vw!important;
+    height:100dvh!important;
+    margin:0!important;
+    padding:84px 18px 24px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:8px!important;
+    background:rgba(1,12,27,.98)!important;
+    border:0!important;
+    border-left:1px solid rgba(255,255,255,.12)!important;
+    border-radius:0!important;
+    box-shadow:-18px 0 50px rgba(0,0,0,.35)!important;
+    opacity:0!important;
+    visibility:hidden!important;
+    transform:translateX(110%)!important;
+    transition:opacity .2s ease, transform .2s ease, visibility .2s ease!important;
+    overflow:auto!important;
+    z-index:1001!important;
+  }
+  .wd-menu-open .wd-menu,
+  .wd-header.wd-menu-open .wd-menu,
+  body.wd-menu-open .wd-menu{
+    opacity:1!important;
+    visibility:visible!important;
+    transform:translateX(0)!important;
+  }
+  .wd-menu a,
+  .wd-header .wd-menu a{
+    display:flex!important;
+    width:100%!important;
+    box-sizing:border-box!important;
+    padding:14px 16px!important;
+    text-align:left!important;
+    border-radius:14px!important;
+    font-size:14px!important;
+    letter-spacing:.08em!important;
+  }
+  /* language + dashboard stay inside drawer, not cramped header */
+  .wd-menu .wd-lang,
+  .wd-menu .wd-nav-member,
+  .wd-menu .wd-btn,
+  .wd-menu > *{
+    width:100%!important;
+    max-width:100%!important;
+    margin-left:0!important;
+  }
+}
+@media(min-width:1100px){
+  .wd-hamburger{display:none!important}
+  .wd-menu,
+  .wd-header .wd-menu{
+    position:static!important;
+    width:auto!important;
+    height:auto!important;
+    max-width:none!important;
+    padding:0!important;
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    gap:6px!important;
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+    opacity:1!important;
+    visibility:visible!important;
+    transform:none!important;
+    overflow:visible!important;
   }
 }
