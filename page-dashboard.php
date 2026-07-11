@@ -487,37 +487,15 @@ if (is_array($gw_order) && !empty($gw_order['order_id']) && function_exists('wdc
 .wdc-gw-progress-cta{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 14px;border-radius:999px;background:var(--wdc-btn-primary,#004A98);color:#fff!important;text-decoration:none;font-weight:900;border:0;cursor:pointer;width:100%;box-sizing:border-box}
 .wdc-gw-progress-cta--warn{background:var(--wdc-btn-primary,#004A98)!important}
 .wdc-gw-progress-cta--ghost{background:#fff!important;border:1px solid var(--wdc-btn-secondary-border,#cfe0e8)!important;color:var(--wdc-btn-secondary-text,#004A98)!important;box-shadow:none!important}
-.wdc-dash-cta-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:28px;width:100%}
-.wdc-dash-cta-card{background:#fff;border:1px solid var(--wdc-border,#e6edf2);border-radius:var(--wdc-radius,20px);padding:20px;box-shadow:var(--wdc-shadow,0 10px 28px rgba(15,23,42,.06));box-sizing:border-box;min-width:0;display:flex;flex-direction:column}
-.wdc-dash-cta-card h2{font-size:22px;color:#0f172a;margin:10px 0;letter-spacing:-.02em;line-height:1.25}
-.wdc-dash-cta-card p{color:#64748b;line-height:1.65;margin:0 0 18px;flex:1}
-.wdc-dash-cta-card a{display:inline-flex;align-self:flex-start}
-.wdc-dash-cta-kicker{font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;color:#0b617c}
 @media(max-width:767.98px){
   .wdc-gw-progress-head{flex-direction:column;align-items:stretch}
   .wdc-gw-progress-badge{align-self:flex-start}
   .wdc-gw-progress-steps{grid-template-columns:1fr}
   .wdc-gw-progress-step{min-height:58px;flex-direction:row;justify-content:flex-start;text-align:left;padding:12px}
   .wdc-gw-progress-actions{grid-template-columns:1fr}
-  .wdc-dash-cta-grid{grid-template-columns:1fr}
 }
 </style>
 <?php endif; ?>
-
-<div class="wdc-dash-cta-grid">
-    <article class="wdc-dash-cta-card">
-        <span class="wdc-dash-cta-kicker"><?php echo contenly_tr('Belajar', 'Learn'); ?></span>
-        <h2><?php echo contenly_tr('Gabung Kursus Menyelam', 'Join a dive course'); ?></h2>
-        <p><?php echo contenly_tr('Mulai Open Water, lanjut ke Advanced, atau bangun keterampilan rescue dan kepemimpinan bersama kru.', 'Start Open Water, continue to Advanced, or build safer rescue and leadership skills with the crew.'); ?></p>
-        <a href="/my-courses/"><?php echo contenly_tr('Buka Kursus Saya', 'Open My Courses'); ?></a>
-    </article>
-    <article class="wdc-dash-cta-card">
-        <span class="wdc-dash-cta-kicker"><?php echo contenly_tr('Peralatan', 'Gear'); ?></span>
-        <h2><?php echo contenly_tr('Beli Peralatan Selam', 'Buy scuba equipment'); ?></h2>
-        <p><?php echo contenly_tr('Jelajahi masker, fin, BCD, regulator, baju selam, dan dive computer dengan bantuan fitting sebelum checkout.', 'Browse masks, fins, BCDs, regulators, wetsuits, and dive computers with fit support before checkout.'); ?></p>
-        <a href="/my-gear/"><?php echo contenly_tr('Buka Peralatan Saya', 'Open My Gear'); ?></a>
-    </article>
-</div>
 
 <?php
 // Latest Informasi (same feed as /informasi/)
