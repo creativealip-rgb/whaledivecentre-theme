@@ -160,7 +160,7 @@ $completed_count = count($completed_courses);
 .wdc-completed-item h3,
 .wdc-completed-item .cell-title h3{
   margin:0!important;
-  font-size:10px!important;
+  font-size:14px!important;
   font-weight:400!important;
   color:#0f172a!important;
   line-height:1.35!important;
