@@ -2870,10 +2870,106 @@ add_filter('register_url', function() {
     return home_url('/member-register/');
 });
 
-// Never send wp-admin visitors to member login.
+// Keep member failed logins on /login (not wp-login.php / wp-admin).
+// Admin auth still uses native wp-login.php.
+function wdc_member_login_page_url($args = []) {
+    $url = function_exists('contenly_localized_url') ? contenly_localized_url('/login/') : home_url('/login/');
+    if (is_array($args) && $args) {
+        $url = add_query_arg($args, $url);
+    }
+    return $url;
+}
+
+function wdc_redirect_is_admin_target($redirect = '') {
+    $redirect = (string) $redirect;
+    if ($redirect === '') {
+        return false;
+    }
+    return (
+        strpos($redirect, 'wp-admin') !== false
+        || strpos($redirect, 'wp-login.php') !== false
+    );
+}
+
+function wdc_request_from_member_login() {
+    $ref = (string) (wp_get_referer() ?: ($_SERVER['HTTP_REFERER'] ?? ''));
+    if ($ref === '') {
+        return false;
+    }
+    $path = (string) (parse_url($ref, PHP_URL_PATH) ?: '');
+    return (
+        $path === '/login'
+        || $path === '/login/'
+        || strpos($path, '/login/') !== false
+        || strpos($path, '/member-login') !== false
+        || substr($path, -6) === '/login'
+    );
+}
+
+add_action('wp_login_failed', function ($username) {
+    $redirect = isset($_REQUEST['redirect_to']) ? (string) wp_unslash($_REQUEST['redirect_to']) : '';
+
+    // Admin login form posts also hit wp-login.php — leave those alone.
+    if (wdc_redirect_is_admin_target($redirect)) {
+        return;
+    }
+    if (!wdc_request_from_member_login() && $redirect === '') {
+        return;
+    }
+
+    $args = ['login' => 'failed'];
+    if ($redirect !== '') {
+        $args['redirect_to'] = $redirect;
+    }
+    wp_safe_redirect(wdc_member_login_page_url($args));
+    exit;
+}, 10, 1);
+
+// Empty username/password fails before/around authenticate; bounce member flow early.
+add_filter('authenticate', function ($user, $username, $password) {
+    if ($user instanceof WP_User) {
+        return $user;
+    }
+    if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
+        return $user;
+    }
+    $redirect = isset($_REQUEST['redirect_to']) ? (string) wp_unslash($_REQUEST['redirect_to']) : '';
+    if (wdc_redirect_is_admin_target($redirect)) {
+        return $user;
+    }
+    if (!wdc_request_from_member_login()) {
+        return $user;
+    }
+    if ($username === '' || $password === '') {
+        $args = ['login' => 'failed'];
+        if ($redirect !== '') {
+            $args['redirect_to'] = $redirect;
+        }
+        wp_safe_redirect(wdc_member_login_page_url($args));
+        exit;
+    }
+    return $user;
+}, 30, 3);
+
+// Safety net: if someone lands on wp-login.php?login=failed without admin target, bounce to /login.
 add_action('login_init', function () {
-    // no-op guard marker for future hooks
-}, 0);
+    if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
+        return;
+    }
+    if (!isset($_GET['login']) || $_GET['login'] !== 'failed') {
+        return;
+    }
+    $redirect = isset($_REQUEST['redirect_to']) ? (string) wp_unslash($_REQUEST['redirect_to']) : '';
+    if (wdc_redirect_is_admin_target($redirect)) {
+        return;
+    }
+    $args = ['login' => 'failed'];
+    if ($redirect !== '') {
+        $args['redirect_to'] = $redirect;
+    }
+    wp_safe_redirect(wdc_member_login_page_url($args));
+    exit;
+}, 1);
 
 // Serve member templates even when the matching WP pages are not created yet.
 function wdc_member_template_route_map() {
