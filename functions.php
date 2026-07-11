@@ -4217,7 +4217,7 @@ function wdc_render_member_list_admin() {
         'order' => 'ASC',
     ]);
 
-    echo '<div class="wrap">';
+    echo '<div class="wrap" style="max-width:none;">';
     if ($user_id) {
         $user = get_userdata($user_id);
         if (!$user) {
