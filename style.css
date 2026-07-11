@@ -2,7 +2,7 @@
 
 /*
 Theme Name: Whale Dive Centre Theme
-Version: 2.3.71
+Version: 2.3.72
 */
 :root{
   --black:#000;--violet:#3B44AC;--cyan:#4CC8ED;--pale:#96DAEA;--red:#C31C4A;--blue:#004A98;--white:#fff;--navy:#061a36;--ink:#0b1930;--muted:#63748a;
@@ -7727,3 +7727,50 @@ html body .wdc-btn--danger{
   -webkit-text-fill-color:#FFFFFF!important;
   border-color:#C31C4A!important;
 }
+
+
+/* WDC EQUIP CARD FULL BLEED (2.3.72) — match course card image treatment */
+html body.whaledive-equipment .wd-shop-card .wd-equip-visual,
+html body.whaledive-equipment .wd-shop-card .wd-equip-visual.has-photo,
+html body.whaledive-equipment #equipGrid .wd-equip-visual,
+html body.whaledive-equipment #equipGrid .wd-equip-visual.has-photo,
+html body .wd-shop-card .wd-equip-visual{
+  padding:0!important;
+  border:0!important;
+  border-bottom:0!important;
+  background:transparent!important;
+  background-image:none!important;
+  box-shadow:none!important;
+  min-height:0!important;
+  height:190px!important;
+  overflow:hidden!important;
+  position:relative!important;
+}
+html body.whaledive-equipment .wd-shop-card .wd-equip-visual:before,
+html body.whaledive-equipment .wd-shop-card .wd-equip-visual:after,
+html body.whaledive-equipment #equipGrid .wd-equip-visual:before,
+html body.whaledive-equipment #equipGrid .wd-equip-visual:after,
+html body .wd-shop-card .wd-equip-visual:before,
+html body .wd-shop-card .wd-equip-visual:after{
+  content:none!important;
+  display:none!important;
+}
+html body.whaledive-equipment .wd-shop-card .wd-equip-photo,
+html body.whaledive-equipment #equipGrid .wd-equip-photo,
+html body .wd-shop-card .wd-equip-photo{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  background:transparent!important;
+  transform:none!important;
+  z-index:1!important;
+}
+/* base legacy .wd-equip-visual padding 22px must not win on catalog cards */
+.wd-equip-visual{padding:0!important}
+.wd-shop-card{padding:0!important}
