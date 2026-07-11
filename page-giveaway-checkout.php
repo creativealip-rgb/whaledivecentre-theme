@@ -30,9 +30,14 @@ if ($order_id && $giveaway_order['order_id'] !== $order_id) {
     exit;
 }
 
-// Already paid?
-if (($giveaway_order['status'] ?? '') === 'paid') {
-    wp_redirect(add_query_arg('giveaway', 'paid', contenly_localized_url('/dashboard/')));
+// Already past payment stage? send back to dashboard progress
+$gw_st = sanitize_key($giveaway_order['status'] ?? '');
+if (in_array($gw_st, ['payment_uploaded', 'verified', 'shipped', 'delivered', 'paid'], true)) {
+    wp_redirect(add_query_arg('giveaway', $gw_st, contenly_localized_url('/dashboard/')));
+    exit;
+}
+if ($gw_st === 'cancelled') {
+    wp_redirect(add_query_arg('giveaway', 'cancelled', contenly_localized_url('/dashboard/')));
     exit;
 }
 

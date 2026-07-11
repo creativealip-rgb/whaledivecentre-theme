@@ -639,17 +639,8 @@ add_action('wp_ajax_wdc_upload_giveaway_payment', function() {
     $order['payment_uploaded_at'] = current_time('mysql');
     update_user_meta($user_id, '_wdc_giveaway_order', $order);
 
-    // Update activity feed
-    $existing_orders = get_user_meta($user_id, '_wdc_course_orders', true);
-    $existing_orders = is_array($existing_orders) ? $existing_orders : [];
-    foreach ($existing_orders as &$eo) {
-        if (isset($eo['type']) && $eo['type'] === 'giveaway' && ($eo['id'] ?? '') === $order['order_id']) {
-            $eo['status'] = 'Payment Uploaded';
-            break;
-        }
-    }
-    unset($eo);
-    update_user_meta($user_id, '_wdc_course_orders', $existing_orders);
+    // Update activity feed + normalized progress
+    wdc_giveaway_sync_activity($user_id, $order);
 
     // Notify admin
     $admin_email = get_option('admin_email');
@@ -667,6 +658,409 @@ add_action('wp_ajax_wdc_upload_giveaway_payment', function() {
 });
 
 /* =========================================================================
+   STATUS / TRACKING HELPERS
+   ========================================================================= */
+
+/**
+ * Canonical giveaway status labels (user-facing).
+ */
+function wdc_giveaway_status_meta($status = '') {
+    $map = [
+        'awaiting_payment'  => [
+            'label' => contenly_tr('Menunggu Pembayaran', 'Awaiting Payment'),
+            'color' => '#b45309',
+            'bg'    => '#fef3c7',
+            'step'  => 1,
+        ],
+        'payment_uploaded'  => [
+            'label' => contenly_tr('Bukti Transfer Dikirim', 'Payment Proof Uploaded'),
+            'color' => '#1d4ed8',
+            'bg'    => '#dbeafe',
+            'step'  => 2,
+        ],
+        'verified'          => [
+            'label' => contenly_tr('Pembayaran Diverifikasi', 'Payment Verified'),
+            'color' => '#047857',
+            'bg'    => '#d1fae5',
+            'step'  => 3,
+        ],
+        'shipped'           => [
+            'label' => contenly_tr('Barang Dikirim', 'Shipped'),
+            'color' => '#6d28d9',
+            'bg'    => '#ede9fe',
+            'step'  => 4,
+        ],
+        'delivered'         => [
+            'label' => contenly_tr('Selesai / Diterima', 'Delivered'),
+            'color' => '#065f46',
+            'bg'    => '#d1fae5',
+            'step'  => 5,
+        ],
+        'cancelled'         => [
+            'label' => contenly_tr('Dibatalkan', 'Cancelled'),
+            'color' => '#991b1b',
+            'bg'    => '#fee2e2',
+            'step'  => 0,
+        ],
+    ];
+    $status = sanitize_key((string) $status);
+    return $map[$status] ?? [
+        'label' => $status ?: contenly_tr('Unknown', 'Unknown'),
+        'color' => '#475569',
+        'bg'    => '#f1f5f9',
+        'step'  => 0,
+    ];
+}
+
+/**
+ * Pipeline steps for progress UI.
+ */
+function wdc_giveaway_progress_steps() {
+    return [
+        'awaiting_payment' => contenly_tr('Klaim + Bayar Ongkir', 'Claim + Pay Shipping'),
+        'payment_uploaded' => contenly_tr('Upload Bukti TF', 'Upload Transfer Proof'),
+        'verified'         => contenly_tr('Admin Verifikasi', 'Admin Verified'),
+        'shipped'          => contenly_tr('Dikirim + Resi', 'Shipped + Tracking'),
+        'delivered'        => contenly_tr('Selesai', 'Delivered'),
+    ];
+}
+
+/**
+ * Build external tracking URL from courier + resi.
+ */
+function wdc_giveaway_tracking_url($courier = '', $resi = '') {
+    $resi = trim((string) $resi);
+    if ($resi === '') {
+        return '';
+    }
+    $c = strtolower(preg_replace('/[^a-z0-9]+/i', '', (string) $courier));
+    if (strpos($c, 'jne') !== false) {
+        return 'https://www.jne.co.id/id/tracking/trace?awb=' . rawurlencode($resi);
+    }
+    if (strpos($c, 'jnt') !== false || strpos($c, 'jt') !== false) {
+        return 'https://jet.co.id/track?awb=' . rawurlencode($resi);
+    }
+    if (strpos($c, 'sicepat') !== false) {
+        return 'https://www.sicepat.com/checkAwb?awb=' . rawurlencode($resi);
+    }
+    if (strpos($c, 'anteraja') !== false) {
+        return 'https://anteraja.id/tracking?awb=' . rawurlencode($resi);
+    }
+    if (strpos($c, 'pos') !== false) {
+        return 'https://www.posindonesia.co.id/id/tracking?awb=' . rawurlencode($resi);
+    }
+    // Generic fallback: cekresi
+    return 'https://cekresi.com/?noresi=' . rawurlencode($resi);
+}
+
+/**
+ * Sync giveaway order status into activity feed (_wdc_course_orders).
+ */
+function wdc_giveaway_sync_activity($user_id, $order) {
+    $user_id = intval($user_id);
+    if (!$user_id || !is_array($order)) {
+        return;
+    }
+    $status = sanitize_key($order['status'] ?? 'awaiting_payment');
+    $meta = wdc_giveaway_status_meta($status);
+    $activity_status = [
+        'awaiting_payment' => 'Awaiting Payment',
+        'payment_uploaded' => 'Payment Uploaded',
+        'verified'         => 'Verified',
+        'shipped'          => 'Active',
+        'delivered'        => 'Completed',
+        'cancelled'        => 'Cancelled',
+    ][$status] ?? 'Requested';
+
+    $note = $meta['label'];
+    if (!empty($order['tracking_number'])) {
+        $note .= ' · Resi: ' . $order['tracking_number'];
+    }
+    if (!empty($order['admin_note'])) {
+        $note .= ' · ' . $order['admin_note'];
+    }
+
+    $existing_orders = get_user_meta($user_id, '_wdc_course_orders', true);
+    $existing_orders = is_array($existing_orders) ? $existing_orders : [];
+    $found = false;
+    foreach ($existing_orders as &$eo) {
+        if (($eo['type'] ?? '') === 'giveaway' && ($eo['id'] ?? '') === ($order['order_id'] ?? '')) {
+            $eo['status'] = $activity_status;
+            $eo['admin_note'] = $note;
+            $eo['amount'] = intval($order['shipping_cost'] ?? 0);
+            $found = true;
+            break;
+        }
+    }
+    unset($eo);
+    if (!$found) {
+        $existing_orders[] = [
+            'id'         => $order['order_id'] ?? '',
+            'item'       => contenly_tr('Giveaway: ', 'Giveaway: ') . implode(', ', $order['items'] ?? []),
+            'status'     => $activity_status,
+            'admin_note' => $note,
+            'type'       => 'giveaway',
+            'amount'     => intval($order['shipping_cost'] ?? 0),
+            'created_at' => $order['created_at'] ?? current_time('mysql'),
+        ];
+    }
+    update_user_meta($user_id, '_wdc_course_orders', $existing_orders);
+}
+
+/**
+ * Collect all claimed giveaway orders across members.
+ */
+function wdc_giveaway_collect_orders($status_filter = '') {
+    $users = get_users([
+        'meta_key' => '_wdc_giveaway_order',
+        'fields'   => ['ID', 'user_login', 'user_email', 'display_name'],
+        'number'   => 500,
+    ]);
+    $rows = [];
+    foreach ($users as $u) {
+        $order = get_user_meta($u->ID, '_wdc_giveaway_order', true);
+        if (!is_array($order) || empty($order['order_id'])) {
+            continue;
+        }
+        $st = sanitize_key($order['status'] ?? '');
+        if ($status_filter && $st !== sanitize_key($status_filter)) {
+            continue;
+        }
+        $order['user_id'] = intval($u->ID);
+        $order['user_login'] = $u->user_login;
+        $order['user_email'] = $u->user_email;
+        $order['display_name'] = $u->display_name;
+        $rows[] = $order;
+    }
+    usort($rows, function($a, $b) {
+        return strcmp((string) ($b['created_at'] ?? ''), (string) ($a['created_at'] ?? ''));
+    });
+    return $rows;
+}
+
+/**
+ * Update giveaway order fields for a user (admin).
+ */
+function wdc_giveaway_admin_update_order($user_id, $order_id, $fields = []) {
+    $user_id = intval($user_id);
+    $order = get_user_meta($user_id, '_wdc_giveaway_order', true);
+    if (!is_array($order) || ($order['order_id'] ?? '') !== $order_id) {
+        return new WP_Error('not_found', 'Order not found for user.');
+    }
+
+    $allowed_status = ['awaiting_payment', 'payment_uploaded', 'verified', 'shipped', 'delivered', 'cancelled'];
+    if (isset($fields['status'])) {
+        $st = sanitize_key($fields['status']);
+        if (!in_array($st, $allowed_status, true)) {
+            return new WP_Error('bad_status', 'Invalid status.');
+        }
+        $order['status'] = $st;
+        if ($st === 'verified' && empty($order['verified_at'])) {
+            $order['verified_at'] = current_time('mysql');
+        }
+        if ($st === 'shipped' && empty($order['shipped_at'])) {
+            $order['shipped_at'] = current_time('mysql');
+        }
+        if ($st === 'delivered' && empty($order['delivered_at'])) {
+            $order['delivered_at'] = current_time('mysql');
+        }
+    }
+    if (array_key_exists('tracking_number', $fields)) {
+        $order['tracking_number'] = sanitize_text_field($fields['tracking_number']);
+        if (!empty($order['tracking_number']) && empty($order['shipped_at'])) {
+            // Auto-promote to shipped when resi filled and still earlier stage
+            $st = $order['status'] ?? '';
+            if (in_array($st, ['verified', 'payment_uploaded'], true)) {
+                $order['status'] = 'shipped';
+                $order['shipped_at'] = current_time('mysql');
+            }
+        }
+    }
+    if (array_key_exists('courier', $fields) && $fields['courier'] !== '') {
+        $order['courier'] = sanitize_text_field($fields['courier']);
+    }
+    if (array_key_exists('service', $fields) && $fields['service'] !== '') {
+        $order['service'] = sanitize_text_field($fields['service']);
+    }
+    if (array_key_exists('admin_note', $fields)) {
+        $order['admin_note'] = sanitize_textarea_field($fields['admin_note']);
+    }
+    $order['updated_at'] = current_time('mysql');
+    $order['tracking_url'] = wdc_giveaway_tracking_url($order['courier'] ?? '', $order['tracking_number'] ?? '');
+
+    update_user_meta($user_id, '_wdc_giveaway_order', $order);
+    wdc_giveaway_sync_activity($user_id, $order);
+    return $order;
+}
+
+/**
+ * Admin action handler for giveaway order updates.
+ */
+function wdc_handle_giveaway_admin_update() {
+    if (!current_user_can('manage_options')) {
+        wp_die('Forbidden');
+    }
+    check_admin_referer('wdc_giveaway_admin_update');
+
+    $user_id = intval($_POST['user_id'] ?? 0);
+    $order_id = sanitize_text_field($_POST['order_id'] ?? '');
+    $fields = [
+        'status' => sanitize_key($_POST['status'] ?? ''),
+        'tracking_number' => sanitize_text_field($_POST['tracking_number'] ?? ''),
+        'courier' => sanitize_text_field($_POST['courier'] ?? ''),
+        'service' => sanitize_text_field($_POST['service'] ?? ''),
+        'admin_note' => sanitize_textarea_field($_POST['admin_note'] ?? ''),
+    ];
+    $result = wdc_giveaway_admin_update_order($user_id, $order_id, $fields);
+    $redirect = add_query_arg([
+        'page' => 'wdc-giveaway-orders',
+        'updated' => is_wp_error($result) ? '0' : '1',
+        'msg' => is_wp_error($result) ? rawurlencode($result->get_error_message()) : 'updated',
+    ], admin_url('admin.php'));
+    wp_safe_redirect($redirect);
+    exit;
+}
+add_action('admin_post_wdc_giveaway_admin_update', 'wdc_handle_giveaway_admin_update');
+
+/**
+ * Render giveaway orders admin list.
+ */
+function wdc_render_giveaway_orders_admin() {
+    if (!current_user_can('manage_options')) {
+        wp_die('Forbidden');
+    }
+    $filter = sanitize_key($_GET['status'] ?? '');
+    $orders = wdc_giveaway_collect_orders($filter);
+    $counts = [
+        'all' => count(wdc_giveaway_collect_orders('')),
+        'payment_uploaded' => count(wdc_giveaway_collect_orders('payment_uploaded')),
+        'verified' => count(wdc_giveaway_collect_orders('verified')),
+        'shipped' => count(wdc_giveaway_collect_orders('shipped')),
+        'delivered' => count(wdc_giveaway_collect_orders('delivered')),
+        'awaiting_payment' => count(wdc_giveaway_collect_orders('awaiting_payment')),
+    ];
+    $all_items = wdc_get_giveaway_items();
+    $item_map = [];
+    foreach ($all_items as $it) {
+        $item_map[$it['id']] = $it['name'];
+    }
+    ?>
+    <div class="wrap">
+        <h1>🎁 <?php echo esc_html(contenly_tr('Giveaway Orders', 'Giveaway Orders')); ?></h1>
+        <?php if (isset($_GET['updated'])) : ?>
+            <div class="<?php echo ($_GET['updated'] === '1') ? 'updated' : 'error'; ?>"><p><?php echo esc_html($_GET['msg'] ?? 'Done'); ?></p></div>
+        <?php endif; ?>
+
+        <ul class="subsubsub" style="margin:12px 0 18px;">
+            <?php
+            $tabs = [
+                '' => 'All (' . $counts['all'] . ')',
+                'payment_uploaded' => 'Need Verify (' . $counts['payment_uploaded'] . ')',
+                'verified' => 'Verified (' . $counts['verified'] . ')',
+                'shipped' => 'Shipped (' . $counts['shipped'] . ')',
+                'delivered' => 'Delivered (' . $counts['delivered'] . ')',
+                'awaiting_payment' => 'Awaiting Pay (' . $counts['awaiting_payment'] . ')',
+            ];
+            $i = 0;
+            foreach ($tabs as $key => $label) :
+                $url = admin_url('admin.php?page=wdc-giveaway-orders' . ($key ? '&status=' . $key : ''));
+                $cls = ($filter === $key || ($filter === '' && $key === '')) ? 'current' : '';
+                echo ($i++ ? ' | ' : '') . '<li><a class="' . esc_attr($cls) . '" href="' . esc_url($url) . '">' . esc_html($label) . '</a></li>';
+            endforeach;
+            ?>
+        </ul>
+
+        <?php if (empty($orders)) : ?>
+            <p><?php echo esc_html(contenly_tr('Belum ada order giveaway.', 'No giveaway orders yet.')); ?></p>
+        <?php else : ?>
+            <div style="display:grid;gap:16px;">
+            <?php foreach ($orders as $o) :
+                $st = sanitize_key($o['status'] ?? '');
+                $meta = wdc_giveaway_status_meta($st);
+                $names = [];
+                foreach (($o['items'] ?? []) as $id) {
+                    $names[] = $item_map[$id] ?? $id;
+                }
+                $track_url = !empty($o['tracking_url']) ? $o['tracking_url'] : wdc_giveaway_tracking_url($o['courier'] ?? '', $o['tracking_number'] ?? '');
+                ?>
+                <div style="background:#fff;border:1px solid #dbe3ea;border-radius:12px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.04);">
+                    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
+                        <div>
+                            <strong style="font-size:16px;"><?php echo esc_html($o['order_id']); ?></strong>
+                            <span style="display:inline-block;margin-left:8px;padding:3px 10px;border-radius:999px;background:<?php echo esc_attr($meta['bg']); ?>;color:<?php echo esc_attr($meta['color']); ?>;font-size:12px;font-weight:800;"><?php echo esc_html($meta['label']); ?></span>
+                            <div style="color:#64748b;font-size:13px;margin-top:4px;">
+                                <?php echo esc_html($o['display_name'] ?: $o['user_login']); ?> · <?php echo esc_html($o['user_email']); ?> · user #<?php echo intval($o['user_id']); ?>
+                            </div>
+                        </div>
+                        <div style="text-align:right;font-size:13px;color:#334155;">
+                            <div>Ongkir: <strong>Rp <?php echo number_format(intval($o['shipping_cost'] ?? 0), 0, ',', '.'); ?></strong></div>
+                            <div><?php echo esc_html(strtoupper($o['courier'] ?? '')); ?> <?php echo esc_html($o['service'] ?? ''); ?></div>
+                            <div style="color:#94a3b8;"><?php echo esc_html($o['created_at'] ?? ''); ?></div>
+                        </div>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:14px;">
+                        <div style="font-size:13px;line-height:1.7;color:#334155;">
+                            <div><strong>Items:</strong> <?php echo esc_html(implode(', ', $names)); ?></div>
+                            <div><strong>Penerima:</strong> <?php echo esc_html($o['recipient_name'] ?? '-'); ?> · <?php echo esc_html($o['phone'] ?? '-'); ?></div>
+                            <div><strong>Alamat:</strong> <?php echo esc_html($o['address'] ?? '-'); ?>, <?php echo esc_html($o['destination'] ?? '-'); ?></div>
+                            <?php if (!empty($o['quote_ss_url'])) : ?>
+                                <div><strong>SS Ongkir:</strong> <a href="<?php echo esc_url($o['quote_ss_url']); ?>" target="_blank" rel="noopener">lihat</a></div>
+                            <?php endif; ?>
+                            <?php if (!empty($o['proof_url'])) : ?>
+                                <div><strong>Bukti TF:</strong> <a href="<?php echo esc_url($o['proof_url']); ?>" target="_blank" rel="noopener">lihat</a> · paid Rp <?php echo number_format(intval($o['paid_amount'] ?? $o['shipping_cost'] ?? 0), 0, ',', '.'); ?></div>
+                            <?php endif; ?>
+                            <?php if (!empty($o['tracking_number'])) : ?>
+                                <div><strong>Resi:</strong> <code><?php echo esc_html($o['tracking_number']); ?></code>
+                                <?php if ($track_url) : ?> · <a href="<?php echo esc_url($track_url); ?>" target="_blank" rel="noopener">cek tracking</a><?php endif; ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px;display:grid;gap:8px;">
+                            <input type="hidden" name="action" value="wdc_giveaway_admin_update">
+                            <?php wp_nonce_field('wdc_giveaway_admin_update'); ?>
+                            <input type="hidden" name="user_id" value="<?php echo intval($o['user_id']); ?>">
+                            <input type="hidden" name="order_id" value="<?php echo esc_attr($o['order_id']); ?>">
+
+                            <label style="font-size:12px;font-weight:700;">Status
+                                <select name="status" style="width:100%;margin-top:4px;">
+                                    <?php foreach (['awaiting_payment','payment_uploaded','verified','shipped','delivered','cancelled'] as $opt) :
+                                        $om = wdc_giveaway_status_meta($opt); ?>
+                                        <option value="<?php echo esc_attr($opt); ?>" <?php selected($st, $opt); ?>><?php echo esc_html($om['label']); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </label>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                                <label style="font-size:12px;font-weight:700;">Kurir
+                                    <input type="text" name="courier" value="<?php echo esc_attr($o['courier'] ?? ''); ?>" style="width:100%;margin-top:4px;">
+                                </label>
+                                <label style="font-size:12px;font-weight:700;">Layanan
+                                    <input type="text" name="service" value="<?php echo esc_attr($o['service'] ?? ''); ?>" style="width:100%;margin-top:4px;">
+                                </label>
+                            </div>
+                            <label style="font-size:12px;font-weight:700;">No. Resi
+                                <input type="text" name="tracking_number" value="<?php echo esc_attr($o['tracking_number'] ?? ''); ?>" placeholder="Contoh: JP1234567890" style="width:100%;margin-top:4px;">
+                            </label>
+                            <label style="font-size:12px;font-weight:700;">Catatan Admin
+                                <textarea name="admin_note" rows="2" style="width:100%;margin-top:4px;"><?php echo esc_textarea($o['admin_note'] ?? ''); ?></textarea>
+                            </label>
+                            <p style="margin:0;font-size:11px;color:#64748b;">Isi resi + set status <strong>Barang Dikirim</strong>. User bisa cek progres + buka tracking di dashboard.</p>
+                            <button type="submit" class="button button-primary">Simpan Update</button>
+                            <?php if ($st === 'payment_uploaded') : ?>
+                                <button type="submit" class="button" name="status" value="verified" onclick="this.form.status.value='verified'">✓ Verifikasi Pembayaran</button>
+                            <?php endif; ?>
+                        </form>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    </div>
+    <?php
+}
+
+/* =========================================================================
    ADMIN SETTINGS
    ========================================================================= */
 
@@ -679,7 +1073,24 @@ add_action('admin_menu', function() {
         'wdc-giveaway-settings',
         'wdc_render_giveaway_settings'
     );
-});
+    add_submenu_page(
+        'contenly-member',
+        contenly_tr('Giveaway Orders', 'Giveaway Orders'),
+        contenly_tr('🎁 Orders', '🎁 Orders'),
+        'manage_options',
+        'wdc-giveaway-orders',
+        'wdc_render_giveaway_orders_admin'
+    );
+    // Also under WDC Members (main ops menu)
+    add_submenu_page(
+        'wdc-member-admin',
+        contenly_tr('Giveaway Orders', 'Giveaway Orders'),
+        contenly_tr('🎁 Giveaway Orders', '🎁 Giveaway Orders'),
+        'manage_options',
+        'wdc-giveaway-orders',
+        'wdc_render_giveaway_orders_admin'
+    );
+}, 20);
 
 function wdc_render_giveaway_settings() {
     if (isset($_POST['wdc_save_giveaway_settings']) && check_admin_referer('wdc_giveaway_settings')) {

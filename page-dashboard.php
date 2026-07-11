@@ -297,6 +297,116 @@ echo implode(",\n", $w_js) . "\n";
 </script>
 <?php endif; ?>
 
+<?php
+// Giveaway progress tracker for claimed members
+$gw_order = is_user_logged_in() ? get_user_meta(get_current_user_id(), '_wdc_giveaway_order', true) : null;
+if (is_array($gw_order) && !empty($gw_order['order_id']) && function_exists('wdc_giveaway_status_meta')) :
+    $gw_status = sanitize_key($gw_order['status'] ?? 'awaiting_payment');
+    $gw_meta = wdc_giveaway_status_meta($gw_status);
+    $gw_steps = wdc_giveaway_progress_steps();
+    $gw_step_keys = array_keys($gw_steps);
+    $gw_current_step = max(0, array_search($gw_status === 'cancelled' ? 'awaiting_payment' : $gw_status, $gw_step_keys, true));
+    if ($gw_status === 'cancelled') { $gw_current_step = -1; }
+    $gw_items_all = wdc_get_giveaway_items();
+    $gw_item_names = [];
+    foreach ($gw_items_all as $it) {
+        if (in_array($it['id'], $gw_order['items'] ?? [], true)) {
+            $gw_item_names[] = $it['name'];
+        }
+    }
+    $gw_track_no = $gw_order['tracking_number'] ?? '';
+    $gw_track_url = !empty($gw_order['tracking_url']) ? $gw_order['tracking_url'] : wdc_giveaway_tracking_url($gw_order['courier'] ?? '', $gw_track_no);
+    $gw_checkout = add_query_arg(['type' => 'giveaway', 'order' => $gw_order['order_id']], contenly_localized_url('/giveaway-checkout/'));
+?>
+<section id="wdc-giveaway-progress" style="background:linear-gradient(135deg,#f0f9ff,#ecfeff);border:2px solid #7dd3fc;border-radius:20px;padding:24px;margin-bottom:28px;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px;">
+        <div>
+            <div style="font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.08em;color:#0369a1;margin-bottom:4px;"><?php echo contenly_tr('Progres Giveaway', 'Giveaway Progress'); ?></div>
+            <h2 style="font-size:22px;font-weight:900;color:#0f172a;margin:0 0 4px;"><?php echo esc_html($gw_order['order_id']); ?></h2>
+            <div style="font-size:13px;color:#475569;"><?php echo esc_html(implode(', ', $gw_item_names) ?: 'Giveaway items'); ?> · Ongkir Rp <?php echo number_format(intval($gw_order['shipping_cost'] ?? 0), 0, ',', '.'); ?></div>
+        </div>
+        <span style="display:inline-flex;align-items:center;padding:8px 14px;border-radius:999px;background:<?php echo esc_attr($gw_meta['bg']); ?>;color:<?php echo esc_attr($gw_meta['color']); ?>;font-size:13px;font-weight:900;"><?php echo esc_html($gw_meta['label']); ?></span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:18px;">
+        <?php foreach ($gw_step_keys as $idx => $key) :
+            $done = $gw_current_step >= $idx;
+            $active = $gw_current_step === $idx;
+            ?>
+            <div style="background:<?php echo $done ? '#dcfce7' : '#fff'; ?>;border:1px solid <?php echo $active ? '#0ea5e9' : ($done ? '#86efac' : '#e2e8f0'); ?>;border-radius:12px;padding:10px 8px;text-align:center;">
+                <div style="font-size:11px;font-weight:900;color:<?php echo $done ? '#166534' : '#64748b'; ?>;line-height:1.3;"><?php echo esc_html($gw_steps[$key]); ?></div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
+    <div style="display:grid;gap:10px;background:#fff;border:1px solid #bae6fd;border-radius:14px;padding:16px;">
+        <div style="font-size:14px;color:#334155;line-height:1.7;">
+            <div><strong><?php echo contenly_tr('Penerima', 'Recipient'); ?>:</strong> <?php echo esc_html($gw_order['recipient_name'] ?? '-'); ?> · <?php echo esc_html($gw_order['phone'] ?? '-'); ?></div>
+            <div><strong><?php echo contenly_tr('Alamat', 'Address'); ?>:</strong> <?php echo esc_html($gw_order['address'] ?? '-'); ?>, <?php echo esc_html($gw_order['destination'] ?? '-'); ?></div>
+            <div><strong><?php echo contenly_tr('Kurir', 'Courier'); ?>:</strong> <?php echo esc_html(strtoupper($gw_order['courier'] ?? '-')); ?> <?php echo esc_html($gw_order['service'] ?? ''); ?></div>
+            <?php if (!empty($gw_order['admin_note'])) : ?>
+            <div><strong><?php echo contenly_tr('Catatan crew', 'Crew note'); ?>:</strong> <?php echo esc_html($gw_order['admin_note']); ?></div>
+            <?php endif; ?>
+        </div>
+
+        <?php if (in_array($gw_status, ['awaiting_payment'], true)) : ?>
+            <a href="<?php echo esc_url($gw_checkout); ?>" style="display:inline-flex;justify-content:center;padding:12px 16px;border-radius:12px;background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;text-decoration:none;font-weight:900;">
+                <?php echo contenly_tr('Lanjut Bayar Ongkir / Upload Bukti', 'Continue Payment / Upload Proof'); ?>
+            </a>
+        <?php elseif ($gw_status === 'payment_uploaded') : ?>
+            <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:12px;color:#1e40af;font-size:13px;font-weight:700;">
+                <?php echo contenly_tr('Bukti transfer sudah diterima. Menunggu admin verifikasi.', 'Transfer proof received. Waiting for admin verification.'); ?>
+            </div>
+        <?php elseif ($gw_status === 'verified') : ?>
+            <div style="background:#ecfdf5;border:1px solid #a7f3d0;border-radius:12px;padding:12px;color:#065f46;font-size:13px;font-weight:700;">
+                <?php echo contenly_tr('Pembayaran diverifikasi. Crew sedang siapkan pengiriman.', 'Payment verified. Crew is preparing shipment.'); ?>
+            </div>
+        <?php elseif (in_array($gw_status, ['shipped', 'delivered'], true) && $gw_track_no) : ?>
+            <div style="display:grid;gap:10px;">
+                <div style="background:#f5f3ff;border:1px solid #ddd6fe;border-radius:12px;padding:12px;">
+                    <div style="font-size:12px;font-weight:900;color:#5b21b6;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;"><?php echo contenly_tr('Nomor Resi', 'Tracking Number'); ?></div>
+                    <div style="font-size:20px;font-weight:950;color:#0f172a;letter-spacing:.04em;"><?php echo esc_html($gw_track_no); ?></div>
+                    <div style="font-size:12px;color:#64748b;margin-top:4px;"><?php echo contenly_tr('Pakai resi ini untuk cek posisi paket di situs kurir.', 'Use this tracking number to check package progress on courier site.'); ?></div>
+                </div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                    <?php if ($gw_track_url) : ?>
+                    <a href="<?php echo esc_url($gw_track_url); ?>" target="_blank" rel="noopener" style="display:inline-flex;padding:12px 16px;border-radius:12px;background:#6d28d9;color:#fff;text-decoration:none;font-weight:900;">
+                        <?php echo contenly_tr('Cek Tracking Resi →', 'Track Package →'); ?>
+                    </a>
+                    <?php endif; ?>
+                    <button type="button" id="wdc-copy-resi" data-resi="<?php echo esc_attr($gw_track_no); ?>" style="display:inline-flex;padding:12px 16px;border-radius:12px;background:#fff;border:1px solid #c4b5fd;color:#5b21b6;font-weight:900;cursor:pointer;">
+                        <?php echo contenly_tr('Salin Resi', 'Copy Tracking No.'); ?>
+                    </button>
+                </div>
+            </div>
+            <script>
+            jQuery(function($){
+                $('#wdc-copy-resi').on('click', function(){
+                    var v = $(this).data('resi') || '';
+                    if (!v) return;
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(v);
+                    } else {
+                        var ta = document.createElement('textarea'); ta.value=v; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+                    }
+                    $(this).text('<?php echo esc_js(contenly_tr('Tersalin!', 'Copied!')); ?>');
+                });
+            });
+            </script>
+        <?php elseif ($gw_status === 'cancelled') : ?>
+            <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:12px;color:#991b1b;font-size:13px;font-weight:700;">
+                <?php echo contenly_tr('Claim dibatalkan. Hubungi crew jika ada pertanyaan.', 'Claim cancelled. Contact crew if you have questions.'); ?>
+            </div>
+        <?php endif; ?>
+    </div>
+</section>
+<style>
+@media(max-width:720px){
+  #wdc-giveaway-progress > div[style*="grid-template-columns:repeat(5"]{grid-template-columns:1fr 1fr!important}
+}
+</style>
+<?php endif; ?>
+
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-bottom:28px;">
     <article style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:24px;box-shadow:0 12px 34px rgba(15,23,42,.06);">
         <span style="font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;color:#0b617c;"><?php echo contenly_tr('Belajar', 'Learn'); ?></span>
