@@ -3421,7 +3421,7 @@ function wdc_render_payment_settings_page() {
         echo '<div class="notice notice-success"><p>Settings saved.</p></div>';
     }
 
-    echo '<div class="wrap">';
+    echo '<div class="wrap" style="max-width:none;">';
     echo '<h1>Payment Settings</h1>';
 
     // Midtrans Section
@@ -4249,7 +4249,7 @@ function wdc_render_member_list_admin() {
             echo '<div class="notice ' . esc_attr($cls) . ' is-dismissible"><p>' . esc_html($map[$updated] ?? 'Saved.') . '</p></div>';
         }
 
-        echo '<div style="background:#fff;border:1px solid #dcdcde;border-radius:12px;padding:16px;margin:12px 0 18px;max-width:920px;">';
+        echo '<div style="background:#fff;border:1px solid #dcdcde;border-radius:8px;padding:16px;margin:12px 0 18px;width:100%;box-sizing:border-box;">';
         echo '<strong style="font-size:16px;">' . esc_html($user->display_name ?: $user->user_login) . '</strong>';
         echo '<div style="color:#64748b;margin-top:4px;">' . esc_html($user->user_email) . ' · @' . esc_html($user->user_login) . ' · user #' . intval($user_id) . '</div>';
         echo '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;font-size:12px;">';
@@ -4264,7 +4264,7 @@ function wdc_render_member_list_admin() {
         echo '<h2 style="margin-top:8px;">Kursus di halaman member</h2>';
         echo '<p class="description">Ini yang muncul di <code>/my-courses/</code> member. Admin bisa tambah / edit / hapus.</p>';
         if ($completed) {
-            echo '<table class="widefat striped" style="max-width:980px;margin:12px 0;"><thead><tr>';
+            echo '<table class="widefat striped" style="width:100%;margin:12px 0;"><thead><tr>';
             echo '<th>Kursus</th><th>Level</th><th>Status</th><th>Tanggal</th><th>Sertifikat</th><th>Aksi</th>';
             echo '</tr></thead><tbody>';
             foreach ($completed as $i => $c) {
@@ -4298,7 +4298,7 @@ function wdc_render_member_list_admin() {
 
         // Add / edit form
         $is_edit = is_array($edit_row);
-        echo '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;max-width:980px;margin:18px 0;">';
+        echo '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;width:100%;box-sizing:border-box;margin:18px 0;">';
         echo '<h2 style="margin:0 0 10px;font-size:16px;">' . ($is_edit ? 'Edit Kursus #' . intval($edit_index + 1) : 'Tambah Kursus ke Member') . '</h2>';
         echo '<form method="post">';
         wp_nonce_field('wdc_member_list_update', 'wdc_member_list_nonce');
@@ -4349,7 +4349,7 @@ function wdc_render_member_list_admin() {
         // Related requests/orders quick view
         if ($course_requests || $course_orders) {
             echo '<h2>Request / Order terkait</h2>';
-            echo '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:980px;">';
+            echo '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;">';
             echo '<div style="background:#fff;border:1px solid #dcdcde;border-radius:10px;padding:12px;"><strong>Course Requests</strong>';
             if ($course_requests) {
                 echo '<ul style="margin:8px 0 0;padding-left:18px;">';
@@ -4385,7 +4385,7 @@ function wdc_render_member_list_admin() {
     if ($updated) {
         echo '<div class="notice notice-success is-dismissible"><p>Saved.</p></div>';
     }
-    echo '<form method="get" style="display:flex;gap:10px;align-items:center;margin:16px 0;background:#fff;border:1px solid #dcdcde;border-radius:10px;padding:12px;max-width:760px;">';
+    echo '<form method="get" style="display:flex;gap:10px;align-items:center;margin:16px 0;background:#fff;border:1px solid #dcdcde;border-radius:8px;padding:12px;width:100%;box-sizing:border-box;">';
     echo '<input type="hidden" name="page" value="wdc-member-list">';
     echo '<input type="search" name="s" value="' . esc_attr($search) . '" placeholder="Cari nama / email / username" style="min-width:280px;">';
     echo '<button class="button button-primary">Cari</button>';
@@ -4395,7 +4395,7 @@ function wdc_render_member_list_admin() {
     echo '</form>';
 
     echo '<p style="color:#64748b;">Menampilkan ' . count($rows) . ' member terbaru' . ($search ? ' (filter: ' . esc_html($search) . ')' : '') . '.</p>';
-    echo '<table class="widefat striped" style="max-width:1100px;"><thead><tr>';
+    echo '<table class="widefat striped" style="width:100%;"><thead><tr>';
     echo '<th>Member</th><th>Email</th><th>Kursus</th><th>Request</th><th>Order</th><th>Registered</th><th>Aksi</th>';
     echo '</tr></thead><tbody>';
     if (!$rows) {

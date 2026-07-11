@@ -647,7 +647,7 @@ add_action('wp_ajax_wdc_upload_giveaway_payment', function() {
     $item_names = implode(', ', $order['items'] ?? []);
     wp_mail(
         $admin_email,
-        '🎁 Giveaway Payment Proof - ' . $order['order_id'],
+        'Giveaway Payment Proof - ' . $order['order_id'],
         "User #{$user_id} uploaded payment proof for giveaway.\n\nOrder: {$order['order_id']}\nItems: {$item_names}\nShipping: Rp " . number_format($order['shipping_cost'], 0, ',', '.') . "\nCourier: {$order['courier']} {$order['service']}\nDestination: {$order['destination']}\n\nProof: {$proof_url}",
         ['Content-Type: text/plain; charset=UTF-8']
     );
@@ -945,13 +945,108 @@ function wdc_render_giveaway_orders_admin() {
         $item_map[$it['id']] = $it['name'];
     }
     ?>
-    <div class="wrap">
-        <h1>🎁 <?php echo esc_html(contenly_tr('Giveaway Orders', 'Giveaway Orders')); ?></h1>
+    <div class="wrap wdc-gw-admin">
+        <style>
+            .wdc-gw-admin { max-width: none; }
+            .wdc-gw-admin .wdc-gw-filters { float:none; margin: 8px 0 18px; width:100%; }
+            .wdc-gw-admin .wdc-gw-list { display:grid; gap:16px; width:100%; clear:both; }
+            .wdc-gw-admin .wdc-gw-card {
+                background:#fff;
+                border:1px solid #c3c4c7;
+                border-radius:8px;
+                padding:0;
+                box-shadow:0 1px 1px rgba(0,0,0,.04);
+                overflow:hidden;
+            }
+            .wdc-gw-admin .wdc-gw-head {
+                display:flex;
+                justify-content:space-between;
+                gap:16px;
+                flex-wrap:wrap;
+                align-items:flex-start;
+                padding:14px 16px;
+                border-bottom:1px solid #e2e4e7;
+                background:#f6f7f7;
+            }
+            .wdc-gw-admin .wdc-gw-head strong { font-size:15px; }
+            .wdc-gw-admin .wdc-gw-badge {
+                display:inline-block;
+                margin-left:8px;
+                padding:3px 10px;
+                border-radius:999px;
+                font-size:12px;
+                font-weight:700;
+                line-height:1.4;
+                vertical-align:middle;
+            }
+            .wdc-gw-admin .wdc-gw-meta { color:#646970; font-size:13px; margin-top:4px; }
+            .wdc-gw-admin .wdc-gw-rightmeta { text-align:right; font-size:13px; color:#1d2327; min-width:160px; }
+            .wdc-gw-admin .wdc-gw-rightmeta .muted { color:#8c8f94; margin-top:2px; }
+            .wdc-gw-admin .wdc-gw-body {
+                display:grid;
+                grid-template-columns: minmax(280px, 1.3fr) minmax(300px, 1fr);
+                gap:0;
+            }
+            .wdc-gw-admin .wdc-gw-info {
+                padding:16px 18px;
+                font-size:13px;
+                line-height:1.7;
+                color:#1d2327;
+                border-right:1px solid #e2e4e7;
+            }
+            .wdc-gw-admin .wdc-gw-info div { margin:0 0 6px; }
+            .wdc-gw-admin .wdc-gw-info div:last-child { margin-bottom:0; }
+            .wdc-gw-admin .wdc-gw-form {
+                padding:16px 18px;
+                background:#fcfcfc;
+                display:grid;
+                gap:10px;
+                align-content:start;
+            }
+            .wdc-gw-admin .wdc-gw-form label {
+                display:grid;
+                gap:4px;
+                font-size:12px;
+                font-weight:600;
+                color:#1d2327;
+            }
+            .wdc-gw-admin .wdc-gw-form input[type="text"],
+            .wdc-gw-admin .wdc-gw-form select,
+            .wdc-gw-admin .wdc-gw-form textarea {
+                width:100%;
+                max-width:100%;
+                margin:0;
+            }
+            .wdc-gw-admin .wdc-gw-row2 {
+                display:grid;
+                grid-template-columns:1fr 1fr;
+                gap:10px;
+            }
+            .wdc-gw-admin .wdc-gw-help {
+                margin:0;
+                font-size:12px;
+                color:#646970;
+                line-height:1.45;
+            }
+            .wdc-gw-admin .wdc-gw-actions {
+                display:flex;
+                flex-wrap:wrap;
+                gap:8px;
+                align-items:center;
+                margin-top:2px;
+            }
+            @media (max-width: 900px) {
+                .wdc-gw-admin .wdc-gw-body { grid-template-columns:1fr; }
+                .wdc-gw-admin .wdc-gw-info { border-right:0; border-bottom:1px solid #e2e4e7; }
+                .wdc-gw-admin .wdc-gw-rightmeta { text-align:left; }
+            }
+        </style>
+        <h1><?php echo esc_html(contenly_tr('Giveaway Orders', 'Giveaway Orders')); ?></h1>
         <?php if (isset($_GET['updated'])) : ?>
-            <div class="<?php echo ($_GET['updated'] === '1') ? 'updated' : 'error'; ?>"><p><?php echo esc_html($_GET['msg'] ?? 'Done'); ?></p></div>
+            <div class="<?php echo ($_GET['updated'] === '1') ? 'notice notice-success' : 'notice notice-error'; ?> is-dismissible"><p><?php echo esc_html($_GET['msg'] ?? 'Done'); ?></p></div>
         <?php endif; ?>
 
-        <ul class="subsubsub" style="margin:12px 0 18px;">
+        <ul class="subsubsub wdc-gw-filters">
             <?php
             $tabs = [
                 '' => 'All (' . $counts['all'] . ')',
@@ -973,7 +1068,7 @@ function wdc_render_giveaway_orders_admin() {
         <?php if (empty($orders)) : ?>
             <p><?php echo esc_html(contenly_tr('Belum ada order giveaway.', 'No giveaway orders yet.')); ?></p>
         <?php else : ?>
-            <div style="display:grid;gap:16px;">
+            <div class="wdc-gw-list">
             <?php foreach ($orders as $o) :
                 $st = sanitize_key($o['status'] ?? '');
                 $meta = wdc_giveaway_status_meta($st);
@@ -983,27 +1078,27 @@ function wdc_render_giveaway_orders_admin() {
                 }
                 $track_url = !empty($o['tracking_url']) ? $o['tracking_url'] : wdc_giveaway_tracking_url($o['courier'] ?? '', $o['tracking_number'] ?? '');
                 ?>
-                <div style="background:#fff;border:1px solid #dbe3ea;border-radius:12px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.04);">
-                    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
+                <div class="wdc-gw-card">
+                    <div class="wdc-gw-head">
                         <div>
-                            <strong style="font-size:16px;"><?php echo esc_html($o['order_id']); ?></strong>
-                            <span style="display:inline-block;margin-left:8px;padding:3px 10px;border-radius:999px;background:<?php echo esc_attr($meta['bg']); ?>;color:<?php echo esc_attr($meta['color']); ?>;font-size:12px;font-weight:800;"><?php echo esc_html($meta['label']); ?></span>
-                            <div style="color:#64748b;font-size:13px;margin-top:4px;">
+                            <strong><?php echo esc_html($o['order_id']); ?></strong>
+                            <span class="wdc-gw-badge" style="background:<?php echo esc_attr($meta['bg']); ?>;color:<?php echo esc_attr($meta['color']); ?>;"><?php echo esc_html($meta['label']); ?></span>
+                            <div class="wdc-gw-meta">
                                 <?php echo esc_html($o['display_name'] ?: $o['user_login']); ?> · <?php echo esc_html($o['user_email']); ?> · user #<?php echo intval($o['user_id']); ?>
                             </div>
                         </div>
-                        <div style="text-align:right;font-size:13px;color:#334155;">
+                        <div class="wdc-gw-rightmeta">
                             <div>Ongkir: <strong>Rp <?php echo number_format(intval($o['shipping_cost'] ?? 0), 0, ',', '.'); ?></strong></div>
                             <div><?php echo esc_html(strtoupper($o['courier'] ?? '')); ?> <?php echo esc_html($o['service'] ?? ''); ?></div>
-                            <div style="color:#94a3b8;"><?php echo esc_html($o['created_at'] ?? ''); ?></div>
+                            <div class="muted"><?php echo esc_html($o['created_at'] ?? ''); ?></div>
                         </div>
                     </div>
 
-                    <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:14px;">
-                        <div style="font-size:13px;line-height:1.7;color:#334155;">
-                            <div><strong>Items:</strong> <?php echo esc_html(implode(', ', $names)); ?></div>
+                    <div class="wdc-gw-body">
+                        <div class="wdc-gw-info">
+                            <div><strong>Items:</strong> <?php echo esc_html(implode(', ', $names) ?: '-'); ?></div>
                             <div><strong>Penerima:</strong> <?php echo esc_html($o['recipient_name'] ?? '-'); ?> · <?php echo esc_html($o['phone'] ?? '-'); ?></div>
-                            <div><strong>Alamat:</strong> <?php echo esc_html($o['address'] ?? '-'); ?>, <?php echo esc_html($o['destination'] ?? '-'); ?></div>
+                            <div><strong>Alamat:</strong> <?php echo esc_html($o['address'] ?? '-'); ?><?php echo !empty($o['destination']) ? ', ' . esc_html($o['destination']) : ''; ?></div>
                             <?php if (!empty($o['quote_ss_url'])) : ?>
                                 <div><strong>SS Ongkir:</strong> <a href="<?php echo esc_url($o['quote_ss_url']); ?>" target="_blank" rel="noopener">lihat</a></div>
                             <?php endif; ?>
@@ -1015,41 +1110,46 @@ function wdc_render_giveaway_orders_admin() {
                                 <?php if ($track_url) : ?> · <a href="<?php echo esc_url($track_url); ?>" target="_blank" rel="noopener">cek tracking</a><?php endif; ?>
                                 </div>
                             <?php endif; ?>
+                            <?php if (!empty($o['admin_note'])) : ?>
+                                <div><strong>Catatan:</strong> <?php echo esc_html($o['admin_note']); ?></div>
+                            <?php endif; ?>
                         </div>
 
-                        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px;display:grid;gap:8px;">
+                        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" class="wdc-gw-form">
                             <input type="hidden" name="action" value="wdc_giveaway_admin_update">
                             <?php wp_nonce_field('wdc_giveaway_admin_update'); ?>
                             <input type="hidden" name="user_id" value="<?php echo intval($o['user_id']); ?>">
                             <input type="hidden" name="order_id" value="<?php echo esc_attr($o['order_id']); ?>">
 
-                            <label style="font-size:12px;font-weight:700;">Status
-                                <select name="status" style="width:100%;margin-top:4px;">
+                            <label>Status
+                                <select name="status">
                                     <?php foreach (['awaiting_payment','payment_uploaded','verified','shipped','delivered','cancelled'] as $opt) :
                                         $om = wdc_giveaway_status_meta($opt); ?>
                                         <option value="<?php echo esc_attr($opt); ?>" <?php selected($st, $opt); ?>><?php echo esc_html($om['label']); ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </label>
-                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                                <label style="font-size:12px;font-weight:700;">Kurir
-                                    <input type="text" name="courier" value="<?php echo esc_attr($o['courier'] ?? ''); ?>" style="width:100%;margin-top:4px;">
+                            <div class="wdc-gw-row2">
+                                <label>Kurir
+                                    <input type="text" name="courier" value="<?php echo esc_attr($o['courier'] ?? ''); ?>">
                                 </label>
-                                <label style="font-size:12px;font-weight:700;">Layanan
-                                    <input type="text" name="service" value="<?php echo esc_attr($o['service'] ?? ''); ?>" style="width:100%;margin-top:4px;">
+                                <label>Layanan
+                                    <input type="text" name="service" value="<?php echo esc_attr($o['service'] ?? ''); ?>">
                                 </label>
                             </div>
-                            <label style="font-size:12px;font-weight:700;">No. Resi
-                                <input type="text" name="tracking_number" value="<?php echo esc_attr($o['tracking_number'] ?? ''); ?>" placeholder="Contoh: JP1234567890" style="width:100%;margin-top:4px;">
+                            <label>No. Resi
+                                <input type="text" name="tracking_number" value="<?php echo esc_attr($o['tracking_number'] ?? ''); ?>" placeholder="Contoh: JP1234567890">
                             </label>
-                            <label style="font-size:12px;font-weight:700;">Catatan Admin
-                                <textarea name="admin_note" rows="2" style="width:100%;margin-top:4px;"><?php echo esc_textarea($o['admin_note'] ?? ''); ?></textarea>
+                            <label>Catatan Admin
+                                <textarea name="admin_note" rows="2"><?php echo esc_textarea($o['admin_note'] ?? ''); ?></textarea>
                             </label>
-                            <p style="margin:0;font-size:11px;color:#64748b;">Isi resi + set status <strong>Barang Dikirim</strong>. User bisa cek progres + buka tracking di dashboard.</p>
-                            <button type="submit" class="button button-primary">Simpan Update</button>
-                            <?php if ($st === 'payment_uploaded') : ?>
-                                <button type="submit" class="button" name="status" value="verified" onclick="this.form.status.value='verified'">✓ Verifikasi Pembayaran</button>
-                            <?php endif; ?>
+                            <p class="wdc-gw-help">Isi resi + set status <strong>Barang Dikirim</strong>. User cek progres + tracking di dashboard.</p>
+                            <div class="wdc-gw-actions">
+                                <button type="submit" class="button button-primary">Simpan Update</button>
+                                <?php if ($st === 'payment_uploaded') : ?>
+                                    <button type="submit" class="button" name="status" value="verified" onclick="this.form.status.value='verified'">Verifikasi Pembayaran</button>
+                                <?php endif; ?>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -1068,7 +1168,7 @@ add_action('admin_menu', function() {
     add_submenu_page(
         'contenly-member',
         contenly_tr('Giveaway Settings', 'Giveaway Settings'),
-        contenly_tr('🎁 Giveaway', '🎁 Giveaway'),
+        contenly_tr('Giveaway Settings', 'Giveaway Settings'),
         'manage_options',
         'wdc-giveaway-settings',
         'wdc_render_giveaway_settings'
@@ -1076,7 +1176,7 @@ add_action('admin_menu', function() {
     add_submenu_page(
         'contenly-member',
         contenly_tr('Giveaway Orders', 'Giveaway Orders'),
-        contenly_tr('🎁 Orders', '🎁 Orders'),
+        contenly_tr('Giveaway Orders', 'Giveaway Orders'),
         'manage_options',
         'wdc-giveaway-orders',
         'wdc_render_giveaway_orders_admin'
@@ -1085,7 +1185,7 @@ add_action('admin_menu', function() {
     add_submenu_page(
         'wdc-member-admin',
         contenly_tr('Giveaway Orders', 'Giveaway Orders'),
-        contenly_tr('🎁 Giveaway Orders', '🎁 Giveaway Orders'),
+        contenly_tr('Giveaway Orders', 'Giveaway Orders'),
         'manage_options',
         'wdc-giveaway-orders',
         'wdc_render_giveaway_orders_admin'
@@ -1111,7 +1211,7 @@ function wdc_render_giveaway_settings() {
     $origin_label = get_option('wdc_giveaway_origin_label', 'Jakarta Selatan (12240)');
     ?>
     <div class="wrap">
-        <h1>🎁 <?php echo contenly_tr('Pengaturan Giveaway', 'Giveaway Settings'); ?></h1>
+        <h1><?php echo contenly_tr('Pengaturan Giveaway', 'Giveaway Settings'); ?></h1>
         <form method="post">
             <?php wp_nonce_field('wdc_giveaway_settings'); ?>
 
