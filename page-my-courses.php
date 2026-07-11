@@ -141,33 +141,67 @@ $completed_count = count($completed_courses);
   .wdc-mc-side input,.wdc-mc-side select,.wdc-mc-side textarea{font-size:16px!important;min-height:42px!important}
 }
 .wdc-mc-empty{text-align:center;padding:36px 16px;border:1px dashed #dbe4ea;border-radius:14px;background:#f8fafc}
-.wdc-completed-list{display:grid;gap:10px}
-.wdc-completed-item{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:12px;
-  padding:14px 16px;
-  background:#fff;
-  border:1px solid #e2e8f0;
-  border-radius:14px;
+.wdc-design-pick{display:grid;gap:14px}
+.wdc-design-label{
+  display:inline-flex;align-items:center;gap:6px;
+  margin:0 0 8px;font-size:11px;font-weight:900;letter-spacing:.06em;
+  text-transform:uppercase;color:#004A98;background:#e8f8fc;
+  border-radius:999px;padding:4px 10px
 }
-.wdc-completed-body{min-width:0;flex:1}
-.wdc-completed-title{margin:0 0 6px;font-size:15px;font-weight:800;color:#0f172a;line-height:1.35}
-.wdc-completed-meta{display:flex;gap:8px;flex-wrap:wrap;font-size:12px;color:#64748b}
-.wdc-completed-meta span{
-  display:inline-flex;align-items:center;
-  padding:3px 8px;border-radius:999px;
-  background:#f1f5f9;color:#475569;font-weight:700
-}
-.wdc-completed-meta span.is-level{background:#e8f8fc;color:#004A98}
-.wdc-completed-notes{margin:8px 0 0;font-size:13px;color:#64748b;line-height:1.45}
 .wdc-remove-completed{
   border:0;background:transparent;cursor:pointer;color:#94a3b8;
   font-size:16px;line-height:1;padding:4px 6px;border-radius:8px;flex-shrink:0
 }
 .wdc-remove-completed:hover{color:#C31C4A;background:#fff5f7}
+
+/* A — Soft card */
+.wdc-dA{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:14px 16px;background:#fff;border:1px solid #e2e8f0;border-radius:14px}
+.wdc-dA h3{margin:0 0 4px;font-size:15px;font-weight:800;color:#0f172a}
+.wdc-dA .meta{font-size:12px;color:#64748b;line-height:1.45}
+.wdc-dA .notes{margin:6px 0 0;font-size:13px;color:#64748b}
+
+/* B — List row inbox */
+.wdc-dB{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:12px 14px;background:#fff;border:1px solid #eef2f6;border-radius:12px}
+.wdc-dB:hover{background:#f8fafc}
+.wdc-dB h3{margin:0;font-size:14px;font-weight:800;color:#0f172a}
+.wdc-dB .sub{margin:3px 0 0;font-size:12px;color:#94a3b8}
+.wdc-dB .right{text-align:right}
+.wdc-dB .level{font-size:12px;font-weight:800;color:#004A98}
+.wdc-dB .date{font-size:12px;color:#64748b;margin-top:2px}
+
+/* C — Timeline */
+.wdc-dC{position:relative;padding:4px 0 4px 22px}
+.wdc-dC:before{content:"";position:absolute;left:7px;top:0;bottom:0;width:2px;background:#dbe4ea}
+.wdc-dC-dot{position:absolute;left:0;top:14px;width:16px;height:16px;border-radius:50%;background:#004A98;border:3px solid #e8f8fc;box-sizing:border-box}
+.wdc-dC-card{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:12px 14px;background:#fff;border:1px solid #e2e8f0;border-radius:12px}
+.wdc-dC h3{margin:0 0 4px;font-size:14px;font-weight:800;color:#0f172a}
+.wdc-dC .meta{font-size:12px;color:#64748b}
+
+/* D — Compact table row */
+.wdc-dD{display:grid;grid-template-columns:minmax(0,1.4fr) .7fr .8fr .9fr auto;gap:10px;align-items:center;padding:12px 14px;background:#fff;border:1px solid #e2e8f0;border-radius:12px}
+.wdc-dD h3{margin:0;font-size:14px;font-weight:800;color:#0f172a}
+.wdc-dD .cell{font-size:12px;color:#64748b}
+.wdc-dD .cell b{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;margin-bottom:2px;font-weight:800}
+.wdc-dD .cell span{color:#334155;font-weight:700}
+
+/* E — Split mini */
+.wdc-dE{display:grid;grid-template-columns:minmax(0,1fr) 150px auto;gap:12px;align-items:start;padding:14px 16px;background:#fff;border:1px solid #e2e8f0;border-radius:14px}
+.wdc-dE h3{margin:0 0 4px;font-size:15px;font-weight:800;color:#0f172a}
+.wdc-dE .notes{margin:0;font-size:13px;color:#64748b;line-height:1.45}
+.wdc-dE .side{text-align:right}
+.wdc-dE .level{display:inline-block;padding:3px 8px;border-radius:999px;background:#e8f8fc;color:#004A98;font-size:11px;font-weight:800;margin-bottom:6px}
+.wdc-dE .date{font-size:12px;color:#64748b;font-weight:700}
+.wdc-dE .cert{margin-top:4px;font-size:11px;color:#94a3b8}
+
 @media(max-width:980px){.wdc-mc-layout{grid-template-columns:1fr}}
+@media(max-width:700px){
+  .wdc-dB{grid-template-columns:minmax(0,1fr) auto}
+  .wdc-dB .right{grid-column:1}
+  .wdc-dD{grid-template-columns:1fr 1fr;gap:8px}
+  .wdc-dD .cell:nth-child(1){grid-column:1 / -1}
+  .wdc-dE{grid-template-columns:minmax(0,1fr) auto}
+  .wdc-dE .side{text-align:left}
+}
 </style>
 
 <div class="wdc-page-head">
@@ -224,10 +258,18 @@ $completed_count = count($completed_courses);
             </div>
         </div>
 
-        <!-- Completed courses list -->
-        <div id="wdc-completed-list" class="wdc-completed-list">
+        <!-- Completed courses list — 5 design options preview (A-E) -->
+        <div id="wdc-completed-list" class="wdc-design-pick">
             <?php if ($completed_courses) : ?>
-                <?php foreach ($completed_courses as $idx => $cc) :
+                <?php
+                $design_names = [
+                    'A' => 'Soft card',
+                    'B' => 'List row',
+                    'C' => 'Timeline',
+                    'D' => 'Compact table',
+                    'E' => 'Split mini',
+                ];
+                foreach ($completed_courses as $idx => $cc) :
                     $title = (string) ($cc['course_title'] ?? 'Course');
                     $level = (string) ($cc['level'] ?? '');
                     $date_raw = (string) ($cc['date_completed'] ?? '');
@@ -240,21 +282,80 @@ $completed_count = count($completed_courses);
                             $date_label = date_i18n('d M Y', $ts);
                         }
                     }
+                    $variant = strtoupper((string) ($cc['design_variant'] ?? ''));
+                    if (!isset($design_names[$variant])) {
+                        $keys = array_keys($design_names);
+                        $variant = $keys[$idx % count($keys)];
+                    }
+                    $design_label = $design_names[$variant];
+                    $meta_line = trim(implode(' · ', array_filter([$level, $date_label, $cert], function ($v) { return $v !== ''; })));
                 ?>
-                <article class="wdc-completed-item" data-index="<?php echo (int) $idx; ?>">
-                    <div class="wdc-completed-body">
-                        <h3 class="wdc-completed-title"><?php echo esc_html($title); ?></h3>
-                        <div class="wdc-completed-meta">
-                            <?php if ($level !== '') : ?><span class="is-level"><?php echo esc_html($level); ?></span><?php endif; ?>
-                            <?php if ($date_label !== '') : ?><span><?php echo esc_html($date_label); ?></span><?php endif; ?>
-                            <?php if ($cert !== '') : ?><span><?php echo esc_html($cert); ?></span><?php endif; ?>
+                <div class="wdc-completed-item" data-index="<?php echo (int) $idx; ?>" data-design="<?php echo esc_attr($variant); ?>">
+                    <div class="wdc-design-label">Desain <?php echo esc_html($variant); ?> · <?php echo esc_html($design_label); ?></div>
+
+                    <?php if ($variant === 'A') : ?>
+                    <article class="wdc-dA">
+                        <div style="min-width:0;flex:1;">
+                            <h3><?php echo esc_html($title); ?></h3>
+                            <?php if ($meta_line) : ?><div class="meta"><?php echo esc_html($meta_line); ?></div><?php endif; ?>
+                            <?php if ($notes !== '') : ?><div class="notes"><?php echo esc_html($notes); ?></div><?php endif; ?>
                         </div>
-                        <?php if ($notes !== '') : ?>
-                        <p class="wdc-completed-notes"><?php echo esc_html($notes); ?></p>
-                        <?php endif; ?>
+                        <button class="wdc-remove-completed" type="button" data-index="<?php echo (int) $idx; ?>" title="<?php echo contenly_tr('Hapus', 'Remove'); ?>">✕</button>
+                    </article>
+
+                    <?php elseif ($variant === 'B') : ?>
+                    <article class="wdc-dB">
+                        <div style="min-width:0;">
+                            <h3><?php echo esc_html($title); ?></h3>
+                            <?php if ($notes !== '') : ?><div class="sub"><?php echo esc_html($notes); ?></div><?php elseif ($cert !== '') : ?><div class="sub"><?php echo esc_html($cert); ?></div><?php endif; ?>
+                        </div>
+                        <div class="right">
+                            <?php if ($level !== '') : ?><div class="level"><?php echo esc_html($level); ?></div><?php endif; ?>
+                            <?php if ($date_label !== '') : ?><div class="date"><?php echo esc_html($date_label); ?></div><?php endif; ?>
+                        </div>
+                        <button class="wdc-remove-completed" type="button" data-index="<?php echo (int) $idx; ?>" title="<?php echo contenly_tr('Hapus', 'Remove'); ?>">✕</button>
+                    </article>
+
+                    <?php elseif ($variant === 'C') : ?>
+                    <div class="wdc-dC">
+                        <span class="wdc-dC-dot" aria-hidden="true"></span>
+                        <article class="wdc-dC-card">
+                            <div style="min-width:0;flex:1;">
+                                <h3><?php echo esc_html($title); ?></h3>
+                                <div class="meta"><?php echo esc_html($meta_line ?: '—'); ?></div>
+                                <?php if ($notes !== '') : ?><div class="meta" style="margin-top:4px;"><?php echo esc_html($notes); ?></div><?php endif; ?>
+                            </div>
+                            <button class="wdc-remove-completed" type="button" data-index="<?php echo (int) $idx; ?>" title="<?php echo contenly_tr('Hapus', 'Remove'); ?>">✕</button>
+                        </article>
                     </div>
-                    <button class="wdc-remove-completed" type="button" data-index="<?php echo (int) $idx; ?>" title="<?php echo contenly_tr('Hapus', 'Remove'); ?>" aria-label="<?php echo contenly_tr('Hapus', 'Remove'); ?>">✕</button>
-                </article>
+
+                    <?php elseif ($variant === 'D') : ?>
+                    <article class="wdc-dD">
+                        <div>
+                            <h3><?php echo esc_html($title); ?></h3>
+                            <?php if ($notes !== '') : ?><div class="cell" style="margin-top:4px;"><?php echo esc_html($notes); ?></div><?php endif; ?>
+                        </div>
+                        <div class="cell"><b><?php echo contenly_tr('Level', 'Level'); ?></b><span><?php echo esc_html($level ?: '—'); ?></span></div>
+                        <div class="cell"><b><?php echo contenly_tr('Tanggal', 'Date'); ?></b><span><?php echo esc_html($date_label ?: '—'); ?></span></div>
+                        <div class="cell"><b><?php echo contenly_tr('Sertifikat', 'Cert'); ?></b><span><?php echo esc_html($cert ?: '—'); ?></span></div>
+                        <button class="wdc-remove-completed" type="button" data-index="<?php echo (int) $idx; ?>" title="<?php echo contenly_tr('Hapus', 'Remove'); ?>">✕</button>
+                    </article>
+
+                    <?php else : /* E */ ?>
+                    <article class="wdc-dE">
+                        <div style="min-width:0;">
+                            <h3><?php echo esc_html($title); ?></h3>
+                            <?php if ($notes !== '') : ?><p class="notes"><?php echo esc_html($notes); ?></p><?php endif; ?>
+                        </div>
+                        <div class="side">
+                            <?php if ($level !== '') : ?><div class="level"><?php echo esc_html($level); ?></div><?php endif; ?>
+                            <?php if ($date_label !== '') : ?><div class="date"><?php echo esc_html($date_label); ?></div><?php endif; ?>
+                            <?php if ($cert !== '') : ?><div class="cert"><?php echo esc_html($cert); ?></div><?php endif; ?>
+                        </div>
+                        <button class="wdc-remove-completed" type="button" data-index="<?php echo (int) $idx; ?>" title="<?php echo contenly_tr('Hapus', 'Remove'); ?>">✕</button>
+                    </article>
+                    <?php endif; ?>
+                </div>
                 <?php endforeach; ?>
             <?php else : ?>
                 <div class="wdc-mc-empty">
