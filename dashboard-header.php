@@ -74,7 +74,7 @@ $wdc_member_icon = function ($path) {
         .dashboard-menu { list-style: none; padding: 0; margin: 0; }
         .dashboard-menu li { margin-bottom: 4px; }
         .dashboard-menu a { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #64748b; text-decoration: none; border-radius: 10px; transition: all 0.2s; font-weight: 500; font-size: 14px; }
-        .dashboard-menu a:hover, .dashboard-menu a.active { background: #EEF5F4; color: #539294; }
+        .dashboard-menu a:hover:not(.dashboard-home-btn), .dashboard-menu a.active:not(.dashboard-home-btn) { background: #EEF5F4; color: #539294; }
         .dashboard-menu .menu-icon { width: 28px; height: 28px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; background: #e8f8fc; color: #0b617c; flex: 0 0 28px; }
         .dashboard-menu .menu-icon svg { width: 16px; height: 16px; display: block; }
         .dashboard-menu .badge { margin-left: auto; background: #fee2e2; color: #dc2626; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600; }
@@ -156,11 +156,40 @@ $wdc_member_icon = function ($path) {
         .user-email, .page-subtitle, .dashboard-main p, .dashboard-main div { border-color: rgba(0,74,152,.12); }
         .user-tier { background: rgba(76,200,237,.16) !important; color: var(--wdc-blue) !important; }
         .dashboard-menu a { color: var(--wdc-muted) !important; }
-        .dashboard-menu a:hover, .dashboard-menu a.active { background: rgba(76,200,237,.14) !important; color: var(--wdc-blue) !important; }
+        .dashboard-menu a:hover:not(.dashboard-home-btn), .dashboard-menu a.active:not(.dashboard-home-btn) { background: rgba(76,200,237,.14) !important; color: var(--wdc-blue) !important; }
         .dashboard-menu .menu-icon { background: rgba(76,200,237,.16) !important; color: var(--wdc-blue) !important; }
         .dashboard-menu .badge { background: rgba(195,28,74,.12) !important; color: var(--wdc-red) !important; }
-        .dashboard-menu a.dashboard-home-btn, .dashboard-menu a.dashboard-home-btn span:not(.menu-icon) { color: var(--wdc-white) !important; }
-        .dashboard-menu a.dashboard-home-btn .menu-icon { background: rgba(255,255,255,.18) !important; color: var(--wdc-white) !important; }
+        .dashboard-menu a.dashboard-home-btn,
+        .dashboard-menu a.dashboard-home-btn:hover,
+        .dashboard-menu a.dashboard-home-btn:focus,
+        .dashboard-menu a.dashboard-home-btn:active {
+          background: linear-gradient(135deg,var(--wdc-blue),var(--wdc-blue-violet)) !important;
+          color: #ffffff !important;
+          box-shadow: 0 10px 22px rgba(0,74,152,.22) !important;
+        }
+        .dashboard-menu a.dashboard-home-btn:hover {
+          filter: brightness(1.06);
+        }
+        .dashboard-menu a.dashboard-home-btn,
+        .dashboard-menu a.dashboard-home-btn:hover,
+        .dashboard-menu a.dashboard-home-btn:focus,
+        .dashboard-menu a.dashboard-home-btn:active,
+        .dashboard-menu a.dashboard-home-btn span:not(.menu-icon),
+        .dashboard-menu a.dashboard-home-btn:hover span:not(.menu-icon),
+        .dashboard-menu a.dashboard-home-btn * {
+          color: #ffffff !important;
+        }
+        .dashboard-menu a.dashboard-home-btn .menu-icon,
+        .dashboard-menu a.dashboard-home-btn:hover .menu-icon,
+        .dashboard-menu a.dashboard-home-btn:focus .menu-icon {
+          background: rgba(255,255,255,.18) !important;
+          color: #ffffff !important;
+        }
+        .dashboard-menu a.dashboard-home-btn .menu-icon svg,
+        .dashboard-menu a.dashboard-home-btn:hover .menu-icon svg {
+          stroke: #ffffff !important;
+          color: #ffffff !important;
+        }
         .dashboard-main > div:has(> h1), .dashboard-main > section:has(> h1), .dashboard-main > h1.page-title, .dashboard-main > p.page-subtitle { background: linear-gradient(135deg,rgba(150,218,234,.28),#f8fcff) !important; border-color: rgba(0,74,152,.14) !important; }
         .dashboard-main a[style*="background:#06384d"], .dashboard-main a[style*="background: #06384d"], .dashboard-main a[style*="background:#539294"], .dashboard-main a[style*="background: #539294"] { background: linear-gradient(135deg,var(--wdc-blue),var(--wdc-blue-violet)) !important; color: var(--wdc-white) !important; }
         .dashboard-main a[style*="background:#fff"], .dashboard-main a[style*="background: #fff"] { color: var(--wdc-blue) !important; border-color: rgba(0,74,152,.18) !important; }
@@ -216,7 +245,16 @@ $wdc_member_icon = function ($path) {
           }
           .user-avatar { background: linear-gradient(135deg, var(--wdc-blue), var(--wdc-blue-violet)) !important; }
           .dashboard-home-btn { background: linear-gradient(135deg, var(--wdc-blue), var(--wdc-blue-violet)) !important; box-shadow: 0 10px 24px rgba(0,74,152,.22) !important; }
-          .dashboard-menu a:hover, .dashboard-menu a.active { color: var(--wdc-blue) !important; background: rgba(76,200,237,.14) !important; }
+          .dashboard-menu a:hover:not(.dashboard-home-btn), .dashboard-menu a.active:not(.dashboard-home-btn) { color: var(--wdc-blue) !important; background: rgba(76,200,237,.14) !important; }
+          .dashboard-menu a.dashboard-home-btn:hover, .dashboard-menu a.dashboard-home-btn:focus {
+            background: linear-gradient(135deg, var(--wdc-blue), var(--wdc-blue-violet)) !important;
+            color: #ffffff !important;
+            filter: brightness(1.06);
+          }
+          .dashboard-menu a.dashboard-home-btn:hover,
+          .dashboard-menu a.dashboard-home-btn:hover *,
+          .dashboard-menu a.dashboard-home-btn:hover span:not(.menu-icon) { color: #ffffff !important; }
+          .dashboard-menu a.dashboard-home-btn:hover .menu-icon { background: rgba(255,255,255,.18) !important; color: #ffffff !important; }
           .user-tier { background: rgba(76,200,237,.16) !important; color: var(--wdc-blue) !important; }
           .mobile-menu-toggle span { background: var(--wdc-blue) !important; }
         }
@@ -249,8 +287,8 @@ $wdc_member_icon = function ($path) {
             .dashboard-menu .menu-icon { width:24px; height:24px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; background:#e8f8fc; color:#0b617c; flex:0 0 24px; }
             .dashboard-menu .menu-icon svg { width:14px; height:14px; }
             .dashboard-menu .badge { background: #fee2e2 !important; color: #dc2626 !important; padding: 2px 6px !important; border-radius: 9999px !important; font-size: 10px !important; font-weight: 600 !important; }
-            .dashboard-home-btn, .dashboard-home-btn * { color: #ffffff !important; }
-            .dashboard-home-btn .menu-icon { color: #355F72 !important; background: #eaf2ff !important; }
+            .dashboard-home-btn, .dashboard-home-btn:hover, .dashboard-home-btn * { color: #ffffff !important; }
+            .dashboard-home-btn .menu-icon, .dashboard-home-btn:hover .menu-icon { color: #ffffff !important; background: rgba(255,255,255,.18) !important; }
             
             .dashboard-main { border-radius: 0; padding: 72px 16px 16px; margin-top: 0; width:100%; max-width:100vw; overflow-x:hidden; }
             .dashboard-main > div:has(> h1), .dashboard-main > section:has(> h1) { padding: 14px 14px !important; margin-bottom: 16px !important; }
