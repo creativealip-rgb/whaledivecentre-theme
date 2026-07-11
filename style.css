@@ -5584,6 +5584,35 @@ body.whaledive-single-course .wd-course-full-image-hero .wd-kicker{
   }
 }
 
+/* WDC mobile width unify 2.3.58: home side gap match courses/equipment */
+@media (max-width: 760px) {
+  body.whaledive-home .wd-shell,
+  body.home .wd-shell,
+  body.whaledive-home .wd-section .wd-shell,
+  body.home .wd-section .wd-shell,
+  body.whaledive-home .wd-footer .wd-shell,
+  body.home .wd-footer .wd-shell,
+  body.whaledive-home .wd-hero .wd-shell,
+  body.home .wd-hero .wd-shell {
+    width: calc(100% - 48px) !important;
+    max-width: none !important;
+    margin-left: 24px !important;
+    margin-right: 24px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    box-sizing: border-box !important;
+  }
+  body.whaledive-home .wd-header .wd-shell,
+  body.home .wd-header .wd-shell {
+    width: 100% !important;
+    max-width: 100vw !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
 /* WDC mobile fix 2.3.57: center NAUI/TDI + drawer close reliable */
 @media (max-width: 760px) {
   /* Home + catalog filter tabs stay centered on mobile */

@@ -50,7 +50,7 @@
   .whaledive-home *,.whaledive-home *:before,.whaledive-home *:after{box-sizing:border-box!important}
   .whaledive-home,.whaledive-home .wd-page{width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:hidden!important}
   .whaledive-home .wd-page,.whaledive-home .wd-section,.whaledive-home .wd-hero,.whaledive-home .wd-shell{min-width:0!important;overflow-wrap:anywhere!important}
-  .whaledive-home .wd-shell{width:calc(100% - 36px)!important;max-width:none!important;padding-left:0!important;padding-right:0!important;margin-left:18px!important;margin-right:18px!important}
+  .whaledive-home .wd-shell{width:calc(100% - 48px)!important;max-width:none!important;padding-left:0!important;padding-right:0!important;margin-left:24px!important;margin-right:24px!important}
   .whaledive-home .wd-header .wd-shell{width:100%!important;max-width:100vw!important;margin:0!important;padding:0!important;overflow:visible!important}
   .whaledive-home .wd-header .wd-nav{width:100%!important;max-width:100vw!important;margin:0!important;padding:10px 72px 10px 14px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important}
   .whaledive-home .wd-header .wd-brand{min-width:0!important;max-width:none!important;flex:1 1 auto!important;overflow:hidden!important}
@@ -73,7 +73,7 @@
   .whaledive-home .wd-divider{max-width:100%!important;overflow:hidden!important}
   .whaledive-home .wd-section{padding-top:52px!important;padding-bottom:52px!important;overflow:hidden!important}
   .whaledive-home #equipment{padding-bottom:52px!important}
-  .whaledive-home .wd-section .wd-shell,.whaledive-home .wd-footer .wd-shell{width:calc(100% - 24px)!important;max-width:none!important;padding-left:0!important;padding-right:0!important;margin-left:12px!important;margin-right:12px!important}
+  .whaledive-home .wd-section .wd-shell,.whaledive-home .wd-footer .wd-shell{width:calc(100% - 48px)!important;max-width:none!important;padding-left:0!important;padding-right:0!important;margin-left:24px!important;margin-right:24px!important}
   .whaledive-home .wd-section .wd-title,.whaledive-home .wd-footer h2{font-size:clamp(34px,11vw,48px)!important;line-height:1.02!important;max-width:100%!important;white-space:normal!important;overflow-wrap:break-word!important;word-break:normal!important}
   .whaledive-home #courses .wd-shell{width:calc(100% - 48px)!important;max-width:none!important;margin-left:24px!important;margin-right:24px!important;padding-left:0!important;padding-right:0!important}
   .whaledive-home #courses .wd-divider,.whaledive-home #courses .wd-title,.whaledive-home #courses .wd-sub{width:100%!important;max-width:100%!important;margin-left:0!important;margin-right:0!important;overflow:visible!important}
