@@ -25,7 +25,7 @@ require_once get_template_directory() . '/inc/wdc-catalog-helpers.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.54');
+    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.55');
     wp_add_inline_style('contenly-style', '.wd-header .gt-lang-switcher{margin-right:10px!important}.wd-header .wd-nav-member{margin-left:8px!important}');
     
     // Google Fonts
@@ -2984,6 +2984,60 @@ function wdc_cleanup_admin_menus() {
 }
 add_action('admin_menu', 'wdc_cleanup_admin_menus', 999);
 
+/**
+ * Dive Sites CPT unused on public site (all drafts; home section hidden; trips/gallery already 301).
+ * Soft-disable: hide public routes + admin menu. Keep draft data for possible restore.
+ */
+add_filter('register_post_type_args', function ($args, $post_type) {
+    if ($post_type !== 'wm_dive_site') {
+        return $args;
+    }
+    $args['public'] = false;
+    $args['publicly_queryable'] = false;
+    $args['show_ui'] = false;
+    $args['show_in_menu'] = false;
+    $args['show_in_nav_menus'] = false;
+    $args['show_in_admin_bar'] = false;
+    $args['show_in_rest'] = false;
+    $args['has_archive'] = false;
+    $args['exclude_from_search'] = true;
+    $args['rewrite'] = false;
+    return $args;
+}, 20, 2);
+
+add_filter('register_taxonomy_args', function ($args, $taxonomy) {
+    if (!in_array($taxonomy, ['dive_region', 'dive_difficulty'], true)) {
+        return $args;
+    }
+    $args['public'] = false;
+    $args['publicly_queryable'] = false;
+    $args['show_ui'] = false;
+    $args['show_in_menu'] = false;
+    $args['show_in_nav_menus'] = false;
+    $args['show_admin_column'] = false;
+    $args['show_in_rest'] = false;
+    $args['rewrite'] = false;
+    return $args;
+}, 20, 2);
+
+add_action('admin_menu', function () {
+    remove_menu_page('edit.php?post_type=wm_dive_site');
+}, 999);
+
+add_action('template_redirect', function () {
+    if (is_admin() || wp_doing_ajax() || (defined('REST_REQUEST') && REST_REQUEST)) {
+        return;
+    }
+    $path = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?: '', '/');
+    $path = preg_replace('#^en/#', '', $path);
+    if ($path === 'dive-sites' || strpos($path, 'dive-sites/') === 0 || is_post_type_archive('wm_dive_site') || is_singular('wm_dive_site')) {
+        wp_safe_redirect(home_url('/'), 301);
+        exit;
+    }
+}, 0);
+
+
+
 // Hide Whale Members menu — handled directly in plugin class-wm-admin.php
 // Payment Settings page — reads/writes same options as whale-membership plugin
 function wdc_render_payment_settings_page() {
@@ -3863,3 +3917,13 @@ function wdc_admin_save_completed_courses($user_id) {
 }
 add_action('personal_options_update', 'wdc_admin_save_completed_courses');
 add_action('edit_user_profile_update', 'wdc_admin_save_completed_courses');
+
+
+// One-shot rewrite flush after soft-disabling dive sites public routes.
+add_action('init', function () {
+    if (get_option('wdc_flush_after_dive_sites_disable')) {
+        return;
+    }
+    flush_rewrite_rules(false);
+    update_option('wdc_flush_after_dive_sites_disable', 1, false);
+}, 99);
