@@ -64,13 +64,13 @@ $wdc_member_icon = function ($path) {
         
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(180deg, #f1f5f9 0%, #ffffff 100%); min-height: 100vh; }
         .dashboard-wrapper { display: grid; grid-template-columns: 260px 1fr; gap: 0; max-width: 100%; margin: 0; }
-        .dashboard-sidebar { background: white; padding: 24px 16px; height: 100vh; position: sticky; top: 0; border-right: 1px solid #f1f5f9; overflow-y: auto; }
+        .dashboard-sidebar { background: white; padding: 24px 16px; height: 100vh; position: sticky; top: 0; border-right: 1px solid #f1f5f9; overflow-y: auto; overflow-x: hidden; min-width: 0; box-sizing: border-box; }
         .dashboard-main { background: #f8fafc; padding: 32px 40px; min-height: 100vh; }
-        .user-profile { text-align: center; padding: 24px 16px; border-bottom: 1px solid #f1f5f9; margin-bottom: 16px; }
-        .user-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, var(--wdc-blue), var(--wdc-blue-violet)); display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; font-weight: 700; margin: 0 auto 12px; }
-        .user-name { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
-        .user-email { font-size: 13px; color: #5f7180; margin-bottom: 8px; }
-        .user-tier { display: inline-block; padding: 4px 12px; border-radius: 9999px; font-size: 11px; font-weight: 600; background: #fef3c7; color: #d97706; }
+        .user-profile { text-align: center; padding: 24px 16px; border-bottom: 1px solid #f1f5f9; margin-bottom: 16px; max-width: 100%; min-width: 0; overflow: hidden; box-sizing: border-box; }
+        .user-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, var(--wdc-blue), var(--wdc-blue-violet)); display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; font-weight: 700; margin: 0 auto 12px; flex-shrink: 0; }
+        .user-name { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 4px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; word-break: break-all; }
+        .user-email { font-size: 13px; color: #5f7180; margin-bottom: 8px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; word-break: break-all; }
+        .user-tier { display: inline-block; max-width: 100%; padding: 4px 12px; border-radius: 9999px; font-size: 11px; font-weight: 600; background: #fef3c7; color: #d97706; box-sizing: border-box; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: top; }
         .dashboard-menu { list-style: none; padding: 0; margin: 0; }
         .dashboard-menu li { margin-bottom: 4px; }
         .dashboard-menu a { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #64748b; text-decoration: none; border-radius: 10px; transition: all 0.2s; font-weight: 500; font-size: 14px; }
@@ -223,7 +223,7 @@ $wdc_member_icon = function ($path) {
 
         @media (max-width: 768px) {
             .dashboard-wrapper { grid-template-columns: 1fr; padding: 0; width:100%; max-width:100vw; overflow-x:hidden; }
-            .dashboard-sidebar { position: fixed; top: 0; left: -100%; width: 75%; max-width: 260px; height: 100vh; z-index: 1001; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; background: white; box-shadow: 4px 0 24px rgba(0,0,0,0.12); }
+            .dashboard-sidebar { position: fixed; top: 0; left: -100%; width: 75%; max-width: 260px; height: 100vh; z-index: 1001; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; overflow-x: hidden; background: white; box-shadow: 4px 0 24px rgba(0,0,0,0.12); min-width: 0; box-sizing: border-box; }
             .dashboard-sidebar.active { left: 0; }
             .mobile-topbar { display:flex; position: fixed; top:0; left:0; right:0; z-index:1000; height:56px; background:#ffffff; border-bottom:1px solid #e2e8f0; align-items:center; justify-content:center; padding:0 14px; }
             .mobile-topbar .topbar-title { position:absolute; left:0; right:0; text-align:center; font-size:15px; font-weight:700; color:#0f172a; pointer-events:none; }
@@ -232,11 +232,11 @@ $wdc_member_icon = function ($path) {
             .mobile-overlay.active { display: block; }
             
             /* Mobile sidebar styling - MORE COMPACT */
-            .user-profile { padding: 20px 16px 16px; border-bottom: 1px solid #f1f5f9; }
+            .user-profile { padding: 20px 16px 16px; border-bottom: 1px solid #f1f5f9; max-width: 100%; min-width: 0; overflow: hidden; }
             .user-avatar { width: 56px; height: 56px; font-size: 24px; background: linear-gradient(135deg, var(--wdc-blue), var(--wdc-blue-violet)); margin-bottom: 8px; }
-            .user-name { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 2px; }
-            .user-email { font-size: 12px; color: #94a3b8; margin-bottom: 8px; display: none; }
-            .user-tier { display: inline-block; padding: 4px 10px; background: #fef3c7; color: #d97706; border-radius: 9999px; font-size: 11px; font-weight: 600; }
+            .user-name { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 2px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+            .user-email { font-size: 12px; color: #94a3b8; margin-bottom: 8px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+            .user-tier { display: inline-block; max-width: 100%; padding: 4px 10px; background: #fef3c7; color: #d97706; border-radius: 9999px; font-size: 11px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; box-sizing: border-box; }
             
             .dashboard-home-btn { background: linear-gradient(135deg, var(--wdc-blue), var(--wdc-blue-violet)) !important; color: #ffffff !important; justify-content: center !important; margin: 12px 16px 16px !important; border-radius: 10px !important; font-weight: 700 !important; padding: 12px 16px !important; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important; font-size: 13px !important; text-shadow: 0 1px 2px rgba(0,0,0,0.25); }
             .dashboard-menu a.dashboard-home-btn { color:#ffffff !important; font-weight:700 !important; }
@@ -305,9 +305,9 @@ $wdc_member_icon = function ($path) {
     <aside class="dashboard-sidebar">
         <div class="user-profile">
             <div class="user-avatar"><?php echo strtoupper(substr($user->display_name, 0, 1)); ?></div>
-            <div class="user-name"><?php echo esc_html($user->display_name); ?></div>
-            <div class="user-email"><?php echo esc_html($user->user_email); ?></div>
-            <div class="user-tier">
+            <div class="user-name" title="<?php echo esc_attr($user->display_name); ?>"><?php echo esc_html($user->display_name); ?></div>
+            <div class="user-email" title="<?php echo esc_attr($user->user_email); ?>"><?php echo esc_html($user->user_email); ?></div>
+            <div class="user-tier" title="<?php echo esc_attr($tier_info['icon'] . ' ' . $tier_info['name'] . ' ' . contenly_tr('Member', 'Member')); ?>">
                 <?php echo esc_html($tier_info['icon'] . ' ' . $tier_info['name'] . ' ' . contenly_tr('Member', 'Member')); ?>
             </div>
         </div>
