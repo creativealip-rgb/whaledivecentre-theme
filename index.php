@@ -8,9 +8,10 @@
 /* Final home polish: unified card rhythm and tighter sections. */
 .whaledive-home .wd-section{padding-top:72px!important;padding-bottom:72px!important}.whaledive-home .wd-course-grid .wd-course-body h3,.whaledive-home #equipment .wd-home-equip-body h3{min-height:42px!important;display:block!important}.whaledive-home .wd-course-grid .wd-course-body p,.whaledive-home #equipment .wd-home-equip-body p{min-height:38px!important}.whaledive-home #equipment{background:linear-gradient(180deg,#ffffff 0%,#f3fbff 100%)!important}.whaledive-home #equipment .wd-home-equip-photo{background-image:radial-gradient(circle at 50% 42%,rgba(76,200,237,.22),rgba(255,255,255,.1) 48%,rgba(255,255,255,.5) 72%),var(--wd-equip-bg,none)!important;background-color:#eef8fb!important}.whaledive-home #equipment .wd-home-equip-photo img{transform:none!important;transform-origin:center!important}.whaledive-home #equipment .wd-home-equip-body a,.whaledive-home .wd-course-grid .wd-course-body a{min-width:112px!important;justify-content:center!important}
 
-/* CTA button: solid readable on dark section */
+/* CTA button: unified dark-section primary/secondary */
 .whaledive-home .wd-dark .wd-section-cta .wd-btn,
-.whaledive-home .wd-dark .wd-section-cta .wd-btn.alt{background:linear-gradient(135deg,#4CC8ED,#96DAEA)!important;border:0!important;color:#03172d!important;font-weight:900!important;box-shadow:0 16px 34px rgba(0,0,0,.28)!important}
+.whaledive-home .wd-dark .wd-section-cta .wd-btn:not(.alt){background:#ffffff!important;background-image:none!important;border:1px solid rgba(255,255,255,.98)!important;color:#06384d!important;-webkit-text-fill-color:#06384d!important;font-weight:900!important;box-shadow:0 14px 30px rgba(0,0,0,.24)!important}
+.whaledive-home .wd-dark .wd-section-cta .wd-btn.alt{background:#06384d!important;background-image:none!important;border:1px solid rgba(255,255,255,.28)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;font-weight:900!important;box-shadow:0 12px 26px rgba(0,0,0,.22)!important}
 .whaledive-home #courses .wd-section-cta{padding:0!important;margin:28px 0 0!important}
 
 

@@ -214,7 +214,7 @@ get_header();
                 <div id="wdc-gw-pay-error" style="display:none;background:#fee2e2;color:#991b1b;border-radius:10px;padding:12px;font-size:14px;font-weight:600;"></div>
 
                 <button type="submit" id="wdc-gw-upload-btn"
-                        style="width:100%;padding:16px;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:16px;cursor:pointer;">
+                        class="wdc-btn wdc-btn--success wdc-btn--block" style="width:100%;">
                     <?php echo contenly_tr('📤 Upload Bukti Transfer', '📤 Upload Transfer Proof'); ?>
                 </button>
             </form>
