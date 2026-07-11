@@ -4515,7 +4515,7 @@ body.whaledive-home #courses .wd-course-body p {
     display: flex !important;
     align-items: center !important;
     width: 100% !important;
-    min-height: 44px !important;
+    min-height: 40px !important;
     margin: 0 !important;
     padding: 0 8px 0 0 !important;
     border-radius: 12px !important;
@@ -4655,9 +4655,9 @@ body.whaledive-home #courses .wd-course-body p {
     padding-bottom: 12px !important;
   }
   #wd-mobile-menu .wd-menu-links {
-    padding-top: 10px !important;
-    padding-bottom: 8px !important;
-    gap: 6px !important;
+    padding-top: 8px !important;
+    padding-bottom: 6px !important;
+    gap: 2px !important;
     align-items: stretch !important;
   }
   #wd-mobile-menu .wd-menu-panel-foot {
@@ -4679,9 +4679,9 @@ body.whaledive-home #courses .wd-course-body p {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
-    padding: 12px 14px !important;
-    min-height: 46px !important;
-    border-radius: 12px !important;
+    padding: 9px 12px !important;
+    min-height: 40px !important;
+    border-radius: 10px !important;
     box-sizing: border-box !important;
     border: 1px solid transparent !important;
     background: transparent !important;
@@ -4714,7 +4714,7 @@ body.whaledive-home #courses .wd-course-body p {
     border: 1px solid rgba(76, 200, 237, .28) !important;
     color: #e8fbff !important;
     box-shadow: none !important;
-    padding: 12px 14px !important;
+    padding: 9px 12px !important;
   }
 
   #wd-mobile-menu .wd-menu-panel-brand {
@@ -4752,5 +4752,25 @@ body.whaledive-home #courses .wd-course-body p {
   #wd-mobile-menu {
     width: min(82vw, 288px) !important;
     max-width: 288px !important;
+  }
+}
+
+
+/* WDC drawer menu spacing FINAL 2026-07-11s */
+@media (max-width: 760px) {
+  #wd-mobile-menu .wd-menu-links,
+  body.wd-menu-open #wd-mobile-menu .wd-menu-links {
+    gap: 2px !important;
+    padding-top: 8px !important;
+    padding-bottom: 6px !important;
+  }
+  #wd-mobile-menu .wd-menu-links a,
+  #wd-mobile-menu .wd-menu-links a.is-active,
+  #wd-mobile-menu .wd-menu-links a[aria-current="page"],
+  body.wd-menu-open #wd-mobile-menu .wd-menu-links a {
+    min-height: 40px !important;
+    padding: 9px 12px !important;
+    margin: 0 !important;
+    border-radius: 10px !important;
   }
 }
