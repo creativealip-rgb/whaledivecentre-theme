@@ -2,7 +2,7 @@
 
 /*
 Theme Name: Whale Dive Centre Theme
-Version: 2.3.79
+Version: 2.3.80
 */
 :root{
   --black:#000;--violet:#3B44AC;--cyan:#4CC8ED;--pale:#96DAEA;--red:#C31C4A;--blue:#004A98;--white:#fff;--navy:#061a36;--ink:#0b1930;--muted:#63748a;
@@ -8092,5 +8092,87 @@ html body.whaledive-equipment .wdc-card-cta .wd-btn.alt{
     visibility: visible !important;
     transform: none !important;
     overflow: visible !important;
+  }
+}
+
+
+/* WDC DRAWER HEAD FORCE (2.3.80) */
+@media (max-width: 1099.98px) {
+  .wd-menu .wd-menu-panel-head,
+  #wd-mobile-menu .wd-menu-panel-head {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    min-height: 68px !important;
+    padding: 14px !important;
+    background: #0d2a4a !important;
+    background-image: linear-gradient(180deg, #13406b 0%, #0a2340 100%) !important;
+    border-bottom: 1px solid rgba(150,218,234,.28) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 2 !important;
+  }
+  .wd-menu .wd-menu-panel-brand,
+  .wd-menu .wd-menu-panel-copy,
+  .wd-menu .wd-menu-kicker,
+  .wd-menu .wd-menu-panel-copy strong {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  .wd-menu .wd-menu-panel-copy {
+    flex-direction: column !important;
+    gap: 2px !important;
+  }
+  .wd-menu .wd-menu-kicker {
+    display: block !important;
+    color: #96DAEA !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    letter-spacing: .12em !important;
+    text-transform: uppercase !important;
+  }
+  .wd-menu .wd-menu-panel-copy strong {
+    display: block !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-size: 16px !important;
+    font-weight: 900 !important;
+  }
+  .wd-menu .wd-menu-close,
+  #wd-mobile-menu .wd-menu-close {
+    display: inline-flex !important;
+    position: relative !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(255,255,255,.22) !important;
+    background: rgba(255,255,255,.12) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    flex: 0 0 40px !important;
+  }
+  .wd-menu .wd-menu-close:before,
+  .wd-menu .wd-menu-close:after {
+    content: "" !important;
+    position: absolute !important;
+    left: 11px !important;
+    right: 11px !important;
+    top: 50% !important;
+    height: 2px !important;
+    background: #fff !important;
+    border-radius: 999px !important;
+  }
+  .wd-menu .wd-menu-close:before { transform: translateY(-50%) rotate(45deg) !important; }
+  .wd-menu .wd-menu-close:after { transform: translateY(-50%) rotate(-45deg) !important; }
+
+  .wd-menu .wd-menu-links a.is-active,
+  .wd-menu .wd-menu-links a[aria-current="page"] {
+    background: rgba(76,200,237,.20) !important;
+    border: 1px solid rgba(76,200,237,.40) !important;
+    color: #e8fbff !important;
+    -webkit-text-fill-color: #e8fbff !important;
+    box-shadow: inset 3px 0 0 #4CC8ED !important;
+    padding-left: 14px !important;
   }
 }
