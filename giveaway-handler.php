@@ -916,6 +916,7 @@ function wdc_handle_giveaway_admin_update() {
         'page' => 'wdc-giveaway-orders',
         'updated' => is_wp_error($result) ? '0' : '1',
         'msg' => is_wp_error($result) ? rawurlencode($result->get_error_message()) : 'updated',
+        'order_id' => $order_id,
     ], admin_url('admin.php'));
     wp_safe_redirect($redirect);
     exit;
@@ -944,101 +945,81 @@ function wdc_render_giveaway_orders_admin() {
     foreach ($all_items as $it) {
         $item_map[$it['id']] = $it['name'];
     }
+    $open_order = sanitize_text_field(wp_unslash($_GET['order_id'] ?? ''));
     ?>
     <div class="wrap wdc-gw-admin">
         <style>
-            .wdc-gw-admin { max-width: none; }
-            .wdc-gw-admin .wdc-gw-filters { float:none; margin: 8px 0 18px; width:100%; }
-            .wdc-gw-admin .wdc-gw-list { display:grid; gap:16px; width:100%; clear:both; }
-            .wdc-gw-admin .wdc-gw-card {
-                background:#fff;
-                border:1px solid #c3c4c7;
-                border-radius:8px;
-                padding:0;
-                box-shadow:0 1px 1px rgba(0,0,0,.04);
-                overflow:hidden;
+            .wdc-gw-admin { max-width:none; }
+            .wdc-gw-admin .wdc-gw-filters { float:none; margin:8px 0 16px; width:100%; }
+            .wdc-gw-admin .wdc-gw-hint { color:#646970; margin:0 0 12px; }
+            .wdc-gw-admin .wdc-gw-table-wrap {
+                width:100%; background:#fff; border:1px solid #c3c4c7; border-radius:8px; overflow:hidden;
             }
-            .wdc-gw-admin .wdc-gw-head {
-                display:flex;
-                justify-content:space-between;
-                gap:16px;
-                flex-wrap:wrap;
-                align-items:flex-start;
-                padding:14px 16px;
-                border-bottom:1px solid #e2e4e7;
-                background:#f6f7f7;
+            .wdc-gw-admin table.wdc-gw-table {
+                width:100%; border-collapse:collapse; margin:0; table-layout:fixed;
             }
-            .wdc-gw-admin .wdc-gw-head strong { font-size:15px; }
+            .wdc-gw-admin table.wdc-gw-table th,
+            .wdc-gw-admin table.wdc-gw-table td {
+                padding:12px 14px; text-align:left; vertical-align:middle; border-bottom:1px solid #e2e4e7;
+            }
+            .wdc-gw-admin table.wdc-gw-table th {
+                background:#f6f7f7; font-size:12px; text-transform:uppercase; letter-spacing:.03em; color:#1d2327;
+            }
+            .wdc-gw-admin table.wdc-gw-table tr.wdc-gw-row { cursor:pointer; }
+            .wdc-gw-admin table.wdc-gw-table tr.wdc-gw-row:hover { background:#f0f6fc; }
+            .wdc-gw-admin table.wdc-gw-table tr.wdc-gw-row.is-open { background:#eef5fb; }
+            .wdc-gw-admin table.wdc-gw-table tr.wdc-gw-detail-row td {
+                background:#fcfcfc; padding:0; border-bottom:1px solid #c3c4c7;
+            }
+            .wdc-gw-admin .wdc-gw-order { font-weight:700; color:#1d2327; }
+            .wdc-gw-admin .wdc-gw-sub { color:#646970; font-size:12px; margin-top:2px; }
             .wdc-gw-admin .wdc-gw-badge {
-                display:inline-block;
-                margin-left:8px;
-                padding:3px 10px;
-                border-radius:999px;
-                font-size:12px;
-                font-weight:700;
-                line-height:1.4;
-                vertical-align:middle;
+                display:inline-block; padding:3px 10px; border-radius:999px;
+                font-size:12px; font-weight:700; line-height:1.4; white-space:nowrap;
             }
-            .wdc-gw-admin .wdc-gw-meta { color:#646970; font-size:13px; margin-top:4px; }
-            .wdc-gw-admin .wdc-gw-rightmeta { text-align:right; font-size:13px; color:#1d2327; min-width:160px; }
-            .wdc-gw-admin .wdc-gw-rightmeta .muted { color:#8c8f94; margin-top:2px; }
-            .wdc-gw-admin .wdc-gw-body {
-                display:grid;
-                grid-template-columns: minmax(280px, 1.3fr) minmax(300px, 1fr);
-                gap:0;
+            .wdc-gw-admin .col-order { width:16%; }
+            .wdc-gw-admin .col-status { width:16%; }
+            .wdc-gw-admin .col-member { width:20%; }
+            .wdc-gw-admin .col-items { width:18%; }
+            .wdc-gw-admin .col-ongkir { width:12%; }
+            .wdc-gw-admin .col-date { width:12%; }
+            .wdc-gw-admin .col-toggle { width:6%; text-align:right; }
+            .wdc-gw-admin .wdc-gw-toggle {
+                display:inline-flex; align-items:center; justify-content:center;
+                min-width:28px; height:28px; border-radius:6px; background:#fff;
+                border:1px solid #c3c4c7; color:#1d2327; font-weight:700;
+            }
+            .wdc-gw-admin tr.is-open .wdc-gw-toggle { background:#2271b1; border-color:#2271b1; color:#fff; }
+            .wdc-gw-admin .wdc-gw-detail {
+                display:none; padding:16px 18px; box-sizing:border-box;
+            }
+            .wdc-gw-admin tr.is-open + tr.wdc-gw-detail-row .wdc-gw-detail { display:block; }
+            .wdc-gw-admin .wdc-gw-detail-grid {
+                display:grid; grid-template-columns:minmax(280px,1.2fr) minmax(300px,1fr); gap:16px;
             }
             .wdc-gw-admin .wdc-gw-info {
-                padding:16px 18px;
-                font-size:13px;
-                line-height:1.7;
-                color:#1d2327;
-                border-right:1px solid #e2e4e7;
+                font-size:13px; line-height:1.7; color:#1d2327;
+                background:#fff; border:1px solid #e2e4e7; border-radius:8px; padding:14px 16px;
             }
             .wdc-gw-admin .wdc-gw-info div { margin:0 0 6px; }
             .wdc-gw-admin .wdc-gw-info div:last-child { margin-bottom:0; }
             .wdc-gw-admin .wdc-gw-form {
-                padding:16px 18px;
-                background:#fcfcfc;
-                display:grid;
-                gap:10px;
-                align-content:start;
+                background:#fff; border:1px solid #e2e4e7; border-radius:8px; padding:14px 16px;
+                display:grid; gap:10px; align-content:start;
             }
             .wdc-gw-admin .wdc-gw-form label {
-                display:grid;
-                gap:4px;
-                font-size:12px;
-                font-weight:600;
-                color:#1d2327;
+                display:grid; gap:4px; font-size:12px; font-weight:600; color:#1d2327;
             }
             .wdc-gw-admin .wdc-gw-form input[type="text"],
             .wdc-gw-admin .wdc-gw-form select,
-            .wdc-gw-admin .wdc-gw-form textarea {
-                width:100%;
-                max-width:100%;
-                margin:0;
-            }
-            .wdc-gw-admin .wdc-gw-row2 {
-                display:grid;
-                grid-template-columns:1fr 1fr;
-                gap:10px;
-            }
-            .wdc-gw-admin .wdc-gw-help {
-                margin:0;
-                font-size:12px;
-                color:#646970;
-                line-height:1.45;
-            }
-            .wdc-gw-admin .wdc-gw-actions {
-                display:flex;
-                flex-wrap:wrap;
-                gap:8px;
-                align-items:center;
-                margin-top:2px;
-            }
-            @media (max-width: 900px) {
-                .wdc-gw-admin .wdc-gw-body { grid-template-columns:1fr; }
-                .wdc-gw-admin .wdc-gw-info { border-right:0; border-bottom:1px solid #e2e4e7; }
-                .wdc-gw-admin .wdc-gw-rightmeta { text-align:left; }
+            .wdc-gw-admin .wdc-gw-form textarea { width:100%; max-width:100%; margin:0; }
+            .wdc-gw-admin .wdc-gw-row2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+            .wdc-gw-admin .wdc-gw-help { margin:0; font-size:12px; color:#646970; line-height:1.45; }
+            .wdc-gw-admin .wdc-gw-actions { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+            @media (max-width: 960px) {
+                .wdc-gw-admin table.wdc-gw-table { table-layout:auto; }
+                .wdc-gw-admin .wdc-gw-detail-grid { grid-template-columns:1fr; }
+                .wdc-gw-admin .col-items, .wdc-gw-admin .col-date { display:none; }
             }
         </style>
         <h1><?php echo esc_html(contenly_tr('Giveaway Orders', 'Giveaway Orders')); ?></h1>
@@ -1068,93 +1049,172 @@ function wdc_render_giveaway_orders_admin() {
         <?php if (empty($orders)) : ?>
             <p><?php echo esc_html(contenly_tr('Belum ada order giveaway.', 'No giveaway orders yet.')); ?></p>
         <?php else : ?>
-            <div class="wdc-gw-list">
-            <?php foreach ($orders as $o) :
-                $st = sanitize_key($o['status'] ?? '');
-                $meta = wdc_giveaway_status_meta($st);
-                $names = [];
-                foreach (($o['items'] ?? []) as $id) {
-                    $names[] = $item_map[$id] ?? $id;
-                }
-                $track_url = !empty($o['tracking_url']) ? $o['tracking_url'] : wdc_giveaway_tracking_url($o['courier'] ?? '', $o['tracking_number'] ?? '');
-                ?>
-                <div class="wdc-gw-card">
-                    <div class="wdc-gw-head">
-                        <div>
-                            <strong><?php echo esc_html($o['order_id']); ?></strong>
-                            <span class="wdc-gw-badge" style="background:<?php echo esc_attr($meta['bg']); ?>;color:<?php echo esc_attr($meta['color']); ?>;"><?php echo esc_html($meta['label']); ?></span>
-                            <div class="wdc-gw-meta">
-                                <?php echo esc_html($o['display_name'] ?: $o['user_login']); ?> · <?php echo esc_html($o['user_email']); ?> · user #<?php echo intval($o['user_id']); ?>
-                            </div>
-                        </div>
-                        <div class="wdc-gw-rightmeta">
-                            <div>Ongkir: <strong>Rp <?php echo number_format(intval($o['shipping_cost'] ?? 0), 0, ',', '.'); ?></strong></div>
-                            <div><?php echo esc_html(strtoupper($o['courier'] ?? '')); ?> <?php echo esc_html($o['service'] ?? ''); ?></div>
-                            <div class="muted"><?php echo esc_html($o['created_at'] ?? ''); ?></div>
-                        </div>
-                    </div>
-
-                    <div class="wdc-gw-body">
-                        <div class="wdc-gw-info">
-                            <div><strong>Items:</strong> <?php echo esc_html(implode(', ', $names) ?: '-'); ?></div>
-                            <div><strong>Penerima:</strong> <?php echo esc_html($o['recipient_name'] ?? '-'); ?> · <?php echo esc_html($o['phone'] ?? '-'); ?></div>
-                            <div><strong>Alamat:</strong> <?php echo esc_html($o['address'] ?? '-'); ?><?php echo !empty($o['destination']) ? ', ' . esc_html($o['destination']) : ''; ?></div>
-                            <?php if (!empty($o['quote_ss_url'])) : ?>
-                                <div><strong>SS Ongkir:</strong> <a href="<?php echo esc_url($o['quote_ss_url']); ?>" target="_blank" rel="noopener">lihat</a></div>
-                            <?php endif; ?>
-                            <?php if (!empty($o['proof_url'])) : ?>
-                                <div><strong>Bukti TF:</strong> <a href="<?php echo esc_url($o['proof_url']); ?>" target="_blank" rel="noopener">lihat</a> · paid Rp <?php echo number_format(intval($o['paid_amount'] ?? $o['shipping_cost'] ?? 0), 0, ',', '.'); ?></div>
-                            <?php endif; ?>
-                            <?php if (!empty($o['tracking_number'])) : ?>
-                                <div><strong>Resi:</strong> <code><?php echo esc_html($o['tracking_number']); ?></code>
-                                <?php if ($track_url) : ?> · <a href="<?php echo esc_url($track_url); ?>" target="_blank" rel="noopener">cek tracking</a><?php endif; ?>
-                                </div>
-                            <?php endif; ?>
-                            <?php if (!empty($o['admin_note'])) : ?>
-                                <div><strong>Catatan:</strong> <?php echo esc_html($o['admin_note']); ?></div>
-                            <?php endif; ?>
-                        </div>
-
-                        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" class="wdc-gw-form">
-                            <input type="hidden" name="action" value="wdc_giveaway_admin_update">
-                            <?php wp_nonce_field('wdc_giveaway_admin_update'); ?>
-                            <input type="hidden" name="user_id" value="<?php echo intval($o['user_id']); ?>">
-                            <input type="hidden" name="order_id" value="<?php echo esc_attr($o['order_id']); ?>">
-
-                            <label>Status
-                                <select name="status">
-                                    <?php foreach (['awaiting_payment','payment_uploaded','verified','shipped','delivered','cancelled'] as $opt) :
-                                        $om = wdc_giveaway_status_meta($opt); ?>
-                                        <option value="<?php echo esc_attr($opt); ?>" <?php selected($st, $opt); ?>><?php echo esc_html($om['label']); ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </label>
-                            <div class="wdc-gw-row2">
-                                <label>Kurir
-                                    <input type="text" name="courier" value="<?php echo esc_attr($o['courier'] ?? ''); ?>">
-                                </label>
-                                <label>Layanan
-                                    <input type="text" name="service" value="<?php echo esc_attr($o['service'] ?? ''); ?>">
-                                </label>
-                            </div>
-                            <label>No. Resi
-                                <input type="text" name="tracking_number" value="<?php echo esc_attr($o['tracking_number'] ?? ''); ?>" placeholder="Contoh: JP1234567890">
-                            </label>
-                            <label>Catatan Admin
-                                <textarea name="admin_note" rows="2"><?php echo esc_textarea($o['admin_note'] ?? ''); ?></textarea>
-                            </label>
-                            <p class="wdc-gw-help">Isi resi + set status <strong>Barang Dikirim</strong>. User cek progres + tracking di dashboard.</p>
-                            <div class="wdc-gw-actions">
-                                <button type="submit" class="button button-primary">Simpan Update</button>
-                                <?php if ($st === 'payment_uploaded') : ?>
-                                    <button type="submit" class="button" name="status" value="verified" onclick="this.form.status.value='verified'">Verifikasi Pembayaran</button>
+            <p class="wdc-gw-hint">Tampil info penting saja. Klik baris untuk buka detail + update status/resi.</p>
+            <div class="wdc-gw-table-wrap">
+                <table class="wdc-gw-table">
+                    <thead>
+                        <tr>
+                            <th class="col-order">Order</th>
+                            <th class="col-status">Status</th>
+                            <th class="col-member">Member / Penerima</th>
+                            <th class="col-items">Items</th>
+                            <th class="col-ongkir">Ongkir</th>
+                            <th class="col-date">Tanggal</th>
+                            <th class="col-toggle"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($orders as $idx => $o) :
+                        $st = sanitize_key($o['status'] ?? '');
+                        $meta = wdc_giveaway_status_meta($st);
+                        $names = [];
+                        foreach (($o['items'] ?? []) as $id) {
+                            $names[] = $item_map[$id] ?? $id;
+                        }
+                        $track_url = !empty($o['tracking_url']) ? $o['tracking_url'] : wdc_giveaway_tracking_url($o['courier'] ?? '', $o['tracking_number'] ?? '');
+                        $order_id = (string) ($o['order_id'] ?? '');
+                        $is_open = ($open_order && $open_order === $order_id);
+                        $row_id = 'wdc-gw-' . sanitize_html_class($order_id ?: ('row-' . $idx));
+                        $member = $o['display_name'] ?: ($o['user_login'] ?? '-');
+                        $recipient = $o['recipient_name'] ?? '-';
+                        $items_short = implode(', ', $names) ?: '-';
+                        if (function_exists('mb_strimwidth')) {
+                            $items_short = mb_strimwidth($items_short, 0, 42, '…', 'UTF-8');
+                        } elseif (strlen($items_short) > 42) {
+                            $items_short = substr($items_short, 0, 39) . '...';
+                        }
+                        ?>
+                        <tr class="wdc-gw-row<?php echo $is_open ? ' is-open' : ''; ?>" data-target="<?php echo esc_attr($row_id); ?>" tabindex="0">
+                            <td class="col-order">
+                                <div class="wdc-gw-order"><?php echo esc_html($order_id); ?></div>
+                                <?php if (!empty($o['tracking_number'])) : ?>
+                                    <div class="wdc-gw-sub">Resi: <?php echo esc_html($o['tracking_number']); ?></div>
                                 <?php endif; ?>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            <?php endforeach; ?>
+                            </td>
+                            <td class="col-status">
+                                <span class="wdc-gw-badge" style="background:<?php echo esc_attr($meta['bg']); ?>;color:<?php echo esc_attr($meta['color']); ?>;"><?php echo esc_html($meta['label']); ?></span>
+                            </td>
+                            <td class="col-member">
+                                <div><?php echo esc_html($member); ?></div>
+                                <div class="wdc-gw-sub"><?php echo esc_html($recipient); ?></div>
+                            </td>
+                            <td class="col-items"><?php echo esc_html($items_short); ?></td>
+                            <td class="col-ongkir"><strong>Rp <?php echo number_format(intval($o['shipping_cost'] ?? 0), 0, ',', '.'); ?></strong></td>
+                            <td class="col-date"><span class="wdc-gw-sub"><?php echo esc_html($o['created_at'] ?? '-'); ?></span></td>
+                            <td class="col-toggle"><span class="wdc-gw-toggle" aria-hidden="true"><?php echo $is_open ? '−' : '+'; ?></span></td>
+                        </tr>
+                        <tr class="wdc-gw-detail-row" id="<?php echo esc_attr($row_id); ?>">
+                            <td colspan="7">
+                                <div class="wdc-gw-detail">
+                                    <div class="wdc-gw-detail-grid">
+                                        <div class="wdc-gw-info">
+                                            <div><strong>Member:</strong> <?php echo esc_html($member); ?> · <?php echo esc_html($o['user_email'] ?? '-'); ?> · #<?php echo intval($o['user_id'] ?? 0); ?></div>
+                                            <div><strong>Items:</strong> <?php echo esc_html(implode(', ', $names) ?: '-'); ?></div>
+                                            <div><strong>Penerima:</strong> <?php echo esc_html($recipient); ?> · <?php echo esc_html($o['phone'] ?? '-'); ?></div>
+                                            <div><strong>Alamat:</strong> <?php echo esc_html($o['address'] ?? '-'); ?><?php echo !empty($o['destination']) ? ', ' . esc_html($o['destination']) : ''; ?></div>
+                                            <div><strong>Kurir:</strong> <?php echo esc_html(strtoupper($o['courier'] ?? '-') . ' ' . ($o['service'] ?? '')); ?></div>
+                                            <?php if (!empty($o['quote_ss_url'])) : ?>
+                                                <div><strong>SS Ongkir:</strong> <a href="<?php echo esc_url($o['quote_ss_url']); ?>" target="_blank" rel="noopener">lihat</a></div>
+                                            <?php endif; ?>
+                                            <?php if (!empty($o['proof_url'])) : ?>
+                                                <div><strong>Bukti TF:</strong> <a href="<?php echo esc_url($o['proof_url']); ?>" target="_blank" rel="noopener">lihat</a> · paid Rp <?php echo number_format(intval($o['paid_amount'] ?? $o['shipping_cost'] ?? 0), 0, ',', '.'); ?></div>
+                                            <?php endif; ?>
+                                            <?php if (!empty($o['tracking_number'])) : ?>
+                                                <div><strong>Resi:</strong> <code><?php echo esc_html($o['tracking_number']); ?></code>
+                                                <?php if ($track_url) : ?> · <a href="<?php echo esc_url($track_url); ?>" target="_blank" rel="noopener">cek tracking</a><?php endif; ?>
+                                                </div>
+                                            <?php endif; ?>
+                                            <?php if (!empty($o['admin_note'])) : ?>
+                                                <div><strong>Catatan:</strong> <?php echo esc_html($o['admin_note']); ?></div>
+                                            <?php endif; ?>
+                                        </div>
+
+                                        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" class="wdc-gw-form">
+                                            <input type="hidden" name="action" value="wdc_giveaway_admin_update">
+                                            <?php wp_nonce_field('wdc_giveaway_admin_update'); ?>
+                                            <input type="hidden" name="user_id" value="<?php echo intval($o['user_id']); ?>">
+                                            <input type="hidden" name="order_id" value="<?php echo esc_attr($order_id); ?>">
+
+                                            <label>Status
+                                                <select name="status">
+                                                    <?php foreach (['awaiting_payment','payment_uploaded','verified','shipped','delivered','cancelled'] as $opt) :
+                                                        $om = wdc_giveaway_status_meta($opt); ?>
+                                                        <option value="<?php echo esc_attr($opt); ?>" <?php selected($st, $opt); ?>><?php echo esc_html($om['label']); ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </label>
+                                            <div class="wdc-gw-row2">
+                                                <label>Kurir
+                                                    <input type="text" name="courier" value="<?php echo esc_attr($o['courier'] ?? ''); ?>">
+                                                </label>
+                                                <label>Layanan
+                                                    <input type="text" name="service" value="<?php echo esc_attr($o['service'] ?? ''); ?>">
+                                                </label>
+                                            </div>
+                                            <label>No. Resi
+                                                <input type="text" name="tracking_number" value="<?php echo esc_attr($o['tracking_number'] ?? ''); ?>" placeholder="Contoh: JP1234567890">
+                                            </label>
+                                            <label>Catatan Admin
+                                                <textarea name="admin_note" rows="2"><?php echo esc_textarea($o['admin_note'] ?? ''); ?></textarea>
+                                            </label>
+                                            <p class="wdc-gw-help">Isi resi + set status <strong>Barang Dikirim</strong>. User cek progres + tracking di dashboard.</p>
+                                            <div class="wdc-gw-actions">
+                                                <button type="submit" class="button button-primary">Simpan Update</button>
+                                                <?php if ($st === 'payment_uploaded') : ?>
+                                                    <button type="submit" class="button" name="status" value="verified" onclick="this.form.status.value='verified'">Verifikasi Pembayaran</button>
+                                                <?php endif; ?>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
+            <script>
+            (function(){
+              function closeAll(except){
+                document.querySelectorAll('.wdc-gw-admin tr.wdc-gw-row.is-open').forEach(function(row){
+                  if (except && row === except) return;
+                  row.classList.remove('is-open');
+                  var t = row.querySelector('.wdc-gw-toggle');
+                  if (t) t.textContent = '+';
+                });
+              }
+              function toggleRow(row){
+                var open = row.classList.contains('is-open');
+                closeAll(row);
+                if (open) {
+                  row.classList.remove('is-open');
+                  var t = row.querySelector('.wdc-gw-toggle');
+                  if (t) t.textContent = '+';
+                } else {
+                  row.classList.add('is-open');
+                  var t2 = row.querySelector('.wdc-gw-toggle');
+                  if (t2) t2.textContent = '−';
+                  try { row.scrollIntoView({behavior:'smooth', block:'nearest'}); } catch(e) {}
+                }
+              }
+              document.querySelectorAll('.wdc-gw-admin tr.wdc-gw-row').forEach(function(row){
+                row.addEventListener('click', function(e){
+                  if (e.target.closest('a,button,input,select,textarea,label,form')) return;
+                  toggleRow(row);
+                });
+                row.addEventListener('keydown', function(e){
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleRow(row);
+                  }
+                });
+              });
+              // keep forms clickable without collapsing parent quirks
+              document.querySelectorAll('.wdc-gw-admin .wdc-gw-detail').forEach(function(detail){
+                detail.addEventListener('click', function(e){ e.stopPropagation(); });
+              });
+            })();
+            </script>
         <?php endif; ?>
     </div>
     <?php
