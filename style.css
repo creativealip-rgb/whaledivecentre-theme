@@ -4807,3 +4807,67 @@ body.whaledive-home #courses .wd-course-body p {
     padding: 9px 12px !important;
   }
 }
+
+
+/* WDC nav height match panel-head FINAL 2026-07-11w */
+@media (max-width: 760px) {
+  /* Match top navbar bar to drawer panel-head (~62px, pad 12/14) */
+  .wd-header .wd-shell,
+  body.whaledive-home .wd-header .wd-shell {
+    padding: 0 !important;
+  }
+  .wd-nav,
+  .whaledive-home .wd-nav,
+  .wd-header .wd-nav {
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    min-height: 62px !important;
+    height: 62px !important;
+    padding: 12px 14px !important;
+    gap: 10px !important;
+  }
+  .wd-brand,
+  .whaledive-home .wd-brand {
+    gap: 10px !important;
+  }
+  .wd-brand-logo,
+  .wd-brand img,
+  .whaledive-home .wd-brand img {
+    width: 36px !important;
+    height: 36px !important;
+    flex: 0 0 36px !important;
+  }
+  .wd-hamburger {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    transform: none !important;
+    width: 38px !important;
+    height: 38px !important;
+    flex: 0 0 38px !important;
+    margin-left: auto !important;
+  }
+
+  /* Keep drawer head the same measured height */
+  .wd-menu-panel-head,
+  #wd-mobile-menu .wd-menu-panel-head {
+    box-sizing: border-box !important;
+    min-height: 62px !important;
+    height: 62px !important;
+    padding: 12px 14px !important;
+    align-items: center !important;
+  }
+  #wd-mobile-menu .wd-menu-panel-brand img,
+  .wd-menu-panel-brand img {
+    width: 36px !important;
+    height: 36px !important;
+    flex: 0 0 36px !important;
+  }
+  #wd-mobile-menu .wd-menu-close,
+  .wd-menu-close {
+    width: 38px !important;
+    height: 38px !important;
+    flex: 0 0 38px !important;
+  }
+}
