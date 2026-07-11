@@ -4063,13 +4063,6 @@ body.whaledive-home .wd-footer .wd-btn.alt {
   .wd-catalog-card .wd-mini-btn{width:100%!important}
 }
 
-/* Blog chrome: keep content titles as-is, strengthen ID chrome */
-.whaledive-blog .wd-blog-section-head .wd-kicker,
-.whaledive-blog .wd-blog-category-filter .wd-chip{
-  font-weight:900!important;
-}
-
-
 /* WDC agency header 2026-07-11 */
 .wd-agency-block{margin-bottom:56px}
 .wd-agency-head{display:flex;align-items:center;gap:16px;margin-bottom:20px}
