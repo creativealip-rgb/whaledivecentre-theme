@@ -80,6 +80,36 @@ function wdc_site_defaults() {
         'value_3_text' => 'WDC mendukung diver untuk terus naik level melalui edukasi, praktik, dan leadership.',
         'value_4_title' => 'Konservasi laut',
         'value_4_text' => 'Kami mendorong perilaku bawah air yang bertanggung jawab dan menghormati ekosistem laut.',
+        'focus_kicker' => 'Fokus Kami',
+        'focus_title' => 'Dari dive pertama sampai level profesional.',
+        'focus_1_title' => 'Pelatihan rekreasional',
+        'focus_1_text' => 'Membangun fondasi skill, buoyancy, buddy awareness, dan kepercayaan diri untuk diver baru.',
+        'focus_2_title' => 'Pelatihan profesional',
+        'focus_2_text' => 'Mengembangkan leadership, briefing, rescue awareness, dan standar kerja profesional.',
+        'focus_3_title' => 'Budaya teknis & keselamatan',
+        'focus_3_text' => 'Mendorong perencanaan konservatif, disiplin prosedur, dan keputusan yang sadar risiko.',
+        'courses_title' => 'Kursus Selam Kami',
+        'courses_sub' => 'Jalur terstruktur dari napas pertama di bawah air hingga kepemimpinan dive profesional.',
+        'courses_cta_label' => 'Lihat Semua Kursus',
+        'courses_cta_url' => '/courses/',
+        'equip_title' => 'Peralatan Selam',
+        'equip_sub' => 'Gear berkualitas untuk latihan, fun dive, dan kenyamanan bawah air yang lebih aman. Beli atau sewa melalui crew.',
+        'articles_kicker' => 'Artikel Pilihan',
+        'articles_title' => 'Cerita Dive & Catatan Laut',
+        'articles_sub' => 'Bacaan pilihan untuk diver baru, pembeli gear, dan anggota komunitas yang peduli laut.',
+        'articles_cta_label' => 'Baca Blog',
+        'articles_cta_url' => '/blog/',
+        'membership_kicker' => 'Portal Member',
+        'membership_title' => 'Gabung Komunitas Whale Dive',
+        'membership_text' => 'Lacak kursus, kelola sertifikasi, beli peralatan, dan terhubung dengan crew — semua dari dashboard member.',
+        'membership_1_title' => 'Lacak Kursus',
+        'membership_1_text' => 'Dari pendaftaran sampai sertifikasi',
+        'membership_2_title' => 'Toko Peralatan',
+        'membership_2_text' => 'Beli atau sewa gear online',
+        'membership_3_title' => 'Portofolio Sertifikasi',
+        'membership_3_text' => 'Semua kartu dive di satu tempat',
+        'membership_cta_label' => 'Buat Akun Gratis',
+        'membership_cta_url' => '/member-register/',
     ];
 }
 
@@ -152,7 +182,7 @@ function wdc_site_admin_menu() {
         58
     );
     add_submenu_page('wdc-site', 'Contact & Footer', 'Contact & Footer', 'manage_options', 'wdc-site', 'wdc_render_site_settings_page');
-    add_submenu_page('wdc-site', 'Home Hero', 'Home Hero', 'manage_options', 'wdc-site-hero', 'wdc_render_home_hero_page');
+    add_submenu_page('wdc-site', 'Home Content', 'Home Content', 'manage_options', 'wdc-site-hero', 'wdc_render_home_hero_page');
     add_submenu_page('wdc-site', 'Notifications', 'Notifications', 'manage_options', 'wdc-site-notify', 'wdc_render_notifications_page');
     add_submenu_page('wdc-site', 'About Page', 'About Page', 'manage_options', 'wdc-site-about', 'wdc_render_about_page');
     add_submenu_page('wdc-site', 'Contact Page', 'Contact Page', 'manage_options', 'wdc-site-contact', 'wdc_render_contact_page');
@@ -245,7 +275,7 @@ function wdc_site_save_posted_keys($keys) {
             if ($key === 'email') {
                 $current[$key] = sanitize_email($raw);
             }
-            if (in_array($key, ['hero_cta1_url', 'hero_cta2_url', 'hero_card_cta_url', 'footer_cta_url', 'about_cta1_url', 'about_cta2_url'], true)) {
+            if (in_array($key, ['hero_cta1_url', 'hero_cta2_url', 'hero_card_cta_url', 'footer_cta_url', 'about_cta1_url', 'about_cta2_url', 'membership_cta_url', 'courses_cta_url', 'articles_cta_url'], true)) {
                 // allow relative paths
                 $current[$key] = sanitize_text_field($raw);
             }
@@ -257,6 +287,10 @@ function wdc_site_save_posted_keys($keys) {
             'contact_title', 'contact_text', 'contact_success', 'contact_hours_note',
             'crew_title', 'values_title',
             'value_1_text', 'value_2_text', 'value_3_text', 'value_4_text',
+            'focus_title', 'focus_1_text', 'focus_2_text', 'focus_3_text',
+            'courses_sub', 'equip_sub', 'articles_sub', 'articles_title',
+            'membership_title', 'membership_text',
+            'membership_1_text', 'membership_2_text', 'membership_3_text',
         ], true)) {
             $current[$key] = sanitize_textarea_field($raw);
         } elseif ($key === 'contact_map_url') {
@@ -319,20 +353,33 @@ function wdc_render_home_hero_page() {
         'hero_proof_3_title', 'hero_proof_3_text',
         'hero_card_kicker', 'hero_card_title', 'hero_card_text',
         'hero_card_cta_label', 'hero_card_cta_url',
+        'focus_kicker', 'focus_title',
+        'focus_1_title', 'focus_1_text',
+        'focus_2_title', 'focus_2_text',
+        'focus_3_title', 'focus_3_text',
+        'courses_title', 'courses_sub', 'courses_cta_label', 'courses_cta_url',
+        'equip_title', 'equip_sub',
         'reviews_kicker', 'reviews_title',
+        'articles_kicker', 'articles_title', 'articles_sub', 'articles_cta_label', 'articles_cta_url',
+        'membership_kicker', 'membership_title', 'membership_text',
+        'membership_1_title', 'membership_1_text',
+        'membership_2_title', 'membership_2_text',
+        'membership_3_title', 'membership_3_text',
+        'membership_cta_label', 'membership_cta_url',
     ];
     $saved = false;
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $saved = wdc_site_save_posted_keys($keys);
     }
-    echo '<div class="wrap"><h1>WDC Site — Home Hero</h1>';
+    echo '<div class="wrap"><h1>WDC Site — Home Content</h1>';
     if ($saved) {
         echo '<div class="notice notice-success is-dismissible"><p>Saved.</p></div>';
     }
-    echo '<p>Edit copy hero homepage + heading section testimoni. Baris baru di title jadi line break.</p>';
+    echo '<p>Edit copy homepage: hero, focus, courses/equipment headings, reviews, articles, membership. Baris baru di hero title jadi line break.</p>';
     echo '<form method="post">';
     wp_nonce_field('wdc_site_save', 'wdc_site_nonce');
     echo '<table class="form-table" role="presentation"><tbody>';
+    echo '<tr><th colspan="2"><h2 style="margin:12px 0 0">Hero</h2></th></tr>';
     wdc_site_field('hero_kicker', 'Hero kicker');
     wdc_site_field('hero_title', 'Hero title', 'textarea', 'Pakai Enter untuk baris baru');
     wdc_site_field('hero_text', 'Hero text', 'textarea');
@@ -351,10 +398,44 @@ function wdc_render_home_hero_page() {
     wdc_site_field('hero_card_text', 'Side card text', 'textarea');
     wdc_site_field('hero_card_cta_label', 'Side card CTA label');
     wdc_site_field('hero_card_cta_url', 'Side card CTA URL');
+    echo '<tr><th colspan="2"><h2 style="margin:18px 0 0">Focus areas</h2></th></tr>';
+    wdc_site_field('focus_kicker', 'Focus kicker');
+    wdc_site_field('focus_title', 'Focus title', 'textarea');
+    wdc_site_field('focus_1_title', 'Focus 1 title');
+    wdc_site_field('focus_1_text', 'Focus 1 text', 'textarea');
+    wdc_site_field('focus_2_title', 'Focus 2 title');
+    wdc_site_field('focus_2_text', 'Focus 2 text', 'textarea');
+    wdc_site_field('focus_3_title', 'Focus 3 title');
+    wdc_site_field('focus_3_text', 'Focus 3 text', 'textarea');
+    echo '<tr><th colspan="2"><h2 style="margin:18px 0 0">Courses / Equipment headings</h2></th></tr>';
+    wdc_site_field('courses_title', 'Courses title');
+    wdc_site_field('courses_sub', 'Courses subtitle', 'textarea');
+    wdc_site_field('courses_cta_label', 'Courses CTA label');
+    wdc_site_field('courses_cta_url', 'Courses CTA URL');
+    wdc_site_field('equip_title', 'Equipment title');
+    wdc_site_field('equip_sub', 'Equipment subtitle', 'textarea');
+    echo '<tr><th colspan="2"><h2 style="margin:18px 0 0">Reviews / Articles</h2></th></tr>';
     wdc_site_field('reviews_kicker', 'Reviews section kicker');
     wdc_site_field('reviews_title', 'Reviews section title');
+    wdc_site_field('articles_kicker', 'Articles kicker');
+    wdc_site_field('articles_title', 'Articles title', 'textarea');
+    wdc_site_field('articles_sub', 'Articles subtitle', 'textarea');
+    wdc_site_field('articles_cta_label', 'Articles CTA label');
+    wdc_site_field('articles_cta_url', 'Articles CTA URL');
+    echo '<tr><th colspan="2"><h2 style="margin:18px 0 0">Membership CTA</h2></th></tr>';
+    wdc_site_field('membership_kicker', 'Membership kicker');
+    wdc_site_field('membership_title', 'Membership title', 'textarea');
+    wdc_site_field('membership_text', 'Membership text', 'textarea');
+    wdc_site_field('membership_1_title', 'Benefit 1 title');
+    wdc_site_field('membership_1_text', 'Benefit 1 text', 'textarea');
+    wdc_site_field('membership_2_title', 'Benefit 2 title');
+    wdc_site_field('membership_2_text', 'Benefit 2 text', 'textarea');
+    wdc_site_field('membership_3_title', 'Benefit 3 title');
+    wdc_site_field('membership_3_text', 'Benefit 3 text', 'textarea');
+    wdc_site_field('membership_cta_label', 'Membership CTA label');
+    wdc_site_field('membership_cta_url', 'Membership CTA URL');
     echo '</tbody></table>';
-    submit_button('Save Home Hero');
+    submit_button('Save Home Content');
     echo '</form>';
     echo '<p><a class="button" href="' . esc_url(home_url('/')) . '" target="_blank" rel="noopener">Preview homepage</a></p>';
     echo '</div>';
