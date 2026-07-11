@@ -38,30 +38,41 @@
             wdcMenu.classList.toggle('is-open', open);
             wdcToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
             document.body.style.overflow = open ? 'hidden' : '';
-            if (wdcBackdrop) {
-                // Reparent to <body> so full-page fixed blur is not trapped by header stacking/filter context
-                if (open) {
-                    if (wdcBackdrop.parentElement !== document.body) {
-                        wdcBackdrop.dataset.wdOrigParent = 'nav';
-                        document.body.appendChild(wdcBackdrop);
-                    }
+
+            // Reparent backdrop + drawer to <body> so:
+            // - page blur is full-viewport
+            // - drawer sits ABOVE blur and never inherits header filter/stacking
+            if (open) {
+                if (wdcBackdrop) {
+                    if (wdcBackdrop.parentElement !== document.body) document.body.appendChild(wdcBackdrop);
                     wdcBackdrop.removeAttribute('hidden');
-                } else {
+                }
+                if (wdcMenu.parentElement !== document.body) {
+                    wdcMenu.dataset.wdOrigParent = 'nav';
+                    document.body.appendChild(wdcMenu);
+                }
+            } else {
+                if (wdcBackdrop) {
                     wdcBackdrop.setAttribute('hidden', 'hidden');
-                    var nav = document.querySelector('.wd-nav');
-                    if (nav && wdcBackdrop.parentElement === document.body) {
-                        // put back before menu for clean DOM
-                        var menu = document.querySelector('#wd-mobile-menu, .wd-menu');
-                        if (menu && menu.parentElement === nav) nav.insertBefore(wdcBackdrop, menu);
-                        else nav.appendChild(wdcBackdrop);
+                }
+                var nav = wdcNav || document.querySelector('.wd-nav');
+                if (nav) {
+                    if (wdcBackdrop && wdcBackdrop.parentElement === document.body) {
+                        nav.appendChild(wdcBackdrop);
+                    }
+                    if (wdcMenu.parentElement === document.body) {
+                        nav.appendChild(wdcMenu);
                     }
                 }
             }
+
             // clear old inline transform hacks from previous popup menu
             wdcMenu.style.removeProperty('opacity');
             wdcMenu.style.removeProperty('visibility');
             wdcMenu.style.removeProperty('pointer-events');
             wdcMenu.style.removeProperty('transform');
+            wdcMenu.style.removeProperty('filter');
+            wdcMenu.style.removeProperty('backdrop-filter');
         }
 
         if (wdcToggle && wdcMenu) {

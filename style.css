@@ -4945,22 +4945,15 @@ body.whaledive-home #courses .wd-course-body p {
 }
 
 
-/* WDC menu open even fullpage blur FINAL 2026-07-11z
-   Root cause: .wd-header { backdrop-filter } creates a containing/stacking
-   context, so fixed .wd-menu-backdrop only "felt" over the navbar glass.
-   Fix: on menu-open, disable header glass and paint one full-viewport
-   backdrop so blur/dim is even across the whole page under the drawer.
+/* WDC menu open even fullpage blur FINAL 2026-07-11aa
+   Page content blurs under overlay; drawer + its text stay sharp.
+   Drawer is reparented to body (JS) and painted ABOVE backdrop.
 */
 @media (max-width: 760px) {
-  /* Header must NOT use backdrop-filter while open (breaks fixed overlay) */
+  /* kill header glass while open */
   html body.wd-menu-open .wd-header,
   html body.wd-menu-open.whaledive-home .wd-header,
-  html body.wd-menu-open.whaledive-inner .wd-header {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    background: #010c1b !important;
-    z-index: 1080 !important; /* under full-page backdrop+drawer stack managed below */
-  }
+  html body.wd-menu-open.whaledive-inner .wd-header,
   html body.wd-menu-open .wd-header .wd-shell,
   html body.wd-menu-open .wd-nav,
   html body.wd-menu-open .wd-header .wd-nav {
@@ -4969,16 +4962,16 @@ body.whaledive-home #courses .wd-course-body p {
     background: #010c1b !important;
   }
 
-  /* One even overlay for entire viewport (including under header area) */
+  /* full-page dim+blur under drawer only */
   html body.wd-menu-open .wd-menu-backdrop,
-  html body .wd-nav.wd-menu-open .wd-menu-backdrop {
+  html body > .wd-menu-backdrop {
     display: block !important;
     position: fixed !important;
+    inset: 0 !important;
     top: 0 !important;
     right: 0 !important;
     bottom: 0 !important;
     left: 0 !important;
-    inset: 0 !important;
     width: 100vw !important;
     height: 100dvh !important;
     min-height: 100vh !important;
@@ -4986,7 +4979,7 @@ body.whaledive-home #courses .wd-course-body p {
     padding: 0 !important;
     border: 0 !important;
     border-radius: 0 !important;
-    z-index: 1090 !important;
+    z-index: 1200 !important;
     background: rgba(2, 10, 22, .55) !important;
     backdrop-filter: blur(8px) !important;
     -webkit-backdrop-filter: blur(8px) !important;
@@ -4997,36 +4990,65 @@ body.whaledive-home #courses .wd-course-body p {
     filter: none !important;
   }
 
-  /* Navbar stays readable ABOVE the even overlay */
+  /* top navbar solid above page blur, below drawer */
   html body.wd-menu-open .wd-header {
-    z-index: 1105 !important;
+    z-index: 1210 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: #010c1b !important;
   }
   html body.wd-menu-open .wd-nav,
   html body.wd-menu-open .wd-header .wd-nav {
     position: relative !important;
-    z-index: 1106 !important;
+    z-index: 1211 !important;
     background: #010c1b !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
   html body.wd-menu-open .wd-brand,
-  html body.wd-menu-open .wd-brand span,
   html body.wd-menu-open .wd-brand img,
-  html body.wd-menu-open .wd-hamburger {
-    position: relative !important;
-    z-index: 1107 !important;
+  html body.wd-menu-open .wd-brand span {
     filter: none !important;
     opacity: 1 !important;
   }
-  /* keep hamburger hidden while open (drawer has its own close) */
   html body.wd-menu-open .wd-hamburger {
     opacity: 0 !important;
     visibility: hidden !important;
     pointer-events: none !important;
   }
 
-  /* Drawer above everything */
+  /* SIDEBAR DRAWER: solid + sharp + above blur overlay */
   html body.wd-menu-open #wd-mobile-menu,
   html body.wd-menu-open .wd-menu,
+  html body > #wd-mobile-menu,
+  html body > .wd-menu.is-open,
   html body.wd-menu-open .wd-nav .wd-menu {
-    z-index: 1110 !important;
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    left: auto !important;
+    bottom: 0 !important;
+    z-index: 1300 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    /* fully opaque so page blur never shows through */
+    background: #071b33 !important;
+    background-image:
+      radial-gradient(circle at 100% 0%, rgba(76,200,237,.14), transparent 40%),
+      linear-gradient(180deg, #071b33 0%, #03111f 100%) !important;
+    isolation: isolate !important;
+    transform: translateX(0) !important;
+    -webkit-font-smoothing: antialiased !important;
+  }
+  html body.wd-menu-open #wd-mobile-menu *,
+  html body > #wd-mobile-menu *,
+  html body.wd-menu-open .wd-menu * {
+    filter: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 }
