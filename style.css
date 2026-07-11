@@ -4091,3 +4091,17 @@ body.single-wm_equipment .wd-shell,
   border: 1px solid #06384d !important;
   color: #fff !important;
 }
+
+
+/* WDC home dark section CTA solid FINAL 2026-07-11e */
+body.whaledive-home .wd-dark .wd-section-cta .wd-btn.alt,
+body.home .wd-dark .wd-section-cta .wd-btn.alt,
+.whaledive-home #courses .wd-section-cta .wd-btn.alt,
+.whaledive-home .wd-dark a.wd-btn.alt {
+  background: linear-gradient(135deg, #4CC8ED, #96DAEA) !important;
+  background-image: linear-gradient(135deg, #4CC8ED, #96DAEA) !important;
+  color: #03172d !important;
+  border: 0 !important;
+  box-shadow: 0 16px 34px rgba(0,0,0,.28) !important;
+  font-weight: 900 !important;
+}
