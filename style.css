@@ -4667,7 +4667,6 @@ body.whaledive-home #courses .wd-course-body p {
 
   /* clean menu items */
   #wd-mobile-menu .wd-menu-links a,
-  #wd-mobile-menu .wd-menu-links a span,
   body.wd-menu-open #wd-mobile-menu .wd-menu-links a,
   body.home .wd-menu .wd-menu-links a,
   body.whaledive-home .wd-menu .wd-menu-links a,
@@ -4679,8 +4678,8 @@ body.whaledive-home #courses .wd-course-body p {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
-    padding: 0 !important;
-    min-height: 40px !important;
+    padding: 9px 12px !important;
+    min-height: 42px !important;
     border-radius: 10px !important;
     box-sizing: border-box !important;
     border: 1px solid transparent !important;
@@ -4693,6 +4692,11 @@ body.whaledive-home #courses .wd-course-body p {
     text-transform: none !important;
     position: relative !important;
     overflow: hidden !important;
+  }
+  #wd-mobile-menu .wd-menu-links a span {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
   #wd-mobile-menu .wd-menu-links a:before,
   #wd-mobile-menu .wd-menu-links a:after,
@@ -4714,7 +4718,7 @@ body.whaledive-home #courses .wd-course-body p {
     border: 1px solid rgba(76, 200, 237, .28) !important;
     color: #e8fbff !important;
     box-shadow: none !important;
-    padding: 0 !important;
+    padding: 9px 12px !important;
   }
 
   #wd-mobile-menu .wd-menu-panel-brand {
@@ -4756,7 +4760,7 @@ body.whaledive-home #courses .wd-course-body p {
 }
 
 
-/* WDC drawer menu spacing FINAL 2026-07-11u balanced */
+/* WDC drawer menu padding restore FINAL 2026-07-11v */
 @media (max-width: 760px) {
   #wd-mobile-menu .wd-menu-links,
   body.wd-menu-open #wd-mobile-menu .wd-menu-links {
@@ -4765,11 +4769,8 @@ body.whaledive-home #courses .wd-course-body p {
     padding-bottom: 6px !important;
   }
 
-  #wd-mobile-menu .wd-menu-links a,
-  body.wd-menu-open #wd-mobile-menu .wd-menu-links a,
-  body.home #wd-mobile-menu .wd-menu-links a,
-  body.whaledive-home #wd-mobile-menu .wd-menu-links a,
-  .wd-nav #wd-mobile-menu .wd-menu-links a {
+  body.wd-menu-open #wd-mobile-menu .wd-menu-links > a,
+  #wd-mobile-menu .wd-menu-links > a {
     display: flex !important;
     align-items: center !important;
     justify-content: flex-start !important;
@@ -4777,7 +4778,7 @@ body.whaledive-home #courses .wd-course-body p {
     min-height: 42px !important;
     height: auto !important;
     margin: 0 !important;
-    padding: 10px 12px !important;
+    padding: 9px 12px !important;
     border-radius: 12px !important;
     border: 1px solid transparent !important;
     background: transparent !important;
@@ -4787,22 +4788,22 @@ body.whaledive-home #courses .wd-course-body p {
     color: rgba(255,255,255,.92) !important;
   }
 
-  #wd-mobile-menu .wd-menu-links a span {
+  body.wd-menu-open #wd-mobile-menu .wd-menu-links > a span,
+  #wd-mobile-menu .wd-menu-links > a span {
     display: block !important;
     padding: 0 !important;
     margin: 0 !important;
     line-height: 1.2 !important;
   }
 
-  /* active = filled chip, not empty outline */
-  #wd-mobile-menu .wd-menu-links a.is-active,
-  #wd-mobile-menu .wd-menu-links a[aria-current="page"],
-  body.wd-menu-open #wd-mobile-menu .wd-menu-links a.is-active,
-  body.wd-menu-open #wd-mobile-menu .wd-menu-links a[aria-current="page"] {
+  body.wd-menu-open #wd-mobile-menu .wd-menu-links > a.is-active,
+  body.wd-menu-open #wd-mobile-menu .wd-menu-links > a[aria-current="page"],
+  #wd-mobile-menu .wd-menu-links > a.is-active,
+  #wd-mobile-menu .wd-menu-links > a[aria-current="page"] {
     background: rgba(76, 200, 237, .18) !important;
     border: 1px solid rgba(76, 200, 237, .28) !important;
     color: #e8fbff !important;
     box-shadow: none !important;
-    padding: 10px 12px !important;
+    padding: 9px 12px !important;
   }
 }
