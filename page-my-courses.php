@@ -96,8 +96,9 @@ $completed_count = count($completed_courses);
 .wdc-mc-layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(280px,.9fr);gap:18px;align-items:start;margin-bottom:24px}
 .wdc-mc-panel{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:18px;box-shadow:0 8px 24px rgba(15,23,42,.04)}
 .wdc-mc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px;flex-wrap:wrap}
-.wdc-mc-head h1{font-size:24px;font-weight:800;color:#0f172a;margin:0 0 4px}
-.wdc-mc-head p{font-size:14px;color:#5f7180;margin:0}
+.wdc-mc-page-head h1{font-size:28px!important;font-weight:800!important;color:#0f172a!important;margin:0 0 6px!important;line-height:1.2!important;display:block!important}
+.wdc-mc-page-head p{font-size:15px;color:#5f7180;margin:0}
+.wdc-mc-head h2{font-size:16px;font-weight:900;color:#0f172a;margin:0}
 .wdc-mc-count{font-size:12px;font-weight:800;color:#0b617c;background:#e8f8fc;border-radius:999px;padding:6px 10px}
 .wdc-mc-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .wdc-mc-actions button{border:0;border-radius:999px;background:#4cc8ed;color:#004A98;padding:9px 14px;font-weight:950;font-size:13px;cursor:pointer}
@@ -111,6 +112,11 @@ $completed_count = count($completed_courses);
 @media(max-width:980px){.wdc-mc-layout{grid-template-columns:1fr}}
 </style>
 
+<div class="wdc-mc-page-head" style="margin-bottom:18px;">
+    <h1 style="font-size:28px;font-weight:800;color:#0f172a;margin:0 0 6px;"><?php echo contenly_tr('Kursus Saya', 'My Courses'); ?></h1>
+    <p style="font-size:15px;color:#5f7180;margin:0;"><?php echo contenly_tr('Daftar kursus menyelam yang sudah pernah kamu ikuti.', 'Your dive courses you have completed.'); ?></p>
+</div>
+
 <?php if ($notice) : ?>
 <div style="margin-bottom:16px;padding:12px 14px;border-radius:12px;background:<?php echo $notice_type === 'success' ? '#dcfce7' : '#fee2e2'; ?>;color:<?php echo $notice_type === 'success' ? '#166534' : '#991b1b'; ?>;font-weight:800;font-size:14px;">
     <?php echo esc_html($notice); ?>
@@ -121,8 +127,7 @@ $completed_count = count($completed_courses);
     <section class="wdc-mc-panel wdc-mc-main">
         <div class="wdc-mc-head">
             <div>
-                <h1><?php echo contenly_tr('Kursus Saya', 'My Courses'); ?></h1>
-                <p><?php echo contenly_tr('Daftar kursus menyelam yang sudah pernah kamu ikuti.', 'Your dive courses you have completed.'); ?></p>
+                <h2 style="font-size:16px;font-weight:900;color:#0f172a;margin:0;"><?php echo contenly_tr('Kursus Selesai', 'Completed Courses'); ?></h2>
             </div>
             <div class="wdc-mc-actions">
                 <span class="wdc-mc-count"><?php echo intval($completed_count); ?> <?php echo contenly_tr('kursus', 'courses'); ?></span>
