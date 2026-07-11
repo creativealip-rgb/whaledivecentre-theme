@@ -1517,7 +1517,7 @@ body.whaledive-home .wd-footer{padding:78px 0 46px!important}body.whaledive-home
 .wd-chip.active{background:var(--cyan,#4CC8ED);color:#04172d;border-color:var(--cyan,#4CC8ED)}
 
 /* Course price block */
-.wd-course-price{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin:12px 0 8px;padding:10px 14px;border-radius:12px;background:rgba(76,200,237,.08);border:1px solid rgba(76,200,237,.12)}
+.wd-course-price{display:flex;flex-direction:column;align-items:flex-start;gap:4px;flex-wrap:nowrap;margin:12px 0 8px;padding:10px 14px;border-radius:12px;background:rgba(76,200,237,.08);border:1px solid rgba(76,200,237,.12)}
 .wd-price-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted,#63748a);font-weight:700}
 .wd-price-amount{font-size:20px;font-weight:800;color:var(--cyan,#4CC8ED);letter-spacing:-.02em}
 .wd-price-note{font-size:11px;color:var(--muted,#63748a);margin-left:auto}
@@ -1545,7 +1545,7 @@ body.whaledive-home .wd-footer{padding:78px 0 46px!important}body.whaledive-home
 }
 
 /* Equipment price (reuse) */
-.wd-equip-price{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin:10px 0 6px}
+.wd-equip-price{display:flex;flex-direction:column;align-items:flex-start;gap:4px;flex-wrap:nowrap;margin:10px 0 6px}
 .wd-equip-price .wd-price-amount{font-size:17px;color:var(--cyan,#4CC8ED);font-weight:800}
 .wd-equip-price .wd-price-label{font-size:11px;color:var(--muted,#63748a);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
 
@@ -2429,7 +2429,7 @@ article.wd-mini-article::before{content:none!important;display:none!important}
 .whaledive-equipment .wd-shop-card h3{font-size:17px!important;line-height:1.18!important;margin:0 0 8px!important}
 .whaledive-equipment .wd-equip-use{display:none!important}
 .whaledive-equipment .wd-equip-price{margin:8px 0!important;padding:9px!important;border-radius:12px!important}
-.whaledive-equipment .wd-price-label{display:none!important}
+.whaledive-equipment .wd-price-label{display:block!important}
 .whaledive-equipment .wd-price-amount{font-size:16px!important}
 .whaledive-equipment .wd-equip-chips{gap:6px!important;margin:8px 0!important}
 .whaledive-equipment .wd-equip-chips span{font-size:11px!important;padding:6px 8px!important}
@@ -4104,4 +4104,47 @@ body.home .wd-dark .wd-section-cta .wd-btn.alt,
   border: 0 !important;
   box-shadow: 0 16px 34px rgba(0,0,0,.28) !important;
   font-weight: 900 !important;
+}
+
+
+/* WDC price stack label above amount FINAL 2026-07-11g */
+.wd-equip-price,
+.wd-course-price,
+.wd-sidebar-price,
+.whaledive-courses #course-catalog .wd-equip-price,
+.whaledive-courses .wd-course-card .wd-equip-price,
+.whaledive-equipment #equipGrid .wd-equip-price,
+.whaledive-equipment .wd-equip-card .wd-equip-price {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 4px !important;
+  flex-wrap: nowrap !important;
+}
+.wd-equip-price .wd-price-label,
+.wd-course-price .wd-price-label,
+.wd-sidebar-price .wd-price-label,
+.whaledive-courses .wd-price-label,
+.whaledive-equipment .wd-price-label {
+  display: block !important;
+  width: 100% !important;
+  flex: 0 0 auto !important;
+  margin: 0 0 2px !important;
+  white-space: normal !important;
+}
+.wd-equip-price .wd-price-amount,
+.wd-course-price .wd-price-amount,
+.wd-sidebar-price .wd-price-amount,
+.whaledive-courses .wd-price-amount,
+.whaledive-equipment .wd-price-amount {
+  display: block !important;
+  width: 100% !important;
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+}
+/* undo equipment catalog hide-label if any leftover */
+.whaledive-equipment .wd-price-label {
+  display: block !important;
 }

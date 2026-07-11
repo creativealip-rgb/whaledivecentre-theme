@@ -114,6 +114,10 @@ function wdc_course_image_url($title, $theme_uri) {
   .whaledive-courses .wd-footer-col,.whaledive-courses .wd-footer-brand{width:100%!important;max-width:100%!important;min-width:0!important}
 }
 
+
+.whaledive-courses #course-catalog .wd-equip-price,.whaledive-courses .wd-course-card .wd-equip-price{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:4px!important;flex-wrap:nowrap!important}
+.whaledive-courses .wd-course-card .wd-price-label{display:block!important;width:100%!important;margin:0!important}
+.whaledive-courses .wd-course-card .wd-price-amount{display:block!important;width:100%!important;margin:0!important}
 </style></head>
 <body <?php body_class('whaledive-inner whaledive-courses'); ?>><?php wp_body_open(); ?>
 <main class="wd-page">
@@ -201,7 +205,7 @@ function wdc_course_image_url($title, $theme_uri) {
               </div>
               <h3 style="font-size:20px!important;line-height:1.08!important;letter-spacing:-.03em!important;margin:0 0 2px!important;color:#061a36!important;min-height:0!important;"><?php echo esc_html($course->post_title); ?></h3>
               <?php if($price): ?>
-              <div class="wd-equip-price" style="margin:0 0 6px!important;padding:0!important;background:transparent!important;border:0!important;">
+              <div class="wd-equip-price" style="display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:4px!important;margin:0 0 6px!important;padding:0!important;background:transparent!important;border:0!important;">
                 <span class="wd-price-label" style="display:block!important;margin:0 0 4px!important;font-size:11px!important;line-height:1.2!important;color:#789!important;"><?php echo contenly_tr('Harga mulai', 'Starting price'); ?></span>
                 <span class="wd-price-amount" style="display:block!important;font-size:17px!important;line-height:1!important;color:#06384d!important;font-weight:900!important;white-space:nowrap!important;">Rp <?php echo number_format((float)$price,0,',','.'); ?></span>
               </div>
