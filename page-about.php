@@ -201,5 +201,6 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 });
 </script>
-<script>document.addEventListener('DOMContentLoaded',function(){var path=location.pathname;document.querySelectorAll('.wd-menu a[data-nav]').forEach(function(a){var key=a.getAttribute('data-nav');var active=(key==='home'&&path==='/')||(key!=='home'&&path.indexOf('/'+key+'/')===0);if(active){a.classList.add('is-active');a.setAttribute('aria-current','page');}});});</script>
-  <?php get_footer(); ?>
+    <?php contenly_render_public_footer(); ?>
+</main>
+<?php wp_footer(); ?></body></html>

@@ -227,8 +227,6 @@ body.whaledive-blog article.wd-blog-card-compact{border-radius:18px!important}
   <!-- CLOSING CTA — match courses/equipment pattern for cross-page consistency -->
   <section class="wdc-card-cta"><div class="wd-shell"><span class="wd-kicker"><?php echo contenly_tr('Mulai dive kamu', 'Start your dive'); ?></span><h2><?php echo esc_html(contenly_tr('Siap ambil langkah pertama di bawah air?', 'Ready to take your first step underwater?')); ?></h2><p><?php echo contenly_tr('Dari kursus pemula sampai panduan gear — crew bantu kamu mulai dengan tenang dan terarah.', 'From beginner courses to gear guidance — the crew helps you start calm and on track.'); ?></p><a class="wd-btn alt" href="/contact/"><?php echo esc_html(contenly_tr('Tanya Crew', 'Ask the Crew')); ?></a></div></section>
 
-  <?php get_footer(); ?>
+    <?php contenly_render_public_footer(); ?>
 </main>
-<script>document.addEventListener('DOMContentLoaded',function(){var path=location.pathname;document.querySelectorAll('.wd-menu a[data-nav]').forEach(function(a){var key=a.getAttribute('data-nav');var active=(key==='home'&&path==='/')||(key!=='home'&&path.indexOf('/'+key+'/')===0);if(active){a.classList.add('is-active');a.setAttribute('aria-current','page');}});});</script><?php wp_footer(); ?>
-</body>
-</html>
+<?php wp_footer(); ?></body></html>

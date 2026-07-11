@@ -58,9 +58,6 @@ function wdc_course_image_url($title, $theme_uri) {
   .whaledive-courses,.whaledive-courses .wd-page,.whaledive-courses .wd-section{width:100%!important;max-width:100%!important;overflow-x:hidden!important}
   .whaledive-courses .wd-section{padding-top:52px!important;padding-bottom:52px!important}
   .whaledive-courses .wd-shell{width:calc(100% - 48px)!important;max-width:none!important;padding-left:0!important;padding-right:0!important;margin-left:24px!important;margin-right:24px!important}
-  .whaledive-courses .wd-header .wd-shell{width:calc(100% - 28px)!important;margin-left:14px!important;margin-right:14px!important}
-  .whaledive-courses .wd-nav,.whaledive-courses .wd-brand{min-width:0!important;max-width:100%!important}
-  .whaledive-courses .wd-brand span{font-size:14px!important;line-height:1.05!important;white-space:normal!important}
   .whaledive-courses .wd-inner-grid{display:grid!important;grid-template-columns:1fr!important;width:100%!important;max-width:100%!important;gap:18px!important}
   .whaledive-courses .wd-inner-hero{padding-top:112px!important;padding-bottom:54px!important}
   .whaledive-courses .wd-inner-copy,.whaledive-courses .wd-support-card{width:100%!important;max-width:100%!important;min-width:0!important}
@@ -221,7 +218,6 @@ function wdc_course_image_url($title, $theme_uri) {
 
   <section class="wdc-card-cta"><div class="wd-shell"><span class="wd-kicker"><?php echo contenly_tr('Butuh saran kursus?', 'Need course advice?'); ?></span><h2><?php echo esc_html(contenly_tr('Crew bantu pilih jalur yang tepat.', 'The crew helps you choose the right path.')); ?></h2><p><?php echo contenly_tr('Ceritakan level sertifikasi, target tanggal, dan tujuan kenyamanan — kami rekomendasikan kursus yang cocok.', 'Tell us your certification level, target dates, and comfort goals — we recommend the course that fits.'); ?></p><a class="wd-btn alt" href="/contact/"><?php echo esc_html(contenly_tr('Tanya Rencana Kursus', 'Ask About Course Plan')); ?></a></div></section>
 
-  <?php get_footer(); ?>
+    <?php contenly_render_public_footer(); ?>
 </main>
-<script>document.addEventListener('DOMContentLoaded',function(){var path=location.pathname;document.querySelectorAll('.wd-menu a[data-nav]').forEach(function(a){var key=a.getAttribute('data-nav');var active=(key==='home'&&path==='/')||(key!=='home'&&path.indexOf('/'+key+'/')===0);if(active){a.classList.add('is-active');a.setAttribute('aria-current','page');}});var chips=Array.prototype.slice.call(document.querySelectorAll('#courseFilters .wd-chip'));var cards=Array.prototype.slice.call(document.querySelectorAll('#course-catalog article.wd-course-card[data-cat]'));function applyCourseFilter(filter){chips.forEach(function(c){c.classList.toggle('active',c.getAttribute('data-filter')===filter);});cards.forEach(function(card){var show=filter==='all'||card.getAttribute('data-cat')===filter;card.setAttribute('data-visible',show?'1':'0');card.setAttribute('aria-hidden',show?'false':'true');card.style.display=show?'':'none';});}chips.forEach(function(chip){chip.addEventListener('click',function(e){e.preventDefault();applyCourseFilter(chip.getAttribute('data-filter')||'all');});});applyCourseFilter('all');document.querySelectorAll('[data-href]').forEach(function(card){card.style.cursor='pointer';card.addEventListener('click',function(e){if(e.target.closest('a,button'))return;window.location.href=card.getAttribute('data-href');});});});</script><?php wp_footer(); ?>
-</body></html>
+<?php wp_footer(); ?></body></html>
