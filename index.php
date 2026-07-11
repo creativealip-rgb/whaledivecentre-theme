@@ -287,6 +287,27 @@ body.whaledive-home .wd-course-meta {
     grid-template-columns: none !important;
   }
 }
+
+/* equipment grid responsive FINAL 2026-07-11k */
+body.whaledive-home .wd-equipment-grid,
+body.home .wd-equipment-grid{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:18px!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+}
+@media(max-width:1100px){
+  body.whaledive-home .wd-equipment-grid,
+  body.home .wd-equipment-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:760px){
+  body.whaledive-home .wd-equipment-grid,
+  body.home .wd-equipment-grid{grid-template-columns:1fr!important}
+  body.whaledive-home .wd-home-equip-card,
+  body.home .wd-home-equip-card{width:100%!important;max-width:100%!important;min-width:0!important}
+}
 </style></head>
 <body <?php body_class('whaledive-home'); ?>><?php wp_body_open(); ?>
 <main class="wd-page">
@@ -322,7 +343,7 @@ $tdi_courses=[
 ['Nitrox Diver',contenly_tr('Nitrox','Nitrox'),contenly_tr('1-2 hari','1-2 days'),contenly_tr('Diving dengan udara terperkaya untuk limit tanpa dekompresi lebih lama.','Dive with enriched air for longer no-decompression limits.'),'nitrox-diver','wdc-course-nitrox.webp'],
 ['Advanced Nitrox Diver',contenly_tr('Nitrox lanjut','Adv Nitrox'),contenly_tr('2-3 hari','2-3 days'),contenly_tr('Penggunaan nitrox tingkat lanjut untuk dive lebih dalam.','Advanced nitrox use for deeper dives.'),'advanced-nitrox-diver','wdc-course-adv-nitrox.webp'],
 ['Decompression Procedures Diver',contenly_tr('Dekompresi','Decompression'),contenly_tr('2-3 hari','2-3 days'),contenly_tr('Prosedur dekompresi aman untuk dive teknis.','Safe decompression procedures for technical diving.'),'decompression-procedures-diver','wdc-course-decompression.webp'],
-['Extended Range & Trimix',contenly_tr('Teknis','Technical'),contenly_tr('3-4 hari','3-4 days'),contenly_tr('Extended range dan trimix untuk depth dan mixed-gas skill.','Extended range and trimix for depth and mixed-gas skills.'),'extended-range-trimix','wdc-course-decompression.webp']
+['Extended Range & Trimix',contenly_tr('Teknis','Technical'),contenly_tr('3-4 hari','3-4 days'),contenly_tr('Extended range dan trimix untuk depth dan mixed-gas skill.','Extended range and trimix for depth and mixed-gas skills.'),'extended-range-trimix','wdc-course-divemaster-real.png']
 ];
 foreach($tdi_courses as $e): ?><article class="wd-course-card"><div class="wd-course-photo" style="background-image:linear-gradient(135deg,rgba(232,251,255,.28),rgba(255,255,255,.42)),url('<?php echo esc_url(get_template_directory_uri().'/assets/'.$e[5]); ?>')!important;background-size:cover,contain!important;background-position:center!important;background-repeat:no-repeat!important;"><img src="<?php echo esc_url(get_template_directory_uri().'/assets/'.$e[5]); ?>" alt="<?php echo esc_attr($e[0]); ?>" loading="eager" decoding="async"></div><div class="wd-course-body"><div class="wd-course-meta"><span><?php echo esc_html($e[1]); ?></span><span><?php echo esc_html($e[2]); ?></span></div><h3><?php echo esc_html($e[0]); ?></h3><p><?php echo esc_html($e[3]); ?></p><a href="/courses/"><?php echo esc_html(contenly_tr('Lihat Detail','View Details')); ?></a></div></article><?php endforeach; ?>
 </div>
