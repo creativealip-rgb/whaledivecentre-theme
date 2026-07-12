@@ -73,7 +73,7 @@ $equipment_url = function_exists('contenly_localized_url') ? contenly_localized_
 $wa_phone_raw = '';
 if (function_exists('wdc_site_get')) {
     $wa_phone_raw = (string) wdc_site_get('phone_tel', '');
-    if ($wa_phone_raw === '' || strpos($wa_phone_raw, '*') !== false) {
+    if ($wa_phone_raw === '') {
         $wa_phone_raw = (string) wdc_site_get('phone', '0821-2666-6111');
     }
 } else {
@@ -84,7 +84,7 @@ if ($wa_digits !== '' && $wa_digits[0] === '0') {
     $wa_digits = '62' . substr($wa_digits, 1);
 }
 if (strlen($wa_digits) < 10) {
-    $wa_digits = '622127939068';
+    $wa_digits = '6282126666111';
 }
 $user = wp_get_current_user();
 $wa_name = trim((string) ($user->display_name ?: $user->user_login));

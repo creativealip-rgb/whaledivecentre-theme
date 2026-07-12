@@ -2173,7 +2173,7 @@ function contenly_get_diving_trip_mode($post = null) {
 function contenly_get_contact_details() {
     return [
         'phone_display' => '(021) 2274 0870',
-        'phone_tel' => '+622****0870',
+        'phone_tel' => '+6282126666111',
         'email' => 'hello@travelship.id',
         'whatsapp_display' => '',
         'whatsapp_number' => '',
