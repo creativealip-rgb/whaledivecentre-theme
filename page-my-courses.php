@@ -39,7 +39,7 @@ if ((($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') && isset($_POST['wdc_course_
     $item_id = absint($_POST['item_id'] ?? 0);
 
     if ($selected_course) {
-        $request_row = [
+        array_unshift($course_requests, [
             'course' => $selected_course,
             'item_id' => $item_id,
             'preferred_date' => $preferred_date,
@@ -47,22 +47,9 @@ if ((($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') && isset($_POST['wdc_course_
             'message' => $message,
             'status' => 'Requested',
             'created_at' => current_time('mysql'),
-        ];
-        $notify_result = ['crew' => false, 'member' => false];
-        if (function_exists('wdc_notify_request')) {
-            $notify_result = wdc_notify_request('course', $user_id, $request_row);
-            if (!is_array($notify_result)) {
-                $notify_result = ['crew' => false, 'member' => false];
-            }
-        }
-        $request_row['notify_crew'] = !empty($notify_result['crew']) ? 1 : 0;
-        $request_row['notify_member'] = !empty($notify_result['member']) ? 1 : 0;
-        array_unshift($course_requests, $request_row);
+        ]);
         update_user_meta($user_id, '_wdc_course_requests', array_slice($course_requests, 0, 20));
         $notice = contenly_tr('Permintaan kursus tersimpan. Crew akan follow-up konfirmasi jadwal.', 'Course request saved. Crew will follow up to confirm schedule.');
-        if (empty($notify_result['crew']) && empty($notify_result['member'])) {
-            $notice .= ' ' . contenly_tr('Catatan: email notifikasi belum terkirim dari server. Crew tetap lihat request di admin.', 'Note: notification email was not sent by the server. Crew can still see the request in admin.');
-        }
     } else {
         $notice = contenly_tr('Pilih kursus terlebih dahulu.', 'Please choose a course first.');
         $notice_type = 'error';
