@@ -3256,8 +3256,8 @@ body.whaledive-single-course .wd-sidebar-note,
   line-height:1.5;
   font-weight:500
 }
-.wdc-auth-form{display:grid;gap:14px}
-.wdc-auth-field{display:grid;gap:6px}
+.wdc-auth-form{display:grid;gap:10px}
+.wdc-auth-field{display:grid;gap:5px}
 .wdc-auth-field label{
   display:block;
   margin:0;
@@ -3269,14 +3269,14 @@ body.whaledive-single-course .wd-sidebar-note,
 }
 .wdc-auth-field input{
   width:100%;
-  min-height:42px;
-  height:42px;
+  min-height:36px!important;
+  height:36px!important;
   border:1px solid #dbe4ea;
-  border-radius:12px;
+  border-radius:10px;
   padding:0 12px;
   background:#fff;
   color:#0f172a;
-  font-size:14px;
+  font-size:13px;
   font-weight:500;
   line-height:1.3;
   box-shadow:none
@@ -3287,25 +3287,35 @@ body.whaledive-single-course .wd-sidebar-note,
   box-shadow:0 0 0 3px rgba(0,74,152,.12)
 }
 .wd-password-wrap{position:relative}
-.wd-password-wrap input{padding-right:96px!important}
+.wd-password-wrap input{padding-right:42px!important}
 .wd-password-toggle{
   position:absolute;
-  right:6px;
+  right:4px;
   top:50%;
   transform:translateY(-50%);
-  height:30px;
-  min-width:78px;
-  border:0;
-  border-radius:999px;
-  background:#004A98;
-  color:#fff;
-  font-size:12px;
-  font-weight:700;
-  padding:0 10px;
+  width:30px!important;
+  height:28px!important;
+  min-width:30px!important;
+  min-height:28px!important;
+  border:0!important;
+  border-radius:8px!important;
+  background:transparent!important;
+  background-image:none!important;
+  color:#64748b!important;
+  -webkit-text-fill-color:#64748b!important;
+  padding:0!important;
+  display:inline-flex!important;
+  align-items:center;
+  justify-content:center;
   cursor:pointer;
-  line-height:1
+  line-height:1;
+  box-shadow:none!important
 }
-.wd-password-toggle:hover{background:#3B44AC}
+.wd-password-toggle:hover{color:#004A98!important;-webkit-text-fill-color:#004A98!important;background:rgba(0,74,152,.06)!important}
+.wd-password-toggle .wd-eye{display:block;pointer-events:none}
+.wd-password-toggle .wd-eye-off{display:none}
+.wd-password-toggle.is-visible .wd-eye-open{display:none}
+.wd-password-toggle.is-visible .wd-eye-off{display:block}
 .wdc-auth-row{
   display:flex;
   justify-content:space-between;
@@ -3338,24 +3348,27 @@ body.whaledive-single-course .wd-sidebar-note,
 .wdc-auth-switch a:hover{text-decoration:underline}
 .wdc-auth-submit{
   width:100%;
-  min-height:44px;
-  height:44px;
-  margin-top:4px;
+  min-height:38px!important;
+  height:38px!important;
+  margin-top:6px;
+  margin-bottom:0;
   border:0;
   border-radius:999px;
   background:#004A98;
   color:#fff;
-  font-size:14px;
+  font-size:13px;
   font-weight:800;
   cursor:pointer;
   box-shadow:none
 }
 .wdc-auth-submit:hover{background:#3B44AC}
 .wdc-auth-switch{
-  margin:16px 0 0!important;
+  margin:18px 0 0!important;
+  padding-top:12px!important;
+  border-top:1px solid #eef2f6;
   text-align:center!important;
   color:#64748b!important;
-  font-size:13px!important;
+  font-size:12px!important;
   font-weight:500!important;
   line-height:1.45!important
 }
@@ -3391,13 +3404,13 @@ body.whaledive-single-course .wd-sidebar-note,
   .wdc-auth-card-head{margin:0 0 14px}
   .wdc-auth-card h2{font-size:20px;margin:0 0 4px}
   .wdc-auth-card-head p{font-size:13px}
-  .wdc-auth-form{gap:12px}
+  .wdc-auth-form{gap:10px}
   .wdc-auth-field label{font-size:12px}
-  .wdc-auth-field input{min-height:44px;height:44px;font-size:16px;border-radius:12px}
-  .wd-password-toggle{height:30px;min-width:82px;font-size:12px}
+  .wdc-auth-field input{min-height:40px!important;height:40px!important;font-size:16px;border-radius:10px}
+  .wd-password-toggle{width:32px!important;height:30px!important;min-width:32px!important}
   .wdc-auth-row{align-items:flex-start;flex-direction:column;gap:8px;margin:0}
-  .wdc-auth-submit{min-height:44px;height:44px;margin-top:2px;font-size:14px}
-  .wdc-auth-switch{margin-top:14px!important;font-size:13px!important}
+  .wdc-auth-submit{min-height:40px!important;height:40px!important;margin-top:4px;font-size:13px}
+  .wdc-auth-switch{margin-top:16px!important;padding-top:12px!important;font-size:12px!important}
 }
 
 /* WDC mobile overflow guard 2026-05-16 (expanded to tablet) */
@@ -6167,30 +6180,39 @@ body.whaledive-register .wd-footer{display:none!important;visibility:hidden!impo
   box-shadow:0 24px 60px rgba(0,0,0,.22)!important;
   max-width:440px!important;
 }
-.wdc-auth-card h2{font-size:26px!important;margin:0 0 8px!important}
-.wdc-auth-card>p{margin:0 0 18px!important;font-size:14px!important}
-.wdc-auth-form{gap:14px!important}
-.wdc-auth-field label{margin:0 0 7px!important;font-size:11px!important;letter-spacing:.06em!important}
+.wdc-auth-card h2{font-size:22px!important;margin:0 0 4px!important}
+.wdc-auth-card>p,
+.wdc-auth-card-head p{margin:0!important;font-size:13px!important}
+.wdc-auth-form{gap:10px!important}
+.wdc-auth-field label{margin:0!important;font-size:12px!important;letter-spacing:.02em!important;text-transform:none!important}
 .wdc-auth-field input{
-  height:50px!important;
-  border-radius:14px!important;
-  border:1px solid #d7e2e8!important;
+  min-height:36px!important;
+  height:36px!important;
+  border-radius:10px!important;
+  border:1px solid #dbe4ea!important;
   box-shadow:none!important;
-  font-size:15px!important;
+  font-size:13px!important;
+  padding:0 12px!important;
 }
-.wdc-auth-field input:focus{outline:3px solid rgba(76,200,237,.2)!important;border-color:#4cc8ed!important}
+.wdc-auth-field input:focus{outline:none!important;box-shadow:0 0 0 3px rgba(0,74,152,.12)!important;border-color:#004A98!important}
 .wd-password-toggle{
-  top:9px!important;right:8px!important;height:32px!important;
-  background:#eef6f9!important;color:#0b617c!important;font-size:12px!important;font-weight:800!important
+  top:50%!important;right:4px!important;transform:translateY(-50%)!important;
+  width:30px!important;height:28px!important;min-width:30px!important;min-height:28px!important;
+  background:transparent!important;background-image:none!important;color:#64748b!important;
+  -webkit-text-fill-color:#64748b!important;border:0!important;border-radius:8px!important;padding:0!important;
+  box-shadow:none!important;font-size:0!important
 }
 .wdc-auth-submit{
-  height:52px!important;
-  background:linear-gradient(135deg,#0b617c,#0891b2)!important;
-  box-shadow:0 12px 28px rgba(11,97,124,.24)!important;
-  font-size:15px!important;
+  min-height:38px!important;
+  height:38px!important;
+  background:#004A98!important;
+  background-image:none!important;
+  box-shadow:none!important;
+  font-size:13px!important;
+  margin-top:6px!important;
 }
-.wdc-auth-row{font-size:13px!important}
-.wdc-auth-switch{margin-top:16px!important;font-size:13px!important}
+.wdc-auth-row{font-size:12px!important}
+.wdc-auth-switch{margin-top:18px!important;padding-top:12px!important;border-top:1px solid #eef2f6;font-size:12px!important}
 .wdc-auth-alert{border-radius:12px!important;font-size:13px!important;font-weight:700!important}
 .wdc-auth-proof{gap:10px!important;margin-top:24px!important}
 .wdc-auth-proof div{padding:14px!important;border-radius:14px!important}
@@ -8285,3 +8307,46 @@ body.wm-member-app .dashboard-main .wdc-completed-item .cell span{
 }
 body.wm-member-app .dashboard-main .wdc-completed-item .notes{display:none!important}
 
+
+
+/* WDC auth compact final 2026-07-12 */
+html body.wdc-auth-page .wdc-auth-form{gap:10px!important}
+html body.wdc-auth-page .wdc-auth-field{gap:5px!important}
+html body.wdc-auth-page .wdc-auth-field label{
+  margin:0!important;font-size:12px!important;font-weight:700!important;
+  letter-spacing:.02em!important;text-transform:none!important;color:#475569!important
+}
+html body.wdc-auth-page .wdc-auth-field input{
+  min-height:36px!important;height:36px!important;border-radius:10px!important;
+  font-size:13px!important;padding:0 12px!important;box-shadow:none!important
+}
+html body.wdc-auth-page .wd-password-wrap input{padding-right:42px!important}
+html body.wdc-auth-page .wd-password-toggle{
+  width:30px!important;height:28px!important;min-width:30px!important;min-height:28px!important;
+  right:4px!important;top:50%!important;transform:translateY(-50%)!important;
+  background:transparent!important;background-image:none!important;border:0!important;
+  border-radius:8px!important;padding:0!important;box-shadow:none!important;
+  color:#64748b!important;-webkit-text-fill-color:#64748b!important;font-size:0!important
+}
+html body.wdc-auth-page .wd-password-toggle:hover{
+  color:#004A98!important;-webkit-text-fill-color:#004A98!important;background:rgba(0,74,152,.06)!important
+}
+html body.wdc-auth-page .wd-password-toggle .wd-eye{display:block;pointer-events:none}
+html body.wdc-auth-page .wd-password-toggle .wd-eye-off{display:none}
+html body.wdc-auth-page .wd-password-toggle.is-visible .wd-eye-open{display:none}
+html body.wdc-auth-page .wd-password-toggle.is-visible .wd-eye-off{display:block}
+html body.wdc-auth-page .wdc-auth-submit{
+  min-height:38px!important;height:38px!important;margin-top:6px!important;margin-bottom:0!important;
+  font-size:13px!important;box-shadow:none!important;background:#004A98!important;background-image:none!important
+}
+html body.wdc-auth-page .wdc-auth-switch{
+  margin:18px 0 0!important;padding-top:12px!important;border-top:1px solid #eef2f6;
+  font-size:12px!important;line-height:1.45!important
+}
+html body.wdc-auth-page .wdc-auth-card{padding:22px 18px 16px!important}
+html body.wdc-auth-page .wdc-auth-card-head{margin:0 0 12px!important}
+html body.wdc-auth-page .wdc-auth-card h2{font-size:22px!important;margin:0 0 4px!important}
+@media(max-width:700px){
+  html body.wdc-auth-page .wdc-auth-field input{min-height:40px!important;height:40px!important;font-size:16px!important}
+  html body.wdc-auth-page .wdc-auth-submit{min-height:40px!important;height:40px!important}
+}

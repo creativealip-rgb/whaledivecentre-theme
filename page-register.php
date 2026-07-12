@@ -86,7 +86,7 @@ if (isset($_POST['register_submit'])) {
             <label for="wd-reg-password"><?php echo esc_html(contenly_tr('Kata sandi', 'Password')); ?></label>
             <div class="wd-password-wrap">
               <input id="wd-reg-password" type="password" name="password" autocomplete="new-password" required>
-              <button class="wd-password-toggle" type="button" data-target="wd-reg-password" data-show="<?php echo esc_attr(contenly_tr('Tampilkan', 'Show')); ?>" data-hide="<?php echo esc_attr(contenly_tr('Sembunyikan', 'Hide')); ?>"><?php echo esc_html(contenly_tr('Tampilkan', 'Show')); ?></button>
+              <button class="wd-password-toggle" type="button" data-target="wd-reg-password" aria-label="Tampilkan/sembunyikan sandi" title="Tampilkan/sembunyikan sandi"><svg class="wd-eye wd-eye-open" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg class="wd-eye wd-eye-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.77 21.77 0 0 1 5.06-5.94"/><path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.8 21.8 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
             </div>
           </div>
 
@@ -94,7 +94,7 @@ if (isset($_POST['register_submit'])) {
             <label for="wd-reg-confirm"><?php echo esc_html(contenly_tr('Konfirmasi kata sandi', 'Confirm password')); ?></label>
             <div class="wd-password-wrap">
               <input id="wd-reg-confirm" type="password" name="confirm_password" autocomplete="new-password" required>
-              <button class="wd-password-toggle" type="button" data-target="wd-reg-confirm" data-show="<?php echo esc_attr(contenly_tr('Tampilkan', 'Show')); ?>" data-hide="<?php echo esc_attr(contenly_tr('Sembunyikan', 'Hide')); ?>"><?php echo esc_html(contenly_tr('Tampilkan', 'Show')); ?></button>
+              <button class="wd-password-toggle" type="button" data-target="wd-reg-confirm" aria-label="Tampilkan/sembunyikan sandi" title="Tampilkan/sembunyikan sandi"><svg class="wd-eye wd-eye-open" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg class="wd-eye wd-eye-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.77 21.77 0 0 1 5.06-5.94"/><path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.8 21.8 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
             </div>
           </div>
 
@@ -114,7 +114,8 @@ document.addEventListener('click', function (e) {
   if (!i) return;
   var show = i.type === 'password';
   i.type = show ? 'text' : 'password';
-  b.textContent = show ? (b.dataset.hide || 'Hide') : (b.dataset.show || 'Show');
+  b.classList.toggle('is-visible', show);
+  b.setAttribute('aria-pressed', show ? 'true' : 'false');
 });
 </script>
 <?php wp_footer(); ?>
