@@ -109,7 +109,7 @@ function wdc_site_defaults() {
         'membership_3_title' => 'Portofolio Sertifikasi',
         'membership_3_text' => 'Semua kartu dive di satu tempat',
         'membership_cta_label' => 'Buat Akun Gratis',
-        'membership_cta_url' => '/member-register/',
+        'membership_cta_url' => '/register/',
         // Courses page closing CTA
         'courses_page_cta_kicker' => 'Butuh saran kursus?',
         'courses_page_cta_title' => 'Crew bantu pilih jalur yang tepat.',

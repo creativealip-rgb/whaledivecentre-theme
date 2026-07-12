@@ -43,7 +43,7 @@ $brand = wp_get_post_terms(get_the_ID(), 'equipment_brand');
 <?php if(is_user_logged_in()): ?>
 <button class="wd-btn-sm wd-add-cart" data-type="equipment" data-id="<?php echo get_the_ID(); ?>">Add to Cart</button>
 <?php else: ?>
-<a href="/member-register/" class="wd-btn-sm">Register to Buy</a>
+<a href="/register/" class="wd-btn-sm">Register to Buy</a>
 <?php endif; ?>
 </div>
 </article>

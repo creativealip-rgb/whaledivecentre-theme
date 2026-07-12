@@ -1332,8 +1332,8 @@ function contenly_local_en_source_slug_map() {
         '/en/contact/' => 'about',
         '/en/login/' => 'login',
         '/en/member-login/' => 'login',
-        '/en/register/' => 'member-register',
-        '/en/member-register/' => 'member-register',
+        '/en/register/' => 'register',
+        '/en/member-register/' => 'register',
     ];
 }
 
@@ -1838,7 +1838,7 @@ function contenly_get_seo_context() {
             'Masuk ke akun member Whale Dive Centre untuk kelola kursus, gear, dan sertifikasi selam Anda.',
             'Sign in to your Whale Dive Centre member account to manage courses, gear, and dive certifications.'
         );
-    } elseif (is_page('member-register')) {
+    } elseif (is_page(['register', 'member-register'])) {
         $description = contenly_tr(
             'Buat akun member Whale Dive Centre untuk akses kursus selam, peralatan, dan dukungan crew.',
             'Create a Whale Dive Centre member account for access to dive courses, gear, and crew support.'
@@ -2967,10 +2967,9 @@ add_action('init', function() {
         wp_redirect($with_qs($target), 301);
         exit;
     }
-    // /register aliases → canonical member-register, keep language.
-    // Do not bounce mapped /en/register/ away from EN chrome.
-    if ($path === 'register') {
-        $target = $is_en ? home_url('/en/member-register/') : home_url('/member-register/');
+    // Legacy member-register → canonical /register/, keep language.
+    if ($path === 'member-register') {
+        $target = $is_en ? home_url('/en/register/') : home_url('/register/');
         wp_redirect($with_qs($target), 301);
         exit;
     }
@@ -3001,9 +3000,9 @@ add_filter('login_url', function($url, $redirect, $force_reauth) {
 }, 10, 3);
 add_filter('register_url', function() {
     if (function_exists('contenly_localized_url')) {
-        return contenly_localized_url('/member-register/');
+        return contenly_localized_url('/register/');
     }
-    return home_url('/member-register/');
+    return home_url('/register/');
 });
 
 // Keep member failed logins on /login (not wp-login.php / wp-admin).
@@ -3220,8 +3219,8 @@ add_filter('pre_get_document_title', function($title) {
     if ($path === 'login' || $path === 'member-login') {
         return 'Member Login - Whale Dive Centre';
     }
-    if ($path === 'member-register') {
-        return 'Member Register - Whale Dive Centre';
+    if ($path === 'register' || $path === 'member-register' || $path === 'en/register' || $path === 'en/member-register') {
+        return 'Register - Whale Dive Centre';
     }
     return $title;
 });

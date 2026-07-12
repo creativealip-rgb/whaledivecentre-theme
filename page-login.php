@@ -16,7 +16,6 @@
     <div class="wd-shell wdc-auth-grid">
       <div class="wdc-auth-copy">
         <a class="wdc-auth-back" href="<?php echo esc_url(home_url('/')); ?>"><?php echo esc_html(contenly_tr('Kembali ke Beranda', 'Back to Home')); ?></a>
-        <span class="wd-kicker"><?php echo esc_html(contenly_tr('Akses Member', 'Member Access')); ?></span>
         <h1><?php echo esc_html(contenly_tr('Selamat datang kembali.', 'Welcome back.')); ?></h1>
         <p><?php echo esc_html(contenly_tr('Masuk untuk kelola kursus, permintaan gear, sertifikasi, dan update crew dari satu dashboard.', 'Log in to manage courses, gear requests, certifications, and crew updates from one dashboard.')); ?></p>
         <div class="wdc-auth-proof">

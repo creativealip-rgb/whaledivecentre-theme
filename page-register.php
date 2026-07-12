@@ -51,7 +51,6 @@ if (isset($_POST['register_submit'])) {
     <div class="wd-shell wdc-auth-grid">
       <div class="wdc-auth-copy">
         <a class="wdc-auth-back" href="<?php echo esc_url(home_url('/')); ?>"><?php echo esc_html(contenly_tr('Kembali ke Beranda', 'Back to Home')); ?></a>
-        <span class="wd-kicker"><?php echo esc_html(contenly_tr('Mulai profil diver', 'Start your diver profile')); ?></span>
         <h1><?php echo esc_html(contenly_tr('Bergabung dengan crew.', 'Join the crew.')); ?></h1>
         <p><?php echo esc_html(contenly_tr('Buat akun untuk simpan perencanaan kursus, request gear, catatan sertifikasi, dan update dive di satu tempat.', 'Create an account to keep course planning, gear requests, certification notes, and dive updates in one place.')); ?></p>
         <div class="wdc-auth-proof">
