@@ -881,6 +881,10 @@ function wdc_render_partners_page() {
     if (!current_user_can('manage_options')) {
         return;
     }
+    // Ensure Media Library modal scripts are present on this page.
+    if (function_exists('wp_enqueue_media')) {
+        wp_enqueue_media();
+    }
 
     $saved = false;
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wdc_site_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_site_nonce'])), 'wdc_site_save')) {
@@ -1016,10 +1020,14 @@ function wdc_render_partners_page() {
       }
     </style>
     <script>
-    (function($){
-      if (typeof wp === 'undefined' || !wp.media) { return; }
+    jQuery(function($){
       var $builder = $('#wdc-partner-builder');
       if (!$builder.length) return;
+      var mediaFrame = null;
+
+      function hasMedia(){
+        return (typeof wp !== 'undefined' && wp.media);
+      }
 
       function reindex(){
         $builder.find('.wdc-partner-row').each(function(ri){
@@ -1073,17 +1081,26 @@ function wdc_render_partners_page() {
         $('#partners').val(lines.join('\n'));
       }
 
-      $builder.on('click', '.wdc-partner-pick', function(e){
+      // Delegate from document so handlers always work.
+      $(document).off('click.wdcPartners', '.wdc-partner-pick').on('click.wdcPartners', '.wdc-partner-pick', function(e){
         e.preventDefault();
+        e.stopPropagation();
+        if (!hasMedia()) {
+          window.alert('Media Library belum siap. Hard refresh halaman admin (Ctrl+F5), lalu coba lagi.');
+          return;
+        }
         var $item = $(this).closest('.wdc-partner-item');
-        var frame = wp.media({
+        if (mediaFrame) {
+          mediaFrame.off('select');
+        }
+        mediaFrame = wp.media({
           title: 'Pilih logo partner',
           button: { text: 'Pakai logo ini' },
           multiple: false,
           library: { type: 'image' }
         });
-        frame.on('select', function(){
-          var att = frame.state().get('selection').first().toJSON();
+        mediaFrame.on('select', function(){
+          var att = mediaFrame.state().get('selection').first().toJSON();
           var url = (att.sizes && att.sizes.medium && att.sizes.medium.url) ? att.sizes.medium.url : att.url;
           $item.find('.wdc-partner-source').val('id:' + att.id);
           $item.find('.wdc-partner-preview').html('<img src="'+url+'" alt="">');
@@ -1093,10 +1110,10 @@ function wdc_render_partners_page() {
           }
           syncRaw();
         });
-        frame.open();
+        mediaFrame.open();
       });
 
-      $builder.on('click', '.wdc-partner-add-item', function(e){
+      $(document).off('click.wdcPartnersAdd', '.wdc-partner-add-item').on('click.wdcPartnersAdd', '.wdc-partner-add-item', function(e){
         e.preventDefault();
         var $row = $(this).closest('.wdc-partner-row');
         var ri = $builder.find('.wdc-partner-row').index($row);
@@ -1105,7 +1122,7 @@ function wdc_render_partners_page() {
         reindex();
       });
 
-      $builder.on('click', '.wdc-partner-remove-item', function(e){
+      $(document).off('click.wdcPartnersRmItem', '.wdc-partner-remove-item').on('click.wdcPartnersRmItem', '.wdc-partner-remove-item', function(e){
         e.preventDefault();
         var $row = $(this).closest('.wdc-partner-row');
         $(this).closest('.wdc-partner-item').remove();
@@ -1115,10 +1132,9 @@ function wdc_render_partners_page() {
         reindex();
       });
 
-      $builder.on('click', '.wdc-partner-remove-row', function(e){
+      $(document).off('click.wdcPartnersRmRow', '.wdc-partner-remove-row').on('click.wdcPartnersRmRow', '.wdc-partner-remove-row', function(e){
         e.preventDefault();
         if ($builder.find('.wdc-partner-row').length <= 1) {
-          // clear only
           var $row = $(this).closest('.wdc-partner-row');
           $row.find('.wdc-partner-items').html(itemHtml(0,0));
           reindex();
@@ -1128,17 +1144,17 @@ function wdc_render_partners_page() {
         reindex();
       });
 
-      $('#wdc-partner-add-row').on('click', function(e){
+      $(document).off('click.wdcPartnersAddRow', '#wdc-partner-add-row').on('click.wdcPartnersAddRow', '#wdc-partner-add-row', function(e){
         e.preventDefault();
         var ri = $builder.find('.wdc-partner-row').length;
         $builder.append(rowHtml(ri));
         reindex();
       });
 
-      $builder.on('input change', '.wdc-partner-name', syncRaw);
-      $('#wdc-partners-form').on('submit', function(){ reindex(); });
+      $builder.off('input.wdcPartners change.wdcPartners', '.wdc-partner-name').on('input.wdcPartners change.wdcPartners', '.wdc-partner-name', syncRaw);
+      $('#wdc-partners-form').off('submit.wdcPartners').on('submit.wdcPartners', function(){ reindex(); });
       reindex();
-    })(jQuery);
+    });
     </script>
     <?php
     echo '</div>';

@@ -3939,8 +3939,15 @@ add_filter('use_block_editor_for_post_type', 'wdc_use_classic_editor_for_catalog
 
 function wdc_admin_assets($hook) {
     $page = isset($_GET['page']) ? sanitize_key(wp_unslash($_GET['page'])) : '';
-    if ($hook === 'toplevel_page_wdc-content-settings' || $page === 'wdc-site-partners') {
+    if (
+        $hook === 'toplevel_page_wdc-content-settings'
+        || $page === 'wdc-site-partners'
+        || $hook === 'wdc-site_page_wdc-site-partners'
+        || $hook === 'admin_page_wdc-site-partners'
+        || strpos((string) $hook, 'wdc-site-partners') !== false
+    ) {
         wp_enqueue_media();
+        wp_enqueue_script('jquery');
     }
     $wdc_admin_pages = [
         'wdc-member-list',
