@@ -178,13 +178,16 @@ function wdc_register_testimonial_cpt() {
         'labels' => [
             'name' => 'Testimonials',
             'singular_name' => 'Testimonial',
+            'add_new' => 'Add New',
             'add_new_item' => 'Add Testimonial',
             'edit_item' => 'Edit Testimonial',
-            'all_items' => 'All Testimonials',
+            // One clean sidebar label under WDC Site (not "All Testimonials").
+            'all_items' => 'Testimonials',
             'menu_name' => 'Testimonials',
         ],
         'public' => false,
         'show_ui' => true,
+        // CPT auto-adds list item under WDC Site. Do not also add manual submenu.
         'show_in_menu' => 'wdc-site',
         'menu_position' => 58,
         'supports' => ['title', 'editor', 'thumbnail', 'page-attributes'],
@@ -211,36 +214,20 @@ function wdc_site_admin_menu() {
     add_submenu_page('wdc-site', 'Contact Page', 'Contact Page', 'manage_options', 'wdc-site-contact', 'wdc_render_contact_page');
     add_submenu_page('wdc-site', 'Courses & Equipment CTA', 'Courses & Equipment CTA', 'manage_options', 'wdc-site-cta', 'wdc_render_cta_page');
     add_submenu_page('wdc-site', 'Partners / Trust', 'Partners / Trust', 'manage_options', 'wdc-site-partners', 'wdc_render_partners_page');
-    add_submenu_page(
-        'wdc-site',
-        'Crew Profiles',
-        'Crew Profiles',
-        'edit_posts',
-        'edit.php?post_type=wdc_crew'
-    );
-    add_submenu_page(
-        'wdc-site',
-        'Add Crew',
-        'Add Crew',
-        'edit_posts',
-        'post-new.php?post_type=wdc_crew'
-    );
-    add_submenu_page(
-        'wdc-site',
-        'Testimonials',
-        'Testimonials',
-        'edit_posts',
-        'edit.php?post_type=wdc_testimonial'
-    );
-    add_submenu_page(
-        'wdc-site',
-        'Add Testimonial',
-        'Add Testimonial',
-        'edit_posts',
-        'post-new.php?post_type=wdc_testimonial'
-    );
+    // Crew + Testimonials list come from CPT show_in_menu only.
+    // "Add New" stays on list page button — not as extra sidebar items.
 }
 add_action('admin_menu', 'wdc_site_admin_menu');
+
+/**
+ * Hide auto "Add New" CPT submenus under WDC Site.
+ * List screens already have "Add New" buttons.
+ */
+function wdc_prune_site_cpt_submenus() {
+    remove_submenu_page('wdc-site', 'post-new.php?post_type=wdc_crew');
+    remove_submenu_page('wdc-site', 'post-new.php?post_type=wdc_testimonial');
+}
+add_action('admin_menu', 'wdc_prune_site_cpt_submenus', 999);
 
 function wdc_site_field($key, $label, $type = 'text', $help = '') {
     $value = wdc_site_get($key);
@@ -783,7 +770,7 @@ function wdc_render_about_page() {
     echo '<tr><th colspan="2"><h2 style="margin:18px 0 0">Crew section</h2></th></tr>';
     wdc_site_field('crew_kicker', 'Crew kicker');
     wdc_site_field('crew_title', 'Crew title', 'textarea');
-    echo '<tr><td colspan="2"><p class="description">Profil crew di menu <strong>WDC Site → Crew Profiles</strong> (nama, role, bio, foto).</p></td></tr>';
+    echo '<tr><td colspan="2"><p class="description">Profil crew di menu <strong>WDC Site → Crew</strong> (nama, role, bio, foto). Pakai tombol Add New di halaman list.</p></td></tr>';
     echo '<tr><th colspan="2"><h2 style="margin:18px 0 0">Values section</h2></th></tr>';
     wdc_site_field('values_kicker', 'Values kicker');
     wdc_site_field('values_title', 'Values title', 'textarea');
@@ -1009,15 +996,18 @@ function wdc_register_crew_cpt() {
     }
     register_post_type('wdc_crew', [
         'labels' => [
-            'name' => 'Crew Profiles',
+            'name' => 'Crew',
             'singular_name' => 'Crew Profile',
+            'add_new' => 'Add New',
             'add_new_item' => 'Add Crew Profile',
             'edit_item' => 'Edit Crew Profile',
-            'all_items' => 'All Crew',
-            'menu_name' => 'Crew Profiles',
+            // One clean sidebar label under WDC Site (not "All Crew" + "Crew Profiles").
+            'all_items' => 'Crew',
+            'menu_name' => 'Crew',
         ],
         'public' => false,
         'show_ui' => true,
+        // CPT auto-adds list item under WDC Site. Do not also add manual submenu.
         'show_in_menu' => 'wdc-site',
         'supports' => ['title', 'editor', 'thumbnail', 'page-attributes'],
         'show_in_rest' => false,
