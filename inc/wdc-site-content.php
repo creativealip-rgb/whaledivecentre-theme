@@ -621,7 +621,31 @@ function wdc_render_notifications_page() {
     wdc_site_field('member_reply_gear', 'Auto-reply teks (peralatan)', 'textarea');
     echo '</tbody></table>';
     submit_button('Save Notifications');
-    echo '</form></div>';
+    echo '</form>';
+
+    $fail_log = get_option('wdc_mail_fail_log', []);
+    if (is_array($fail_log) && $fail_log) {
+        echo '<hr><h2>Mail Fail Log (last ' . count($fail_log) . ')</h2>';
+        echo '<p>Kalau list ini penuh, biasanya server belum pakai SMTP plugin / sendmail. Install SMTP (FluentSMTP / WP Mail SMTP) pakai mailbox domain, contoh <code>info@whaledivecentre.com</code>.</p>';
+        echo '<table class="widefat striped"><thead><tr><th>Time</th><th>To</th><th>Subject</th><th>From</th><th>Error</th></tr></thead><tbody>';
+        foreach ($fail_log as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+            echo '<tr>';
+            echo '<td>' . esc_html((string) ($row['time'] ?? '')) . '</td>';
+            echo '<td>' . esc_html((string) ($row['to'] ?? '')) . '</td>';
+            echo '<td>' . esc_html((string) ($row['subject'] ?? '')) . '</td>';
+            echo '<td>' . esc_html((string) ($row['from'] ?? '')) . '</td>';
+            echo '<td>' . esc_html((string) ($row['error'] ?? '')) . '</td>';
+            echo '</tr>';
+        }
+        echo '</tbody></table>';
+    } else {
+        echo '<hr><p><em>Belum ada mail fail log. Request berikutnya yang gagal kirim akan tercatat di sini.</em></p>';
+    }
+
+    echo '</div>';
 }
 
 function wdc_request_notify_recipients() {
@@ -646,6 +670,90 @@ function wdc_request_notify_recipients() {
         }
     }
     return array_values(array_unique($emails));
+}
+
+/**
+ * Preferred From address for outbound WDC mail.
+ * Prefer domain mailbox when available.
+ */
+function wdc_mail_from_address() {
+    // Prefer domain mailbox first so SPF/DKIM on host matches.
+    $host = preg_replace('/^www\./', '', wp_parse_url(home_url(), PHP_URL_HOST) ?: 'whaledivecentre.com');
+    $candidates = [
+        'info@' . $host,
+        'noreply@' . $host,
+        'admin@' . $host,
+        (string) wdc_site_get('email', ''),
+        (string) get_option('admin_email'),
+    ];
+    foreach ($candidates as $candidate) {
+        $email = sanitize_email($candidate);
+        if ($email && is_email($email)) {
+            // Prefer same-domain From when possible.
+            $domain = substr(strrchr($email, '@') ?: '', 1);
+            if ($domain && strcasecmp($domain, $host) === 0) {
+                return $email;
+            }
+        }
+    }
+    foreach ($candidates as $candidate) {
+        $email = sanitize_email($candidate);
+        if ($email && is_email($email)) {
+            return $email;
+        }
+    }
+    return 'wordpress@' . $host;
+}
+
+function wdc_mail_from_name() {
+    return 'Whale Dive Centre';
+}
+
+/**
+ * Send HTML mail with stable From headers + failure logging.
+ *
+ * @param string|array $to
+ * @param string       $subject
+ * @param string       $html_body
+ * @param array        $extra_headers
+ * @return bool
+ */
+function wdc_send_html_mail($to, $subject, $html_body, array $extra_headers = []) {
+    $from_email = wdc_mail_from_address();
+    $from_name = wdc_mail_from_name();
+    $headers = array_merge([
+        'Content-Type: text/html; charset=UTF-8',
+        'From: ' . $from_name . ' <' . $from_email . '>',
+    ], $extra_headers);
+
+    $error_message = '';
+    $on_failed = function ($wp_error) use (&$error_message) {
+        if (is_wp_error($wp_error)) {
+            $error_message = $wp_error->get_error_message();
+        }
+    };
+    add_action('wp_mail_failed', $on_failed);
+    $sent = (bool) wp_mail($to, $subject, wpautop($html_body), $headers);
+    remove_action('wp_mail_failed', $on_failed);
+
+    if (!$sent) {
+        $log = [
+            'time' => current_time('mysql'),
+            'to' => is_array($to) ? implode(',', $to) : (string) $to,
+            'subject' => (string) $subject,
+            'from' => $from_email,
+            'error' => $error_message !== '' ? $error_message : 'wp_mail returned false',
+        ];
+        $history = get_option('wdc_mail_fail_log', []);
+        if (!is_array($history)) {
+            $history = [];
+        }
+        array_unshift($history, $log);
+        update_option('wdc_mail_fail_log', array_slice($history, 0, 20), false);
+        error_log('[WDC mail fail] ' . wp_json_encode($log));
+    }
+
+    return $sent;
 }
 
 /**
@@ -690,19 +798,19 @@ function wdc_notify_request($type, $user_id, array $payload) {
         $lines[] = 'Size notes: ' . esc_html((string) ($payload['size_notes'] ?: '-'));
     }
     $lines[] = 'Message: ' . esc_html($message !== '' ? $message : '-');
-    $lines[] = 'Open WP Admin → Users / member meta to follow up.';
+    $lines[] = 'Open WP Admin → WDC Members → Course/Gear Requests to follow up.';
     $body = implode('<br>', $lines);
 
-    $headers = ['Content-Type: text/html; charset=UTF-8'];
+    $extra_headers = [];
     if ($member_email && is_email($member_email)) {
-        $headers[] = 'Reply-To: ' . $display . ' <' . $member_email . '>';
+        $extra_headers[] = 'Reply-To: ' . $display . ' <' . $member_email . '>';
     }
 
     if (wdc_site_get('notify_crew', '1') === '1') {
         $recipients = wdc_request_notify_recipients();
         if ($recipients) {
             $subject = '[WDC] ' . ($type === 'course' ? 'Course request' : 'Gear request') . ': ' . $item;
-            $result['crew'] = (bool) wp_mail($recipients, $subject, wpautop($body), $headers);
+            $result['crew'] = wdc_send_html_mail($recipients, $subject, $body, $extra_headers);
         }
     }
 
@@ -722,7 +830,7 @@ function wdc_notify_request($type, $user_id, array $payload) {
         $subject = $type === 'course'
             ? 'Permintaan kursus diterima — Whale Dive Centre'
             : 'Permintaan peralatan diterima — Whale Dive Centre';
-        $result['member'] = (bool) wp_mail($member_email, $subject, wpautop($member_body), ['Content-Type: text/html; charset=UTF-8']);
+        $result['member'] = wdc_send_html_mail($member_email, $subject, $member_body);
     }
 
     return $result;

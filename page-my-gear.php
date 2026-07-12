@@ -21,19 +21,29 @@ if ((($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') && isset($_POST['wdc_gear_no
     $message = sanitize_textarea_field(wp_unslash($_POST['message'] ?? ''));
 
     if ($selected_gear) {
-        array_unshift($gear_requests, [
+        $request_row = [
             'gear' => $selected_gear,
             'request_type' => $request_type ?: 'Buy advice',
             'size_notes' => $size_notes,
             'message' => $message,
             'status' => 'Requested',
             'created_at' => current_time('mysql'),
-        ]);
-        update_user_meta($user_id, '_wdc_gear_requests', array_slice($gear_requests, 0, 10));
+        ];
+        $notify_result = ['crew' => false, 'member' => false];
         if (function_exists('wdc_notify_request')) {
-            wdc_notify_request('gear', $user_id, $gear_requests[0]);
+            $notify_result = wdc_notify_request('gear', $user_id, $request_row);
+            if (!is_array($notify_result)) {
+                $notify_result = ['crew' => false, 'member' => false];
+            }
         }
+        $request_row['notify_crew'] = !empty($notify_result['crew']) ? 1 : 0;
+        $request_row['notify_member'] = !empty($notify_result['member']) ? 1 : 0;
+        array_unshift($gear_requests, $request_row);
+        update_user_meta($user_id, '_wdc_gear_requests', array_slice($gear_requests, 0, 10));
         $notice = contenly_tr('Permintaan peralatan tersimpan. Kru akan membantu konfirmasi fitting dan langkah selanjutnya.', 'Gear request saved. The crew can help confirm fit and next steps.');
+        if (empty($notify_result['crew']) && empty($notify_result['member'])) {
+            $notice .= ' ' . contenly_tr('Catatan: email notifikasi belum terkirim dari server. Crew tetap lihat request di admin.', 'Note: notification email was not sent by the server. Crew can still see the request in admin.');
+        }
     } else {
         $notice = contenly_tr('Pilih peralatan terlebih dahulu.', 'Please choose gear first.');
         $notice_type = 'error';

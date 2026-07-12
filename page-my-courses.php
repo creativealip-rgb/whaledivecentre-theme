@@ -39,7 +39,7 @@ if ((($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') && isset($_POST['wdc_course_
     $item_id = absint($_POST['item_id'] ?? 0);
 
     if ($selected_course) {
-        array_unshift($course_requests, [
+        $request_row = [
             'course' => $selected_course,
             'item_id' => $item_id,
             'preferred_date' => $preferred_date,
@@ -47,12 +47,22 @@ if ((($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') && isset($_POST['wdc_course_
             'message' => $message,
             'status' => 'Requested',
             'created_at' => current_time('mysql'),
-        ]);
-        update_user_meta($user_id, '_wdc_course_requests', array_slice($course_requests, 0, 20));
+        ];
+        $notify_result = ['crew' => false, 'member' => false];
         if (function_exists('wdc_notify_request')) {
-            wdc_notify_request('course', $user_id, $course_requests[0]);
+            $notify_result = wdc_notify_request('course', $user_id, $request_row);
+            if (!is_array($notify_result)) {
+                $notify_result = ['crew' => false, 'member' => false];
+            }
         }
+        $request_row['notify_crew'] = !empty($notify_result['crew']) ? 1 : 0;
+        $request_row['notify_member'] = !empty($notify_result['member']) ? 1 : 0;
+        array_unshift($course_requests, $request_row);
+        update_user_meta($user_id, '_wdc_course_requests', array_slice($course_requests, 0, 20));
         $notice = contenly_tr('Permintaan kursus tersimpan. Crew akan follow-up konfirmasi jadwal.', 'Course request saved. Crew will follow up to confirm schedule.');
+        if (empty($notify_result['crew']) && empty($notify_result['member'])) {
+            $notice .= ' ' . contenly_tr('Catatan: email notifikasi belum terkirim dari server. Crew tetap lihat request di admin.', 'Note: notification email was not sent by the server. Crew can still see the request in admin.');
+        }
     } else {
         $notice = contenly_tr('Pilih kursus terlebih dahulu.', 'Please choose a course first.');
         $notice_type = 'error';
@@ -94,7 +104,19 @@ $completed_count = count($completed_courses);
 
 <style>
 .wdc-mc-layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(280px,.9fr);gap:18px;align-items:start;margin-bottom:24px}
+.wdc-mc-left{display:grid;gap:18px;min-width:0}
 .wdc-mc-panel{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:18px;box-shadow:0 8px 24px rgba(15,23,42,.04)}
+.wdc-mc-activity-list{display:grid;gap:10px}
+.wdc-mc-activity-item{
+  display:flex;justify-content:space-between;gap:12px;align-items:center;
+  padding:12px 14px;border:1px solid #e2e8f0;border-radius:12px;background:#f8fafc;flex-wrap:wrap
+}
+.wdc-mc-activity-item strong{display:block;color:#0f172a;font-size:14px;font-weight:700;line-height:1.35}
+.wdc-mc-activity-item .meta{font-size:12px;color:#64748b;margin-top:3px;line-height:1.4}
+.wdc-mc-activity-badge{
+  font-size:11px;font-weight:800;color:#004A98;background:#e8f1fb;
+  border-radius:999px;padding:5px 10px;white-space:nowrap
+}
 .wdc-mc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px;flex-wrap:wrap}
 .wdc-mc-page-head{display:none}
 .wdc-mc-page-head p{font-size:15px;color:#5f7180;margin:0}
@@ -244,6 +266,7 @@ $completed_count = count($completed_courses);
 <?php endif; ?>
 
 <div class="wdc-mc-layout">
+    <div class="wdc-mc-left">
     <section class="wdc-mc-panel wdc-mc-main">
         <div class="wdc-mc-head">
             <div>
@@ -320,6 +343,65 @@ $completed_count = count($completed_courses);
             <?php endif; ?>
         </div>
     </section>
+
+    <?php if (!empty($course_requests)) : ?>
+    <section class="wdc-mc-panel wdc-mc-activity">
+        <div class="wdc-mc-head">
+            <div>
+                <h2 class="wdc-section-title" style="margin:0;"><?php echo contenly_tr('Aktivitas Kursus Terbaru', 'Recent Course Activity'); ?></h2>
+            </div>
+            <span class="wdc-mc-count"><?php echo (int) min(5, count($course_requests)); ?> <?php echo contenly_tr('request', 'requests'); ?></span>
+        </div>
+        <div class="wdc-mc-activity-list">
+            <?php foreach (array_slice($course_requests, 0, 5) as $request) : ?>
+            <div class="wdc-mc-activity-item">
+                <div>
+                    <strong><?php echo esc_html($request['course'] ?? 'Course'); ?></strong>
+                    <div class="meta">
+                        <?php echo esc_html(contenly_tr('Preferensi', 'Preferred')); ?>:
+                        <?php echo esc_html(!empty($request['preferred_date']) ? $request['preferred_date'] : contenly_tr('Fleksibel', 'Flexible')); ?>
+                        <?php if (!empty($request['experience'])) : ?> · <?php echo esc_html($request['experience']); ?><?php endif; ?>
+                    </div>
+                </div>
+                <span class="wdc-mc-activity-badge"><?php echo esc_html($request['status'] ?? 'Requested'); ?></span>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </section>
+    <?php endif; ?>
+
+    <?php if (!empty($course_orders)) : ?>
+    <section class="wdc-mc-panel wdc-mc-orders">
+        <div class="wdc-mc-head">
+            <div>
+                <h2 class="wdc-section-title" style="margin:0;"><?php echo contenly_tr('Pesanan Kursus', 'Course Orders'); ?></h2>
+            </div>
+        </div>
+        <div class="wdc-mc-activity-list">
+            <?php foreach (array_slice($course_orders, 0, 5) as $order) :
+                $order_link = !empty($order['item_id']) ? get_permalink((int) $order['item_id']) : '';
+            ?>
+            <div class="wdc-mc-activity-item">
+                <div>
+                    <strong>
+                        <?php if ($order_link) : ?>
+                        <a href="<?php echo esc_url($order_link); ?>" style="color:inherit;text-decoration:none;"><?php echo esc_html($order['item'] ?? 'Course'); ?></a>
+                        <?php else : ?>
+                        <?php echo esc_html($order['item'] ?? 'Course'); ?>
+                        <?php endif; ?>
+                    </strong>
+                    <div class="meta">
+                        Order: <?php echo esc_html($order['id'] ?? 'Direct checkout'); ?>
+                        <?php if (!empty($order['admin_note'])) : ?> · <?php echo esc_html($order['admin_note']); ?><?php endif; ?>
+                    </div>
+                </div>
+                <span class="wdc-mc-activity-badge"><?php echo esc_html($order['status'] ?? 'Payment Uploaded'); ?></span>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </section>
+    <?php endif; ?>
+    </div>
 
     <aside class="wdc-mc-panel wdc-mc-side" id="wdc-course-request">
         <h2 class="wdc-section-title"><?php echo contenly_tr('Ajukan Pendaftaran Kursus', 'Request Course Enrollment'); ?></h2>
@@ -470,38 +552,4 @@ $completed_count = count($completed_courses);
     });
 })();
 </script>
-
-<?php if (!empty($course_orders)) : ?>
-<section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;margin-top:28px;margin-bottom:28px;">
-    <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;letter-spacing:.03em;"><?php echo contenly_tr('Pesanan Kursus', 'Course Orders'); ?></h2>
-    <div style="display:grid;gap:10px;">
-        <?php foreach (array_slice($course_orders, 0, 5) as $order) : $order_link = !empty($order['item_id']) ? get_permalink((int) $order['item_id']) : ''; ?>
-        <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc;flex-wrap:wrap;">
-            <div>
-                <strong style="color:#0f172a;"><?php if ($order_link) : ?><a href="<?php echo esc_url($order_link); ?>" style="color:inherit;text-decoration:none;"><?php echo esc_html($order['item'] ?? 'Course'); ?></a><?php else : ?><?php echo esc_html($order['item'] ?? 'Course'); ?><?php endif; ?></strong>
-                <div style="font-size:13px;color:#64748b;">Order: <?php echo esc_html($order['id'] ?? 'Direct checkout'); ?><?php if (!empty($order['admin_note'])) : ?> · <?php echo esc_html($order['admin_note']); ?><?php endif; ?></div>
-            </div>
-            <span style="font-size:12px;font-weight:900;color:#0b617c;background:#e8f8fc;border-radius:999px;padding:6px 10px;"><?php echo esc_html($order['status'] ?? 'Payment Uploaded'); ?></span>
-        </div>
-        <?php endforeach; ?>
-    </div>
-</section>
-<?php endif; ?>
-
-<?php if (!empty($course_requests)) : ?>
-<section style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px;margin-bottom:28px;">
-    <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:0 0 14px;"><?php echo contenly_tr('Aktivitas Kursus Terbaru', 'Recent Course Activity'); ?></h2>
-    <div style="display:grid;gap:10px;">
-        <?php foreach (array_slice($course_requests, 0, 5) as $request) : ?>
-        <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc;flex-wrap:wrap;">
-            <div>
-                <strong style="color:#0f172a;"><?php echo esc_html($request['course'] ?? 'Course'); ?></strong>
-                <div style="font-size:13px;color:#64748b;">Preferred: <?php echo esc_html($request['preferred_date'] ?: 'Flexible'); ?> · <?php echo esc_html($request['experience'] ?? ''); ?></div>
-            </div>
-            <span style="font-size:12px;font-weight:900;color:#0b617c;background:#e8f8fc;border-radius:999px;padding:6px 10px;"><?php echo esc_html($request['status'] ?? 'Requested'); ?></span>
-        </div>
-        <?php endforeach; ?>
-    </div>
-</section>
-<?php endif; ?>
 <?php require_once get_template_directory() . '/dashboard-footer.php'; ?>
