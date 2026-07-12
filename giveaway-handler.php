@@ -221,7 +221,28 @@ function wdc_giveaway_store_upload($file, $subdir = 'wdc-giveaway-proofs') {
  * Temporary external shipping checker URL (manual quote flow)
  */
 function wdc_giveaway_external_ongkir_url() {
-    return apply_filters('wdc_giveaway_external_ongkir_url', get_option('wdc_giveaway_external_ongkir_url', 'https://cekongkir.com/'));
+    return apply_filters('wdc_giveaway_external_ongkir_url', get_option('wdc_giveaway_external_ongkir_url', 'https://berdu.id/cek-ongkir'));
+}
+
+/**
+ * External resi checker used by admin + member tracking fallback.
+ */
+function wdc_giveaway_external_resi_url($resi = '') {
+    $base = apply_filters('wdc_giveaway_external_resi_url', get_option('wdc_giveaway_external_resi_url', 'https://cekresi.com/'));
+    $base = esc_url_raw((string) $base);
+    if ($base === '') {
+        $base = 'https://cekresi.com/';
+    }
+    $resi = trim((string) $resi);
+    if ($resi === '') {
+        return $base;
+    }
+    $sep = (strpos($base, '?') === false) ? '?' : '&';
+    // Keep common cekresi.com param; other sites still open base.
+    if (stripos($base, 'cekresi.com') !== false) {
+        return $base . $sep . 'noresi=' . rawurlencode($resi);
+    }
+    return $base;
 }
 
 /**
@@ -720,25 +741,12 @@ function wdc_giveaway_progress_steps() {
 function wdc_giveaway_tracking_url($courier = '', $resi = '') {
     $resi = trim((string) $resi);
     if ($resi === '') {
-        return '';
+        return function_exists('wdc_giveaway_external_resi_url') ? wdc_giveaway_external_resi_url() : 'https://cekresi.com/';
     }
-    $c = strtolower(preg_replace('/[^a-z0-9]+/i', '', (string) $courier));
-    if (strpos($c, 'jne') !== false) {
-        return 'https://www.jne.co.id/id/tracking/trace?awb=' . rawurlencode($resi);
+    // Prefer unified external checker for admin/member ops.
+    if (function_exists('wdc_giveaway_external_resi_url')) {
+        return wdc_giveaway_external_resi_url($resi);
     }
-    if (strpos($c, 'jnt') !== false || strpos($c, 'jt') !== false) {
-        return 'https://jet.co.id/track?awb=' . rawurlencode($resi);
-    }
-    if (strpos($c, 'sicepat') !== false) {
-        return 'https://www.sicepat.com/checkAwb?awb=' . rawurlencode($resi);
-    }
-    if (strpos($c, 'anteraja') !== false) {
-        return 'https://anteraja.id/tracking?awb=' . rawurlencode($resi);
-    }
-    if (strpos($c, 'pos') !== false) {
-        return 'https://www.posindonesia.co.id/id/tracking?awb=' . rawurlencode($resi);
-    }
-    // Generic fallback: cekresi
     return 'https://cekresi.com/?noresi=' . rawurlencode($resi);
 }
 
@@ -966,6 +974,10 @@ function wdc_render_giveaway_orders_admin() {
             }
         </style>
         <h1><?php echo esc_html(contenly_tr('Giveaway Orders', 'Giveaway Orders')); ?></h1>
+        <p class="wdc-gw-quick-links" style="margin:8px 0 14px;">
+            <a class="button" href="<?php echo esc_url(function_exists('wdc_giveaway_external_ongkir_url') ? wdc_giveaway_external_ongkir_url() : 'https://berdu.id/cek-ongkir'); ?>" target="_blank" rel="noopener">Cek Ongkir</a>
+            <a class="button" href="<?php echo esc_url(function_exists('wdc_giveaway_external_resi_url') ? wdc_giveaway_external_resi_url() : 'https://cekresi.com/'); ?>" target="_blank" rel="noopener">Cek Resi</a>
+        </p>
         <?php if (isset($_GET['updated'])) : ?>
             <div class="<?php echo ($_GET['updated'] === '1') ? 'notice notice-success' : 'notice notice-error'; ?> is-dismissible"><p><?php echo esc_html($_GET['msg'] ?? 'Done'); ?></p></div>
         <?php endif; ?>
@@ -1064,7 +1076,7 @@ function wdc_render_giveaway_orders_admin() {
                                             <?php endif; ?>
                                             <?php if (!empty($o['tracking_number'])) : ?>
                                                 <div><strong>Resi:</strong> <code><?php echo esc_html($o['tracking_number']); ?></code>
-                                                <?php if ($track_url) : ?> · <a href="<?php echo esc_url($track_url); ?>" target="_blank" rel="noopener">cek tracking</a><?php endif; ?>
+                                                <?php if ($track_url) : ?> · <a href="<?php echo esc_url($track_url); ?>" target="_blank" rel="noopener">Cek Resi</a><?php endif; ?>
                                                 </div>
                                             <?php endif; ?>
                                             <?php if (!empty($o['admin_note'])) : ?>
@@ -1201,7 +1213,8 @@ function wdc_render_giveaway_settings() {
         update_option('wdc_biteship_origin_area_id', sanitize_text_field($_POST['wdc_biteship_origin_area_id'] ?? ''));
         update_option('wdc_biteship_origin_postal', sanitize_text_field($_POST['wdc_biteship_origin_postal'] ?? '10110'));
         update_option('wdc_giveaway_enabled', isset($_POST['wdc_giveaway_enabled']) ? '1' : '0');
-        update_option('wdc_giveaway_external_ongkir_url', esc_url_raw($_POST['wdc_giveaway_external_ongkir_url'] ?? 'https://cekongkir.com/'));
+        update_option('wdc_giveaway_external_ongkir_url', esc_url_raw($_POST['wdc_giveaway_external_ongkir_url'] ?? 'https://berdu.id/cek-ongkir'));
+        update_option('wdc_giveaway_external_resi_url', esc_url_raw($_POST['wdc_giveaway_external_resi_url'] ?? 'https://cekresi.com/'));
         update_option('wdc_giveaway_origin_label', sanitize_text_field($_POST['wdc_giveaway_origin_label'] ?? 'Jakarta Selatan (12240)'));
         echo '<div class="updated"><p>Settings saved!</p></div>';
     }
@@ -1210,11 +1223,16 @@ function wdc_render_giveaway_settings() {
     $origin_id  = get_option('wdc_biteship_origin_area_id', '');
     $origin_zip = get_option('wdc_biteship_origin_postal', '10110');
     $enabled    = get_option('wdc_giveaway_enabled', '1');
-    $external_url = get_option('wdc_giveaway_external_ongkir_url', 'https://cekongkir.com/');
+    $external_url = get_option('wdc_giveaway_external_ongkir_url', 'https://berdu.id/cek-ongkir');
+    $external_resi_url = get_option('wdc_giveaway_external_resi_url', 'https://cekresi.com/');
     $origin_label = get_option('wdc_giveaway_origin_label', 'Jakarta Selatan (12240)');
     ?>
     <div class="wrap">
         <h1><?php echo contenly_tr('Pengaturan Giveaway', 'Giveaway Settings'); ?></h1>
+        <p>
+            <a class="button" href="<?php echo esc_url($external_url ?: 'https://berdu.id/cek-ongkir'); ?>" target="_blank" rel="noopener">Cek Ongkir</a>
+            <a class="button" href="<?php echo esc_url($external_resi_url ?: 'https://cekresi.com/'); ?>" target="_blank" rel="noopener">Cek Resi</a>
+        </p>
         <form method="post">
             <?php wp_nonce_field('wdc_giveaway_settings'); ?>
 
@@ -1226,8 +1244,15 @@ function wdc_render_giveaway_settings() {
                 <tr>
                     <th><?php echo contenly_tr('Link Cek Ongkir Eksternal', 'External Ongkir Checker URL'); ?></th>
                     <td>
-                        <input type="url" name="wdc_giveaway_external_ongkir_url" value="<?php echo esc_attr($external_url); ?>" class="regular-text" placeholder="https://cekongkir.com/">
+                        <input type="url" name="wdc_giveaway_external_ongkir_url" value="<?php echo esc_attr($external_url); ?>" class="regular-text" placeholder="https://berdu.id/cek-ongkir">
                         <p class="description"><?php echo contenly_tr('Sementara: user dicek ongkir di web ini, lalu input nominal + upload SS.', 'Temporary: user checks shipping on this site, then inputs amount + uploads screenshot.'); ?></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th><?php echo contenly_tr('Link Cek Resi Eksternal', 'External Resi Checker URL'); ?></th>
+                    <td>
+                        <input type="url" name="wdc_giveaway_external_resi_url" value="<?php echo esc_attr($external_resi_url); ?>" class="regular-text" placeholder="https://cekresi.com/">
+                        <p class="description"><?php echo contenly_tr('Dipakai admin/member untuk cek resi pengiriman.', 'Used by admin/members to check shipment tracking.'); ?></p>
                     </td>
                 </tr>
                 <tr>

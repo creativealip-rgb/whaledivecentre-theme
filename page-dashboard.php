@@ -56,7 +56,7 @@ foreach ($manual_orders as $mo) {
     $gw_excerpt = $giveaway_post ? $giveaway_post[0]->post_excerpt : contenly_tr('Barang gratis — bayar ongkir saja.', 'Items free — just pay shipping.');
     $gw_link = $giveaway_post ? get_permalink($giveaway_post[0]->ID) : contenly_localized_url('/informasi/');
     $gw_origin = function_exists('wdc_giveaway_origin_label') ? wdc_giveaway_origin_label() : 'Jakarta Selatan (12240)';
-    $gw_ongkir_url = function_exists('wdc_giveaway_external_ongkir_url') ? wdc_giveaway_external_ongkir_url() : 'https://cekongkir.com/';
+    $gw_ongkir_url = function_exists('wdc_giveaway_external_ongkir_url') ? wdc_giveaway_external_ongkir_url() : 'https://berdu.id/cek-ongkir';
 ?>
 <section id="wdc-giveaway-section" class="wdc-gw">
     <div class="wdc-gw-head">
