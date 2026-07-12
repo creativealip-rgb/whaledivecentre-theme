@@ -146,18 +146,15 @@ get_header();
             <h2 style="font-size:18px;font-weight:800;color:#0f172a;margin:0 0 16px;"><?php echo contenly_tr('Instruksi Pembayaran', 'Payment Instructions'); ?></h2>
 
             <?php
-            $bank_accounts = get_option('tmp_bank_accounts', [
-                [
-                    'bank' => 'BCA',
-                    'account_name' => 'Whale Dive Centre',
-                    'account_number' => '1234567890',
-                ],
-            ]);
+            $bank_accounts = get_option('wm_bank_accounts', []);
+            if (!is_array($bank_accounts) || empty($bank_accounts)) {
+                $bank_accounts = get_option('tmp_bank_accounts', []);
+            }
             if (!is_array($bank_accounts) || empty($bank_accounts)) {
                 $bank_accounts = [[
                     'bank' => 'BCA',
                     'account_name' => 'Whale Dive Centre',
-                    'account_number' => '1234567890',
+                    'account_number' => 'Isi di WDC Members → Payment Settings',
                 ]];
             }
             ?>

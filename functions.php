@@ -1062,8 +1062,8 @@ function contenly_render_public_footer() {
           <h3><?php echo esc_html(contenly_tr('Kontak', 'Contact')); ?></h3>
           <?php
           $wdc_email = function_exists('wdc_site_get') ? wdc_site_get('email') : 'info@whaledivecentre.com';
-          $wdc_phone = function_exists('wdc_site_get') ? wdc_site_get('phone') : '(021) 27939068';
-          $wdc_phone_tel = function_exists('wdc_site_get') ? wdc_site_get('phone_tel') : '+622127939068';
+          $wdc_phone = function_exists('wdc_site_get') ? wdc_site_get('phone') : '0821-2666-6111';
+          $wdc_phone_tel = function_exists('wdc_site_get') ? wdc_site_get('phone_tel') : '+628212666611';
           $wdc_address = function_exists('wdc_site_get') ? wdc_site_get('address') : 'Jl. Tanah Kusir II No.3, Kebayoran Lama, Jakarta Selatan 12240';
           $wdc_hours = function_exists('wdc_site_get') ? wdc_site_get('hours') : '';
           $wdc_ig = function_exists('wdc_site_get') ? wdc_site_get('instagram') : 'https://www.instagram.com/whaledivecentre.id/';
@@ -3408,7 +3408,9 @@ function wdc_render_payment_settings_page() {
                 }
             }
         }
+        // Keep both option keys in sync (manual checkout + giveaway).
         update_option('wm_bank_accounts', $accounts);
+        update_option('tmp_bank_accounts', $accounts);
         echo '<div class="notice notice-success"><p>Bank accounts saved.</p></div>';
     }
 
@@ -3436,12 +3438,18 @@ function wdc_render_payment_settings_page() {
     echo '</form>';
 
     // Bank Accounts Section
-    $bank_accounts = get_option('wm_bank_accounts', [
-        ['bank' => 'BCA', 'account_name' => 'Whale Dive Centre', 'account_number' => '1234567890'],
-        ['bank' => 'Mandiri', 'account_name' => 'Whale Dive Centre', 'account_number' => '9876543210'],
-    ]);
+    $bank_accounts = get_option('wm_bank_accounts', []);
+    if (!is_array($bank_accounts) || empty($bank_accounts)) {
+        $bank_accounts = get_option('tmp_bank_accounts', []);
+    }
+    if (!is_array($bank_accounts) || empty($bank_accounts)) {
+        $bank_accounts = [
+            ['bank' => '', 'account_name' => '', 'account_number' => ''],
+        ];
+    }
 
     echo '<h2 style="margin-top:2rem">Bank Accounts (for Manual Payments)</h2>';
+    echo '<p style="color:#64748b;max-width:720px;">Isi rekening penerima TF di sini. Dipakai checkout manual + giveaway. Kosongkan baris yang tidak dipakai. Midtrans di atas opsional (boleh dikosongkan kalau flow tetap WA/TF manual).</p>';
     echo '<form method="post">';
     wp_nonce_field('wdc_bank_accounts');
     echo '<table class="form-table"><tbody>';

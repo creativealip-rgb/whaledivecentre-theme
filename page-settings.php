@@ -179,10 +179,10 @@ $wa_phone_raw = '';
 if (function_exists('wdc_site_get')) {
     $wa_phone_raw = (string) wdc_site_get('phone_tel', '');
     if ($wa_phone_raw === '' || strpos($wa_phone_raw, '*') !== false) {
-        $wa_phone_raw = (string) wdc_site_get('phone', '(021) 27939068');
+        $wa_phone_raw = (string) wdc_site_get('phone', '0821-2666-6111');
     }
 } else {
-    $wa_phone_raw = '(021) 27939068';
+    $wa_phone_raw = '0821-2666-6111';
 }
 $wa_digits = preg_replace('/\D+/', '', $wa_phone_raw);
 if ($wa_digits !== '' && $wa_digits[0] === '0') {
