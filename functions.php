@@ -25,7 +25,7 @@ require_once get_template_directory() . '/inc/wdc-catalog-helpers.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.90');
+    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.91');
     wp_add_inline_style('contenly-style', '.wd-header .gt-lang-switcher{margin-right:10px!important}.wd-header .wd-nav-member{margin-left:8px!important}');
     
     // Google Fonts
@@ -1092,6 +1092,9 @@ function contenly_render_public_header() {
     }
     if (is_user_logged_in() && !headers_sent()) {
         nocache_headers();
+        if (!headers_sent()) {
+            header('X-LiteSpeed-Cache-Control: no-cache');
+        }
     }
     $brand_logo = esc_url(get_template_directory_uri() . '/assets/wdc-navbar-logo.jpg?v=20260514b');
     $home_url = esc_url(contenly_localized_url('/home/'));
@@ -1099,8 +1102,14 @@ function contenly_render_public_header() {
     $equipment_url = esc_url(contenly_localized_url('/equipment/'));
     $about_url = esc_url(contenly_localized_url('/about/'));
     $blog_url = esc_url(contenly_localized_url('/blog/'));
-    $member_url = is_user_logged_in() ? esc_url(contenly_localized_url('/dashboard/')) : esc_url(contenly_localized_url('/login/'));
-    $member_label = is_user_logged_in() ? contenly_tr('Dashboard', 'Dashboard') : contenly_tr('Masuk', 'Login');
+    $login_url = esc_url(contenly_localized_url('/login/'));
+    $dashboard_url = esc_url(contenly_localized_url('/dashboard/'));
+    $login_label = contenly_tr('Masuk', 'Login');
+    $dashboard_label = contenly_tr('Dashboard', 'Dashboard');
+    // Prefer live auth state when PHP runs; LiteSpeed may still serve guest HTML.
+    // data-* + JS cookie check keep button correct after language switch.
+    $member_url = is_user_logged_in() ? $dashboard_url : $login_url;
+    $member_label = is_user_logged_in() ? $dashboard_label : $login_label;
     $request_path = trailingslashit(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/');
     $active_key = ($request_path === '/' || $request_path === '/en/' || $request_path === '/home/' || $request_path === '/en/home/') ? 'home' : '';
     if (false !== strpos($request_path, '/courses/') || false !== strpos($request_path, '/course/')) {
@@ -1144,7 +1153,12 @@ function contenly_render_public_header() {
         . '<div class="wd-menu-panel-foot">'
         . '<div class="wd-menu-foot-label">' . esc_html(contenly_tr('Bahasa', 'Language')) . '</div>'
         . contenly_render_language_switcher('wd-lang-switcher')
-        . '<a href="' . $member_url . '" class="wd-nav-member">' . esc_html($member_label) . '</a>'
+        . '<a href="' . $member_url . '" class="wd-nav-member"'
+        . ' data-login-url="' . $login_url . '"'
+        . ' data-dashboard-url="' . $dashboard_url . '"'
+        . ' data-login-label="' . esc_attr($login_label) . '"'
+        . ' data-dashboard-label="' . esc_attr($dashboard_label) . '">'
+        . esc_html($member_label) . '</a>'
         . '</div>'
         . '</nav></div></div></header>';
 }
@@ -1159,6 +1173,26 @@ function wdc_public_mobile_and_call_cleanup() {
       /* Menu open/close owned by assets/js/main.js — avoid double handlers. */
       var callLinks = Array.prototype.slice.call(document.querySelectorAll('a[aria-label="Call Whale Dive Centre"], a[aria-label*="Call Whale Dive"]'));
       callLinks.slice(1).forEach(function(link){ link.remove(); });
+
+      /* Keep member CTA correct even when LiteSpeed serves guest-cached HTML. */
+      function wdcHasWpLoginCookie(){
+        return document.cookie.split(';').some(function(c){
+          return c.trim().indexOf('wordpress_logged_in_') === 0;
+        });
+      }
+      document.querySelectorAll('a.wd-nav-member').forEach(function(a){
+        var loginUrl = a.getAttribute('data-login-url');
+        var dashUrl = a.getAttribute('data-dashboard-url');
+        var loginLabel = a.getAttribute('data-login-label');
+        var dashLabel = a.getAttribute('data-dashboard-label');
+        if (wdcHasWpLoginCookie()) {
+          if (dashUrl) a.setAttribute('href', dashUrl);
+          if (dashLabel) a.textContent = dashLabel;
+        } else {
+          if (loginUrl) a.setAttribute('href', loginUrl);
+          if (loginLabel) a.textContent = loginLabel;
+        }
+      });
     });
     </script>
     <style id="wdc-public-mobile-call-cleanup-css">
