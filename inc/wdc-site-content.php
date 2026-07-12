@@ -66,7 +66,7 @@ function wdc_site_defaults() {
         'contact_form_kicker' => 'Hubungi Kami',
         'contact_form_title' => 'Mulai percakapan',
         'contact_success' => 'Terima kasih. Pesan Anda sudah terkirim dan crew akan membalas dalam 24 jam.',
-        'contact_map_url' => 'https://www.google.com/maps/search/?api=1&query=Jl.%20Tanah%20Kusir%20II%20No.3%20Jakarta%20Selatan',
+        'contact_map_url' => 'https://maps.app.goo.gl/7A3Yo7gsaDCcS6xZ6',
         'contact_hours_note' => 'Senin - Sabtu, 09:00 - 18:00 WIB. Jadwal kursus dan perjalanan dikonfirmasi berdasarkan perjanjian.',
         'crew_kicker' => 'Leadership Team',
         'crew_title' => 'Profesional berpengalaman yang membangun ekosistem diving Indonesia.',
