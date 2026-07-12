@@ -35,7 +35,7 @@ if ('POST' === ($_SERVER['REQUEST_METHOD'] ?? '') && isset($_POST['wd_contact_su
 
 if (isset($_GET['wd_contact'])) {
     if ('sent' === $_GET['wd_contact']) {
-        $wd_contact_notice = function_exists('wdc_site_get') ? wdc_site_get('contact_success', contenly_tr('Terima kasih. Pesan Anda sudah terkirim dan crew akan membalas dalam 24 jam.', 'Thank you. Your inquiry has been sent and our crew will reply within 24 hours.')) : contenly_tr('Terima kasih. Pesan Anda sudah terkirim dan crew akan membalas dalam 24 jam.', 'Thank you. Your inquiry has been sent and our crew will reply within 24 hours.');
+        $wd_contact_notice = function_exists('wdc_site_get') ? wdc_site_tr('contact_success', 'Terima kasih. Pesan Anda sudah terkirim dan crew akan membalas dalam 24 jam.', 'Thank you. Your inquiry has been sent and our crew will reply within 24 hours.') : contenly_tr('Terima kasih. Pesan Anda sudah terkirim dan crew akan membalas dalam 24 jam.', 'Thank you. Your inquiry has been sent and our crew will reply within 24 hours.');
         $wd_contact_notice_type = 'success';
     } elseif ('mail-error' === $_GET['wd_contact']) {
         $wd_contact_notice = contenly_tr('Pesan belum berhasil dikirim oleh server email. Silakan hubungi kami via telepon jika urgent.', 'The mail server could not send your inquiry yet. Please call us if urgent.');
@@ -96,17 +96,17 @@ body.whaledive-contact .wd-contact-form .wd-btn{min-height:48px;justify-content:
   <section class="wd-inner-hero">
     <div class="wd-shell wd-inner-grid">
       <div>
-        <span class="wd-kicker"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('contact_kicker', contenly_tr('Hubungi Kami', 'Get in Touch')) : contenly_tr('Hubungi Kami', 'Get in Touch')); ?></span>
-        <h1><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('contact_title', contenly_tr('Mulai percakapan dengan crew.', 'Start a conversation with the crew.')) : contenly_tr('Mulai percakapan dengan crew.', 'Start a conversation with the crew.')); ?></h1>
-        <p><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('contact_text', contenly_tr('Tanya jadwal kursus, ketersediaan peralatan, atau jalur sertifikasi. Kami balas dalam 24 jam.', 'Ask about course schedules, equipment availability, or certification pathways. We reply within 24 hours.')) : contenly_tr('Tanya jadwal kursus, ketersediaan peralatan, atau jalur sertifikasi. Kami balas dalam 24 jam.', 'Ask about course schedules, equipment availability, or certification pathways. We reply within 24 hours.')); ?></p>
+        <span class="wd-kicker"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_tr('contact_kicker', 'Hubungi Kami', 'Get in Touch') : contenly_tr('Hubungi Kami', 'Get in Touch')); ?></span>
+        <h1><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_tr('contact_title', 'Mulai percakapan dengan crew.', 'Start a conversation with the crew.') : contenly_tr('Mulai percakapan dengan crew.', 'Start a conversation with the crew.')); ?></h1>
+        <p><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_tr('contact_text', 'Tanya jadwal kursus, ketersediaan peralatan, atau jalur sertifikasi. Kami balas dalam 24 jam.', 'Ask about course schedules, equipment availability, or certification pathways. We reply within 24 hours.') : contenly_tr('Tanya jadwal kursus, ketersediaan peralatan, atau jalur sertifikasi. Kami balas dalam 24 jam.', 'Ask about course schedules, equipment availability, or certification pathways. We reply within 24 hours.')); ?></p>
       </div>
     </div>
   </section>
 
   <section class="wd-section white" id="contact-form">
     <div class="wd-shell">
-      <span class="wd-kicker"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('contact_form_kicker', contenly_tr('Hubungi Kami', 'Get in Touch')) : contenly_tr('Hubungi Kami', 'Get in Touch')); ?></span>
-      <h2 class="wd-title"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('contact_form_title', contenly_tr('Mulai percakapan', 'Start the conversation')) : contenly_tr('Mulai percakapan', 'Start the conversation')); ?></h2>
+      <span class="wd-kicker"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_tr('contact_form_kicker', 'Hubungi Kami', 'Get in Touch') : contenly_tr('Hubungi Kami', 'Get in Touch')); ?></span>
+      <h2 class="wd-title"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_tr('contact_form_title', 'Mulai percakapan', 'Start the conversation') : contenly_tr('Mulai percakapan', 'Start the conversation')); ?></h2>
       <?php if ($wd_contact_notice) : ?>
         <div class="wd-contact-notice <?php echo esc_attr($wd_contact_notice_type); ?>" role="status"><?php echo esc_html($wd_contact_notice); ?></div>
       <?php endif; ?>

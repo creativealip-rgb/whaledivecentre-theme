@@ -155,10 +155,32 @@ function wdc_site_get($key = null, $default = null) {
     return $defaults[$key] ?? '';
 }
 
+
+/**
+ * Language-aware site content.
+ * Admin saves ID copy in wdc_site_settings. On EN pages, use English default
+ * (or optional {$key}_en if filled) so saved ID text does not leak.
+ */
+function wdc_site_tr($key, $id_text, $en_text = null) {
+    if ($en_text === null) {
+        $en_text = $id_text;
+    }
+    $is_en = function_exists('contenly_is_english') && contenly_is_english();
+    if ($is_en) {
+        $en_key = $key . '_en';
+        $saved = get_option('wdc_site_settings', []);
+        if (is_array($saved) && !empty($saved[$en_key]) && is_string($saved[$en_key])) {
+            return $saved[$en_key];
+        }
+        return $en_text;
+    }
+    return wdc_site_get($key, $id_text);
+}
+
 function wdc_site_url($path) {
     $path = trim((string) $path);
     if ($path === '') {
-        return home_url('/');
+        return function_exists('contenly_localized_url') ? contenly_localized_url('/') : home_url('/');
     }
     if (preg_match('#^https?://#i', $path) || str_starts_with($path, 'mailto:') || str_starts_with($path, 'tel:')) {
         return $path;
@@ -166,6 +188,9 @@ function wdc_site_url($path) {
     // In-page anchors stay as-is.
     if (str_starts_with($path, '#')) {
         return $path;
+    }
+    if (function_exists('contenly_localized_url')) {
+        return contenly_localized_url('/' . ltrim($path, '/'));
     }
     return home_url('/' . ltrim($path, '/'));
 }

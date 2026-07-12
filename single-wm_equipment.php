@@ -178,9 +178,9 @@ rewind_posts();
   </section>
 
   <?php
-    $wdc_se_kicker = function_exists('wdc_site_get') ? wdc_site_get('equip_single_cta_kicker', contenly_tr('Siap saat kamu siap', 'Ready when you are')) : contenly_tr('Siap saat kamu siap', 'Ready when you are');
-    $wdc_se_title = function_exists('wdc_site_get') ? wdc_site_get('equip_single_cta_title', contenly_tr('Ajukan lewat akun member.', 'Request through your member account.')) : contenly_tr('Ajukan lewat akun member.', 'Request through your member account.');
-    $wdc_se_text = function_exists('wdc_site_get') ? wdc_site_get('equip_single_cta_text', contenly_tr('Ajukan gear dari dashboard. Crew follow-up size/stok setelah request masuk.', 'Request gear from your dashboard. Crew follows up on size/stock after the request lands.')) : contenly_tr('Ajukan gear dari dashboard. Crew follow-up size/stok setelah request masuk.', 'Request gear from your dashboard. Crew follows up on size/stock after the request lands.');
+    $wdc_se_kicker = function_exists('wdc_site_get') ? wdc_site_tr('equip_single_cta_kicker', 'Siap saat kamu siap', 'Ready when you are') : contenly_tr('Siap saat kamu siap', 'Ready when you are');
+    $wdc_se_title = function_exists('wdc_site_get') ? wdc_site_tr('equip_single_cta_title', 'Ajukan lewat akun member.', 'Request through your member account.') : contenly_tr('Ajukan lewat akun member.', 'Request through your member account.');
+    $wdc_se_text = function_exists('wdc_site_get') ? wdc_site_tr('equip_single_cta_text', 'Ajukan gear dari dashboard. Crew follow-up size/stok setelah request masuk.', 'Request gear from your dashboard. Crew follows up on size/stock after the request lands.') : contenly_tr('Ajukan gear dari dashboard. Crew follow-up size/stok setelah request masuk.', 'Request gear from your dashboard. Crew follows up on size/stock after the request lands.');
   ?>
   <section class="wdc-card-cta"><div class="wd-shell"><span class="wd-kicker"><?php echo esc_html($wdc_se_kicker); ?></span><h2><?php echo esc_html($wdc_se_title); ?></h2><p><?php echo esc_html($wdc_se_text); ?></p><a class="wd-btn alt" href="<?php echo esc_url($action_url); ?>"><?php echo esc_html($cta_label); ?></a></div></section>
   <?php contenly_render_public_footer(); ?>

@@ -1028,10 +1028,10 @@ function contenly_render_public_footer() {
     <div class="wd-shell">
       <div class="wd-footer-top">
         <div class="wd-footer-brand">
-          <span class="wd-footer-kicker"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('footer_kicker', contenly_tr('Siap dive?', 'Ready to dive?')) : contenly_tr('Siap dive?', 'Ready to dive?')); ?></span>
+          <span class="wd-footer-kicker"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_tr('footer_kicker', 'Siap dive?', 'Ready to dive?') : contenly_tr('Siap dive?', 'Ready to dive?')); ?></span>
           <h2>Whale Dive Centre</h2>
-          <p><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('footer_blurb', contenly_tr('Pelatihan selam, trip komunitas, dukungan peralatan, dan pengalaman peduli laut untuk petualangan bawah air yang lebih aman.', 'Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.')) : contenly_tr('Pelatihan selam, trip komunitas, dukungan peralatan, dan pengalaman peduli laut untuk petualangan bawah air yang lebih aman.', 'Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.')); ?></p>
-          <a class="wd-btn alt" href="<?php echo esc_url(function_exists('wdc_site_url') ? wdc_site_url(wdc_site_get('footer_cta_url', '/contact/')) : $contact); ?>"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_get('footer_cta_label', contenly_tr('Mulai Konsultasi', 'Start Inquiry')) : contenly_tr('Mulai Konsultasi', 'Start Inquiry')); ?></a>
+          <p><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_tr('footer_blurb', 'Pelatihan selam, trip komunitas, dukungan peralatan, dan pengalaman peduli laut untuk petualangan bawah air yang lebih aman.', 'Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.') : contenly_tr('Pelatihan selam, trip komunitas, dukungan peralatan, dan pengalaman peduli laut untuk petualangan bawah air yang lebih aman.', 'Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.')); ?></p>
+          <a class="wd-btn alt" href="<?php echo esc_url(function_exists('wdc_site_url') ? wdc_site_url(wdc_site_get('footer_cta_url', '/contact/')) : $contact); ?>"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_tr('footer_cta_label', 'Mulai Konsultasi', 'Start Inquiry') : contenly_tr('Mulai Konsultasi', 'Start Inquiry')); ?></a>
         </div>
         <nav class="wd-footer-col" aria-label="<?php echo esc_attr(contenly_tr('Jelajahi', 'Explore')); ?>">
           <h3><?php echo esc_html(contenly_tr('Jelajahi', 'Explore')); ?></h3>
@@ -1207,10 +1207,12 @@ function contenly_local_en_template_map() {
         '/en/courses/' => 'page-courses.php',
         '/en/equipment/' => 'page-equipment.php',
         '/en/journal/' => 'page-blog.php',
+        '/en/blog/' => 'page-blog.php',
         '/en/about/' => 'page-about.php',
         '/en/contact/' => 'page-about.php',
         '/en/login/' => 'page-login.php',
         '/en/member-login/' => 'page-login.php',
+        '/en/register/' => 'page-register.php',
         '/en/member-register/' => 'page-register.php',
     ];
 }
@@ -1221,10 +1223,12 @@ function contenly_local_en_source_slug_map() {
         '/en/courses/' => 'courses',
         '/en/equipment/' => 'equipment',
         '/en/journal/' => 'blog',
+        '/en/blog/' => 'blog',
         '/en/about/' => 'about',
         '/en/contact/' => 'about',
         '/en/login/' => 'login',
         '/en/member-login/' => 'login',
+        '/en/register/' => 'member-register',
         '/en/member-register/' => 'member-register',
     ];
 }
@@ -1297,6 +1301,50 @@ add_filter('body_class', function($classes) {
     }
     return array_values(array_unique($classes));
 }, 20);
+
+/**
+ * Keep custom /en/* routes from being redirected back to ID pages.
+ */
+function contenly_block_en_canonical_redirect($redirect_url, $requested_url) {
+    if (function_exists('contenly_current_en_template') && contenly_current_en_template()) {
+        return false;
+    }
+    $path = trailingslashit(parse_url($requested_url ?: ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH) ?: '/');
+    if ($path === '/en' || 0 === strpos($path, '/en/')) {
+        // Only block if we have a mapped template or known public EN path.
+        if (function_exists('contenly_local_en_template_map')) {
+            $map = contenly_local_en_template_map();
+            if (isset($map[$path])) {
+                return false;
+            }
+        }
+    }
+    return $redirect_url;
+}
+add_filter('redirect_canonical', 'contenly_block_en_canonical_redirect', 10, 2);
+
+/**
+ * Stop any template_redirect that would bounce mapped EN routes to ID pages.
+ * Runs early so legacy maps/canonical do not win.
+ */
+function contenly_stop_en_mapped_redirects() {
+    if (!function_exists('contenly_current_en_template')) {
+        return;
+    }
+    if (contenly_current_en_template()) {
+        // Ensure 200 and skip later redirectors by short-circuiting nothing —
+        // just mark query as non-404. Actual template comes from template_include.
+        status_header(200);
+        global $wp_query;
+        if ($wp_query instanceof WP_Query) {
+            $wp_query->is_404 = false;
+        }
+        // Prevent later redirect_canonical via hard remove once path known.
+        remove_action('template_redirect', 'redirect_canonical');
+    }
+}
+add_action('template_redirect', 'contenly_stop_en_mapped_redirects', 0);
+
 
 function contenly_public_page_slugs() {
     return ['beranda', 'home', 'tentang', 'about', 'kontak', 'contact', 'paket-tour', 'tour-packages', 'blog', 'journal'];
@@ -2798,19 +2846,28 @@ add_action('template_redirect', function() {
 // Member login lives at /login/. Keep /member-login as legacy 301.
 // Do NOT force admin auth through member login.
 add_action('init', function() {
-    $path = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?: '', '/');
+    $raw_path = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?: '';
+    $path = trim((string) $raw_path, '/');
+    $is_en = ($path === 'en' || 0 === strpos($path, 'en/'));
     $path = preg_replace('#^en/#', '', $path);
-    if ($path === 'member-login') {
-        $target = home_url('/login/');
-        $qs = $_SERVER['QUERY_STRING'] ?? '';
+    $qs = $_SERVER['QUERY_STRING'] ?? '';
+    $with_qs = static function ($target) use ($qs) {
         if ($qs !== '') {
             $target .= (strpos($target, '?') === false ? '?' : '&') . $qs;
         }
-        wp_redirect($target, 301);
+        return $target;
+    };
+
+    if ($path === 'member-login') {
+        $target = $is_en ? home_url('/en/login/') : home_url('/login/');
+        wp_redirect($with_qs($target), 301);
         exit;
     }
+    // /register aliases → canonical member-register, keep language.
+    // Do not bounce mapped /en/register/ away from EN chrome.
     if ($path === 'register') {
-        wp_redirect(home_url('/member-register/'), 301);
+        $target = $is_en ? home_url('/en/member-register/') : home_url('/member-register/');
+        wp_redirect($with_qs($target), 301);
         exit;
     }
 }, 1);
@@ -2839,6 +2896,9 @@ add_filter('login_url', function($url, $redirect, $force_reauth) {
     return $login;
 }, 10, 3);
 add_filter('register_url', function() {
+    if (function_exists('contenly_localized_url')) {
+        return contenly_localized_url('/member-register/');
+    }
     return home_url('/member-register/');
 });
 
