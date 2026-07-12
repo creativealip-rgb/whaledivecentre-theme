@@ -670,14 +670,8 @@ function contenly_theme_setup() {
 add_action('after_setup_theme', 'contenly_theme_setup');
 
 function contenly_current_lang() {
-    $request_path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
-    if (0 === strpos($request_path, '/en')) {
-        return 'en';
-    }
-
-    // Only use Polylang if it has a language prefix in the URL
-    // Without prefix, default to 'id' (matches live behavior without Polylang)
-    return 'id';
+    // Keep in sync with switcher / Polylang. Default ID when no signal.
+    return contenly_requested_lang();
 }
 
 function contenly_is_english() {
@@ -1180,14 +1174,27 @@ add_action('wp_footer', 'wdc_public_mobile_and_call_cleanup', 5);
 
 function contenly_requested_lang() {
     $request_path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
-    if (0 === strpos($request_path, '/en')) {
+    // Directory prefix always wins (works with or without Polylang).
+    if ($request_path === '/en' || 0 === strpos($request_path, '/en/')) {
         return 'en';
     }
 
+    // Polylang current language (local install). Never trust unknown slugs.
     if (function_exists('pll_current_language')) {
         $current = pll_current_language('slug');
-        if ($current) {
+        if (in_array($current, ['id', 'en'], true)) {
             return $current;
+        }
+    }
+
+    // Singular fallback: post/page language assignment.
+    if (function_exists('pll_get_post_language')) {
+        $object_id = get_queried_object_id();
+        if ($object_id) {
+            $post_lang = pll_get_post_language($object_id, 'slug');
+            if (in_array($post_lang, ['id', 'en'], true)) {
+                return $post_lang;
+            }
         }
     }
 
