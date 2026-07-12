@@ -1,9 +1,9 @@
 # Whale Dive Centre — Soft Handover
 
-**Tanggal:** 12 Juli 2026
+**Tanggal:** 12 Juli 2026 (update lanjutan)
 **Website:** https://whaledivecentre.com
 **Status:** Soft handover ready
-**Commit:** `6d1be07` · branch `local/polish-20260711` · CSS `2.3.93`
+**Commit:** `847fb41` · branch `local/polish-20260711` · CSS `2.3.94`
 
 ---
 
@@ -13,12 +13,14 @@ Website Whale Dive Centre sudah live dan siap soft handover ke client.
 
 Core flow yang sudah jalan:
 
-- Public site: homepage, courses, equipment, about/contact, blog, 404 bilingual.
-- Member area: register, login, dashboard, my courses, my gear, settings, giveaway claim.
+- Public site: homepage, courses, equipment, about/contact compact, blog, 404 bilingual.
+- Member area: register (`/register/`), login (`/login/`), dashboard, my courses, my gear, settings, giveaway claim.
 - Commerce: harga publik; CTA Daftar/Beli login-gated; order WA-first + upload bukti TF.
-- Admin: WDC Site (konten) + WDC Members (ops member/request/giveaway/payment settings).
-- Bilingual chrome custom: ID default + /en/ (EN UI chrome). Isi artikel tidak auto-translate.
+- Admin: WDC Site (konten + menus/links + partners media picker) + WDC Members (ops member/request/giveaway/payment settings).
+- Bilingual chrome custom: ID default + `/en/` (EN UI chrome). Isi artikel tidak auto-translate.
 - Giveaway: cek ongkir eksternal + cek resi eksternal + upload SS + transfer exact.
+- Navbar + footer link lists admin-editable (WDC Site → Menus / Links).
+- Partner logos admin-editable lewat Media Library picker.
 
 Status rekomendasi: Soft handover ready. Residual client-owned: rekening bank TF, SMTP inbox test (opsional), konten final (crew/testimonial/harga/stok).
 
@@ -34,12 +36,14 @@ Local preview: http://168.144.37.19:8088
 - **Homepage EN:** https://whaledivecentre.com/en/
 - **Courses:** https://whaledivecentre.com/courses/
 - **Equipment:** https://whaledivecentre.com/equipment/
-- **About + Contact:** https://whaledivecentre.com/about/
+- **About:** https://whaledivecentre.com/about/
+- **Contact:** https://whaledivecentre.com/contact/
 - **Blog:** https://whaledivecentre.com/blog/
 - **Member Login:** https://whaledivecentre.com/login/
-- **Member Register:** https://whaledivecentre.com/member-register/
+- **Member Register:** https://whaledivecentre.com/register/
 - **EN Login:** https://whaledivecentre.com/en/login/
-- **EN Register:** https://whaledivecentre.com/en/member-register/
+- **EN Register:** https://whaledivecentre.com/en/register/
+- **Legacy register redirect:** `/member-register/` → `/register/`
 - **404 example:** https://whaledivecentre.com/en/aaa
 - **Maps:** https://maps.app.goo.gl/7A3Yo7gsaDCcS6xZ6
 - **Cek Ongkir:** https://berdu.id/cek-ongkir
@@ -65,15 +69,16 @@ Catatan: public site tidak hard-sell lewat floating WA sebagai sales pitch. Cont
 
 ### A. Register
 
-1. Buka /member-register/ (EN: /en/member-register/).
+1. Buka `/register/` (EN: `/en/register/`). Legacy `/member-register/` otomatis redirect.
 2. Isi data akun lalu buat akun.
 3. Setelah sukses, member masuk dashboard.
 
 ### B. Login
 
-1. Buka /login/ (EN: /en/login/).
+1. Buka `/login/` (EN: `/en/login/`).
 2. Masukkan email/username + password.
-3. Diarahkan ke /dashboard/.
+3. Diarahkan ke `/dashboard/`.
+4. Header public otomatis ganti tombol **Masuk → Dashboard** (cookie flag `wdc_member_ui`).
 
 ### C. Daftar kursus / beli gear (login-gated)
 
@@ -84,7 +89,7 @@ Catatan: public site tidak hard-sell lewat floating WA sebagai sales pitch. Cont
 
 ### D. Request bantuan kursus / gear
 
-1. Login → My Courses (/my-courses/) atau My Gear (/my-gear/).
+1. Login → My Courses (`/my-courses/`) atau My Gear (`/my-gear/`).
 2. Isi form request / fitting.
 3. Admin melihat di WDC Members → Course Requests / Gear Requests.
 
@@ -99,7 +104,7 @@ Catatan: public site tidak hard-sell lewat floating WA sebagai sales pitch. Cont
 
 ### F. Settings akun
 
-1. Login → /settings/.
+1. Login → `/settings/`.
 2. Update nama, phone/WA, catatan gear, emergency contact.
 3. Level diver otomatis dari kursus tertinggi (auto).
 
@@ -109,28 +114,54 @@ Catatan: public site tidak hard-sell lewat floating WA sebagai sales pitch. Cont
 
 Admin WordPress punya 2 group menu utama:
 
-- WDC Site — konten public (hero, about, contact, crew, testimonials, CTA copy, dll).
-- WDC Members — ops member (dashboard, member list, course/gear requests, giveaway orders, payment settings).
+- **WDC Site** — konten public (hero, about, contact, crew, testimonials, CTA, partners, menus/links).
+- **WDC Members** — ops member (dashboard, member list, course/gear requests, giveaway orders, payment settings).
 
 ### A. Konten site (WDC Site)
 
 1. Login wp-admin.
 2. Buka WDC Site.
-3. Edit section yang dibutuhkan (contact, about values, crew, testimonials, CTA).
+3. Edit section yang dibutuhkan.
 4. Simpan. Hard refresh browser (Ctrl+F5) karena LiteSpeed cache HTML/CSS sampai 7 hari.
 
-### B. Member List
+### B. Menus / Links (baru)
+
+1. WDC Site → **Menus / Links**.
+2. Atur:
+   - Navbar links
+   - Footer kolom 1 title + links (default Jelajahi)
+   - Footer kolom 2 title + links (default Kursus)
+3. Format per baris: `Label|URL` atau navbar `Label|URL|navkey`.
+4. Save → Ctrl+F5 di frontend.
+
+Contoh:
+
+```text
+Beranda|/|home
+Kursus|/courses/|courses
+Tentang|/about/|about
+```
+
+### C. Partners / Trust (media picker)
+
+1. WDC Site → Partners / Trust.
+2. Klik **Pilih dari Media** (Media Library), bukan ketik filename.
+3. Atur nama partner + baris logo.
+4. Save → cek homepage trust bar.
+5. Logo partner sudah ada di Media Library (NAUI/TDI/DAN + brand gear).
+
+### D. Member List
 
 1. WDC Members → Member List.
 2. Cek data member, completed courses meta, status request/order.
 
-### C. Course / Gear Requests
+### E. Course / Gear Requests
 
 1. Buka Course Requests atau Gear Requests.
 2. Update status + admin note.
 3. Member melihat status terbaru di area member.
 
-### D. Giveaway Orders
+### F. Giveaway Orders
 
 1. WDC Members → Giveaway Orders.
 2. Tombol cepat: Cek Ongkir (berdu.id) + Cek Resi (cekresi.com).
@@ -138,14 +169,14 @@ Admin WordPress punya 2 group menu utama:
 4. Verifikasi pembayaran → set status shipped + isi no. resi.
 5. Member melihat progress + link cek resi.
 
-### E. Giveaway Settings
+### G. Giveaway Settings
 
 1. Set link Cek Ongkir: https://berdu.id/cek-ongkir
 2. Set link Cek Resi: https://cekresi.com/
 3. Set label asal pengiriman (contoh: Jakarta Selatan).
 4. Biteship field boleh kosong (flow saat ini external manual).
 
-### F. Payment Settings
+### H. Payment Settings
 
 1. Isi rekening bank TF (sumber tunggal bank accounts).
 2. Jangan ubah Midtrans/live payment config tanpa approval.
@@ -157,43 +188,47 @@ Admin WordPress punya 2 group menu utama:
 
 Strategi final soft handover: custom bilingual chrome only.
 
-- ID = default path (/).
-- EN = prefix path (/en/).
+- ID = default path (`/`).
+- EN = prefix path (`/en/`).
 - Switcher di header (ID | EN).
 - UI chrome (nav, button, kicker, about values titles, contact labels) ikut bahasa.
 - Isi artikel/blog body = bahasa tulisan post (tidak auto-translate).
 - Polylang dicoba lalu dicabut; jangan reinstall kecuali client minta EN body penuh.
 
-Helper penting: wdc_site_tr() agar admin text ID tidak menimpa EN chrome defaults.
+Helper penting: `wdc_site_tr()` agar admin text ID tidak menimpa EN chrome defaults.
 
-Tombol header: guest = Masuk/Login; logged-in = Dashboard (JS cookie fix melawan LiteSpeed guest cache).
+Tombol header: guest = Masuk/Login; logged-in = Dashboard (cookie flag non-HttpOnly `wdc_member_ui=1` melawan LiteSpeed guest cache + WP HttpOnly auth cookie).
 
 ---
 
 ## 7. Design & UX Rules
 
-- Palette brand only: #000000 #3B44AC #4CC8ED #96DAEA #C31C4A #004A98 #FFFFFF.
+- Palette brand only: `#000000` `#3B44AC` `#4CC8ED` `#96DAEA` `#C31C4A` `#004A98` `#FFFFFF`.
 - Font UI: Plus Jakarta Sans.
-- Primary button #004A98; hover #3B44AC; danger #C31C4A.
+- Primary button `#004A98`; hover `#3B44AC`; danger `#C31C4A`.
 - Mobile + tablet drawer: hamburger ≤1099.98px; full menu ≥1100px.
-- Auth pages: no public header/footer.
-- Member page heads: .wd-page-head / .wdc-section-title.
+- Auth pages: no public header/footer; kicker badge dihapus (lebih clean).
+- Member page heads: `.wd-page-head` / `.wdc-section-title`.
 - Public prices OK; action Daftar/Beli login-gated.
+- Contact page form + info cards match About compact layout.
 - 404 page bilingual clean card (Back to Home / Explore Courses / Contact Crew).
 
 ---
 
 ## 8. Yang Sudah Selesai (Soft Handover Scope)
 
-- Public catalog + about/contact compact redesign.
-- Member login/register polish (compact fields, password eye).
+- Public catalog + about/contact compact redesign (contact = same form/card style as about).
+- Member login/register polish (compact fields, password eye, no kicker badge).
+- Canonical register slug `/register/` (+ legacy redirect).
 - Member hubs: dashboard, my-courses, my-gear, settings.
 - Giveaway checkout 2-col + external ongkir/resi.
 - Admin ops pages full-width, menu bersih (no emoji decorative).
 - Bilingual custom chrome ID/EN + live deploy.
 - Google Maps shortlink updated.
 - 404 bilingual page.
-- Nav member button cookie-aware across language switch.
+- Nav member button cookie-aware across language switch (`wdc_member_ui`).
+- Partners / Trust media picker + logos di Media Library.
+- Navbar + footer link lists admin-editable (Menus / Links).
 
 ---
 
@@ -214,6 +249,16 @@ Tombol header: guest = Masuk/Login; logged-in = Dashboard (JS cookie fix melawan
 1. wp-admin → WDC Site.
 2. Ubah field yang perlu.
 3. Save → hard refresh frontend (Ctrl+F5).
+
+### Edit navbar / footer links
+
+1. WDC Site → Menus / Links.
+2. Edit list `Label|URL` → Save → Ctrl+F5.
+
+### Edit partner logos
+
+1. WDC Site → Partners / Trust.
+2. Pilih dari Media → Save → cek homepage.
 
 ### Edit blog
 
@@ -237,14 +282,16 @@ LiteSpeed server cache HTML+CSS max-age 7 hari. Setelah CSS/theme change, bump v
 
 - ☐ Homepage ID/EN load normal.
 - ☐ Courses/Equipment catalog tampil, harga terlihat.
-- ☐ Login/register member berhasil.
-- ☐ Dashboard member tampil setelah login.
-- ☐ About contact compact + maps shortlink benar.
+- ☐ Login/register member berhasil (`/login/`, `/register/`).
+- ☐ Dashboard member tampil setelah login; header public jadi Dashboard.
+- ☐ About + Contact compact form/cards match.
 - ☐ Contact form submit (cek inbox jika SMTP sudah siap).
 - ☐ Course/Gear request masuk admin.
 - ☐ Giveaway claim → SS ongkir → TF → admin verify → resi.
 - ☐ 404 page muncul untuk URL random.
 - ☐ Switch ID↔EN: chrome berubah, logged-in tetap Dashboard.
+- ☐ Menus / Links admin mengubah navbar + footer.
+- ☐ Partners / Trust media picker mengubah logo homepage.
 - ☐ Payment Settings diisi rekening client.
 
 ---
@@ -253,25 +300,28 @@ LiteSpeed server cache HTML+CSS max-age 7 hari. Setelah CSS/theme change, bump v
 
 - **Live domain:** https://whaledivecentre.com
 - **Local preview:** http://168.144.37.19:8088
-- **Theme path live:** /home/whalediv/public_html/wp-content/themes/theme-travel-master
-- **Theme repo local:** /root/projects/whaledivecentre-theme
-- **Git branch:** local/polish-20260711
-- **Latest commit:** 6d1be07
-- **Public CSS version:** 2.3.93
+- **Theme path live:** `/home/whalediv/public_html/wp-content/themes/theme-travel-master`
+- **Theme repo local:** `/root/projects/whaledivecentre-theme`
+- **Git branch:** `local/polish-20260711`
+- **Latest commit:** `847fb41`
+- **Public CSS version:** `2.3.94`
 - **Deploy method:** cPanel Fileman binary upload + MD5 verify
-- **Float WA:** mu-plugin wa-float.php
-- **Bilingual engine:** contenly_tr + /en/ + wdc_site_tr
-- **Giveaway ongkir option:** wdc_giveaway_external_ongkir_url
-- **Giveaway resi option:** wdc_giveaway_external_resi_url
+- **Float WA:** mu-plugin `wa-float.php`
+- **Bilingual engine:** `contenly_tr` + `/en/` + `wdc_site_tr`
+- **Member UI cookie:** `wdc_member_ui=1`
+- **Menus options:** `nav_links`, `footer_explore_links`, `footer_course_links`
+- **Partners option:** `partners` (`Name|id:123` / file / URL)
+- **Giveaway ongkir option:** `wdc_giveaway_external_ongkir_url`
+- **Giveaway resi option:** `wdc_giveaway_external_resi_url`
 
-Push policy: hanya branch local/polish-20260711. Jangan force push main.
+Push policy: hanya branch `local/polish-20260711`. Jangan force push main.
 
 ---
 
 ## 13. Statement Handover (siap dikirim client)
 
-> Website Whale Dive Centre sudah live dan soft handover ready. Public catalog, member login/register, request kursus/gear, giveaway + cek ongkir/resi eksternal, admin ops, about/contact, bilingual chrome ID/EN, dan halaman 404 sudah berfungsi. Residual di sisi client: isi rekening TF di Payment Settings, validasi konten final, dan opsional setup SMTP/strategi EN konten penuh.
+> Website Whale Dive Centre sudah live dan soft handover ready. Public catalog, member login/register, request kursus/gear, giveaway + cek ongkir/resi eksternal, admin ops, about/contact compact, bilingual chrome ID/EN, 404, partner logos via Media Library, serta admin editor navbar/footer links sudah berfungsi. Residual di sisi client: isi rekening TF di Payment Settings, validasi konten final, dan opsional setup SMTP/strategi EN konten penuh.
 
 ---
 
-_Dokumen digenerate otomatis · 12 July 2026_
+_Dokumen digenerate otomatis · update 12 July 2026_

@@ -1,8 +1,8 @@
 # Whale Dive Centre — Panduan Menu Admin (Simple, Lengkap)
 
-**Tanggal:** 12 Juli 2026  
+**Tanggal:** 12 Juli 2026 (update lanjutan)  
 **Website:** https://whaledivecentre.com  
-**Isi:** semua menu custom WP admin + fungsi + cara pakai (termasuk Courses & Equipment).
+**Isi:** semua menu custom WP admin + fungsi + cara pakai (termasuk Courses, Equipment, Menus/Links, Partners media).
 
 ---
 
@@ -19,14 +19,11 @@
 
 Menu kiri: Courses. CPT: Dive Courses (wm_course). Tampil di /courses/.
 
-| Menu | Fungsi | Cara pakai |
-|---|---|---|
-| **All Courses / Courses** | Daftar semua kursus di website. | Courses → All Courses. Klik judul untuk edit. Status Publish = aktif. |
-| **Add New Course** | Tambah kursus baru. | Courses → Add New. Isi Title, Excerpt, Content, Featured Image. Isi box Course Details. Publish. |
-| **Course Details (box di edit course)** | Harga, durasi, kuota, prasyarat, include, highlight, CTA, tampil di katalog. | Isi Price (IDR), Duration, Max Students, Prerequisites, What's Included. Optional: Highlight 1–3, CTA Label. Centang “Show in public/member course catalog”. Centang “Price is estimate / starting price” bila “Harga mulai”. Update. |
-| **Course Levels** | Level/filter kursus (badge di katalog). | Di sidebar edit course, atau taxonomy Course Levels. Pilih/assign level → Update. |
-| **Course Agencies / Agencies** | Agensi kursus (NAUI, TDI, dll) untuk badge/filter. | Assign agency di panel course → Update. |
-| **Featured Image** | Foto card & single course. | Set Featured Image di edit course. Kosong = fallback tema. |
+- **All Courses / Courses** — daftar semua kursus. Edit judul, status Publish = aktif.
+- **Add New Course** — tambah kursus baru. Isi Title, Excerpt, Content, Featured Image + Course Details.
+- **Course Details** — Price (IDR), Duration, Max Students, Prerequisites, What's Included, Highlight 1–3, CTA Label. Centang show in catalog + estimate bila “Harga mulai”.
+- **Course Levels / Agencies** — badge/filter.
+- **Featured Image** — foto card & single.
 
 ---
 
@@ -34,37 +31,30 @@ Menu kiri: Courses. CPT: Dive Courses (wm_course). Tampil di /courses/.
 
 Menu kiri: Equipment. CPT: Dive Equipment (wm_equipment). Tampil di /equipment/.
 
-| Menu | Fungsi | Cara pakai |
-|---|---|---|
-| **All Equipment / Equipment** | Daftar semua gear di website. | Equipment → All Equipment. Klik item untuk edit. Publish = aktif. |
-| **Add New Equipment** | Tambah item gear baru. | Equipment → Add New. Isi Title, Excerpt, Content, Featured Image. Isi box Equipment Details. Publish. |
-| **Equipment Details (box di edit gear)** | Harga, stok, size/varian, fit note, service points, CTA, tampil katalog. | Isi Price (IDR), Stock, Sizes/Variants, Fit/Usage Note. Optional Service Point 1–3 + CTA Label. Centang show in catalog + estimate bila perlu. Update. |
-| **Gear Categories / Equipment Categories** | Kategori gear untuk filter/badge. | Assign category di panel equipment → Update. |
-| **Brands / Equipment Brands** | Brand gear untuk filter/badge. | Assign brand di panel equipment → Update. |
-| **Featured Image** | Foto produk card & single. | Set Featured Image di edit equipment. |
+- **All Equipment** — list gear. Publish = aktif.
+- **Add New Equipment** — Title, Excerpt, Content, Featured Image + Equipment Details.
+- **Equipment Details** — Price, Stock, Sizes/Variants, Fit note, Service Point, CTA, show catalog.
+- **Categories / Brands** — filter/badge.
+- **Featured Image** — foto produk.
 
 ---
 
 ## 3. Informasi — info / giveaway / event
 
-Menu kiri: Informasi (wdc_info). Konten info member/public (termasuk giveaway copy).
+Menu kiri: Informasi (wdc_info).
 
-| Menu | Fungsi | Cara pakai |
-|---|---|---|
-| **Semua Informasi** | List pengumuman/info/event/giveaway text. | Informasi → Semua Informasi → Edit / Add New → Publish. |
-| **Tipe Informasi** | Kategori info (1st Giveaway, Event, Trip, Update NAUI/WDC/TDI/DAN, dll). | Assign tipe di edit info. Bisa tambah term baru di Tipe Informasi. |
+- **Semua Informasi** — list pengumuman/info/event/giveaway text.
+- **Tipe Informasi** — kategori (1st Giveaway, Event, Trip, Update NAUI/WDC/TDI/DAN, dll).
 
 ---
 
 ## 4. Cerita Kamu — story member
 
-Menu kiri: Cerita Kamu (wdc_story). Moderasi cerita member.
+Menu kiri: Cerita Kamu (wdc_story).
 
-| Menu | Fungsi | Cara pakai |
-|---|---|---|
-| **Semua Cerita** | List cerita yang masuk/diinput. | Cerita Kamu → list → review isi & foto. |
-| **Approval Status / Featured** | Approve atau highlight cerita (bila field tersedia di edit). | Buka cerita → set status/featured sesuai box → Update. |
-| **Jenis Cerita** | Klasifikasi jenis cerita. | Assign taxonomy Jenis Cerita → Update. |
+- **Semua Cerita** — review cerita + foto.
+- **Approval / Featured** — set status/highlight bila field tersedia.
+- **Jenis Cerita** — klasifikasi.
 
 ---
 
@@ -72,16 +62,78 @@ Menu kiri: Cerita Kamu (wdc_story). Moderasi cerita member.
 
 Menu kiri: WDC Site. Edit teks section website (bukan order).
 
-| Menu | Fungsi | Cara pakai |
-|---|---|---|
-| **Contact & Footer** | Email, telepon/WA, alamat, Instagram, teks footer. | Isi field → Save Changes → cek website + Ctrl+F5. |
-| **Home Content** | Hero/home headline & copy utama. | Edit teks home → Save → cek beranda. |
-| **About Page** | Teks halaman Tentang / values. | Edit About fields → Save → cek /about/. |
-| **Contact Page** | Teks form contact, jam, Google Maps URL. | Edit → Save. Maps: https://maps.app.goo.gl/7A3Yo7gsaDCcS6xZ6 |
-| **Courses & Equipment CTA** | Copy tombol/CTA di halaman courses & equipment. | Ubah CTA → Save → cek /courses/ & /equipment/. |
-| **Partners / Trust** | Logo partner trust (NAUI, TDI, DAN, dll). | Update partner → Save → cek beranda. |
-| **Crew** | Profil crew (nama, role, bio, foto). | WDC Site → Crew → Add New / Edit → Publish. (Add New di tombol list, bukan sidebar ekstra.) |
-| **Testimonials** | Testimoni klien/member. | WDC Site → Testimonials → Add New / Edit → Publish. |
+- **Contact & Footer** — email, telepon/WA, alamat, jam, Instagram/Facebook/X, footer kicker/blurb/CTA.
+- **Menus / Links** — **(baru)** navbar + footer Jelajahi/Kursus.
+- **Home Content** — hero/home headline & copy utama.
+- **About Page** — teks Tentang / values.
+- **Contact Page** — teks form contact + maps URL.
+- **Courses & Equipment CTA** — copy tombol/CTA di halaman courses & equipment.
+- **Partners / Trust** — logo partner trust (Media Library picker).
+- **Crew** — profil crew (nama, role, bio, foto).
+- **Testimonials** — testimoni klien/member.
+
+### 5A. Menus / Links (cara pakai)
+
+1. WDC Site → **Menus / Links**.
+2. Edit field:
+   - **Navbar links**
+   - **Footer kolom 1 title** (default: Jelajahi)
+   - **Footer kolom 1 links**
+   - **Footer kolom 2 title** (default: Kursus)
+   - **Footer kolom 2 links**
+3. Format per baris:
+
+```text
+Label|URL
+Label|URL|navkey
+```
+
+Contoh navbar:
+
+```text
+Beranda|/|home
+Kursus|/courses/|courses
+Peralatan|/equipment/|equipment
+Tentang|/about/|about
+Blog|/blog/|blog
+```
+
+Contoh footer Jelajahi:
+
+```text
+Kursus Selam|/courses/
+Peralatan Selam|/equipment/
+Testimoni|/testimonials/
+Konservasi|/conservation/
+Tentang Kami|/about/
+Blog|/blog/
+```
+
+4. Save Menus / Links → buka website → Ctrl+F5.
+
+Catatan:
+
+- URL boleh path relatif (`/about/`) atau full URL.
+- Baris kosong diabaikan.
+- Awali baris dengan `#` untuk komentar.
+- Tombol login/dashboard di navbar tetap otomatis (guest Masuk / logged-in Dashboard).
+
+### 5B. Partners / Trust (cara pakai)
+
+1. WDC Site → **Partners / Trust**.
+2. Edit trust text + trust label bila perlu.
+3. Di builder logo:
+   - **Pilih dari Media** → pilih/upload logo di Media Library.
+   - Isi **Nama partner**.
+   - **Tambah logo di baris ini** / **Baris logo baru**.
+4. Save Partners / Trust → cek homepage trust bar → Ctrl+F5.
+
+Catatan:
+
+- Tidak perlu ketik filename theme `assets/partners/`.
+- Format simpan otomatis: `Nama|id:123` (media attachment).
+- Advanced raw format tetap support: `Nama|file.webp` / `Nama|https://...`.
+- Logo default (NAUI, TDI, DAN, Sherwood, Zeagle, Waterproof, Shearwater, BARE) sudah diimport ke Media Library live.
 
 ---
 
@@ -89,71 +141,75 @@ Menu kiri: WDC Site. Edit teks section website (bukan order).
 
 Menu kiri: WDC Members. Request, member data, giveaway, rekening.
 
-| Menu | Fungsi | Cara pakai |
-|---|---|---|
-| **Dashboard** | Ringkasan ops member/request. | Buka WDC Members untuk overview. |
-| **Member List** | Daftar member + data akun + completed courses. | Cari member → buka detail → edit bila perlu → Save. |
-| **Course Requests** | Permintaan/review kursus dari member. | Buka list → update status + admin note → Save / Verify / Cancel. |
-| **Gear Requests** | Permintaan fitting/ketersediaan gear. | Update status + note → Save. |
-| **Giveaway Orders** | Order giveaway: SS ongkir, bukti TF, resi. | Filter status → buka baris → cek SS/TF → Verifikasi → isi kurir + no.resi → set Shipped → Save. Pakai tombol Cek Ongkir / Cek Resi di atas halaman. |
-| **Payment Settings** | Rekening bank TF (sumber nomor rekening). | Isi bank, no.rek, atas nama → Save. Jangan ubah Midtrans sembarangan. |
+- **Dashboard** — ringkasan ops.
+- **Member List** — data member + completed courses.
+- **Course Requests** — permintaan kursus: update status + note.
+- **Gear Requests** — fitting/ketersediaan gear.
+- **Giveaway Orders** — SS ongkir, bukti TF, resi; tombol Cek Ongkir / Cek Resi.
+- **Payment Settings** — rekening bank TF (sumber nomor rekening). Jangan ubah Midtrans sembarangan.
 
 ---
 
 ## 7. Giveaway Settings (jika muncul di admin)
 
-Submenu giveaway settings (URL eksternal ongkir/resi, origin label, enable giveaway).
-
-| Menu | Fungsi | Cara pakai |
-|---|---|---|
-| **Giveaway Settings** | Aktifkan giveaway + link cek ongkir/resi + label asal kirim. | Set Cek Ongkir = https://berdu.id/cek-ongkir · Cek Resi = https://cekresi.com/ · isi origin label → Save. |
-| **Giveaway Orders** | Sama seperti di WDC Members (bisa muncul di 2 tempat). | Proses order giveaway di sini atau lewat WDC Members → Giveaway Orders. |
+- **Giveaway Settings** — enable giveaway + link cek ongkir/resi + origin label.
+  - Cek Ongkir = https://berdu.id/cek-ongkir
+  - Cek Resi = https://cekresi.com/
+- **Giveaway Orders** — proses order (bisa muncul di 2 tempat).
 
 ---
 
-## 8. Posts (blog) — WP standar yang dipakai
+## 8. Posts (blog) + Media
 
-Bukan CPT custom, tapi dipakai konten public.
+- **Posts** — artikel blog public di `/blog/`.
+- **Media** — upload foto/file; dipakai course/equipment/crew/post/partner logos.
 
-| Menu | Fungsi | Cara pakai |
-|---|---|---|
-| **Posts** | Artikel blog public. | Posts → Add New / Edit → Publish. Tampil di /blog/. |
-| **Media** | Upload foto/file. | Media → Add New → pakai di course/equipment/crew/post. |
+---
+
+## 9. Auth public (bukan menu admin)
+
+- Login member: https://whaledivecentre.com/login/
+- Register member: https://whaledivecentre.com/register/
+- Legacy `/member-register/` redirect ke `/register/`
+- Auth page clean (tanpa public header/footer, tanpa kicker badge).
+- Setelah login, header public tombol = **Dashboard**.
 
 ---
 
 ## Tidak untuk harian / disembunyikan
 
-| Item | Fungsi | Catatan |
-|---|---|---|
-| **Dive Sites** | CPT lama, menu disembunyikan (data draft disimpan). | Tidak dipakai di public site. Jangan andalkan untuk konten harian. |
-| **Catalog Images (hidden tool)** | Tool backfill foto catalog dari assets tema. | Bukan menu sidebar harian. Foto harian: edit Featured Image di Courses/Equipment. |
-| **Direct Orders / Input Pesanan** | Menu order lama dihapus/disembunyikan. | Flow sekarang WA-first + Course/Gear Requests + Giveaway Orders. |
+- **Dive Sites** — CPT lama, menu disembunyikan.
+- **Catalog Images (hidden tool)** — backfill foto; harian pakai Featured Image.
+- **Direct Orders / Input Pesanan** — dihapus/disembunyikan. Flow: WA-first + Requests + Giveaway.
 
 ---
 
 ## Link penting
 
-- **Website live:** https://whaledivecentre.com — Cek hasil edit. Selalu Ctrl+F5.
-- **Login member public:** https://whaledivecentre.com/login/ — Bukan /wp-admin.
-- **Courses public:** https://whaledivecentre.com/courses/ — Hasil menu Courses.
-- **Equipment public:** https://whaledivecentre.com/equipment/ — Hasil menu Equipment.
-- **Cek Ongkir giveaway:** https://berdu.id/cek-ongkir — Hitung ongkir eksternal.
-- **Cek Resi giveaway:** https://cekresi.com/ — Tracking resi setelah admin isi resi.
+- **Website live:** https://whaledivecentre.com — cek hasil edit, selalu Ctrl+F5.
+- **Login member public:** https://whaledivecentre.com/login/
+- **Register member public:** https://whaledivecentre.com/register/
+- **Courses public:** https://whaledivecentre.com/courses/
+- **Equipment public:** https://whaledivecentre.com/equipment/
+- **Contact public:** https://whaledivecentre.com/contact/
+- **Cek Ongkir giveaway:** https://berdu.id/cek-ongkir
+- **Cek Resi giveaway:** https://cekresi.com/
 
 ---
 
 ## Tips cepat
 
 - Courses & Equipment = data katalog (harga, foto, deskripsi).
-- WDC Site = teks section homepage/about/contact/CTA/crew/testimoni.
+- WDC Site = teks section homepage/about/contact/CTA/crew/testimoni + **Menus/Links** + **Partners**.
 - WDC Members = request member + giveaway + rekening TF.
 - Harga publik; tombol Daftar/Beli butuh login member.
 - Centang “Show in catalog” supaya item muncul di /courses/ atau /equipment/.
-- Featured Image penting untuk card catalog; kosong = fallback tema.
-- EN di frontend = chrome UI (/en/). Isi artikel/course body tidak auto-translate.
+- Featured Image penting untuk card catalog.
+- Partner logo: pilih dari Media, jangan ketik file theme.
+- Navbar/footer links: edit di Menus / Links, format `Label|URL`.
+- EN di frontend = chrome UI (`/en/`). Isi artikel/course body tidak auto-translate.
 - Kalau tampilan belum berubah: Ctrl+F5 dulu.
 
 ---
 
-_Versi simple lengkap untuk client / crew ops._
+_Versi simple lengkap untuk client / crew ops · update 12 July 2026_
