@@ -25,7 +25,7 @@ require_once get_template_directory() . '/inc/wdc-catalog-helpers.php';
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.91');
+    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.92');
     wp_add_inline_style('contenly-style', '.wd-header .gt-lang-switcher{margin-right:10px!important}.wd-header .wd-nav-member{margin-left:8px!important}');
     
     // Google Fonts
@@ -3141,6 +3141,11 @@ add_filter('template_include', function($template) {
 }, 999);
 
 add_filter('pre_get_document_title', function($title) {
+    if (is_404()) {
+        return function_exists('contenly_tr')
+            ? (contenly_tr('Halaman tidak ditemukan', 'Page not found') . ' - Whale Dive Centre')
+            : 'Page not found - Whale Dive Centre';
+    }
     $path = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
     if ($path === 'login' || $path === 'member-login') {
         return 'Member Login - Whale Dive Centre';
@@ -3150,6 +3155,19 @@ add_filter('pre_get_document_title', function($title) {
     }
     return $title;
 });
+
+// Prefer theme 404.php over home-style fallbacks.
+add_filter('template_include', function($template) {
+    if (is_404()) {
+        $candidate = get_stylesheet_directory() . '/404.php';
+        if (file_exists($candidate)) {
+            status_header(404);
+            nocache_headers();
+            return $candidate;
+        }
+    }
+    return $template;
+}, 1000);
 
 
 
