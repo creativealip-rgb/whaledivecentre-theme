@@ -798,48 +798,355 @@ function wdc_render_contact_page() {
     echo '</div>';
 }
 
+/**
+ * Normalize one partner source token.
+ * Supports:
+ * - theme asset filename: naui.webp
+ * - media attachment: id:123
+ * - full URL: https://...
+ */
+function wdc_partner_normalize_source($source) {
+    $source = trim((string) $source);
+    if ($source === '') {
+        return '';
+    }
+    if (preg_match('#^id:(\d+)$#i', $source, $m)) {
+        return 'id:' . absint($m[1]);
+    }
+    if (preg_match('#^https?://#i', $source) || strpos($source, '//') === 0) {
+        return esc_url_raw($source);
+    }
+    // legacy theme asset filename only
+    $file = basename(str_replace(['\\', '..'], '', $source));
+    return $file;
+}
+
+/**
+ * Public image URL for one partner item.
+ */
+function wdc_partner_image_url($partner) {
+    $source = '';
+    if (is_array($partner)) {
+        $source = (string) ($partner['source'] ?? $partner['file'] ?? '');
+    } else {
+        $source = (string) $partner;
+    }
+    $source = wdc_partner_normalize_source($source);
+    if ($source === '') {
+        return '';
+    }
+    if (preg_match('#^id:(\d+)$#i', $source, $m)) {
+        $url = wp_get_attachment_image_url(absint($m[1]), 'full');
+        return $url ? $url : '';
+    }
+    if (preg_match('#^https?://#i', $source) || strpos($source, '//') === 0) {
+        return $source;
+    }
+    return get_template_directory_uri() . '/assets/partners/' . ltrim($source, '/');
+}
+
+/**
+ * Preview URL for admin partner builder.
+ */
+function wdc_partner_preview_url($source) {
+    return wdc_partner_image_url(['source' => $source]);
+}
+
+/**
+ * Serialize partner rows to storage string.
+ * Line format: Name|source
+ * Row break: ---
+ */
+function wdc_partners_serialize_rows($rows) {
+    $out = [];
+    $first = true;
+    foreach ($rows as $row) {
+        if (!$first) {
+            $out[] = '---';
+        }
+        $first = false;
+        foreach ($row as $item) {
+            $name = trim((string) ($item['name'] ?? ''));
+            $source = wdc_partner_normalize_source($item['source'] ?? $item['file'] ?? '');
+            if ($name === '' || $source === '') {
+                continue;
+            }
+            $out[] = $name . '|' . $source;
+        }
+    }
+    return implode("\n", $out);
+}
+
 function wdc_render_partners_page() {
     if (!current_user_can('manage_options')) {
         return;
     }
-    $keys = ['trust_text', 'trust_label', 'partners'];
+
     $saved = false;
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $saved = wdc_site_save_posted_keys($keys);
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wdc_site_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wdc_site_nonce'])), 'wdc_site_save')) {
+        $current = get_option('wdc_site_settings', []);
+        if (!is_array($current)) {
+            $current = [];
+        }
+        $current['trust_text'] = sanitize_textarea_field(wp_unslash($_POST['trust_text'] ?? ''));
+        $current['trust_label'] = sanitize_text_field(wp_unslash($_POST['trust_label'] ?? ''));
+
+        // Builder payload preferred; fallback to raw textarea.
+        $rows_in = [];
+        if (!empty($_POST['wdc_partner_rows']) && is_array($_POST['wdc_partner_rows'])) {
+            foreach ($_POST['wdc_partner_rows'] as $row) {
+                if (!is_array($row)) {
+                    continue;
+                }
+                $items = [];
+                foreach ($row as $item) {
+                    if (!is_array($item)) {
+                        continue;
+                    }
+                    $name = sanitize_text_field(wp_unslash($item['name'] ?? ''));
+                    $source = wdc_partner_normalize_source(wp_unslash($item['source'] ?? ''));
+                    if ($name === '' || $source === '') {
+                        continue;
+                    }
+                    $items[] = ['name' => $name, 'source' => $source];
+                }
+                if ($items) {
+                    $rows_in[] = $items;
+                }
+            }
+            $current['partners'] = wdc_partners_serialize_rows($rows_in);
+        } else {
+            $current['partners'] = sanitize_textarea_field(wp_unslash($_POST['partners'] ?? ''));
+        }
+
+        update_option('wdc_site_settings', $current, false);
+        $saved = true;
     }
-    echo '<div class="wrap"><h1>WDC Site — Partners / Trust</h1>';
+
+    $rows = wdc_get_partner_rows();
+    if (!$rows) {
+        $rows = [[['name' => '', 'source' => '', 'file' => '']]];
+    }
+
+    echo '<div class="wrap wdc-partners-admin"><h1>WDC Site — Partners / Trust</h1>';
     if ($saved) {
-        echo '<div class="notice notice-success is-dismissible"><p>Saved.</p></div>';
+        echo '<div class="notice notice-success is-dismissible"><p>Saved. Hard refresh homepage (Ctrl+F5) kalau logo belum berubah.</p></div>';
     }
-    echo '<p>Teks trust bar homepage + daftar partner logo. Format partners: <code>Nama|filename.webp</code> per baris. Baris <code>---</code> = baris logo baru. File harus ada di <code>assets/partners/</code>.</p>';
-    echo '<form method="post">';
+    echo '<p>Atur teks trust bar + logo partner. <strong>Pilih logo dari Media Library</strong> — tidak perlu ketik nama file.</p>';
+    echo '<form method="post" id="wdc-partners-form">';
     wp_nonce_field('wdc_site_save', 'wdc_site_nonce');
     echo '<table class="form-table" role="presentation"><tbody>';
     wdc_site_field('trust_text', 'Trust bar text', 'textarea');
     wdc_site_field('trust_label', 'Trust label');
-    wdc_site_field('partners', 'Partner logos', 'textarea', 'Contoh: NAUI|naui.webp');
     echo '</tbody></table>';
-    submit_button('Save Partners / Trust');
+
+    echo '<h2 style="margin-top:22px">Partner logos</h2>';
+    echo '<p class="description" style="margin-top:0">Tambah logo per baris. Tombol “Baris baru” = pindah ke baris logo berikutnya di homepage.</p>';
+    echo '<div id="wdc-partner-builder" class="wdc-partner-builder">';
+
+    foreach ($rows as $ri => $row) {
+        echo '<div class="wdc-partner-row" data-row="' . esc_attr((string) $ri) . '">';
+        echo '<div class="wdc-partner-row-head"><strong>Baris ' . esc_html((string) ($ri + 1)) . '</strong>';
+        echo '<button type="button" class="button-link-delete wdc-partner-remove-row">Hapus baris</button></div>';
+        echo '<div class="wdc-partner-items">';
+        foreach ($row as $ii => $item) {
+            $name = (string) ($item['name'] ?? '');
+            $source = (string) ($item['source'] ?? $item['file'] ?? '');
+            $preview = wdc_partner_preview_url($source);
+            echo '<div class="wdc-partner-item">';
+            echo '<div class="wdc-partner-preview">' . ($preview ? '<img src="' . esc_url($preview) . '" alt="">' : '<span>No logo</span>') . '</div>';
+            echo '<div class="wdc-partner-fields">';
+            echo '<label>Nama partner<br><input type="text" class="regular-text wdc-partner-name" name="wdc_partner_rows[' . esc_attr((string) $ri) . '][' . esc_attr((string) $ii) . '][name]" value="' . esc_attr($name) . '" placeholder="NAUI"></label>';
+            echo '<input type="hidden" class="wdc-partner-source" name="wdc_partner_rows[' . esc_attr((string) $ri) . '][' . esc_attr((string) $ii) . '][source]" value="' . esc_attr($source) . '">';
+            echo '<div class="wdc-partner-actions">';
+            echo '<button type="button" class="button wdc-partner-pick">Pilih dari Media</button> ';
+            echo '<button type="button" class="button-link-delete wdc-partner-remove-item">Hapus</button>';
+            echo '</div></div></div>';
+        }
+        echo '</div>';
+        echo '<p><button type="button" class="button wdc-partner-add-item">+ Tambah logo di baris ini</button></p>';
+        echo '</div>';
+    }
+
+    echo '</div>';
+    echo '<p style="margin-top:12px">';
+    echo '<button type="button" class="button button-secondary" id="wdc-partner-add-row">+ Baris logo baru</button> ';
+    submit_button('Save Partners / Trust', 'primary', 'submit', false);
+    echo '</p>';
+
+    // Keep raw textarea hidden for advanced/debug + JS fallback sync.
+    echo '<details style="margin-top:18px;max-width:820px"><summary>Advanced: raw format (opsional)</summary>';
+    echo '<p class="description">Boleh pakai Media picker di atas. Format lama tetap didukung: <code>Nama|file.webp</code>, <code>Nama|id:123</code>, atau <code>Nama|https://...</code>. Baris <code>---</code> = baris baru.</p>';
+    echo '<textarea class="large-text code" rows="8" id="partners" name="partners">' . esc_textarea((string) wdc_site_get('partners', '')) . '</textarea>';
+    echo '</details>';
     echo '</form>';
+
+    // theme assets list still helpful
     $files = [];
     $dir = get_template_directory() . '/assets/partners';
     if (is_dir($dir)) {
         foreach (scandir($dir) as $f) {
-            if ($f === '.' || $f === '..') continue;
+            if ($f === '.' || $f === '..') {
+                continue;
+            }
             if (preg_match('/\.(webp|png|jpg|jpeg|svg)$/i', $f)) {
                 $files[] = $f;
             }
         }
     }
     if ($files) {
-        echo '<h2>Files di assets/partners</h2><p style="max-width:720px">' . esc_html(implode(', ', $files)) . '</p>';
+        echo '<p class="description" style="margin-top:16px;max-width:820px"><strong>Fallback theme assets:</strong> ' . esc_html(implode(', ', $files)) . ' (boleh tetap dipakai lewat raw format).</p>';
     }
+
+    ?>
+    <style>
+      .wdc-partners-admin .wdc-partner-builder{display:grid;gap:16px;max-width:920px;margin-top:10px}
+      .wdc-partners-admin .wdc-partner-row{background:#fff;border:1px solid #dcdcde;border-radius:12px;padding:14px 16px}
+      .wdc-partners-admin .wdc-partner-row-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+      .wdc-partners-admin .wdc-partner-items{display:grid;gap:10px}
+      .wdc-partners-admin .wdc-partner-item{display:grid;grid-template-columns:88px 1fr;gap:12px;align-items:center;padding:10px;border:1px solid #e2e4e7;border-radius:10px;background:#f8fafc}
+      .wdc-partners-admin .wdc-partner-preview{width:88px;height:64px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px dashed #c3c4c7;border-radius:8px;overflow:hidden}
+      .wdc-partners-admin .wdc-partner-preview img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+      .wdc-partners-admin .wdc-partner-preview span{font-size:11px;color:#646970}
+      .wdc-partners-admin .wdc-partner-fields label{display:block;font-size:12px;font-weight:600;margin:0 0 6px}
+      .wdc-partners-admin .wdc-partner-actions{display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap}
+      @media (max-width:782px){
+        .wdc-partners-admin .wdc-partner-item{grid-template-columns:1fr}
+        .wdc-partners-admin .wdc-partner-preview{width:100%;height:80px}
+      }
+    </style>
+    <script>
+    (function($){
+      if (typeof wp === 'undefined' || !wp.media) { return; }
+      var $builder = $('#wdc-partner-builder');
+      if (!$builder.length) return;
+
+      function reindex(){
+        $builder.find('.wdc-partner-row').each(function(ri){
+          var $row = $(this);
+          $row.attr('data-row', ri);
+          $row.find('.wdc-partner-row-head strong').text('Baris ' + (ri+1));
+          $row.find('.wdc-partner-item').each(function(ii){
+            var $item = $(this);
+            $item.find('.wdc-partner-name').attr('name', 'wdc_partner_rows['+ri+']['+ii+'][name]');
+            $item.find('.wdc-partner-source').attr('name', 'wdc_partner_rows['+ri+']['+ii+'][source]');
+          });
+        });
+        syncRaw();
+      }
+
+      function itemHtml(ri, ii){
+        return ''+
+          '<div class="wdc-partner-item">'+
+            '<div class="wdc-partner-preview"><span>No logo</span></div>'+
+            '<div class="wdc-partner-fields">'+
+              '<label>Nama partner<br><input type="text" class="regular-text wdc-partner-name" name="wdc_partner_rows['+ri+']['+ii+'][name]" value="" placeholder="NAUI"></label>'+
+              '<input type="hidden" class="wdc-partner-source" name="wdc_partner_rows['+ri+']['+ii+'][source]" value="">'+
+              '<div class="wdc-partner-actions">'+
+                '<button type="button" class="button wdc-partner-pick">Pilih dari Media</button> '+
+                '<button type="button" class="button-link-delete wdc-partner-remove-item">Hapus</button>'+
+              '</div>'+
+            '</div>'+
+          '</div>';
+      }
+
+      function rowHtml(ri){
+        return ''+
+          '<div class="wdc-partner-row" data-row="'+ri+'">'+
+            '<div class="wdc-partner-row-head"><strong>Baris '+(ri+1)+'</strong>'+
+            '<button type="button" class="button-link-delete wdc-partner-remove-row">Hapus baris</button></div>'+
+            '<div class="wdc-partner-items">'+itemHtml(ri,0)+'</div>'+
+            '<p><button type="button" class="button wdc-partner-add-item">+ Tambah logo di baris ini</button></p>'+
+          '</div>';
+      }
+
+      function syncRaw(){
+        var lines = [];
+        $builder.find('.wdc-partner-row').each(function(ri){
+          if (ri > 0) lines.push('---');
+          $(this).find('.wdc-partner-item').each(function(){
+            var name = ($(this).find('.wdc-partner-name').val() || '').trim();
+            var source = ($(this).find('.wdc-partner-source').val() || '').trim();
+            if (name && source) lines.push(name + '|' + source);
+          });
+        });
+        $('#partners').val(lines.join('\n'));
+      }
+
+      $builder.on('click', '.wdc-partner-pick', function(e){
+        e.preventDefault();
+        var $item = $(this).closest('.wdc-partner-item');
+        var frame = wp.media({
+          title: 'Pilih logo partner',
+          button: { text: 'Pakai logo ini' },
+          multiple: false,
+          library: { type: 'image' }
+        });
+        frame.on('select', function(){
+          var att = frame.state().get('selection').first().toJSON();
+          var url = (att.sizes && att.sizes.medium && att.sizes.medium.url) ? att.sizes.medium.url : att.url;
+          $item.find('.wdc-partner-source').val('id:' + att.id);
+          $item.find('.wdc-partner-preview').html('<img src="'+url+'" alt="">');
+          if (!$item.find('.wdc-partner-name').val()) {
+            var n = (att.title || att.filename || 'Partner').replace(/\.[^.]+$/, '');
+            $item.find('.wdc-partner-name').val(n);
+          }
+          syncRaw();
+        });
+        frame.open();
+      });
+
+      $builder.on('click', '.wdc-partner-add-item', function(e){
+        e.preventDefault();
+        var $row = $(this).closest('.wdc-partner-row');
+        var ri = $builder.find('.wdc-partner-row').index($row);
+        var ii = $row.find('.wdc-partner-item').length;
+        $row.find('.wdc-partner-items').append(itemHtml(ri, ii));
+        reindex();
+      });
+
+      $builder.on('click', '.wdc-partner-remove-item', function(e){
+        e.preventDefault();
+        var $row = $(this).closest('.wdc-partner-row');
+        $(this).closest('.wdc-partner-item').remove();
+        if (!$row.find('.wdc-partner-item').length) {
+          $row.find('.wdc-partner-items').append(itemHtml(0,0));
+        }
+        reindex();
+      });
+
+      $builder.on('click', '.wdc-partner-remove-row', function(e){
+        e.preventDefault();
+        if ($builder.find('.wdc-partner-row').length <= 1) {
+          // clear only
+          var $row = $(this).closest('.wdc-partner-row');
+          $row.find('.wdc-partner-items').html(itemHtml(0,0));
+          reindex();
+          return;
+        }
+        $(this).closest('.wdc-partner-row').remove();
+        reindex();
+      });
+
+      $('#wdc-partner-add-row').on('click', function(e){
+        e.preventDefault();
+        var ri = $builder.find('.wdc-partner-row').length;
+        $builder.append(rowHtml(ri));
+        reindex();
+      });
+
+      $builder.on('input change', '.wdc-partner-name', syncRaw);
+      $('#wdc-partners-form').on('submit', function(){ reindex(); });
+      reindex();
+    })(jQuery);
+    </script>
+    <?php
     echo '</div>';
 }
 
 /**
  * Parse partner list into rows of items.
- * @return array<int, array<int, array{name:string,file:string}>>
+ * @return array<int, array<int, array{name:string,source:string,file:string}>>
  */
 function wdc_get_partner_rows() {
     $raw = (string) wdc_site_get('partners', '');
@@ -859,30 +1166,30 @@ function wdc_get_partner_rows() {
         }
         $parts = array_map('trim', explode('|', $line, 2));
         $name = $parts[0] ?? '';
-        $file = $parts[1] ?? '';
-        if ($name === '' || $file === '') {
+        $source = wdc_partner_normalize_source($parts[1] ?? '');
+        if ($name === '' || $source === '') {
             continue;
         }
-        // prevent path traversal
-        $file = basename(str_replace(['\\', '..'], '', $file));
-        if ($file === '') {
-            continue;
-        }
-        $rows[$ri][] = ['name' => $name, 'file' => $file];
+        $rows[$ri][] = [
+            'name' => $name,
+            'source' => $source,
+            // keep file key for older callers
+            'file' => $source,
+        ];
     }
     // drop empty trailing
     $rows = array_values(array_filter($rows, function ($r) { return !empty($r); }));
     if (!$rows) {
         $rows = [[
-            ['name' => 'NAUI', 'file' => 'naui.webp'],
-            ['name' => 'TDI', 'file' => 'tdi.webp'],
-            ['name' => 'DAN', 'file' => 'dan.webp'],
+            ['name' => 'NAUI', 'source' => 'naui.webp', 'file' => 'naui.webp'],
+            ['name' => 'TDI', 'source' => 'tdi.webp', 'file' => 'tdi.webp'],
+            ['name' => 'DAN', 'source' => 'dan.webp', 'file' => 'dan.webp'],
         ], [
-            ['name' => 'Sherwood Scuba', 'file' => 'sherwood.webp'],
-            ['name' => 'Zeagle', 'file' => 'zeagle.webp'],
-            ['name' => 'Waterproof', 'file' => 'waterproof.webp'],
-            ['name' => 'Shearwater Research', 'file' => 'shearwater.webp'],
-            ['name' => 'BARE', 'file' => 'bare.webp'],
+            ['name' => 'Sherwood Scuba', 'source' => 'sherwood.webp', 'file' => 'sherwood.webp'],
+            ['name' => 'Zeagle', 'source' => 'zeagle.webp', 'file' => 'zeagle.webp'],
+            ['name' => 'Waterproof', 'source' => 'waterproof.webp', 'file' => 'waterproof.webp'],
+            ['name' => 'Shearwater Research', 'source' => 'shearwater.webp', 'file' => 'shearwater.webp'],
+            ['name' => 'BARE', 'source' => 'bare.webp', 'file' => 'bare.webp'],
         ]];
     }
     return $rows;

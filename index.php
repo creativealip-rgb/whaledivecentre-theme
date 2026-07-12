@@ -336,7 +336,6 @@ body.home .wd-equipment-grid{
   $wdc_trust_text = function_exists('wdc_site_get') ? wdc_site_tr('trust_text', 'Gerbang kamu ke dunia bawah laut. Kami menggabungkan pelatihan selam profesional, peralatan berkualitas, bimbingan grup kecil, dan semangat konservasi laut.', 'Your gateway to the underwater world — professional scuba training, quality gear, small-group guidance, and a passion for marine conservation.') : contenly_tr('Gerbang kamu ke dunia bawah laut. Kami menggabungkan pelatihan selam profesional, peralatan berkualitas, bimbingan grup kecil, dan semangat konservasi laut.', 'Your gateway to the underwater world — professional scuba training, quality gear, small-group guidance, and a passion for marine conservation.');
   $wdc_trust_label = function_exists('wdc_site_get') ? wdc_site_tr('trust_label', 'Dipercaya oleh', 'Trusted by') : contenly_tr('Dipercaya oleh', 'Trusted by');
   $wdc_partner_rows = function_exists('wdc_get_partner_rows') ? wdc_get_partner_rows() : [];
-  $wdc_partner_base = get_template_directory_uri() . '/assets/partners/';
   ?>
   <section class="wd-trust-bar"><div class="wd-shell"><p class="wd-trust-text"><?php echo esc_html($wdc_trust_text); ?></p><div class="wd-trust-label"><?php echo esc_html($wdc_trust_label); ?></div><div class="wd-trust-logos" aria-label="Dive training and equipment partners">
   <?php foreach ($wdc_partner_rows as $row) :
@@ -344,9 +343,14 @@ body.home .wd-equipment-grid{
   ?>
     <div class="<?php echo esc_attr($row_class); ?>">
       <?php foreach ($row as $partner) :
-        $src = $wdc_partner_base . ltrim($partner['file'], '/');
+        $src = function_exists('wdc_partner_image_url')
+          ? wdc_partner_image_url($partner)
+          : (get_template_directory_uri() . '/assets/partners/' . ltrim((string) ($partner['file'] ?? ''), '/'));
+        if ($src === '') {
+          continue;
+        }
       ?>
-        <img src="<?php echo esc_url($src); ?>" alt="<?php echo esc_attr($partner['name']); ?>" loading="lazy" decoding="async">
+        <img src="<?php echo esc_url($src); ?>" alt="<?php echo esc_attr($partner['name'] ?? ''); ?>" loading="lazy" decoding="async">
       <?php endforeach; ?>
     </div>
   <?php endforeach; ?>

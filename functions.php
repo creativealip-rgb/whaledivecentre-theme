@@ -3938,10 +3938,10 @@ function wdc_use_classic_editor_for_catalog($use_block_editor, $post_type) {
 add_filter('use_block_editor_for_post_type', 'wdc_use_classic_editor_for_catalog', 10, 2);
 
 function wdc_admin_assets($hook) {
-    if ($hook === 'toplevel_page_wdc-content-settings') {
+    $page = isset($_GET['page']) ? sanitize_key(wp_unslash($_GET['page'])) : '';
+    if ($hook === 'toplevel_page_wdc-content-settings' || $page === 'wdc-site-partners') {
         wp_enqueue_media();
     }
-    $page = isset($_GET['page']) ? sanitize_key(wp_unslash($_GET['page'])) : '';
     $wdc_admin_pages = [
         'wdc-member-list',
         'wdc-member-admin',
@@ -3950,6 +3950,7 @@ function wdc_admin_assets($hook) {
         'wdc-course-requests',
         'wdc-gear-requests',
         'wdc-payment-settings',
+        'wdc-site-partners',
     ];
     if (!in_array($page, $wdc_admin_pages, true) && strpos((string) $hook, 'wdc-') === false) {
         return;
