@@ -21,11 +21,65 @@ require_once get_template_directory() . '/inc/wdc-site-content.php';
 require_once get_template_directory() . '/inc/wdc-catalog-helpers.php';
 
 /**
+ * Non-HttpOnly login flag for public nav JS.
+ * WP auth cookie is HttpOnly, so document.cookie cannot see it.
+ * LiteSpeed often serves guest-cached HTML even when user is logged in.
+ */
+function wdc_set_member_ui_cookie($logged_in) {
+    if (headers_sent()) {
+        return;
+    }
+    $secure = is_ssl();
+    $path = defined('COOKIEPATH') && COOKIEPATH ? COOKIEPATH : '/';
+    $domain = defined('COOKIE_DOMAIN') ? COOKIE_DOMAIN : '';
+    if ($logged_in) {
+        setcookie('wdc_member_ui', '1', [
+            'expires' => time() + (14 * DAY_IN_SECONDS),
+            'path' => $path,
+            'domain' => $domain,
+            'secure' => $secure,
+            'httponly' => false,
+            'samesite' => 'Lax',
+        ]);
+        $_COOKIE['wdc_member_ui'] = '1';
+    } else {
+        setcookie('wdc_member_ui', '', [
+            'expires' => time() - YEAR_IN_SECONDS,
+            'path' => $path,
+            'domain' => $domain,
+            'secure' => $secure,
+            'httponly' => false,
+            'samesite' => 'Lax',
+        ]);
+        unset($_COOKIE['wdc_member_ui']);
+    }
+}
+
+add_action('wp_login', function () {
+    wdc_set_member_ui_cookie(true);
+}, 20);
+
+add_action('wp_logout', function () {
+    wdc_set_member_ui_cookie(false);
+}, 1);
+
+add_action('init', function () {
+    if (is_user_logged_in()) {
+        if (empty($_COOKIE['wdc_member_ui'])) {
+            wdc_set_member_ui_cookie(true);
+        }
+    } elseif (!empty($_COOKIE['wdc_member_ui'])) {
+        // Stale flag after logout/session end.
+        wdc_set_member_ui_cookie(false);
+    }
+}, 1);
+
+/**
  * Enqueue theme styles and scripts
  */
 function contenly_enqueue_scripts() {
     // Theme stylesheet
-    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.93');
+    wp_enqueue_style('contenly-style', get_template_directory_uri() . '/style.css', [], '2.3.94');
     wp_add_inline_style('contenly-style', '.wd-header .gt-lang-switcher{margin-right:10px!important}.wd-header .wd-nav-member{margin-left:8px!important}');
     
     // Google Fonts
@@ -1169,31 +1223,47 @@ function wdc_public_mobile_and_call_cleanup() {
     }
     ?>
     <script id="wdc-public-nav-call-cleanup">
-    document.addEventListener('DOMContentLoaded', function(){
-      /* Menu open/close owned by assets/js/main.js — avoid double handlers. */
-      var callLinks = Array.prototype.slice.call(document.querySelectorAll('a[aria-label="Call Whale Dive Centre"], a[aria-label*="Call Whale Dive"]'));
-      callLinks.slice(1).forEach(function(link){ link.remove(); });
-
-      /* Keep member CTA correct even when LiteSpeed serves guest-cached HTML. */
-      function wdcHasWpLoginCookie(){
-        return document.cookie.split(';').some(function(c){
-          return c.trim().indexOf('wordpress_logged_in_') === 0;
+    (function(){
+      function wdcHasMemberUi(){
+        // Custom non-HttpOnly flag. WP auth cookie is HttpOnly (invisible to JS).
+        try {
+          return document.cookie.split(';').some(function(c){
+            c = c.trim();
+            return c === 'wdc_member_ui=1' || c.indexOf('wdc_member_ui=1') === 0;
+          }) || (document.body && document.body.classList.contains('logged-in'));
+        } catch (e) {
+          return false;
+        }
+      }
+      function wdcSyncMemberNav(){
+        var loggedIn = wdcHasMemberUi();
+        document.querySelectorAll('a.wd-nav-member').forEach(function(a){
+          var loginUrl = a.getAttribute('data-login-url');
+          var dashUrl = a.getAttribute('data-dashboard-url');
+          var loginLabel = a.getAttribute('data-login-label');
+          var dashLabel = a.getAttribute('data-dashboard-label');
+          if (loggedIn) {
+            if (dashUrl) a.setAttribute('href', dashUrl);
+            if (dashLabel) a.textContent = dashLabel;
+          } else {
+            if (loginUrl) a.setAttribute('href', loginUrl);
+            if (loginLabel) a.textContent = loginLabel;
+          }
         });
       }
-      document.querySelectorAll('a.wd-nav-member').forEach(function(a){
-        var loginUrl = a.getAttribute('data-login-url');
-        var dashUrl = a.getAttribute('data-dashboard-url');
-        var loginLabel = a.getAttribute('data-login-label');
-        var dashLabel = a.getAttribute('data-dashboard-label');
-        if (wdcHasWpLoginCookie()) {
-          if (dashUrl) a.setAttribute('href', dashUrl);
-          if (dashLabel) a.textContent = dashLabel;
-        } else {
-          if (loginUrl) a.setAttribute('href', loginUrl);
-          if (loginLabel) a.textContent = loginLabel;
-        }
-      });
-    });
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function(){
+          var callLinks = Array.prototype.slice.call(document.querySelectorAll('a[aria-label="Call Whale Dive Centre"], a[aria-label*="Call Whale Dive"]'));
+          callLinks.slice(1).forEach(function(link){ link.remove(); });
+          wdcSyncMemberNav();
+        });
+      } else {
+        wdcSyncMemberNav();
+      }
+      // Re-run shortly after paint for late-hydrated headers.
+      setTimeout(wdcSyncMemberNav, 50);
+      setTimeout(wdcSyncMemberNav, 400);
+    })();
     </script>
     <style id="wdc-public-mobile-call-cleanup-css">
       @media(max-width:760px){
