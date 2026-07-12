@@ -205,10 +205,8 @@ if (isset($_GET['wd_contact'])) {
   if ($wdc_map === '') {
     $wdc_map = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($wdc_address);
   }
-  // Prefer compact bilingual default; optional contact_hours_note_en if filled.
-  $wdc_hours_display = function_exists('wdc_site_tr')
-    ? wdc_site_tr('contact_hours_note', 'Senin–Sabtu, 09:00–18:00 WIB', 'Mon–Sat, 09:00–18:00 WIB')
-    : contenly_tr('Senin–Sabtu, 09:00–18:00 WIB', 'Mon–Sat, 09:00–18:00 WIB');
+  // Compact bilingual hours only (ignore long admin note for this layout).
+  $wdc_hours_display = contenly_tr('Senin–Sabtu, 09:00–18:00 WIB', 'Mon–Sat, 09:00–18:00 WIB');
   ?>
   <section class="wd-section white wdc-contact-compact" id="contact-form">
     <div class="wd-shell">
