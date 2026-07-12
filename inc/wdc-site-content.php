@@ -21,6 +21,12 @@ function wdc_site_defaults() {
         'footer_blurb' => 'Pelatihan selam, trip komunitas, dukungan peralatan, dan pengalaman peduli laut untuk petualangan bawah air yang lebih aman.',
         'footer_cta_label' => 'Mulai Konsultasi',
         'footer_cta_url' => '/contact/',
+        // Navbar + footer link lists (Label|URL or Label|URL|navkey per line)
+        'nav_links' => "Beranda|/|home\nKursus|/courses/|courses\nPeralatan|/equipment/|equipment\nTentang|/about/|about\nBlog|/blog/|blog",
+        'footer_explore_title' => 'Jelajahi',
+        'footer_explore_links' => "Kursus Selam|/courses/\nPeralatan Selam|/equipment/\nTestimoni|/testimonials/\nKonservasi|/conservation/\nTentang Kami|/about/\nBlog|/blog/",
+        'footer_courses_title' => 'Kursus',
+        'footer_course_links' => "Open Water Scuba Diver|/courses/open-water-scuba-diver/\nAdvanced Open Water|/courses/advanced-open-water-diver/\nRescue Scuba Diver|/courses/rescue-scuba-diver/\nDivemaster|/courses/divemaster/\nInstruktur|/courses/instructor/\nTechnical Diver|/courses/intro-to-tech/\nLihat Semua Kursus|/courses/",
         'hero_kicker' => 'Latihan selam Jakarta & komunitas diving',
         'hero_title' => "Mulai Tenang.\nDive Pede.",
         'hero_text' => 'Belajar, siapkan gear, dan rencanakan petualangan bawah air berikutnya bersama crew yang menjaga setiap dive tetap jelas, aman, dan peduli laut.',
@@ -233,6 +239,7 @@ function wdc_site_admin_menu() {
         58
     );
     add_submenu_page('wdc-site', 'Contact & Footer', 'Contact & Footer', 'manage_options', 'wdc-site', 'wdc_render_site_settings_page');
+    add_submenu_page('wdc-site', 'Menus / Links', 'Menus / Links', 'manage_options', 'wdc-site-menus', 'wdc_render_menus_page');
     add_submenu_page('wdc-site', 'Home Content', 'Home Content', 'manage_options', 'wdc-site-hero', 'wdc_render_home_hero_page');
     add_submenu_page('wdc-site', 'About Page', 'About Page', 'manage_options', 'wdc-site-about', 'wdc_render_about_page');
     add_submenu_page('wdc-site', 'Contact Page', 'Contact Page', 'manage_options', 'wdc-site-contact', 'wdc_render_contact_page');
@@ -318,6 +325,7 @@ function wdc_site_save_posted_keys($keys) {
             'hero_title', 'hero_text', 'footer_blurb', 'hero_card_text',
             'member_reply_course', 'member_reply_gear',
             'trust_text', 'partners',
+            'nav_links', 'footer_explore_links', 'footer_course_links',
             'about_title', 'about_text', 'about_intro_title', 'about_intro_p1', 'about_intro_p2',
             'contact_title', 'contact_text', 'contact_success', 'contact_hours_note',
             'crew_title', 'values_title',
@@ -378,6 +386,140 @@ function wdc_render_site_settings_page() {
     echo '</tbody></table>';
     submit_button('Save Contact & Footer');
     echo '</form></div>';
+}
+
+/**
+ * Parse menu/link list lines.
+ * Format per line: Label|URL  OR  Label|URL|navkey
+ * @return array<int, array{label:string,url:string,nav:string}>
+ */
+function wdc_parse_link_list($raw, $fallback = '') {
+    $raw = trim((string) $raw);
+    if ($raw === '' && $fallback !== '') {
+        $raw = (string) $fallback;
+    }
+    $items = [];
+    foreach (preg_split('/\r\n|\r|\n/', $raw) as $line) {
+        $line = trim($line);
+        if ($line === '' || strpos($line, '#') === 0) {
+            continue;
+        }
+        $parts = array_map('trim', explode('|', $line));
+        $label = $parts[0] ?? '';
+        $url = $parts[1] ?? '';
+        $nav = $parts[2] ?? '';
+        if ($label === '' || $url === '') {
+            continue;
+        }
+        // relative path or full URL
+        if (preg_match('#^https?://#i', $url) || strpos($url, '//') === 0 || strpos($url, 'mailto:') === 0 || strpos($url, 'tel:') === 0) {
+            $url = esc_url_raw($url);
+        } else {
+            $url = sanitize_text_field($url);
+            if ($url !== '' && $url[0] !== '/') {
+                $url = '/' . $url;
+            }
+        }
+        $nav = sanitize_key($nav);
+        $items[] = [
+            'label' => sanitize_text_field($label),
+            'url' => $url,
+            'nav' => $nav,
+        ];
+    }
+    return $items;
+}
+
+/**
+ * Resolve public URL for a stored menu path.
+ */
+function wdc_menu_item_url($url) {
+    $url = (string) $url;
+    if ($url === '') {
+        return home_url('/');
+    }
+    if (preg_match('#^https?://#i', $url) || strpos($url, '//') === 0 || strpos($url, 'mailto:') === 0 || strpos($url, 'tel:') === 0) {
+        return $url;
+    }
+    if (function_exists('contenly_localized_url')) {
+        return contenly_localized_url($url);
+    }
+    if (function_exists('wdc_site_url')) {
+        return wdc_site_url($url);
+    }
+    return home_url($url);
+}
+
+/**
+ * Default link lists (same as previous hardcoded chrome).
+ */
+function wdc_default_nav_links_raw() {
+    return "Beranda|/|home\nKursus|/courses/|courses\nPeralatan|/equipment/|equipment\nTentang|/about/|about\nBlog|/blog/|blog";
+}
+function wdc_default_footer_explore_raw() {
+    return "Kursus Selam|/courses/\nPeralatan Selam|/equipment/\nTestimoni|/testimonials/\nKonservasi|/conservation/\nTentang Kami|/about/\nBlog|/blog/";
+}
+function wdc_default_footer_courses_raw() {
+    return "Open Water Scuba Diver|/courses/open-water-scuba-diver/\nAdvanced Open Water|/courses/advanced-open-water-diver/\nRescue Scuba Diver|/courses/rescue-scuba-diver/\nDivemaster|/courses/divemaster/\nInstruktur|/courses/instructor/\nTechnical Diver|/courses/intro-to-tech/\nLihat Semua Kursus|/courses/";
+}
+
+function wdc_get_nav_links() {
+    $raw = function_exists('wdc_site_get') ? wdc_site_get('nav_links', '') : '';
+    $items = wdc_parse_link_list($raw, wdc_default_nav_links_raw());
+    return $items ?: wdc_parse_link_list(wdc_default_nav_links_raw());
+}
+
+function wdc_get_footer_explore_links() {
+    $raw = function_exists('wdc_site_get') ? wdc_site_get('footer_explore_links', '') : '';
+    $items = wdc_parse_link_list($raw, wdc_default_footer_explore_raw());
+    return $items ?: wdc_parse_link_list(wdc_default_footer_explore_raw());
+}
+
+function wdc_get_footer_course_links() {
+    $raw = function_exists('wdc_site_get') ? wdc_site_get('footer_course_links', '') : '';
+    $items = wdc_parse_link_list($raw, wdc_default_footer_courses_raw());
+    return $items ?: wdc_parse_link_list(wdc_default_footer_courses_raw());
+}
+
+function wdc_render_menus_page() {
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+    $keys = [
+        'nav_links',
+        'footer_explore_title',
+        'footer_explore_links',
+        'footer_courses_title',
+        'footer_course_links',
+    ];
+    $saved = false;
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $saved = wdc_site_save_posted_keys($keys);
+    }
+    echo '<div class="wrap"><h1>WDC Site — Menus / Links</h1>';
+    if ($saved) {
+        echo '<div class="notice notice-success is-dismissible"><p>Saved. Hard refresh public pages (Ctrl+F5) kalau masih cache.</p></div>';
+    }
+    echo '<p>Atur link <strong>navbar</strong> + kolom footer <strong>Jelajahi</strong> / <strong>Kursus</strong>. Format per baris: <code>Label|URL</code>. Untuk navbar aktif state: <code>Label|URL|navkey</code> (contoh <code>Kursus|/courses/|courses</code>).</p>';
+    echo '<p class="description">URL boleh path relatif (<code>/about/</code>) atau full URL. Baris kosong diabaikan. Awali baris dengan <code>#</code> untuk komentar.</p>';
+    echo '<form method="post">';
+    wp_nonce_field('wdc_site_save', 'wdc_site_nonce');
+    echo '<table class="form-table" role="presentation"><tbody>';
+    wdc_site_field('nav_links', 'Navbar links', 'textarea', 'Contoh: Beranda|/|home');
+    // enlarge textarea rows via inline style after field — field uses rows=4; add help only
+    wdc_site_field('footer_explore_title', 'Footer kolom 1 title', 'text', 'Default: Jelajahi');
+    wdc_site_field('footer_explore_links', 'Footer kolom 1 links (Jelajahi)', 'textarea', 'Contoh: Kursus Selam|/courses/');
+    wdc_site_field('footer_courses_title', 'Footer kolom 2 title', 'text', 'Default: Kursus');
+    wdc_site_field('footer_course_links', 'Footer kolom 2 links (Kursus)', 'textarea', 'Contoh: Open Water Scuba Diver|/courses/open-water-scuba-diver/');
+    echo '</tbody></table>';
+    echo '<style>.wrap textarea#nav_links,.wrap textarea#footer_explore_links,.wrap textarea#footer_course_links{min-height:160px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.45}</style>';
+    submit_button('Save Menus / Links');
+    echo '</form>';
+    echo '<hr><h2>Default cepat (copy-paste)</h2>';
+    echo '<p><strong>Navbar</strong></p><pre style="background:#f6f7f7;padding:12px;border-radius:8px;max-width:720px;white-space:pre-wrap">' . esc_html(wdc_default_nav_links_raw()) . '</pre>';
+    echo '<p><strong>Jelajahi</strong></p><pre style="background:#f6f7f7;padding:12px;border-radius:8px;max-width:720px;white-space:pre-wrap">' . esc_html(wdc_default_footer_explore_raw()) . '</pre>';
+    echo '<p><strong>Kursus</strong></p><pre style="background:#f6f7f7;padding:12px;border-radius:8px;max-width:720px;white-space:pre-wrap">' . esc_html(wdc_default_footer_courses_raw()) . '</pre>';
+    echo '</div>';
 }
 
 function wdc_render_home_hero_page() {

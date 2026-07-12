@@ -1068,15 +1068,16 @@ function contenly_render_public_footer() {
     if (is_page(['login', 'member-login', 'register', 'member-register']) || is_page_template(['page-login.php', 'page-register.php'])) {
         return;
     }
-    $home = esc_url(home_url('/'));
-    $courses = esc_url(home_url('/courses/'));
-    $equipment = esc_url(home_url('/equipment/'));
-    $about = esc_url(home_url('/about/'));
-    $blog = esc_url(home_url('/blog/'));
     $contact = esc_url(home_url('/contact/'));
-    $conservation = esc_url(home_url('/conservation/'));
-    $testimonials = esc_url(home_url('/testimonials/'));
     $year = esc_html(date('Y'));
+    $explore_title = function_exists('wdc_site_get')
+        ? wdc_site_tr('footer_explore_title', 'Jelajahi', 'Explore')
+        : contenly_tr('Jelajahi', 'Explore');
+    $courses_title = function_exists('wdc_site_get')
+        ? wdc_site_tr('footer_courses_title', 'Kursus', 'Courses')
+        : contenly_tr('Kursus', 'Courses');
+    $explore_links = function_exists('wdc_get_footer_explore_links') ? wdc_get_footer_explore_links() : [];
+    $course_links = function_exists('wdc_get_footer_course_links') ? wdc_get_footer_course_links() : [];
     ?>
   <footer id="site-footer" class="wd-footer">
     <div class="wd-shell">
@@ -1087,24 +1088,21 @@ function contenly_render_public_footer() {
           <p><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_tr('footer_blurb', 'Pelatihan selam, trip komunitas, dukungan peralatan, dan pengalaman peduli laut untuk petualangan bawah air yang lebih aman.', 'Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.') : contenly_tr('Pelatihan selam, trip komunitas, dukungan peralatan, dan pengalaman peduli laut untuk petualangan bawah air yang lebih aman.', 'Dive training, community trips, equipment support, and ocean-minded experiences for safer adventures below the surface.')); ?></p>
           <a class="wd-btn alt" href="<?php echo esc_url(function_exists('wdc_site_url') ? wdc_site_url(wdc_site_get('footer_cta_url', '/contact/')) : $contact); ?>"><?php echo esc_html(function_exists('wdc_site_get') ? wdc_site_tr('footer_cta_label', 'Mulai Konsultasi', 'Start Inquiry') : contenly_tr('Mulai Konsultasi', 'Start Inquiry')); ?></a>
         </div>
-        <nav class="wd-footer-col" aria-label="<?php echo esc_attr(contenly_tr('Jelajahi', 'Explore')); ?>">
-          <h3><?php echo esc_html(contenly_tr('Jelajahi', 'Explore')); ?></h3>
-          <a href="<?php echo $courses; ?>"><?php echo esc_html(contenly_tr('Kursus Selam', 'Dive Courses')); ?></a>
-          <a href="<?php echo $equipment; ?>"><?php echo esc_html(contenly_tr('Peralatan Selam', 'Scuba Equipment')); ?></a>
-          <a href="<?php echo $testimonials; ?>"><?php echo esc_html(contenly_tr('Testimoni', 'Testimonials')); ?></a>
-          <a href="<?php echo $conservation; ?>"><?php echo esc_html(contenly_tr('Konservasi', 'Conservation')); ?></a>
-          <a href="<?php echo $about; ?>"><?php echo esc_html(contenly_tr('Tentang Kami', 'About Us')); ?></a>
-          <a href="<?php echo $blog; ?>">Blog</a>
+        <nav class="wd-footer-col" aria-label="<?php echo esc_attr($explore_title); ?>">
+          <h3><?php echo esc_html($explore_title); ?></h3>
+          <?php foreach ($explore_links as $item) :
+              $href = function_exists('wdc_menu_item_url') ? wdc_menu_item_url($item['url']) : home_url($item['url']);
+          ?>
+          <a href="<?php echo esc_url($href); ?>"><?php echo esc_html($item['label']); ?></a>
+          <?php endforeach; ?>
         </nav>
-        <nav class="wd-footer-col" aria-label="<?php echo esc_attr(contenly_tr('Kursus', 'Courses')); ?>">
-          <h3><?php echo esc_html(contenly_tr('Kursus', 'Courses')); ?></h3>
-          <a href="<?php echo esc_url(home_url('/courses/open-water-scuba-diver/')); ?>">Open Water Scuba Diver</a>
-          <a href="<?php echo esc_url(home_url('/courses/advanced-open-water-diver/')); ?>">Advanced Open Water</a>
-          <a href="<?php echo esc_url(home_url('/courses/rescue-scuba-diver/')); ?>">Rescue Scuba Diver</a>
-          <a href="<?php echo esc_url(home_url('/courses/divemaster/')); ?>">Divemaster</a>
-          <a href="<?php echo esc_url(home_url('/courses/instructor/')); ?>"><?php echo esc_html(contenly_tr('Instruktur', 'Instructor')); ?></a>
-          <a href="<?php echo esc_url(home_url('/courses/intro-to-tech/')); ?>">Technical Diver</a>
-          <a href="<?php echo $courses; ?>"><?php echo esc_html(contenly_tr('Lihat Semua Kursus', 'View All Courses')); ?></a>
+        <nav class="wd-footer-col" aria-label="<?php echo esc_attr($courses_title); ?>">
+          <h3><?php echo esc_html($courses_title); ?></h3>
+          <?php foreach ($course_links as $item) :
+              $href = function_exists('wdc_menu_item_url') ? wdc_menu_item_url($item['url']) : home_url($item['url']);
+          ?>
+          <a href="<?php echo esc_url($href); ?>"><?php echo esc_html($item['label']); ?></a>
+          <?php endforeach; ?>
         </nav>
         <div class="wd-footer-col">
           <h3><?php echo esc_html(contenly_tr('Kontak', 'Contact')); ?></h3>
@@ -1152,10 +1150,6 @@ function contenly_render_public_header() {
     }
     $brand_logo = esc_url(get_template_directory_uri() . '/assets/wdc-navbar-logo.jpg?v=20260514b');
     $home_url = esc_url(contenly_localized_url('/home/'));
-    $courses_url = esc_url(contenly_localized_url('/courses/'));
-    $equipment_url = esc_url(contenly_localized_url('/equipment/'));
-    $about_url = esc_url(contenly_localized_url('/about/'));
-    $blog_url = esc_url(contenly_localized_url('/blog/'));
     $login_url = esc_url(contenly_localized_url('/login/'));
     $dashboard_url = esc_url(contenly_localized_url('/dashboard/'));
     $login_label = contenly_tr('Masuk', 'Login');
@@ -1187,6 +1181,29 @@ function contenly_render_public_header() {
     $open_label = esc_attr(contenly_tr('Buka menu', 'Open menu'));
     $brand_name = esc_html('Whale Dive');
     $menu_kicker = esc_html(contenly_tr('Navigasi', 'Navigate'));
+    $nav_links = function_exists('wdc_get_nav_links') ? wdc_get_nav_links() : [];
+
+    $menu_links_html = '';
+    foreach ($nav_links as $item) {
+        $href = function_exists('wdc_menu_item_url') ? wdc_menu_item_url($item['url']) : home_url($item['url']);
+        $nav_key = $item['nav'] !== '' ? $item['nav'] : sanitize_title($item['label']);
+        // Infer common nav keys from path if not provided.
+        if ($item['nav'] === '') {
+            $path = trim((string) parse_url($item['url'], PHP_URL_PATH), '/');
+            if ($path === '' || $path === 'home' || $path === 'en') {
+                $nav_key = 'home';
+            } elseif (strpos($path, 'courses') === 0) {
+                $nav_key = 'courses';
+            } elseif (strpos($path, 'equipment') === 0) {
+                $nav_key = 'equipment';
+            } elseif (strpos($path, 'about') === 0 || strpos($path, 'tentang') === 0) {
+                $nav_key = 'about';
+            } elseif (strpos($path, 'blog') === 0 || strpos($path, 'journal') === 0) {
+                $nav_key = 'blog';
+            }
+        }
+        $menu_links_html .= '<a href="' . esc_url($href) . '" data-nav="' . esc_attr($nav_key) . '"' . $active_class($nav_key) . '><span>' . esc_html($item['label']) . '</span></a>';
+    }
 
     echo '<header class="wd-header"><div class="wd-shell"><div class="wd-nav">'
         . '<a class="wd-brand" href="' . $home_url . '"><img class="wd-brand-logo" src="' . $brand_logo . '" alt="Whale Dive Centre"><span>Whale Dive Centre</span></a>'
@@ -1198,11 +1215,7 @@ function contenly_render_public_header() {
         . '<button type="button" class="wd-menu-close" data-wd-menu-close aria-label="' . $close_label . '"><span></span></button>'
         . '</div>'
         . '<div class="wd-menu-links">'
-        . '<a href="' . $home_url . '" data-nav="home"' . $active_class('home') . '><span>' . esc_html(contenly_tr('Beranda', 'Home')) . '</span></a>'
-        . '<a href="' . $courses_url . '" data-nav="courses"' . $active_class('courses') . '><span>' . esc_html(contenly_tr('Kursus', 'Courses')) . '</span></a>'
-        . '<a href="' . $equipment_url . '" data-nav="equipment"' . $active_class('equipment') . '><span>' . esc_html(contenly_tr('Peralatan', 'Equipment')) . '</span></a>'
-        . '<a href="' . $about_url . '" data-nav="about"' . $active_class('about') . '><span>' . esc_html(contenly_tr('Tentang', 'About')) . '</span></a>'
-        . '<a href="' . $blog_url . '" data-nav="blog"' . $active_class('blog') . '><span>' . esc_html(contenly_tr('Blog', 'Blog')) . '</span></a>'
+        . $menu_links_html
         . '</div>'
         . '<div class="wd-menu-panel-foot">'
         . '<div class="wd-menu-foot-label">' . esc_html(contenly_tr('Bahasa', 'Language')) . '</div>'
