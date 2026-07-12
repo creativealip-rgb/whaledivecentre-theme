@@ -161,7 +161,7 @@ if (isset($_GET['wd_contact'])) {
       <div class="wd-contact-grid">
         <?php
         $wdc_email = function_exists('wdc_site_get') ? wdc_site_get('email') : 'info@whaledivecentre.com';
-        $wdc_phone = function_exists('wdc_site_get') ? wdc_site_get('phone') : '0821-2666-6111';
+        $wdc_phone = function_exists('wdc_site_get') ? wdc_site_get('phone') : '0821-2666-611';
         $wdc_phone_tel = function_exists('wdc_site_get') ? wdc_site_get('phone_tel') : '+628212666611';
         $wdc_address = function_exists('wdc_site_get') ? wdc_site_get('address') : 'Jl. Tanah Kusir II No.3, Kebayoran Lama, Jakarta Selatan 12240';
         $wdc_hours_note = function_exists('wdc_site_get') ? wdc_site_get('contact_hours_note') : '';

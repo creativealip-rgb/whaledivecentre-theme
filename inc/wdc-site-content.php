@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
 function wdc_site_defaults() {
     return [
         'email' => 'whaledivecentre@gmail.com',
-        'phone' => '0821-2666-6111',
+        'phone' => '0821-2666-611',
         'phone_tel' => '+628212666611',
         'address' => 'Jl. Tanah Kusir II No.3, Kebayoran Lama, Jakarta Selatan 12240',
         'hours' => 'Senin–Sabtu, 09.00–18.00',
@@ -340,7 +340,7 @@ function wdc_render_site_settings_page() {
     wp_nonce_field('wdc_site_save', 'wdc_site_nonce');
     echo '<table class="form-table" role="presentation"><tbody>';
     wdc_site_field('email', 'Email');
-    wdc_site_field('phone', 'Phone / WhatsApp display', 'text', 'Contoh: 0821-2666-6111');
+    wdc_site_field('phone', 'Phone / WhatsApp display', 'text', 'Contoh: 0821-2666-611');
     wdc_site_field('phone_tel', 'Phone / WhatsApp tel link', 'text', 'Format internasional tanpa spasi. Contoh: +628212666611');
     wdc_site_field('address', 'Address', 'textarea');
     wdc_site_field('hours', 'Business hours');

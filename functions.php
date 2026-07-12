@@ -1062,7 +1062,7 @@ function contenly_render_public_footer() {
           <h3><?php echo esc_html(contenly_tr('Kontak', 'Contact')); ?></h3>
           <?php
           $wdc_email = function_exists('wdc_site_get') ? wdc_site_get('email') : 'info@whaledivecentre.com';
-          $wdc_phone = function_exists('wdc_site_get') ? wdc_site_get('phone') : '0821-2666-6111';
+          $wdc_phone = function_exists('wdc_site_get') ? wdc_site_get('phone') : '0821-2666-611';
           $wdc_phone_tel = function_exists('wdc_site_get') ? wdc_site_get('phone_tel') : '+628212666611';
           $wdc_address = function_exists('wdc_site_get') ? wdc_site_get('address') : 'Jl. Tanah Kusir II No.3, Kebayoran Lama, Jakarta Selatan 12240';
           $wdc_hours = function_exists('wdc_site_get') ? wdc_site_get('hours') : '';
@@ -2173,7 +2173,7 @@ function contenly_get_diving_trip_mode($post = null) {
 function contenly_get_contact_details() {
     return [
         'phone_display' => '(021) 2274 0870',
-        'phone_tel' => '+6282126666111',
+        'phone_tel' => '+628212666611',
         'email' => 'hello@travelship.id',
         'whatsapp_display' => '',
         'whatsapp_number' => '',
