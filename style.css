@@ -3132,3 +3132,21 @@ body.wdc-brand-font-mode .wd-hero-simple p{
   body.wd-menu-open .wd-menu,.wd-menu-open .wd-menu,.whaledive-home.wd-menu-open .wd-menu,.wd-menu.is-open{opacity:1!important;visibility:visible!important;transform:translateY(0)!important;pointer-events:auto!important}
   .wd-header .wd-menu a,.whaledive-home .wd-header .wd-menu a{display:flex!important;width:100%!important;justify-content:flex-start!important;padding:13px 15px!important;text-align:left!important;border-radius:14px!important;color:#fff!important;font-size:13px!important;font-weight:800!important;letter-spacing:.08em!important;text-transform:uppercase!important;box-sizing:border-box!important}
 }
+
+
+/* Local language switcher 2026-05-23 */
+.gt-lang-switcher.wd-lang-switcher{display:inline-flex!important;align-items:center!important;gap:3px!important;margin-left:6px!important;padding:3px!important;border-radius:999px!important;background:rgba(255,255,255,.08)!important;border:1px solid rgba(150,218,234,.24)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)!important}
+.gt-lang-switcher.wd-lang-switcher .gt-lang-link{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:34px!important;height:28px!important;padding:0 9px!important;border-radius:999px!important;color:rgba(255,255,255,.72)!important;font-size:12px!important;font-weight:900!important;letter-spacing:.08em!important;line-height:1!important;text-decoration:none!important;text-transform:uppercase!important;background:transparent!important;border:0!important;box-shadow:none!important}
+.gt-lang-switcher.wd-lang-switcher .gt-lang-link:hover{color:#fff!important;background:rgba(255,255,255,.10)!important}
+.gt-lang-switcher.wd-lang-switcher .gt-lang-link.is-active{color:#03172d!important;background:#96DAEA!important;box-shadow:0 8px 20px rgba(76,200,237,.22)!important}
+.gt-lang-switcher.wd-lang-switcher .gt-lang-link:focus-visible{outline:3px solid #4CC8ED!important;outline-offset:3px!important}
+@media(max-width:760px){.gt-lang-switcher.wd-lang-switcher{width:100%!important;margin:6px 0 0!important;justify-content:space-between!important;background:rgba(150,218,234,.12)!important}.gt-lang-switcher.wd-lang-switcher .gt-lang-link{flex:1 1 0!important;height:38px!important}}
+
+
+/* EN route audit polish 2026-05-23 */
+body.whaledive-login .wd-header,body.whaledive-register .wd-header{display:block!important}
+body.whaledive-login .wdc-auth-hero,body.whaledive-register .wdc-auth-hero{padding-top:154px!important}
+.wd-inner-hero h1{line-height:1.04!important;letter-spacing:-.035em!important}
+.wd-inner-hero .wd-btn.alt{background:rgba(255,255,255,.94)!important;color:#06384d!important;border:1px solid rgba(255,255,255,.8)!important;box-shadow:0 14px 32px rgba(0,0,0,.18)!important}
+.wd-inner-hero .wd-btn.alt:hover{background:#96DAEA!important;color:#03172d!important}
+.wd-header .wd-menu a[aria-current="page"]{color:#96DAEA!important;background:rgba(255,255,255,.08)!important;border-radius:999px!important}

@@ -197,11 +197,16 @@ function contenly_theme_setup() {
 add_action('after_setup_theme', 'contenly_theme_setup');
 
 function contenly_current_lang() {
-    if (function_exists('pll_current_language')) {
-        return pll_current_language('slug') ?: 'en';
+    $request_path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+    if (0 === strpos($request_path, '/en')) {
+        return 'en';
     }
 
-    return 'en';
+    if (function_exists('pll_current_language')) {
+        return pll_current_language('slug') ?: 'id';
+    }
+
+    return 'id';
 }
 
 function contenly_is_english() {
@@ -395,7 +400,7 @@ function contenly_localize_menu_item_title($title, $route_key, $lang) {
         'contact' => ['id' => 'Kontak', 'en' => 'Contact'],
         'tour-packages' => ['id' => 'Paket Tour', 'en' => 'Tour Packages'],
         'blog' => ['id' => 'Blog', 'en' => 'Blog'],
-        'login' => ['id' => 'Masuk', 'en' => 'Login'],
+        'login' => ['id' => 'Login', 'en' => 'Login'],
         'register' => ['id' => 'Daftar', 'en' => 'Register'],
         'dashboard' => ['id' => 'Dashboard', 'en' => 'Dashboard'],
         'membership' => ['id' => 'Membership', 'en' => 'Membership'],
@@ -527,6 +532,40 @@ function contenly_render_language_switcher($class = '') {
         . '</div>';
 }
 
+function contenly_render_public_header() {
+    $brand_logo = esc_url(get_template_directory_uri() . '/assets/wdc-navbar-logo.jpg?v=20260514b');
+    $home_url = esc_url(contenly_localized_url('/home/'));
+    $courses_url = esc_url(contenly_localized_url('/courses/'));
+    $equipment_url = esc_url(contenly_localized_url('/equipment/'));
+    $blog_url = esc_url(contenly_localized_url('/blog/'));
+    $member_url = is_user_logged_in() ? esc_url(contenly_localized_url('/member-dashboard/')) : esc_url(contenly_localized_url('/member-login/'));
+    $member_label = is_user_logged_in() ? contenly_tr('Dashboard', 'Dashboard') : contenly_tr('Login', 'Login');
+    $request_path = trailingslashit(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/');
+    $active_key = ($request_path === '/' || $request_path === '/en/' || $request_path === '/home/' || $request_path === '/en/home/') ? 'home' : '';
+    if (false !== strpos($request_path, '/courses/') || false !== strpos($request_path, '/course/')) {
+        $active_key = 'courses';
+    } elseif (false !== strpos($request_path, '/equipment/')) {
+        $active_key = 'equipment';
+    } elseif (false !== strpos($request_path, '/blog/') || false !== strpos($request_path, '/journal/') || is_singular('post')) {
+        $active_key = 'blog';
+    }
+    $active_class = function($key) use ($active_key) {
+        return $key === $active_key ? ' class="is-active" aria-current="page"' : '';
+    };
+
+    echo '<header class="wd-header"><div class="wd-shell"><div class="wd-nav">'
+        . '<a class="wd-brand" href="' . $home_url . '"><img class="wd-brand-logo" src="' . $brand_logo . '" alt="Whale Dive Centre"><span>Whale Dive Centre</span></a>'
+        . '<button class="wd-hamburger" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>'
+        . '<nav class="wd-menu" id="wd-mobile-menu">'
+        . '<a href="' . $home_url . '" data-nav="home"' . $active_class('home') . '>' . esc_html(contenly_tr('Home', 'Home')) . '</a>'
+        . '<a href="' . $courses_url . '" data-nav="courses"' . $active_class('courses') . '>' . esc_html(contenly_tr('Courses', 'Courses')) . '</a>'
+        . '<a href="' . $equipment_url . '" data-nav="equipment"' . $active_class('equipment') . '>' . esc_html(contenly_tr('Equipment', 'Equipment')) . '</a>'
+        . '<a href="' . $blog_url . '" data-nav="blog"' . $active_class('blog') . '>' . esc_html(contenly_tr('Blog', 'Blog')) . '</a>'
+        . contenly_render_language_switcher('wd-lang-switcher')
+        . '<a href="' . $member_url . '" class="wd-nav-member">' . esc_html($member_label) . '</a>'
+        . '</nav></div></div></header>';
+}
+
 function contenly_requested_lang() {
     $request_path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
     if (0 === strpos($request_path, '/en')) {
@@ -542,6 +581,101 @@ function contenly_requested_lang() {
 
     return 'id';
 }
+
+function contenly_local_en_template_map() {
+    return [
+        '/en/' => 'index.php',
+        '/en/courses/' => 'page-courses.php',
+        '/en/equipment/' => 'page-equipment.php',
+        '/en/journal/' => 'page-blog.php',
+        '/en/about/' => 'page-about.php',
+        '/en/contact/' => 'page-about.php',
+        '/en/member-login/' => 'page-login.php',
+        '/en/member-register/' => 'page-register.php',
+    ];
+}
+
+function contenly_local_en_source_slug_map() {
+    return [
+        '/en/' => 'home',
+        '/en/courses/' => 'courses',
+        '/en/equipment/' => 'equipment',
+        '/en/journal/' => 'blog',
+        '/en/about/' => 'about',
+        '/en/contact/' => 'about',
+        '/en/member-login/' => 'member-login',
+        '/en/member-register/' => 'member-register',
+    ];
+}
+
+function contenly_current_en_source_page() {
+    $request_path = trailingslashit(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/');
+    $slug_map = contenly_local_en_source_slug_map();
+    if (empty($slug_map[$request_path])) {
+        return null;
+    }
+
+    if ('/en/' === $request_path) {
+        $front_id = (int) get_option('page_on_front');
+        if ($front_id) {
+            return get_post($front_id);
+        }
+
+        return get_page_by_path('sample-page') ?: get_page_by_path('about');
+    }
+
+    return get_page_by_path($slug_map[$request_path]);
+}
+
+function contenly_current_en_template() {
+    $request_path = trailingslashit(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/');
+    $map = contenly_local_en_template_map();
+    return $map[$request_path] ?? '';
+}
+
+add_filter('pre_handle_404', function($preempt, $wp_query) {
+    if (contenly_current_en_template()) {
+        $source_page = contenly_current_en_source_page();
+        if ($source_page) {
+            $wp_query->queried_object = $source_page;
+            $wp_query->queried_object_id = $source_page->ID;
+            $wp_query->post = $source_page;
+            $wp_query->posts = [$source_page];
+            $wp_query->post_count = 1;
+            $wp_query->is_page = true;
+            $wp_query->is_singular = true;
+        }
+        $wp_query->is_404 = false;
+        status_header(200);
+        return true;
+    }
+    return $preempt;
+}, 1, 2);
+
+add_filter('template_include', function($template) {
+    $en_template = contenly_current_en_template();
+    if ($en_template) {
+        $source_page = contenly_current_en_source_page();
+        if ($source_page) {
+            global $post;
+            $post = $source_page;
+            setup_postdata($post);
+        }
+        $candidate = get_stylesheet_directory() . '/' . $en_template;
+        if (file_exists($candidate)) {
+            status_header(200);
+            return $candidate;
+        }
+    }
+    return $template;
+}, 1);
+
+add_filter('body_class', function($classes) {
+    if ('index.php' === contenly_current_en_template()) {
+        $classes[] = 'home';
+    }
+    return array_values(array_unique($classes));
+}, 20);
 
 function contenly_public_page_slugs() {
     return ['beranda', 'home', 'tentang', 'about', 'kontak', 'contact', 'paket-tour', 'tour-packages', 'blog', 'journal'];
@@ -802,7 +936,7 @@ function contenly_custom_document_title($title) {
         [['is_page_template', 'page-contact.php'], ['Kontak', 'Contact']],
         [['is_page_template', 'page-blog.php'], ['Blog', 'Blog']],
         [['is_page_template', 'page-tours.php'], ['Paket Tour', 'Tour Packages']],
-        [['is_page_template', 'page-login.php'], ['Masuk', 'Login']],
+        [['is_page_template', 'page-login.php'], ['Login', 'Login']],
         [['is_page_template', 'page-register.php'], ['Daftar', 'Register']],
         [['is_page_template', 'page-booking-detail.php'], ['Detail Booking', 'Booking Details']],
         [['is_page_template', 'page-checkout.php'], ['Pembayaran Booking', 'Booking Payment']],
@@ -822,7 +956,7 @@ function contenly_custom_document_title($title) {
         [['is_page', 'contact'], ['Kontak', 'Contact']],
         [['is_page', 'blog'], ['Blog', 'Blog']],
         [['is_page', 'tour-packages'], ['Paket Tour', 'Tour Packages']],
-        [['is_page', 'login'], ['Masuk', 'Login']],
+        [['is_page', 'login'], ['Login', 'Login']],
         [['is_page', 'register'], ['Daftar', 'Register']],
         [['is_page', 'booking-detail'], ['Detail Booking', 'Booking Details']],
         [['is_page', 'checkout'], ['Pembayaran Booking', 'Booking Payment']],
@@ -868,7 +1002,7 @@ function contenly_get_seo_context() {
     if (is_front_page() || is_home()) {
         $title = contenly_tr('Whale Dive Centre - Dive Beyond the Surface', 'Whale Dive Centre - Jakarta Diving Community & Academy');
         $description = contenly_tr(
-            'Whale Dive Centre bantu rencanakan trip private, family trip, dan group trip dengan itinerary yang rapi, harga transparan, dan pendampingan jelas dari awal sampai berangkat.',
+            'Whale Dive Centre offers scuba courses, dive community support, quality gear guidance, and calm instructor-led training from Jakarta.',
             'Whale Dive Centre in Jakarta offers scuba diving courses, dive community programs, quality scuba equipment, and ocean-minded training for beginner to professional divers.'
         );
         $schema[] = [
@@ -886,33 +1020,33 @@ function contenly_get_seo_context() {
         ];
     } elseif (is_page_template('page-about.php') || is_page('about')) {
         $description = contenly_tr(
-            'Kenali Whale Dive Centre, partner perjalanan untuk trip domestik dan internasional dengan itinerary realistis, komunikasi jelas, dan pendampingan yang responsif.',
-            'Get to know Whale Dive Centre, your travel partner for domestic and international trips with realistic itineraries, clear communication, and responsive support.'
+            'Get to know Whale Dive Centre, a Jakarta dive centre focused on safer scuba training, quality gear support, and an ocean-minded community.',
+            'Get to know Whale Dive Centre, a Jakarta dive centre focused on safer scuba training, quality gear support, and an ocean-minded community.'
         );
     } elseif (is_page_template('page-contact.php') || is_page('contact')) {
         $description = contenly_tr(
-            'Isi form kebutuhan perjalanan untuk custom itinerary, family trip, corporate outing, atau open trip. Tim Whale Dive Centre akan review dan kirim opsi yang paling sesuai.',
-            'Share your travel requirements for a custom itinerary, family trip, corporate outing, or open trip. The Whale Dive Centre team will review and send the best-fit options.'
+            'Share your course, gear, or dive inquiry. The Whale Dive Centre crew will review it and guide you toward the right next step.',
+            'Share your course, gear, or dive inquiry. The Whale Dive Centre crew will review it and guide you toward the right next step.'
         );
     } elseif (is_page_template('page-blog.php') || is_page('blog')) {
         $description = contenly_tr(
-            'Baca cerita traveler, tips liburan, dan insight perjalanan dari Whale Dive Centre untuk bantu rencanakan trip yang lebih nyaman.',
-            'Read traveler stories, travel tips, and practical insights from Whale Dive Centre to plan a smoother, more enjoyable trip.'
+            'Read dive stories, course tips, gear notes, and ocean-minded insights from the Whale Dive Centre crew.',
+            'Read dive stories, course tips, gear notes, and ocean-minded insights from the Whale Dive Centre crew.'
         );
     } elseif (is_page_template('page-tours.php') || is_page('tour-packages')) {
         $description = contenly_tr(
-            'Temukan paket tour pilihan Whale Dive Centre dan isi form kebutuhan perjalanan jika perlu bantuan tim untuk itinerary, fasilitas, atau budget yang paling sesuai.',
-            'Explore curated tour packages from Whale Dive Centre and share your trip requirements if you need help matching the right itinerary, inclusions, or budget.'
+            'Explore Whale Dive Centre programs, course pathways, and dive support options for your next underwater step.',
+            'Explore Whale Dive Centre programs, course pathways, and dive support options for your next underwater step.'
         );
     } elseif (is_page('login')) {
         $description = contenly_tr(
-            'Masuk ke akun Whale Dive Centre untuk cek booking, pembayaran, wishlist, dan update perjalanan dalam satu dashboard.',
-            'Log in to your Whale Dive Centre account to manage bookings, payments, wishlist items, and trip updates in one dashboard.'
+            'Log in to your Whale Dive Centre account to manage course progress, gear requests, certifications, and crew updates.',
+            'Log in to your Whale Dive Centre account to manage course progress, gear requests, certifications, and crew updates.'
         );
     } elseif (is_page('register')) {
         $description = contenly_tr(
-            'Buat akun Whale Dive Centre untuk simpan wishlist, kirim booking request, dan pantau perjalanan lebih rapi.',
-            'Create a Whale Dive Centre account to save wishlists, submit booking requests, and track your trips more clearly.'
+            'Create a Whale Dive Centre account to keep course planning, gear requests, certification notes, and dive updates in one place.',
+            'Create a Whale Dive Centre account to keep course planning, gear requests, certification notes, and dive updates in one place.'
         );
     } elseif (is_page('dashboard')) {
         $description = contenly_tr(
@@ -926,18 +1060,18 @@ function contenly_get_seo_context() {
         );
     } elseif (is_page('wishlist')) {
         $description = contenly_tr(
-            'Simpan paket tour favorit dan buka lagi saat siap booking dari wishlist member Whale Dive Centre.',
-            'Save your favourite tour packages and revisit them when you are ready to book from your Whale Dive Centre wishlist.'
+            'Save gear, course interests, and dive planning notes in your Whale Dive Centre member wishlist.',
+            'Save gear, course interests, and dive planning notes in your Whale Dive Centre member wishlist.'
         );
     } elseif (is_page('reviews')) {
         $description = contenly_tr(
-            'Kelola review perjalanan Anda dan lihat status publikasinya dari dashboard member Whale Dive Centre.',
-            'Manage your travel reviews and check their publication status from the Whale Dive Centre member dashboard.'
+            'Manage your dive reviews and publication status from the Whale Dive Centre member dashboard.',
+            'Manage your dive reviews and publication status from the Whale Dive Centre member dashboard.'
         );
     } elseif (is_page('travel-story')) {
         $description = contenly_tr(
-            'Tulis dan kelola cerita perjalanan member untuk dibagikan di Whale Dive Centre.',
-            'Write and manage your member travel stories to share through Whale Dive Centre.'
+            'Write and manage member dive stories to share through Whale Dive Centre.',
+            'Write and manage member dive stories to share through Whale Dive Centre.'
         );
     } elseif (is_page('rewards')) {
         $description = contenly_tr(
@@ -951,8 +1085,8 @@ function contenly_get_seo_context() {
         );
     } elseif (is_page('notifications')) {
         $description = contenly_tr(
-            'Atur preferensi notifikasi booking dan update member sesuai kebutuhan Anda.',
-            'Manage your booking notifications and member update preferences the way you want.'
+            'Manage course, gear, and member notification preferences the way you want.',
+            'Manage course, gear, and member notification preferences the way you want.'
         );
     } elseif (is_page('settings')) {
         $description = contenly_tr(
@@ -960,7 +1094,7 @@ function contenly_get_seo_context() {
             'Update your account profile, password, and member settings from one Whale Dive Centre page.'
         );
     } elseif (is_singular('tour')) {
-        $description = wp_strip_all_tags(get_the_excerpt() ?: get_post_meta(get_the_ID(), 'location', true) ?: contenly_tr('Paket tour pilihan dari Whale Dive Centre.', 'Curated tour package from Whale Dive Centre.'));
+        $description = wp_strip_all_tags(get_the_excerpt() ?: get_post_meta(get_the_ID(), 'location', true) ?: contenly_tr('Dive program from Whale Dive Centre.', 'Dive program from Whale Dive Centre.'));
         if (strlen($description) > 160) {
             $description = wp_trim_words($description, 24, '...');
         }
@@ -968,8 +1102,8 @@ function contenly_get_seo_context() {
 
     if (!$description) {
         $description = wp_strip_all_tags(get_bloginfo('description')) ?: contenly_tr(
-            'Whale Dive Centre - partner perjalanan dengan itinerary yang rapi dan pendampingan yang jelas.',
-            'Whale Dive Centre - a travel partner with clear itineraries and dependable support.'
+            'Whale Dive Centre - scuba training, dive community, and gear support from Jakarta.',
+            'Whale Dive Centre - scuba training, dive community, and gear support from Jakarta.'
         );
     }
 
@@ -2015,8 +2149,17 @@ add_action('template_redirect', function () {
 add_filter('pre_handle_404', function($preempt, $wp_query) {
     $path = wdc_current_clean_path();
     if (isset(wdc_member_template_route_map()[$path])) {
+        $source_page = get_page_by_path($path) ?: get_page_by_path('sample-page') ?: get_page_by_path('about');
+        if ($source_page) {
+            $wp_query->queried_object = $source_page;
+            $wp_query->queried_object_id = $source_page->ID;
+            $wp_query->post = $source_page;
+            $wp_query->posts = [$source_page];
+            $wp_query->post_count = 1;
+        }
         $wp_query->is_404 = false;
         $wp_query->is_page = true;
+        $wp_query->is_singular = true;
         status_header(200);
         return true;
     }
@@ -2029,10 +2172,16 @@ add_filter('template_include', function($template) {
     if (isset($map[$path])) {
         $candidate = get_stylesheet_directory() . '/' . $map[$path];
         if (file_exists($candidate)) {
-            global $wp_query;
+            global $wp_query, $post;
+            $source_page = get_page_by_path($path) ?: get_page_by_path('sample-page') ?: get_page_by_path('about');
+            if ($source_page) {
+                $post = $source_page;
+                setup_postdata($post);
+            }
             if ($wp_query) {
                 $wp_query->is_404 = false;
                 $wp_query->is_page = true;
+                $wp_query->is_singular = true;
             }
             status_header(200);
             return $candidate;
